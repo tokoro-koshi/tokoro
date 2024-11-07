@@ -22,4 +22,4 @@ jobs:
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_BACKEND }}
         heroku_email: "bxttfxcker@gmail.com"
         remote_branch: "main"
-        appdir: "backendd"
+        appdir: "backend"
