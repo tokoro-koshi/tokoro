@@ -1,0 +1,23 @@
+name: Deploy Backend
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v3
+
+    - name: Deploy to Heroku
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: |
+        heroku git:remote -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
+        git push heroku `git subtree split --prefix backend main`:refs/heads/main --force
