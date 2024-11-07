@@ -16,8 +16,10 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Deploy to Heroku
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: |
-        heroku git:remote -a ${{ secrets.HEROKU_APP_NAME_BACKEND }}
-        git push heroku `git subtree split --prefix backend main`:refs/heads/main --force
+      uses: akhileshns/heroku-deploy@v3.13.15
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_BACKEND }}
+        heroku_email: "bxttfxcker@gmail.com"
+        remote_branch: "main"
+        appdir: "backendd"
