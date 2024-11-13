@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 @Configuration
@@ -59,13 +60,7 @@ public class SecurityConfig {
     }
 
     private boolean isProduction() {
-        String[] activeProfiles = env.getActiveProfiles();
-        for (String profile : activeProfiles) {
-            if (profile.equals("prod")) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(env.getActiveProfiles()).anyMatch("prod"::equals);
     }
 
     @Bean
