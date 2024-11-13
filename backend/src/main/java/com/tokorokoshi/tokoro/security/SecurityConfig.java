@@ -7,7 +7,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -33,28 +32,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         if (isProduction()) {
-            http
-                    .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                    .oauth2ResourceServer(oauth2 -> oauth2
-                            .jwt(jwt -> jwt.decoder(jwtDecoder()))
-                    );
-
-            http.authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/error").permitAll()
-                    .requestMatchers("/actuator/health").permitAll()
-                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .requestMatchers("/api/**").authenticated()
-                    .anyRequest().denyAll()
-            );
+            http.cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder())))
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/error").permitAll()
+                            .requestMatchers("/actuator/health").permitAll()
+                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                            .requestMatchers("/api/**").authenticated()
+                            .anyRequest().denyAll()
+                );
         } else {
-            http
-                    .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                    .authorizeHttpRequests(auth -> auth
-                            .anyRequest().permitAll()
-                    );
+            http.cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .authorizeHttpRequests(auth ->
+                        auth.anyRequest().permitAll()
+                );
         }
-
-        // CSRF protection is enabled by default, no need to disable it
 
         return http.build();
     }
