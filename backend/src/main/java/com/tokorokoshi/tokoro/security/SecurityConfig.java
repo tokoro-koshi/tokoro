@@ -54,7 +54,7 @@ public class SecurityConfig {
                     );
         }
 
-        http.csrf(AbstractHttpConfigurer::disable);
+        // CSRF protection is enabled by default, no need to disable it
 
         return http.build();
     }
