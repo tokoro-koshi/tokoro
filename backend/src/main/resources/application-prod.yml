@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH0_ISSUER}}
+
+auth0:
+  audience: ${AUTH0_AUDIENCE} # https://tokoro-back-133c2efe4dcf.herokuapp.com
+  issuer: ${AUTH0_ISSUER} # https://dev-dngu4n3glnkuwbbp.us.auth0.com/
+
+cors:
+  allowed-origins: https://tokoro-front-c982e0550f7e.herokuapp.com/
