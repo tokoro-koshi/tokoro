@@ -1,0 +1,8 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH0_ISSUER}
+cors:
+  allowed-origins: https://tokoro-front-c982e0550f7e.herokuapp.com/
