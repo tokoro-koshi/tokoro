@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.security;
+package com.tokorokoshi.tokoro.configuration;
 
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
@@ -18,6 +18,7 @@ public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
             return OAuth2TokenValidatorResult.success();
         }
         return OAuth2TokenValidatorResult.failure(
-                new OAuth2Error("invalid_token", "The required audience is missing", null));
+                new OAuth2Error("invalid_token", "The required audience is missing", null)
+        );
     }
 }
