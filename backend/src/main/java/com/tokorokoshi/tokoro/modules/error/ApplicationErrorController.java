@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.controllers;
+package com.tokorokoshi.tokoro.modules.error;
 
 import jakarta.servlet.RequestDispatcher;
 import org.json.JSONObject;
