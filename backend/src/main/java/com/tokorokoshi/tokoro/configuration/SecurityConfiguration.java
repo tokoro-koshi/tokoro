@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -33,7 +34,10 @@ public class SecurityConfiguration {
 
 
     @Autowired
-    public SecurityConfiguration(Environment env, CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfiguration(
+            Environment env,
+            CorsConfigurationSource corsConfigurationSource
+    ) {
         this.activeProfiles = env.getActiveProfiles();
         this.corsConfigurationSource = corsConfigurationSource;
     }
@@ -43,15 +47,22 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+    throws Exception {
         if (isDevelopment()) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-        }
-        else {
+                .authorizeHttpRequests(
+                        auth -> auth.anyRequest().permitAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable);
+        } else {
             // Production & staging configuration
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder())))
+                .oauth2ResourceServer(
+                        oauth2 -> oauth2.jwt(
+                                jwt -> jwt.decoder(jwtDecoder())
+                        )
+                )
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/error")
                                     .permitAll()
@@ -63,7 +74,8 @@ public class SecurityConfiguration {
                                     .authenticated()
                                     .anyRequest()
                                     .denyAll()
-                );
+                )
+                .csrf(AbstractHttpConfigurer::disable);
         }
         return http.build();
     }

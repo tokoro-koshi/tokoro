@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -20,34 +21,37 @@ public class ApplicationErrorController implements ErrorController {
     private final Logger logger =
             LoggerFactory.getLogger(ApplicationErrorController.class);
 
-    private final Pattern notFoundRegex = Pattern.compile(
-            "^No static resource (.*?)\\.$"
-    );
+    private final Pattern notFoundRegex =
+            Pattern.compile("^No static resource (.*?)\\.$");
 
     @RequestMapping(value = "/error",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> handleError(WebRequest webRequest) {
-        Object status = webRequest.getAttribute(
+        Object statusObj = webRequest.getAttribute(
                 RequestDispatcher.ERROR_STATUS_CODE,
                 WebRequest.SCOPE_REQUEST
         );
-        Object message = webRequest.getAttribute(
+        Integer status = statusObj != null
+                ? Integer.parseInt(statusObj.toString())
+                : null;
+
+        Object messageObj = webRequest.getAttribute(
                 RequestDispatcher.ERROR_MESSAGE,
                 WebRequest.SCOPE_REQUEST
         );
+        String message = messageObj != null
+                ? messageObj.toString()
+                : "Something wrong happened";
+
         Object exception = webRequest.getAttribute(
                 RequestDispatcher.ERROR_EXCEPTION,
                 WebRequest.SCOPE_REQUEST
         );
 
-        if (message == null) {
-            message = "Something wrong happened";
-        }
-
-        var matcher = notFoundRegex.matcher(message.toString());
+        // Extract URL from message if it's a 404 error
+        Matcher matcher = notFoundRegex.matcher(message);
         if (matcher.find()) {
-            // Extract matched URL from message by matcher
-            var path = matcher.group(1);
+            String path = matcher.group(1);
             message = "Resource not found: /" + path;
         }
 
@@ -55,15 +59,15 @@ public class ApplicationErrorController implements ErrorController {
                 ? HttpStatus.valueOf(Integer.parseInt(status.toString()))
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        logger.error(
-                "Error Status: {}, Message: {}, Exception: {}",
-                status,
-                message,
-                exception
-        );
+        if (logger.isErrorEnabled() &&
+                (exception != null || (status != null && status >= 500)))
+            logger.error("Error Status: {}, Message: {}, Exception: {}",
+                    status,
+                    message,
+                    exception);
 
         var jo = new JSONObject();
-        jo.put("message", message.toString());
+        jo.put("message", message);
         jo.put("status", httpStatus.value());
         return new ResponseEntity<>(jo.toString(), httpStatus);
     }
