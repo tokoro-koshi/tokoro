@@ -20,33 +20,11 @@ public class TagService {
         this.clientService = clientService;
     }
 
-    public Response<TagDto> generateTag(String message) {
-        return clientService.getResponse(
-                message,
-                TagDto.class,
-                null,
-                TagService.MODEL,
-                TagService.TOKENS_LIMIT,
-                TagService.TEMPERATURE
-        );
-    }
-
     public Response<TagDto> generateTag(String message, String conversationId) {
         return clientService.getResponse(
                 message,
                 TagDto.class,
                 conversationId,
-                TagService.MODEL,
-                TagService.TOKENS_LIMIT,
-                TagService.TEMPERATURE
-        );
-    }
-
-    public Response<TagsDto> generateTags(String message) {
-        return clientService.getResponse(
-                message,
-                TagsDto.class,
-                null,
                 TagService.MODEL,
                 TagService.TOKENS_LIMIT,
                 TagService.TEMPERATURE
