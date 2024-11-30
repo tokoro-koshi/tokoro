@@ -104,7 +104,7 @@ public class Response<C> {
 
         public Builder<C> refusalStatus(String refusalStatus) {
             this.refusalStatus = refusalStatus == null
-                    ? null
+                    ? 500
                     : Integer.parseInt(refusalStatus);
             return this;
         }
