@@ -138,12 +138,12 @@ public class OpenAiClientService implements AiClientService {
                            .refusal(
                                    components.length > 1
                                            ? components[1]
-                                           : components[0]
+                                           : e.getMessage()
                            )
                            .refusalStatus(
                                    components.length > 1
                                            ? components[0]
-                                           : "error"
+                                           : "500"
                            )
                            .build();
         }
