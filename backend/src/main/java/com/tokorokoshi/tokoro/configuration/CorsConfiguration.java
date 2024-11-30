@@ -15,10 +15,8 @@ public class CorsConfiguration {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
-
+        var config = new org.springframework.web.cors.CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(allowedOrigins));
-
         config.setAllowedMethods(Arrays.asList(
                 "GET",
                 "POST",
@@ -27,7 +25,6 @@ public class CorsConfiguration {
                 "PATCH",
                 "OPTIONS"
         ));
-
         config.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
@@ -35,15 +32,13 @@ public class CorsConfiguration {
                 "Origin",
                 "X-Requested-With"
         ));
-
         config.setExposedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Disposition"
         ));
-
         config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
         return source;
