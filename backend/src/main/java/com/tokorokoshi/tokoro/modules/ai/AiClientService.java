@@ -1,6 +1,5 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
-import com.tokorokoshi.tokoro.modules.tags.Response;
 import jakarta.annotation.Nullable;
 
 public interface AiClientService {

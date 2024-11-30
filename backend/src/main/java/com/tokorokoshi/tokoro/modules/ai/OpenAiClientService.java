@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
 import com.tokorokoshi.tokoro.modules.json.JsonHelper;
-import com.tokorokoshi.tokoro.modules.tags.Response;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -82,8 +81,13 @@ public class OpenAiClientService implements AiClientService {
                 )
         );
 
-        ChatResponse chatResponse = this.chatClient.call(prompt);
-        return chatResponse.getResult().getOutput().getContent();
+        try {
+            ChatResponse chatResponse = this.chatClient.call(prompt);
+            return chatResponse.getResult().getOutput().getContent();
+        } catch (Exception e) {
+            String[] components = e.getMessage().split(" - ");
+            return components.length > 1 ? components[1] : components[0];
+        }
     }
 
     @Override
@@ -113,17 +117,35 @@ public class OpenAiClientService implements AiClientService {
                 )
         );
 
-        // TODO: check if response is successful
-        ChatResponse chatResponse = this.chatClient.call(prompt);
+        try {
+            ChatResponse chatResponse = this.chatClient.call(prompt);
+            String strResponse = chatResponse
+                    .getResult()
+                    .getOutput()
+                    .getContent();
 
-        String strResponse = chatResponse
-                .getResult()
-                .getOutput()
-                .getContent();
-
-        return Response.<T>builder()
-                       .conversationId(conversationId)
-                       .content(JsonHelper.fromJson(strResponse, responseType))
-                       .build();
+            return Response.<T>builder()
+                           .conversationId(conversationId)
+                           .content(JsonHelper.fromJson(
+                                   strResponse,
+                                   responseType
+                           ))
+                           .build();
+        } catch (Exception e) {
+            String[] components = e.getMessage().split(" - ");
+            return Response.<T>builder()
+                           .conversationId(conversationId)
+                           .refusal(
+                                   components.length > 1
+                                           ? components[1]
+                                           : components[0]
+                           )
+                           .refusalStatus(
+                                   components.length > 1
+                                           ? components[0]
+                                           : "error"
+                           )
+                           .build();
+        }
     }
 }

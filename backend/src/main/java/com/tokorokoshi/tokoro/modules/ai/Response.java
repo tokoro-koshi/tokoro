@@ -1,10 +1,11 @@
-package com.tokorokoshi.tokoro.modules.tags;
+package com.tokorokoshi.tokoro.modules.ai;
 
 public class Response<C> {
     private final String conversationId;
 
     private final C content;
     private final String refusal;
+    private final Integer refusalStatus;
 
     public Response(
             C content,
@@ -12,15 +13,18 @@ public class Response<C> {
     ) {
         this.content = content;
         this.refusal = null;
+        this.refusalStatus = null;
         this.conversationId = conversationId;
     }
 
     public Response(
             String refusal,
+            Integer refusalStatus,
             String conversationId
     ) {
         this.content = null;
         this.refusal = refusal;
+        this.refusalStatus = refusalStatus;
         this.conversationId = conversationId;
     }
 
@@ -42,8 +46,27 @@ public class Response<C> {
         return refusal;
     }
 
+    public Integer getRefusalStatus() {
+        if (isSuccessful()) {
+            throw new IllegalStateException("Response is successful");
+        }
+        return refusalStatus;
+    }
+
     public boolean isSuccessful() {
         return content != null;
+    }
+
+    public boolean isRefusal() {
+        return refusal != null;
+    }
+
+    public String toString() {
+        if (isSuccessful()) {
+            return "Response{content=" + content + "}";
+        } else {
+            return "Response{refusal=" + refusal + ", status=" + refusalStatus + "}";
+        }
     }
 
     public static <C> Builder<C> builder() {
@@ -57,6 +80,7 @@ public class Response<C> {
         private String conversationId;
         private C content;
         private String refusal;
+        private Integer refusalStatus;
 
         public Builder<C> conversationId(String conversationId) {
             this.conversationId = conversationId;
@@ -73,19 +97,31 @@ public class Response<C> {
             return this;
         }
 
+        public Builder<C> refusalStatus(Integer refusalStatus) {
+            this.refusalStatus = refusalStatus;
+            return this;
+        }
+
+        public Builder<C> refusalStatus(String refusalStatus) {
+            this.refusalStatus = refusalStatus == null
+                    ? null
+                    : Integer.parseInt(refusalStatus);
+            return this;
+        }
+
         public Response<C> build() {
             if (content == null && refusal == null) {
                 throw new IllegalStateException("Response must have content or refusal");
             }
 
-            if (content != null && refusal != null) {
+            if (content != null && (refusal != null || refusalStatus != null)) {
                 throw new IllegalStateException("Response cannot have both content and refusal");
             }
 
             if (content != null) {
                 return new Response<>(content, conversationId);
             } else {
-                return new Response<>(refusal, conversationId);
+                return new Response<>(refusal, refusalStatus, conversationId);
             }
         }
     }
