@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+// TODO: Add JavaDoc
+// TODO: Add messages array to start with a predefined prompt
 @Service
 public class OpenAiClientService implements AiClientService {
     private final ChatModel chatClient;
