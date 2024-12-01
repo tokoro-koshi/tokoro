@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * <h3>TagController</h1>
+ * <h3>TagController</h3>
  * <p>
  * This class is a REST controller that handles requests for generating tags from messages.
  * </p>

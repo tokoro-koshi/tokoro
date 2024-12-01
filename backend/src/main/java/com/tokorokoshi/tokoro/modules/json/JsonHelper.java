@@ -31,9 +31,6 @@ public class JsonHelper {
         // Add required fields
         addRequired(jsonSchema);
 
-        System.out.println(jsonSchema.asText());
-        System.out.println(jsonSchema.toPrettyString());
-
         return jsonSchema.toPrettyString();
     }
 
