@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,12 +11,12 @@ import java.time.Instant;
 @Document(collection = "promptHistory")
 public class PromptHistory {
     @Id
-    private ObjectId id;
+    private String id;
 
     @NonNull
     private String prompt;
 
-    private ObjectId userId;
+    private String userId;
 
     @Indexed
     @CreatedDate
@@ -28,11 +27,11 @@ public class PromptHistory {
     }
 
     @NonNull
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(@NonNull ObjectId id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -45,11 +44,11 @@ public class PromptHistory {
         this.prompt = prompt;
     }
 
-    public ObjectId getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(ObjectId userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

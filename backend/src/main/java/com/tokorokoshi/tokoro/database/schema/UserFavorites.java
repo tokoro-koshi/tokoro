@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,10 +9,10 @@ import java.util.List;
 @Document
 public class UserFavorites {
     @DBRef
-    private List<ObjectId> places;
+    private List<String> places;
 
     @DBRef
-    private List<ObjectId> prompts;
+    private List<String> prompts;
 
     public UserFavorites() {
         this.places = List.of();
@@ -21,20 +20,20 @@ public class UserFavorites {
     }
 
     @NonNull
-    public List<ObjectId> getPlaces() {
+    public List<String> getPlaces() {
         return places;
     }
 
-    public void setPlaces(@NonNull List<ObjectId> places) {
+    public void setPlaces(@NonNull List<String> places) {
         this.places = places;
     }
 
     @NonNull
-    public List<ObjectId> getPrompts() {
+    public List<String> getPrompts() {
         return prompts;
     }
 
-    public void setPrompts(@NonNull List<ObjectId> prompts) {
+    public void setPrompts(@NonNull List<String> prompts) {
         this.prompts = prompts;
     }
 }

@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,7 +14,7 @@ import java.util.List;
 @Document(collection = "blog")
 public class Blog {
     @Id
-    private ObjectId id;
+    private String id;
 
     @NonNull
     private String title;
@@ -25,11 +24,11 @@ public class Blog {
 
     @NonNull
     @DBRef
-    private List<ObjectId> authorId;
+    private List<String> authorId;
 
     @NonNull
     @DBRef
-    private List<ObjectId> tags;
+    private List<String> tags;
 
     @DBRef
     private List<Comment> comments;
@@ -52,11 +51,11 @@ public class Blog {
     }
 
     @NonNull
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(@NonNull ObjectId id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -79,20 +78,20 @@ public class Blog {
     }
 
     @NonNull
-    public List<ObjectId> getAuthorId() {
+    public List<String> getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(@NonNull List<ObjectId> authorId) {
+    public void setAuthorId(@NonNull List<String> authorId) {
         this.authorId = authorId;
     }
 
     @NonNull
-    public List<ObjectId> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(@NonNull List<ObjectId> tags) {
+    public void setTags(@NonNull List<String> tags) {
         this.tags = tags;
     }
 
