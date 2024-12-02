@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.database.schema;
+package com.tokorokoshi.tokoro.database;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,7 +10,7 @@ public class UserRating {
 
     private String userId;
 
-    private String establishmentId;
+    private String placeId;
 
     private int value;
 
@@ -34,12 +34,12 @@ public class UserRating {
         this.userId = userId;
     }
 
-    public String getEstablishmentId() {
-        return establishmentId;
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setEstablishmentId(String establishmentId) {
-        this.establishmentId = establishmentId;
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
     public int getValue() {
