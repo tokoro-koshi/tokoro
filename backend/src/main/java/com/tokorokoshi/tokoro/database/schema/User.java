@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -10,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "user")
 public class User {
     @Id // reserved MongoDB name for primary key with ObjectID type (conforms to string)
-    private ObjectId id;
+    private String id;
 
     @Indexed(unique = true)
     @NonNull
@@ -31,11 +30,11 @@ public class User {
         this.email = "";
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

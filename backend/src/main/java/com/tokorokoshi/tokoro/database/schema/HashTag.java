@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class HashTag {
     @Id
     @NonNull
-    private ObjectId id;
+    private String id;
 
     @NonNull
     private String name;
@@ -19,11 +18,11 @@ public class HashTag {
     }
 
     @NonNull
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(@NonNull ObjectId id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

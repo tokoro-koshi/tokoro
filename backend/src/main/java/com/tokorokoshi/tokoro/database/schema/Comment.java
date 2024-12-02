@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,7 +12,7 @@ import java.time.Instant;
 @Document
 public class Comment {
     @Id
-    private ObjectId userId;
+    private String userId;
 
     @NotNull
     private String value;
@@ -31,11 +30,11 @@ public class Comment {
     }
 
     @NotNull
-    public ObjectId getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(@NotNull ObjectId userId) {
+    public void setUserId(@NotNull String userId) {
         this.userId = userId;
     }
 

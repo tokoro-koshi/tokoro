@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -12,7 +11,7 @@ import java.util.List;
 @Document(collection = "establishment")
 public class Establishment {
     @Id
-    private ObjectId id;
+    private String id;
 
     @NonNull
     @Indexed(unique = true)
@@ -24,7 +23,7 @@ public class Establishment {
     @DBRef
     private Location location;
 
-    private ObjectId categoryId;
+    private String categoryId;
 
     @DBRef
     @NonNull
@@ -42,11 +41,11 @@ public class Establishment {
     }
 
     @NonNull
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(@NonNull ObjectId id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -77,11 +76,11 @@ public class Establishment {
     }
 
     @NonNull
-    public ObjectId getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(@NonNull ObjectId categoryId) {
+    public void setCategoryId(@NonNull String categoryId) {
         this.categoryId = categoryId;
     }
 
