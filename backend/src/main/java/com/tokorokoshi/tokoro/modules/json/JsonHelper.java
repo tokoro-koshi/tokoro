@@ -54,7 +54,6 @@ public class JsonHelper {
 
     private static void addRequired(JsonNode node) {
         if (!node.isObject()) return;
-
         ObjectNode objectNode = (ObjectNode) node;
 
         // Check if the object contains "properties" and set additionalProperties to false

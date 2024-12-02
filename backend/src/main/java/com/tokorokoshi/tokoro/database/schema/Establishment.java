@@ -21,7 +21,6 @@ public class Establishment {
     private String description;
 
     @NonNull
-    @Indexed(unique = true)
     @DBRef
     private Location location;
 
