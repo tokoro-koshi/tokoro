@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database.schema;
 
 import com.mongodb.lang.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +13,7 @@ public class UserPreferences {
 
     @NonNull
     @DBRef
-    private List<ObjectId> tags;
+    private List<String> tags;
 
     @NonNull
     @DBRef
@@ -37,11 +36,11 @@ public class UserPreferences {
     }
 
     @NonNull
-    public List<ObjectId> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(@NonNull List<ObjectId> tags) {
+    public void setTags(@NonNull List<String> tags) {
         this.tags = tags;
     }
 
