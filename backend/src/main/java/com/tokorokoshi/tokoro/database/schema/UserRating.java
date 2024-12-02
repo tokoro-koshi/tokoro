@@ -19,14 +19,6 @@ public class UserRating {
         this.value = 0;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
     public ObjectId getId() {
         return id;
     }
@@ -49,5 +41,13 @@ public class UserRating {
 
     public void setEstablishmentId(ObjectId establishmentId) {
         this.establishmentId = establishmentId;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 }

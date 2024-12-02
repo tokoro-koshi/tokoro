@@ -21,11 +21,19 @@ public class PromptHistory {
 
     @Indexed
     @CreatedDate
-    private Instant created_at;
+    private Instant createdAt;
 
-    public PromptHistory(){
+    public PromptHistory() {
         this.prompt = "";
+    }
 
+    @NonNull
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(@NonNull ObjectId id) {
+        this.id = id;
     }
 
     @NonNull
@@ -33,31 +41,23 @@ public class PromptHistory {
         return prompt;
     }
 
-    public Instant getCreated_at() {
-        return created_at;
-    }
-
-    public ObjectId getId() {
-        return id;
+    public void setPrompt(@NonNull String prompt) {
+        this.prompt = prompt;
     }
 
     public ObjectId getUserId() {
         return userId;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public void setCreated_at(Instant created_at) {
-        this.created_at = created_at;
-    }
-
     public void setUserId(ObjectId userId) {
         this.userId = userId;
     }
 
-    public void setPrompt(@NonNull String prompt) {
-        this.prompt = prompt;
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 }

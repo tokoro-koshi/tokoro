@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Location {
-
     @NonNull
     private String address;
 
@@ -28,13 +27,12 @@ public class Location {
     }
 
     @NonNull
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
-    @NonNull
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(@NonNull String address) {
+        this.address = address;
     }
 
     @NonNull
@@ -42,24 +40,25 @@ public class Location {
         return city;
     }
 
+    public void setCity(@NonNull String city) {
+        this.city = city;
+    }
+
     @NonNull
     public String getCountry() {
         return country;
     }
 
-    public void setAddress(@NonNull String address) {
-        this.address = address;
+    public void setCountry(@NonNull String country) {
+        this.country = country;
+    }
+
+    @NonNull
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
     public void setCoordinate(@NonNull Coordinate coordinate) {
         this.coordinate = coordinate;
-    }
-
-    public void setCity(@NonNull String city) {
-        this.city = city;
-    }
-
-    public void setCountry(@NonNull String country) {
-        this.country = country;
     }
 }
