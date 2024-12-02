@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.database.schema;
+package com.tokorokoshi.tokoro.database;
 
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import org.springframework.data.annotation.CreatedDate;
