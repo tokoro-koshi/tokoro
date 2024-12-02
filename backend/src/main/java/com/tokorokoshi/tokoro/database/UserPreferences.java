@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.database.schema;
+package com.tokorokoshi.tokoro.database;
 
 import com.mongodb.lang.NonNull;
 import org.springframework.data.mongodb.core.mapping.DBRef;

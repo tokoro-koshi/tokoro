@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.database.schema;
+package com.tokorokoshi.tokoro.database;
 
 import com.mongodb.lang.NonNull;
 import org.springframework.data.annotation.Id;
@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "establishment")
-public class Establishment {
+@Document(collection = "place")
+public class Place {
     @Id
     private String id;
 
@@ -32,7 +32,7 @@ public class Establishment {
     @NonNull
     private double rating;
 
-    public Establishment() {
+    public Place() {
         this.name = "";
         this.description = "";
         this.location = new Location();
