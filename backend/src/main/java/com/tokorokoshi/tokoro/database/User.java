@@ -19,6 +19,9 @@ public class User {
     @NonNull
     private String email;
 
+    @NonNull
+    private String password;
+
     @DBRef
     private UserPreferences preferences;
 
@@ -28,6 +31,7 @@ public class User {
     public User() {
         this.username = "";
         this.email = "";
+        this.password = "";
     }
 
     public String getId() {
@@ -68,5 +72,14 @@ public class User {
 
     public void setFavorites(UserFavorites favorites) {
         this.favorites = favorites;
+    }
+
+    @NonNull
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NonNull String password) {
+        this.password = password;
     }
 }
