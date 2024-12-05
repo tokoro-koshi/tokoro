@@ -5,6 +5,7 @@ import com.tokorokoshi.tokoro.modules.user.dto.CreateUpdateUserDto;
 import com.tokorokoshi.tokoro.modules.user.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.control.MappingControl;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface UserMapper {
     @Mapping(target = "userPreferencesDto", source = "preferences")
     @Mapping(target = "userFavoritesDto", source = "favorites")
     List<UserDto> toUserDto(List<User> user);
+
+    @Mapping(target = "preferences", source = "userPreferencesDto")
+    @Mapping(target = "favorites", source = "userFavorites")
+    User toUserSchema(UserDto userDto);
 }
