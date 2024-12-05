@@ -41,7 +41,8 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserById(id));
     }
 
-    @GetMapping(value = {"/all", "/list"})
+    @GetMapping(value = {"/all", "/list"},
+                produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
