@@ -47,6 +47,6 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
-        mongoTemplate.remove(getUserById(id));
+        mongoTemplate.remove(userMapper.toUserSchema(getUserById(id)));
     }
 }
