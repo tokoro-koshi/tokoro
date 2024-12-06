@@ -10,7 +10,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/places")
+@RequestMapping("/api/place")
 public class PlaceController {
     private final PlaceService placeService;
 
@@ -22,7 +22,8 @@ public class PlaceController {
     @PostMapping(value = {"", "/"},
                 consumes = APPLICATION_JSON_VALUE,
                 produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PlaceDto> savePlace(CreateUpdatePlaceDto place){
+    public ResponseEntity<PlaceDto> savePlace(@RequestBody CreateUpdatePlaceDto place){
+        System.out.println("Place: " + place);
         return ResponseEntity.ok(placeService.savePlace(place));
     }
 
@@ -41,7 +42,7 @@ public class PlaceController {
     @PutMapping(value = "/{id}",
                 consumes = APPLICATION_JSON_VALUE,
                 produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PlaceDto> updatePlace(@PathVariable String id, CreateUpdatePlaceDto place) {
+    public ResponseEntity<PlaceDto> updatePlace(@PathVariable String id, @RequestBody CreateUpdatePlaceDto place) {
         return ResponseEntity.ok(placeService.updatePlace(id, place));
     }
 

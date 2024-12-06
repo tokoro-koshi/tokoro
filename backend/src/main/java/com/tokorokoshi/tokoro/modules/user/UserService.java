@@ -26,9 +26,8 @@ public class UserService {
     // CRUD operations
 
     public UserDto saveUser(CreateUpdateUserDto user) {
-        User userSchema = mongoTemplate.save(
-                this.userMapper.toUserSchema(user)
-        );
+        User userSchema = this.userMapper.toUserSchema(user);
+        userSchema = mongoTemplate.save(userSchema);
         return this.userMapper.toUserDto(userSchema);
     }
 
