@@ -3,8 +3,8 @@ package com.tokorokoshi.tokoro.database;
 import com.mongodb.lang.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -20,12 +20,12 @@ public class Place {
     private String description;
 
     @NonNull
-    @DBRef
+    @Field
     private Location location;
 
     private String categoryId;
 
-    @DBRef
+
     @NonNull
     private List<HashTag> hashTags;
 

@@ -23,14 +23,11 @@ public class Blog {
     private String content;
 
     @NonNull
-    @DBRef
     private List<String> authorId;
 
     @NonNull
-    @DBRef
     private List<String> tags;
 
-    @DBRef
     private List<Comment> comments;
 
     @Indexed

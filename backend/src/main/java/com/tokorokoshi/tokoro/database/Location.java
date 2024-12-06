@@ -3,8 +3,9 @@ package com.tokorokoshi.tokoro.database;
 import com.mongodb.lang.NonNull;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document
+
 public class Location {
     @NonNull
     private String address;
@@ -16,7 +17,7 @@ public class Location {
     private String country;
 
     @NonNull
-    @DBRef
+    @Field
     private Coordinate coordinate;
 
     public Location() {

@@ -30,6 +30,7 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(
             @RequestBody CreateUpdateUserDto userCreateDto
     ){
+        System.out.print("UserCreateDto: " + userCreateDto);
         return ResponseEntity.ok(this.userService.saveUser(userCreateDto));
     }
 

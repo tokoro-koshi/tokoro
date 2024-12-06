@@ -4,7 +4,7 @@ import com.mongodb.lang.NonNull;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+
 public class Coordinate {
     @NonNull
     private double latitude;

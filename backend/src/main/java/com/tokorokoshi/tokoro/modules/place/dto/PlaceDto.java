@@ -45,11 +45,11 @@ public class PlaceDto {
         this.description = description;
     }
 
-    public LocationDto getLocation() {
+    public LocationDto getLocationDto() {
         return locationDto;
     }
 
-    public void setLocation(LocationDto location) {
+    public void setLocationDto(LocationDto location) {
         this.locationDto = location;
     }
 
@@ -61,11 +61,11 @@ public class PlaceDto {
         this.categoryId = categoryId;
     }
 
-    public List<HashTagDto> getHashTags() {
+    public List<HashTagDto> getHashTagsDto() {
         return hashTagsDto;
     }
 
-    public void setHashTags(List<HashTagDto> hashTags) {
+    public void setHashTagsDto(List<HashTagDto> hashTags) {
         this.hashTagsDto = hashTags;
     }
 

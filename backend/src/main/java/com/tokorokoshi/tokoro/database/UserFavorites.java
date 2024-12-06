@@ -6,12 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
-public class UserFavorites {
-    @DBRef
-    private List<String> places;
 
-    @DBRef
+public class UserFavorites {
+    private List<String> places;
     private List<String> prompts;
 
     public UserFavorites() {

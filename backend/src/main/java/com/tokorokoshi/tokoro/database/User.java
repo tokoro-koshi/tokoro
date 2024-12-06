@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "user")
 public class User {
@@ -22,10 +23,10 @@ public class User {
     @NonNull
     private String password;
 
-    @DBRef
+    @Field("preferences")
     private UserPreferences preferences;
 
-    @DBRef
+    @Field("favorites")
     private UserFavorites favorites;
 
     public User() {

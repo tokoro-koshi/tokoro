@@ -6,17 +6,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
+
 public class UserPreferences {
     @NonNull
     private String language;
 
     @NonNull
-    @DBRef
     private List<String> tags;
 
     @NonNull
-    @DBRef
     private List<String> categories;
 
     public UserPreferences() {
