@@ -23,6 +23,6 @@ public interface UserMapper {
     List<UserDto> toUserDto(List<User> user);
 
     @Mapping(target = "preferences", source = "userPreferencesDto")
-    @Mapping(target = "favorites", source = "userFavorites")
+    @Mapping(target = "favorites", source = "userFavoritesDto")
     User toUserSchema(UserDto userDto);
 }
