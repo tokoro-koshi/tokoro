@@ -1,7 +1,5 @@
 package com.tokorokoshi.tokoro.modules.userRating;
 
-
-import com.tokorokoshi.tokoro.database.PromptHistory;
 import com.tokorokoshi.tokoro.database.UserRating;
 import com.tokorokoshi.tokoro.modules.userRating.dto.CreateUpdateUserRatingDto;
 import com.tokorokoshi.tokoro.modules.userRating.dto.UserRatingDto;

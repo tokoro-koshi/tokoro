@@ -1,6 +1,8 @@
 package com.tokorokoshi.tokoro.modules.place;
 
 import com.tokorokoshi.tokoro.database.Place;
+import com.tokorokoshi.tokoro.modules.place.dto.CreateUpdatePlaceDto;
+import com.tokorokoshi.tokoro.modules.place.dto.PlaceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -11,27 +13,33 @@ import java.util.List;
 public class PlaceService {
     //What is this?
     private final MongoTemplate mongoTemplate;
+    private final PlaceMapper placeMapper;
 
     @Autowired
-    public PlaceService(MongoTemplate mongoTemplate){this.mongoTemplate = mongoTemplate;}
+    public PlaceService(MongoTemplate mongoTemplate,
+                        PlaceMapper placeMapper){
+        this.mongoTemplate = mongoTemplate;
+        this.placeMapper = placeMapper;
+    }
 
     //CRUD
 
-    public void savePlace(Place place){
-        mongoTemplate.save(place);
+    public PlaceDto savePlace(CreateUpdatePlaceDto place){
+        return placeMapper.toPlaceDto(mongoTemplate.save(placeMapper.toPlaceSchema(place)));
     }
 
-    public Place getPlaceById(String id){return mongoTemplate.findById(id, Place.class);}
+    public PlaceDto getPlaceById(String id){return placeMapper.toPlaceDto(mongoTemplate.findById(id, Place.class));}
 
-    public List<Place> getAllPlaces(){return mongoTemplate.findAll(Place.class);}
+    public List<PlaceDto> getAllPlaces(){return placeMapper.toPlaceDto(mongoTemplate.findAll(Place.class));}
 
-    public void updatePlace(String id, Place place)
+    public PlaceDto updatePlace(String id, CreateUpdatePlaceDto place)
     {
-        place.setId(id);
-        mongoTemplate.save(place);
+        Place placeSchema = placeMapper.toPlaceSchema(place);
+        placeSchema.setId(id);
+        return placeMapper.toPlaceDto(mongoTemplate.save(placeSchema));
     }
 
-    public void deleteUser(String id){
-        mongoTemplate.remove(getPlaceById(id));
+    public void deletePlace(String id){
+        mongoTemplate.remove(placeMapper.toPlaceSchema(getPlaceById(id)));
     }
 }
