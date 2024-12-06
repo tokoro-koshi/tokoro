@@ -12,6 +12,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "preferences", source = "userPreferencesDto")
+    @Mapping(target = "favorites", source = "userFavoritesDto")
     User toUserSchema(CreateUpdateUserDto userCreateDto);
 
     @Mapping(target = "userPreferencesDto", source = "preferences")

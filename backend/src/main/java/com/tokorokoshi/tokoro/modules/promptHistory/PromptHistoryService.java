@@ -27,7 +27,7 @@ public class PromptHistoryService {
 
     public PromptHistoryDto savePromptHistory(CreateUpdatePromptHistoryDto promptHistory){
         PromptHistory promptHistorySchema = promptHistoryMapper.toPromptHistorySchema(promptHistory);
-        return promptHistoryMapper.toPromptHistoryDto(promptHistorySchema);
+        return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.save(promptHistorySchema));
     }
 
 
