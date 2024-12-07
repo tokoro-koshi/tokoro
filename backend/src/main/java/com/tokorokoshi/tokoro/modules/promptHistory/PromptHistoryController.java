@@ -32,7 +32,7 @@ public class PromptHistoryController {
        return ResponseEntity.ok(promptHistoryService.findPromptHistoryById(id));
     }
 
-    @GetMapping(value = {"/all", "list"},
+    @GetMapping(value = {"", "/"},
                 produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PromptHistoryDto>> findAllPromptHistories() {
         return ResponseEntity.ok(promptHistoryService.findAllPromptHistories());

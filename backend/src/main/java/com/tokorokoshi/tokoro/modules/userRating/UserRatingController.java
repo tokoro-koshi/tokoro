@@ -35,7 +35,7 @@ public class UserRatingController {
         return ResponseEntity.ok(this.userRatingService.findUserRatingById(id));
     }
 
-    @GetMapping(value = {"/all", "list"},
+    @GetMapping(value = {"", "/"},
             produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserRatingDto>> getAllUserRatings() {
         return ResponseEntity.ok(this.userRatingService.findAllUserRatings());

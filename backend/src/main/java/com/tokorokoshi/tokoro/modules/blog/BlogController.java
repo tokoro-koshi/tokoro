@@ -36,7 +36,7 @@ public class BlogController {
         return ResponseEntity.ok(this.blogService.getBlogById(id));
     }
 
-    @GetMapping(value = {"/all", "list"},
+    @GetMapping(value = {"", "/"},
             produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<BlogDto>> getAllBlogs(){
         return ResponseEntity.ok(this.blogService.getAllBlogs());
