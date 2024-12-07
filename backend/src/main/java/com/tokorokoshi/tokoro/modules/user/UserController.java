@@ -30,7 +30,6 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(
             @RequestBody CreateUpdateUserDto userCreateDto
     ){
-        System.out.print("UserCreateDto: " + userCreateDto);
         return ResponseEntity.ok(this.userService.saveUser(userCreateDto));
     }
 
@@ -42,7 +41,7 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserById(id));
     }
 
-    @GetMapping(value = {"/all", "/list"},
+    @GetMapping(value = {"", "/"},
                 produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAllUsers(){
         return ResponseEntity.ok(this.userService.getAllUsers());
