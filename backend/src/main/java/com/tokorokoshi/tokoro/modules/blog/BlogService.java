@@ -38,6 +38,9 @@ public class BlogService {
     }
 
     public BlogDto updateBlog(String id, CreateUpdateBlogDto blog){
+        if(getBlogById(id) == null){
+            return null;
+        }
         Blog blogSchema = blogMapper.toBlogSchema(blog);
         blogSchema.setId(id);
         return blogMapper.toBlogDto(mongoTemplate.save(blogSchema));

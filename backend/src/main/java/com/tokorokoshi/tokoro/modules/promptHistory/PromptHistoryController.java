@@ -33,7 +33,7 @@ public class PromptHistoryController {
     }
 
     @GetMapping(value = {"/all", "list"},
-            produces = APPLICATION_JSON_VALUE)
+                produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PromptHistoryDto>> findAllPromptHistories() {
         return ResponseEntity.ok(promptHistoryService.findAllPromptHistories());
     }
@@ -41,9 +41,15 @@ public class PromptHistoryController {
     @PutMapping(value = "/{id}",
                 consumes = APPLICATION_JSON_VALUE,
                 produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PromptHistoryDto> updatePromptHistory(@RequestBody CreateUpdatePromptHistoryDto promptHistory,
-                                              @PathVariable String id) {
-        return ResponseEntity.ok(promptHistoryService.updatePromptHistory(id, promptHistory));
+    public ResponseEntity<PromptHistoryDto> updatePromptHistory(
+            @RequestBody CreateUpdatePromptHistoryDto promptHistory,
+            @PathVariable String id
+    ) {
+        PromptHistoryDto updatedPromptHistory = promptHistoryService.updatePromptHistory(id, promptHistory);
+        if(updatedPromptHistory == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedPromptHistory);
     }
 
     @DeleteMapping(value = "/{id}")

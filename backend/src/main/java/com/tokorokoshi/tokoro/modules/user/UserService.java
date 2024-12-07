@@ -40,6 +40,9 @@ public class UserService {
     }
 
     public UserDto updateUser(String id, CreateUpdateUserDto user) {
+        if(getUserById(id) == null) {
+            return null;
+        }
         User userSchema = this.userMapper.toUserSchema(user);
         userSchema.setId(id);
         return this.userMapper.toUserDto(mongoTemplate.save(userSchema));
