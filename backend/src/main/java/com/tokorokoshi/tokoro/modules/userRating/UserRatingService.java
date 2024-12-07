@@ -43,6 +43,9 @@ public class UserRatingService {
     }
 
     public UserRatingDto updateUserRating(String id, CreateUpdateUserRatingDto userRating){
+        if(findUserRatingById(id) == null){
+            return null;
+        }
         UserRating userRatingSchema = userRatingMapper.toUserRatingSchema(userRating);
         userRatingSchema.setId(id);
         return userRatingMapper.

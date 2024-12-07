@@ -43,7 +43,11 @@ public class PlaceController {
                 consumes = APPLICATION_JSON_VALUE,
                 produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PlaceDto> updatePlace(@PathVariable String id, @RequestBody CreateUpdatePlaceDto place) {
-        return ResponseEntity.ok(placeService.updatePlace(id, place));
+        PlaceDto updatedPlace = placeService.updatePlace(id, place);
+        if(updatedPlace == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedPlace);
     }
 
     @DeleteMapping(value = "/{id}")
