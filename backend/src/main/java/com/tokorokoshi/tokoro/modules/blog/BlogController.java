@@ -47,7 +47,11 @@ public class BlogController {
                 produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<BlogDto> updateBlog(@RequestBody CreateUpdateBlogDto createUpdateBlogDto,
                                               @PathVariable String id){
-        return ResponseEntity.ok(this.blogService.updateBlog(id, createUpdateBlogDto));
+        BlogDto updatedBlog = this.blogService.updateBlog(id, createUpdateBlogDto);
+        if(updatedBlog == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedBlog);
     }
 
     @DeleteMapping(value = "/{id}")

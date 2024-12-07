@@ -41,6 +41,9 @@ public class PromptHistoryService {
     }
 
     public PromptHistoryDto updatePromptHistory(String id, CreateUpdatePromptHistoryDto promptHistory){
+        if(findPromptHistoryById(id) == null){
+            return null;
+        }
         PromptHistory promptHistorySchema = promptHistoryMapper.toPromptHistorySchema(promptHistory);
         promptHistorySchema.setId(id);
         return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.save(promptHistorySchema));

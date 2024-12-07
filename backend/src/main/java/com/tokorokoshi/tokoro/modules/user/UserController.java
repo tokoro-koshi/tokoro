@@ -57,7 +57,11 @@ public class UserController {
             @PathVariable String id,
             @RequestBody CreateUpdateUserDto updateUserDto
     ){
-        return ResponseEntity.ok(this.userService.updateUser(id, updateUserDto));
+        UserDto updatedUser = this.userService.updateUser(id, updateUserDto);
+        if(updatedUser == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping(

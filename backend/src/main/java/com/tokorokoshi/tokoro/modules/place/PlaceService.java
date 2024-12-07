@@ -34,6 +34,9 @@ public class PlaceService {
 
     public PlaceDto updatePlace(String id, CreateUpdatePlaceDto place)
     {
+        if(getPlaceById(id) == null){
+            return null;
+        }
         Place placeSchema = placeMapper.toPlaceSchema(place);
         placeSchema.setId(id);
         return placeMapper.toPlaceDto(mongoTemplate.save(placeSchema));

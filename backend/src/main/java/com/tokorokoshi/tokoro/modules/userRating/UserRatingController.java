@@ -47,7 +47,11 @@ public class UserRatingController {
     public ResponseEntity<UserRatingDto> updateUserRating(
             @RequestBody CreateUpdateUserRatingDto userRating,
             @PathVariable String id) {
-        return ResponseEntity.ok(this.userRatingService.updateUserRating(id, userRating));
+        UserRatingDto updatedUserRating = this.userRatingService.updateUserRating(id, userRating);
+        if(updatedUserRating == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedUserRating);
     }
 
     @DeleteMapping(value = "/{id}")
