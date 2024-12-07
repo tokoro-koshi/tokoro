@@ -106,7 +106,7 @@
 
 [//]: # (>   Accessible at `http://localhost:8080`.)
 
-> ## 🗂 Monorepo Structure
+> ## 🗂 Project Structure
 >
 > ```
 > tokoro/
