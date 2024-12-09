@@ -6,4 +6,5 @@ public record CreateUpdatePromptHistoryDto(
         String prompt,
         String userId,
         Instant createdAt
-) {}
+) {
+}

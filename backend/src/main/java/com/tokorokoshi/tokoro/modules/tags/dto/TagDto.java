@@ -5,4 +5,5 @@ import jakarta.annotation.Nonnull;
 public record TagDto(
         @Nonnull String lang,
         @Nonnull String name
-) {}
+) {
+}

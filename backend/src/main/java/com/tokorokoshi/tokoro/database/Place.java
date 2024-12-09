@@ -25,7 +25,7 @@ public record Place(
         @NonNull
         double rating
 ) {
-        public Place withId(String id) {
-                return new Place(id, name, description, location, categoryId, hashTags, rating);
-        }
+    public Place withId(String id) {
+        return new Place(id, name, description, location, categoryId, hashTags, rating);
+    }
 }

@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,11 +10,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
@@ -48,23 +48,23 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
-    throws Exception {
+            throws Exception {
         if (isDevelopment()) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .authorizeHttpRequests(
-                        auth -> auth.anyRequest().permitAll()
-                )
-                .csrf(AbstractHttpConfigurer::disable);
+                    .authorizeHttpRequests(
+                            auth -> auth.anyRequest().permitAll()
+                    )
+                    .csrf(AbstractHttpConfigurer::disable);
         } else {
             // Production & staging configuration
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(
-                                jwt -> jwt.decoder(jwtDecoder())
-                        )
-                )
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/error")
+                    .oauth2ResourceServer(
+                            oauth2 -> oauth2.jwt(
+                                    jwt -> jwt.decoder(jwtDecoder())
+                            )
+                    )
+                    .authorizeHttpRequests(
+                            auth -> auth.requestMatchers("/error")
                                     .permitAll()
                                     .requestMatchers("/actuator/health")
                                     .permitAll()
@@ -74,8 +74,8 @@ public class SecurityConfiguration {
                                     .authenticated()
                                     .anyRequest()
                                     .denyAll()
-                )
-                .csrf(AbstractHttpConfigurer::disable);
+                    )
+                    .csrf(AbstractHttpConfigurer::disable);
         }
         return http.build();
     }

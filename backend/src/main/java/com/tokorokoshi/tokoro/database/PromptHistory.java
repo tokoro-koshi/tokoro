@@ -19,7 +19,7 @@ public record PromptHistory(
         @CreatedDate
         Instant createdAt
 ) {
-        public PromptHistory withId(String id) {
-                return new PromptHistory(id, prompt, userId, createdAt);
-        }
+    public PromptHistory withId(String id) {
+        return new PromptHistory(id, prompt, userId, createdAt);
+    }
 }

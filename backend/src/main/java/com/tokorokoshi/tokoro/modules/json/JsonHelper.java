@@ -49,7 +49,7 @@ public class JsonHelper {
 
         // Recursively apply to all objects inside
         objectNode.fields()
-                  .forEachRemaining(entry -> addAdditionalPropertiesFalse(entry.getValue()));
+                .forEachRemaining(entry -> addAdditionalPropertiesFalse(entry.getValue()));
     }
 
     private static void addRequired(JsonNode node) {
@@ -65,7 +65,7 @@ public class JsonHelper {
 
         // Recursively apply to all objects inside
         objectNode.fields()
-                  .forEachRemaining(entry -> addRequired(entry.getValue()));
+                .forEachRemaining(entry -> addRequired(entry.getValue()));
     }
 
     public static <T> T fromJson(String json, Class<T> type) {

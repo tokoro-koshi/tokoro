@@ -40,12 +40,11 @@ public class UsersService {
     }
 
     public UserDto updateUser(String id, CreateUpdateUserDto user) {
-        if(getUserById(id) == null) {
+        if (getUserById(id) == null) {
             return null;
         }
         User userSchema = this.userMapper.toUserSchema(user);
-        userSchema.setId(id);
-        return this.userMapper.toUserDto(mongoTemplate.save(userSchema));
+        return this.userMapper.toUserDto(mongoTemplate.save(userSchema.withId(id)));
     }
 
     public void deleteUser(String id) {

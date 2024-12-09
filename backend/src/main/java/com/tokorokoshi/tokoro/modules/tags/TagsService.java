@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TagsService {
     private static final String MODEL = "gpt-4o";
-    private static final int    TOKENS_LIMIT = 1000;
+    private static final int TOKENS_LIMIT = 1000;
     private static final double TEMPERATURE = 1.5;
 
     private final AiClientService clientService;

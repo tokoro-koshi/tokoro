@@ -23,38 +23,37 @@ public class UserRatingsService {
 
     //Crud
 
-    public UserRatingDto saveUserRating(CreateUpdateUserRatingDto userRating){
+    public UserRatingDto saveUserRating(CreateUpdateUserRatingDto userRating) {
         return userRatingMapper.
                 toUserRatingDto(mongoTemplate.
                         save(userRatingMapper.
                                 toUserRatingSchema(userRating)));
     }
 
-    public UserRatingDto findUserRatingById(String id){
+    public UserRatingDto findUserRatingById(String id) {
         return userRatingMapper.
                 toUserRatingDto(mongoTemplate.
                         findById(id, UserRating.class));
     }
 
-    public List<UserRatingDto> findAllUserRatings(){
+    public List<UserRatingDto> findAllUserRatings() {
         return userRatingMapper.
                 toUserRatingDto(mongoTemplate.
                         findAll(UserRating.class));
     }
 
-    public UserRatingDto updateUserRating(String id, CreateUpdateUserRatingDto userRating){
-        if(findUserRatingById(id) == null){
+    public UserRatingDto updateUserRating(String id, CreateUpdateUserRatingDto userRating) {
+        if (findUserRatingById(id) == null) {
             return null;
         }
         UserRating userRatingSchema = userRatingMapper.toUserRatingSchema(userRating);
-        userRatingSchema.setId(id);
-        return userRatingMapper.
-                toUserRatingDto(mongoTemplate.
-                        save(userRatingSchema));
+        return userRatingMapper.toUserRatingDto(
+                mongoTemplate.save(userRatingSchema.withId(id))
+        );
 
     }
 
-    public void deleteUserRating(String id){
+    public void deleteUserRating(String id) {
         mongoTemplate.remove(userRatingMapper.toUserRatingSchema(findUserRatingById(id)));
     }
 }

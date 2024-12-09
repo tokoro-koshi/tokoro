@@ -5,4 +5,5 @@ public record UserRatingDto(
         String userId,
         String placeId,
         int value
-) {}
+) {
+}

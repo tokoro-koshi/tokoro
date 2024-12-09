@@ -30,7 +30,7 @@ public record Blog(
         @LastModifiedDate
         Instant updatedAt
 ) {
-        public Blog withId(String id) {
-                return new Blog(id, title, content, authorId, tags, comments, createdAt, updatedAt);
-        }
+    public Blog withId(String id) {
+        return new Blog(id, title, content, authorId, tags, comments, createdAt, updatedAt);
+    }
 }

@@ -6,7 +6,6 @@ import com.tokorokoshi.tokoro.modules.users.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 import java.util.List;
 
 

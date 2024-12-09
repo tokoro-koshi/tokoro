@@ -10,4 +10,5 @@ public record PlaceDto(
         String categoryId,
         List<HashTagDto> hashTagsDto,
         double rating
-) {}
+) {
+}
