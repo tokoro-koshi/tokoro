@@ -9,54 +9,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 
 @Document(collection = "promptHistory")
-public class PromptHistory {
-    @Id
-    private String id;
-
-    @NonNull
-    private String prompt;
-
-    private String userId;
-
-    @Indexed
-    @CreatedDate
-    private Instant createdAt;
-
-    public PromptHistory() {
-        this.prompt = "";
-    }
-
-    @NonNull
-    public String getId() {
-        return id;
-    }
-
-    public void setId(@NonNull String id) {
-        this.id = id;
-    }
-
-    @NonNull
-    public String getPrompt() {
-        return prompt;
-    }
-
-    public void setPrompt(@NonNull String prompt) {
-        this.prompt = prompt;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
+public record PromptHistory(
+        @Id
+        String id,
+        @NonNull
+        String prompt,
+        String userId,
+        @Indexed
+        @CreatedDate
+        Instant createdAt
+) {
+        public PromptHistory withId(String id) {
+                return new PromptHistory(id, prompt, userId, createdAt);
+        }
 }
