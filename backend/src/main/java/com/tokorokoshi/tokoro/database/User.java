@@ -25,7 +25,7 @@ public record User(
         @Field("favorites")
         UserFavorites favorites
 ) {
-        public User withId(String id) {
-                return new User(id, username, email, password, preferences, favorites);
-        }
+    public User withId(String id) {
+        return new User(id, username, email, password, preferences, favorites);
+    }
 }

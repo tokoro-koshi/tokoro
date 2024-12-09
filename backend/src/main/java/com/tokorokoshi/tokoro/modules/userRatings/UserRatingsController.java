@@ -48,7 +48,7 @@ public class UserRatingsController {
             @RequestBody CreateUpdateUserRatingDto userRating,
             @PathVariable String id) {
         UserRatingDto updatedUserRating = this.userRatingsService.updateUserRating(id, userRating);
-        if(updatedUserRating == null) {
+        if (updatedUserRating == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedUserRating);

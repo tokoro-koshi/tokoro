@@ -11,4 +11,5 @@ public record UserFavorites(
         List<String> places,
         @NonNull
         List<String> prompts
-) {}
+) {
+}

@@ -7,4 +7,5 @@ public record UserDto(
         String password,
         UserPreferencesDto userPreferencesDto,
         UserFavoritesDto userFavoritesDto
-) {}
+) {
+}

@@ -16,30 +16,32 @@ public class PlacesService {
 
     @Autowired
     public PlacesService(MongoTemplate mongoTemplate,
-                         PlaceMapper placeMapper){
+                         PlaceMapper placeMapper) {
         this.mongoTemplate = mongoTemplate;
         this.placeMapper = placeMapper;
     }
 
-    public PlaceDto savePlace(CreateUpdatePlaceDto place){
+    public PlaceDto savePlace(CreateUpdatePlaceDto place) {
         return placeMapper.toPlaceDto(mongoTemplate.save(placeMapper.toPlaceSchema(place)));
     }
 
-    public PlaceDto getPlaceById(String id){return placeMapper.toPlaceDto(mongoTemplate.findById(id, Place.class));}
+    public PlaceDto getPlaceById(String id) {
+        return placeMapper.toPlaceDto(mongoTemplate.findById(id, Place.class));
+    }
 
-    public List<PlaceDto> getAllPlaces(){return placeMapper.toPlaceDto(mongoTemplate.findAll(Place.class));}
+    public List<PlaceDto> getAllPlaces() {
+        return placeMapper.toPlaceDto(mongoTemplate.findAll(Place.class));
+    }
 
-    public PlaceDto updatePlace(String id, CreateUpdatePlaceDto place)
-    {
-        if(getPlaceById(id) == null){
+    public PlaceDto updatePlace(String id, CreateUpdatePlaceDto place) {
+        if (getPlaceById(id) == null) {
             return null;
         }
         Place placeSchema = placeMapper.toPlaceSchema(place);
-        placeSchema.setId(id);
-        return placeMapper.toPlaceDto(mongoTemplate.save(placeSchema));
+        return placeMapper.toPlaceDto(mongoTemplate.save(placeSchema.withId(id)));
     }
 
-    public void deletePlace(String id){
+    public void deletePlace(String id) {
         mongoTemplate.remove(placeMapper.toPlaceSchema(getPlaceById(id)));
     }
 }

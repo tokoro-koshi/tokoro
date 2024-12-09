@@ -18,7 +18,7 @@ public interface BlogMapper {
     BlogDto toBlogDto(Blog blogSchema);
 
     @Mapping(target = "commentDtos", source = "comments")
-    List<BlogDto> toBlogDto(List<Blog>blogList);
+    List<BlogDto> toBlogDto(List<Blog> blogList);
 
     @Mapping(target = "comments", source = "commentDtos")
     Blog toBlogSchema(BlogDto blogDto);

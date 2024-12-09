@@ -15,4 +15,5 @@ public record Location(
         @NonNull
         @Field
         Coordinate coordinate
-) {}
+) {
+}

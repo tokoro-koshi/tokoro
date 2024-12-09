@@ -12,4 +12,5 @@ public record BlogDto(
         List<CommentDto> commentDtos,
         Instant createdAt,
         Instant updatedAt
-) {}
+) {
+}

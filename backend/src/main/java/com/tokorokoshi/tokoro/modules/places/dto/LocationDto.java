@@ -5,4 +5,5 @@ public record LocationDto(
         String city,
         String country,
         CoordinateDto coordinate
-) {}
+) {
+}

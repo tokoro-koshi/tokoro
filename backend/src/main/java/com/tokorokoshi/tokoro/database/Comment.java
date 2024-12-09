@@ -21,4 +21,5 @@ public record Comment(
         @Indexed
         @LastModifiedDate
         Instant updatedAt
-) {}
+) {
+}

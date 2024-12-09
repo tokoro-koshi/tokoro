@@ -16,8 +16,7 @@ public class PromptHistoryService {
 
     @Autowired
     public PromptHistoryService(MongoTemplate mongoTemplate,
-                                PromptHistoryMapper promptHistoryMapper)
-    {
+                                PromptHistoryMapper promptHistoryMapper) {
         this.mongoTemplate = mongoTemplate;
         this.promptHistoryMapper = promptHistoryMapper;
     }
@@ -25,34 +24,34 @@ public class PromptHistoryService {
 
     //CRUD
 
-    public PromptHistoryDto savePromptHistory(CreateUpdatePromptHistoryDto promptHistory){
+    public PromptHistoryDto savePromptHistory(CreateUpdatePromptHistoryDto promptHistory) {
         PromptHistory promptHistorySchema = promptHistoryMapper.toPromptHistorySchema(promptHistory);
         return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.save(promptHistorySchema));
     }
 
 
-    public PromptHistoryDto findPromptHistoryById(String id){
-       return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.findById(id, PromptHistory.class));
+    public PromptHistoryDto findPromptHistoryById(String id) {
+        return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.findById(id, PromptHistory.class));
     }
 
-    public List<PromptHistoryDto> findAllPromptHistories(){
+    public List<PromptHistoryDto> findAllPromptHistories() {
         return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.findAll(PromptHistory.class));
 
     }
 
-    public PromptHistoryDto updatePromptHistory(String id, CreateUpdatePromptHistoryDto promptHistory){
-        if(findPromptHistoryById(id) == null){
+    public PromptHistoryDto updatePromptHistory(String id, CreateUpdatePromptHistoryDto promptHistory) {
+        if (findPromptHistoryById(id) == null) {
             return null;
         }
         PromptHistory promptHistorySchema = promptHistoryMapper.toPromptHistorySchema(promptHistory);
-        promptHistorySchema.setId(id);
-        return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.save(promptHistorySchema));
+        return promptHistoryMapper.toPromptHistoryDto(
+                mongoTemplate.save(promptHistorySchema.withId(id))
+        );
     }
 
-    public void deletePromptHistory(String id){
+    public void deletePromptHistory(String id) {
         mongoTemplate.remove(promptHistoryMapper.toPromptHistorySchema(findPromptHistoryById(id)));
     }
-
 
 
 }

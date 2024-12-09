@@ -4,4 +4,5 @@ public record CreateUpdateUserRatingDto(
         String userId,
         String placeId,
         int value
-) {}
+) {
+}

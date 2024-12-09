@@ -6,4 +6,5 @@ public record CreateUpdateUserDto(
         String password,
         UserPreferencesDto userPreferencesDto,
         UserFavoritesDto userFavoritesDto
-) {}
+) {
+}
