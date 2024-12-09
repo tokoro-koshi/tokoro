@@ -23,7 +23,6 @@ public class BlogsService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    //Crud
     public BlogDto saveBlog(CreateUpdateBlogDto blog){
         Blog blogSchema = blogMapper.toBlogSchema(blog);
         return blogMapper.toBlogDto(mongoTemplate.save(blogSchema));

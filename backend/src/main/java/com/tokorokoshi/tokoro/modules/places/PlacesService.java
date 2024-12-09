@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class PlacesService {
-    //What is this?
     private final MongoTemplate mongoTemplate;
     private final PlaceMapper placeMapper;
 
@@ -21,8 +20,6 @@ public class PlacesService {
         this.mongoTemplate = mongoTemplate;
         this.placeMapper = placeMapper;
     }
-
-    //CRUD
 
     public PlaceDto savePlace(CreateUpdatePlaceDto place){
         return placeMapper.toPlaceDto(mongoTemplate.save(placeMapper.toPlaceSchema(place)));

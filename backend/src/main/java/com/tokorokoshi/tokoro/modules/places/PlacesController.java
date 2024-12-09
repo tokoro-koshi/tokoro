@@ -18,7 +18,6 @@ public class PlacesController {
         this.placesService = placesService;
     }
 
-    //CRUD
     @PostMapping(value = {"", "/"},
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE)
