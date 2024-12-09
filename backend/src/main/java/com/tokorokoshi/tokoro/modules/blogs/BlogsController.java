@@ -17,45 +17,45 @@ public class BlogsController {
     private final BlogsService blogsService;
 
     @Autowired
-    public BlogsController(BlogsService blogsService){
+    public BlogsController(BlogsService blogsService) {
         this.blogsService = blogsService;
     }
 
     @PostMapping(value = {"", "/"},
-                consumes = APPLICATION_JSON_VALUE,
-                produces = APPLICATION_JSON_VALUE)
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<BlogDto> createBlog(
             @RequestBody CreateUpdateBlogDto createUpdateBlogDto
-            ){
+    ) {
         return ResponseEntity.ok(this.blogsService.saveBlog(createUpdateBlogDto));
     }
 
     @GetMapping(value = "/{id}",
-                produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BlogDto> getBlog(@PathVariable String id){
+            produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BlogDto> getBlog(@PathVariable String id) {
         return ResponseEntity.ok(this.blogsService.getBlogById(id));
     }
 
     @GetMapping(value = {"", "/"},
             produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BlogDto>> getAllBlogs(){
+    public ResponseEntity<List<BlogDto>> getAllBlogs() {
         return ResponseEntity.ok(this.blogsService.getAllBlogs());
     }
 
     @PutMapping(value = "/{id}",
-                consumes = APPLICATION_JSON_VALUE,
-                produces = APPLICATION_JSON_VALUE)
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<BlogDto> updateBlog(@RequestBody CreateUpdateBlogDto createUpdateBlogDto,
-                                              @PathVariable String id){
+                                              @PathVariable String id) {
         BlogDto updatedBlog = this.blogsService.updateBlog(id, createUpdateBlogDto);
-        if(updatedBlog == null){
+        if (updatedBlog == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedBlog);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteBlog(@PathVariable String id){
+    public void deleteBlog(@PathVariable String id) {
         this.blogsService.deleteBlog(id);
     }
 

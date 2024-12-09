@@ -7,4 +7,5 @@ public record CommentDto(
         String value,
         Instant createdAt,
         Instant updatedAt
-) {}
+) {
+}

@@ -14,13 +14,13 @@ public record UserRating(
         String placeId,
         int value
 ) {
-        public UserRating {
-                if (value < 1 || value > 5) {
-                        throw new IllegalArgumentException("Rating value must be between 1 and 5");
-                }
+    public UserRating {
+        if (value < 1 || value > 5) {
+            throw new IllegalArgumentException("Rating value must be between 1 and 5");
         }
+    }
 
-        public UserRating withId(String id) {
-                return new UserRating(id, userId, placeId, value);
-        }
+    public UserRating withId(String id) {
+        return new UserRating(id, userId, placeId, value);
+    }
 }

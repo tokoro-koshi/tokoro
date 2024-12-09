@@ -9,4 +9,5 @@ public record CreateUpdatePlaceDto(
         String categoryId,
         List<HashTagDto> hashTagsDto,
         double rating
-) {}
+) {
+}

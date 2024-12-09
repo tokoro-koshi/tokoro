@@ -127,27 +127,27 @@ public class OpenAiClientService implements AiClientService {
                     .getContent();
 
             return Response.<T>builder()
-                           .conversationId(conversationId)
-                           .content(JsonHelper.fromJson(
-                                   strResponse,
-                                   responseType
-                           ))
-                           .build();
+                    .conversationId(conversationId)
+                    .content(JsonHelper.fromJson(
+                            strResponse,
+                            responseType
+                    ))
+                    .build();
         } catch (Exception e) {
             String[] components = e.getMessage().split(" - ");
             return Response.<T>builder()
-                           .conversationId(conversationId)
-                           .refusal(
-                                   components.length > 1
-                                           ? components[1]
-                                           : e.getMessage()
-                           )
-                           .refusalStatus(
-                                   components.length > 1
-                                           ? components[0]
-                                           : "500"
-                           )
-                           .build();
+                    .conversationId(conversationId)
+                    .refusal(
+                            components.length > 1
+                                    ? components[1]
+                                    : e.getMessage()
+                    )
+                    .refusalStatus(
+                            components.length > 1
+                                    ? components[0]
+                                    : "500"
+                    )
+                    .build();
         }
     }
 }

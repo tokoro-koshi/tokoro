@@ -8,4 +8,5 @@ public record CreateUpdateBlogDto(
         List<String> authorId,
         List<String> tags,
         List<CommentDto> commentDtos
-) {}
+) {
+}

@@ -13,4 +13,5 @@ public record UserPreferences(
         List<String> tags,
         @NonNull
         List<String> categories
-) {}
+) {
+}

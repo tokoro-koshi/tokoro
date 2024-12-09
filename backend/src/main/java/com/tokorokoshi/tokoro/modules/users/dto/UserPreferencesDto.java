@@ -6,4 +6,5 @@ public record UserPreferencesDto(
         String language,
         List<String> tags,
         List<String> categories
-) {}
+) {
+}

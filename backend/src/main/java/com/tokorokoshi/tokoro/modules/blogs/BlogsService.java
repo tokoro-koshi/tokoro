@@ -17,35 +17,33 @@ public class BlogsService {
     @Autowired
     public BlogsService(
             MongoTemplate mongoTemplate,
-            BlogMapper blogMapper)
-    {
+            BlogMapper blogMapper) {
         this.blogMapper = blogMapper;
         this.mongoTemplate = mongoTemplate;
     }
 
-    public BlogDto saveBlog(CreateUpdateBlogDto blog){
+    public BlogDto saveBlog(CreateUpdateBlogDto blog) {
         Blog blogSchema = blogMapper.toBlogSchema(blog);
         return blogMapper.toBlogDto(mongoTemplate.save(blogSchema));
     }
 
-    public BlogDto getBlogById(String id){
+    public BlogDto getBlogById(String id) {
         return blogMapper.toBlogDto(mongoTemplate.findById(id, Blog.class));
     }
 
-    public List<BlogDto> getAllBlogs(){
+    public List<BlogDto> getAllBlogs() {
         return blogMapper.toBlogDto(mongoTemplate.findAll(Blog.class));
     }
 
-    public BlogDto updateBlog(String id, CreateUpdateBlogDto blog){
-        if(getBlogById(id) == null){
+    public BlogDto updateBlog(String id, CreateUpdateBlogDto blog) {
+        if (getBlogById(id) == null) {
             return null;
         }
         Blog blogSchema = blogMapper.toBlogSchema(blog);
-        blogSchema.setId(id);
-        return blogMapper.toBlogDto(mongoTemplate.save(blogSchema));
+        return blogMapper.toBlogDto(mongoTemplate.save(blogSchema.withId(id)));
     }
 
-    public void deleteBlog(String id){
+    public void deleteBlog(String id) {
         mongoTemplate.remove(blogMapper.toBlogSchema(getBlogById(id)));
     }
 }

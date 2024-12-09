@@ -5,4 +5,5 @@ import java.util.List;
 public record UserFavoritesDto(
         List<String> places,
         List<String> prompts
-) {}
+) {
+}

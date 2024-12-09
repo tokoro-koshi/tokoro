@@ -11,4 +11,5 @@ public record HashTag(
         String id,
         @NonNull
         String name
-) {}
+) {
+}
