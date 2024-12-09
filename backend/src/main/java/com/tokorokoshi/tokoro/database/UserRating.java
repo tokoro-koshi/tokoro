@@ -1,52 +1,26 @@
 package com.tokorokoshi.tokoro.database;
 
+import jakarta.annotation.Nonnull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "userRating")
-public class UserRating {
-    @Id
-    private String id;
+public record UserRating(
+        @Id
+        String id,
+        @Nonnull
+        String userId,
+        @Nonnull
+        String placeId,
+        int value
+) {
+        public UserRating {
+                if (value < 1 || value > 5) {
+                        throw new IllegalArgumentException("Rating value must be between 1 and 5");
+                }
+        }
 
-    private String userId;
-
-    private String placeId;
-
-    private int value;
-
-    public UserRating(){
-        this.value = 0;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
+        public UserRating withId(String id) {
+                return new UserRating(id, userId, placeId, value);
+        }
 }
