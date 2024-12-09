@@ -6,9 +6,6 @@ on:
       - 'backend/**'
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   deploy:
