@@ -6,6 +6,9 @@ on:
       - 'backend/**'
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -14,6 +17,12 @@ jobs:
     steps:
     - name: Check out the code
       uses: actions/checkout@v3
+
+    - name: Install Heroku CLI
+      run: curl https://cli-assets.heroku.com/install.sh | sh
+
+    - name: Verify Heroku CLI
+      run: heroku --version
 
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.13.15
