@@ -1,0 +1,63 @@
+﻿name: Build and test pull requests
+
+on:
+  push:
+    branches:
+      - develop
+      - dev/*
+  pull_request:
+    branches:
+      - main
+      - develop
+      - dev/*
+
+jobs:
+  build-frontend:
+    name: Build the frontend part of the application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        id: checkout_code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        id: setup_node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Restore cache
+        id: restore_cache_frontend
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/.next/cache
+            ./frontend/node_modules
+          # Cache key based on frontend-specific package.json and lockfile.
+          key: frontend-deps-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+          # Allow partial cache restoration based on dependencies only.
+          restore-keys: |
+            frontend-deps-${{ runner.os }}-
+
+      - name: Install dependencies for frontend
+        id: install_dependencies
+        working-directory: ./frontend
+        run: |
+          npm install
+
+      - name: Build frontend
+        id: build_frontend
+        working-directory: ./frontend
+        run: |
+          npm run build
+
+      - name: Cache build artifacts
+        id: cache_artifacts
+        uses: actions/cache@v4
+        if: steps.restore_cache_frontend.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ${{ github.workspace }}/.next/cache
+          # Cache key based on the built files to allow efficient rebuilds.
+          key: frontend-build-${{ runner.os }}-${{ hashFiles('frontend/next.config.js', 'frontend/.next/cache') }}
