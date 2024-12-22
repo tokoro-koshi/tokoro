@@ -1,6 +1,8 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
 import com.tokorokoshi.tokoro.modules.json.JsonHelper;
+import jakarta.annotation.Nullable;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -11,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-// TODO: Add JavaDoc
-// TODO: Add messages array to start with a predefined prompt
 @Service
 public class OpenAiClientService implements AiClientService {
     private final ChatModel chatClient;
@@ -29,6 +29,19 @@ public class OpenAiClientService implements AiClientService {
             Integer maxTokens,
             Double temperature
     ) {
+        // This builder will generate similar JSON options for OpenAI fetch query
+        /*
+        {
+            "model": "gpt-4o-mini";
+            "maxTokens": 1500;
+            "chatMemory": {
+                "conversationId": "1234";
+            };
+            "temperature": 0.5;
+            "responseFormat"L
+        }
+         */
+
         OpenAiChatOptions.Builder optionsBuilder = OpenAiChatOptions.builder();
         if (model != null) {
             optionsBuilder.withModel(model);
@@ -59,7 +72,6 @@ public class OpenAiClientService implements AiClientService {
         return optionsBuilder.build();
     }
 
-
     @Override
     public String getResponse(
             String strPrompt,
@@ -84,8 +96,11 @@ public class OpenAiClientService implements AiClientService {
         );
 
         try {
-            ChatResponse chatResponse = this.chatClient.call(prompt);
-            return chatResponse.getResult().getOutput().getContent();
+            return this.chatClient
+                    .call(prompt)
+                    .getResult()
+                    .getOutput()
+                    .getContent();
         } catch (Exception e) {
             String[] components = e.getMessage().split(" - ");
             return components.length > 1 ? components[1] : components[0];
@@ -149,5 +164,32 @@ public class OpenAiClientService implements AiClientService {
                     )
                     .build();
         }
+    }
+
+    @Override
+    public String getResponse(
+            String prompt,
+            Message[] messages,
+            @Nullable String conversationId,
+            @Nullable String model,
+            @Nullable Integer maxTokens,
+            @Nullable Double temperature
+    ) {
+        // TODO
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public <T> Response<T> getResponse(
+            String prompt,
+            Message[] messages,
+            Class<T> responseType,
+            @Nullable String conversationId,
+            @Nullable String model,
+            @Nullable Integer maxTokens,
+            @Nullable Double temperature
+    ) {
+        // TODO
+        throw new NotImplementedException();
     }
 }
