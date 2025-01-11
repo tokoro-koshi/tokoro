@@ -2,8 +2,12 @@ package com.tokorokoshi.tokoro.modules.ai;
 
 import jakarta.annotation.Nullable;
 
-public interface AiClientService {
+import java.util.List;
 
+/**
+ * AI client services facade for our app
+ */
+public interface AiClientService {
     /**
      * Get a string response from AI model.
      *
@@ -48,7 +52,6 @@ public interface AiClientService {
     /**
      * Get a string response from AI model
      *
-     * @param prompt         prompt to send to AI model
      * @param messages       initial messages that will seed the context
      * @param conversationId conversation id
      * @param model          model to use (check language model documentation)
@@ -58,8 +61,7 @@ public interface AiClientService {
      * or unsuccessful and contain a string refusal reason
      */
     String getResponse(
-            String prompt,
-            Message[] messages,
+            List<Message> messages,
             @Nullable String conversationId,
             @Nullable String model,
             @Nullable Integer maxTokens,
@@ -69,7 +71,6 @@ public interface AiClientService {
     /**
      * Get a structured response from AI model.
      *
-     * @param prompt         prompt to send to AI model
      * @param messages       initial messages that will seed the context
      * @param responseType   response type
      * @param conversationId conversation id
@@ -81,8 +82,7 @@ public interface AiClientService {
      * or unsuccessful and contain a string refusal reason
      */
     <T> Response<T> getResponse(
-            String prompt,
-            Message[] messages,
+            List<Message> messages,
             Class<T> responseType,
             @Nullable String conversationId,
             @Nullable String model,
