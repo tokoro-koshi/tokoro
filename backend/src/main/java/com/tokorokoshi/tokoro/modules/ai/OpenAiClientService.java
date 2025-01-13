@@ -150,49 +150,16 @@ public class OpenAiClientService implements AiClientService {
             Integer maxTokens,
             Double temperature
     ) {
-        Prompt prompt = new Prompt(
-                Objects.requireNonNull(strPrompt),
-                OpenAiClientService.getOptions(
-                        JsonHelper.getJsonSchema(
-                                Objects.requireNonNull(responseType)
-                        ),
-                        conversationId,
-                        model,
-                        maxTokens,
-                        temperature
-                )
-        );
-
-        try {
-            ChatResponse chatResponse = this.chatClient.call(prompt);
-            String strResponse = chatResponse
-                    .getResult()
-                    .getOutput()
-                    .getContent();
-
-            return Response.<T>builder()
-                    .conversationId(conversationId)
-                    .content(JsonHelper.fromJson(
-                            strResponse,
-                            responseType
-                    ))
-                    .build();
-        } catch (Exception e) {
-            String[] components = e.getMessage().split(" - ");
-            return Response.<T>builder()
-                    .conversationId(conversationId)
-                    .refusal(
-                            components.length > 1
-                                    ? components[1]
-                                    : e.getMessage()
-                    )
-                    .refusalStatus(
-                            components.length > 1
-                                    ? components[0]
-                                    : "500"
-                    )
-                    .build();
-        }
+        return this.getResponse(
+                List.of(new Message(
+                        MessageType.USER,
+                        strPrompt)
+                ),
+                responseType,
+                conversationId,
+                model,
+                maxTokens,
+                temperature);
     }
 
     @Override
@@ -236,7 +203,44 @@ public class OpenAiClientService implements AiClientService {
             @Nullable Integer maxTokens,
             @Nullable Double temperature
     ) {
-        // TODO
-        throw new NotImplementedException();
+        Prompt prompt = new Prompt(
+                mapMessages(Objects.requireNonNull(messages)),
+                OpenAiClientService.getOptions(
+                        JsonHelper.
+                                getJsonSchema(Objects.requireNonNull(responseType)),
+                        conversationId,
+                        model,
+                        maxTokens,
+                        temperature
+                )
+        );
+        try {
+            ChatResponse chatResponse = this.chatClient.call(prompt);
+            String strResponse = chatResponse
+                    .getResult()
+                    .getOutput()
+                    .getContent();
+
+            return Response.<T>builder()
+                    .conversationId(conversationId)
+                    .content(JsonHelper.fromJson(
+                            strResponse,
+                            responseType))
+                    .build();
+        }catch (Exception e) {
+                String[] components = e.getMessage().split(" - ");
+                return Response.<T>builder()
+                        .conversationId(conversationId)
+                        .refusal(
+                                components.length > 1
+                                        ? components[1]
+                                        : e.getMessage()
+                        )
+                        .refusalStatus(
+                                components.length > 1
+                                        ? components[0]
+                                        : "500"
+                        ).build();
+        }
     }
 }
