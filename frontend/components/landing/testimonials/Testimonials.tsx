@@ -15,7 +15,7 @@ export default function Testimonials() {
               <Card>
                 <CardContent className={styles.cardContent}>
                   <Image src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} width={64} height={64} className={styles.avatar} />
-                  <p className={styles.comment}>"{testimonial.comment}"</p>
+                  <p className={styles.comment}>&#34;{testimonial.comment}&#34;</p>
                   <p className={styles.name}>{testimonial.name}</p>
                 </CardContent>
               </Card>
