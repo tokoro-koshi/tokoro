@@ -1,0 +1,28 @@
+.howItWorks {
+  @apply py-16 px-4;
+}
+
+.title {
+  @apply text-3xl font-bold text-center mb-12;
+}
+
+.stepsContainer {
+  @apply flex flex-col md:flex-row justify-center items-center md:items-start space-y-8 md:space-y-0 md:space-x-12;
+}
+
+.step {
+  @apply flex flex-col items-center text-center max-w-xs;
+}
+
+.iconWrapper {
+  @apply mb-4 p-4 rounded-full bg-primary text-primary-foreground;
+}
+
+.stepTitle {
+  @apply text-xl font-semibold mb-2;
+}
+
+.stepDescription {
+  @apply text-muted-foreground;
+}
+

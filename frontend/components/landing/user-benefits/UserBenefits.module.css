@@ -1,0 +1,20 @@
+.benefits {
+  @apply py-16 px-4 bg-muted;
+}
+
+.title {
+  @apply text-3xl font-bold text-center mb-8;
+}
+
+.list {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto;
+}
+
+.item {
+  @apply flex items-center space-x-2;
+}
+
+.icon {
+  @apply text-primary h-5 w-5;
+}
+
