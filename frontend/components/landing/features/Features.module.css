@@ -1,0 +1,20 @@
+.features {
+  @apply py-16 px-4 bg-muted;
+}
+
+.title {
+  @apply text-3xl font-bold text-center mb-8;
+}
+
+.cardContainer {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto;
+}
+
+.card {
+  @apply text-center;
+}
+
+.iconWrapper {
+  @apply mx-auto mb-4 p-3 rounded-full bg-primary text-primary-foreground;
+}
+

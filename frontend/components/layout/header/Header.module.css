@@ -1,0 +1,16 @@
+.header {
+  @apply flex items-center justify-between p-4 bg-background;
+}
+
+.logo {
+  @apply text-2xl font-bold text-primary;
+}
+
+.nav {
+  @apply hidden md:flex space-x-4;
+}
+
+.navLink {
+  @apply text-muted-foreground hover:text-primary transition-colors;
+}
+
