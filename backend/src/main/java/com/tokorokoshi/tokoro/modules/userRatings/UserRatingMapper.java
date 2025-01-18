@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserRatingMapper {
-
     UserRating toUserRatingSchema(CreateUpdateUserRatingDto userRatingDto);
 
     UserRatingDto toUserRatingDto(UserRating userRatingSchema);

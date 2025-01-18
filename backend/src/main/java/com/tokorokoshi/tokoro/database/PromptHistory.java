@@ -10,14 +10,14 @@ import java.time.Instant;
 
 @Document(collection = "promptHistory")
 public record PromptHistory(
-        @Id
-        String id,
-        @NonNull
-        String prompt,
-        String userId,
-        @Indexed
-        @CreatedDate
-        Instant createdAt
+    @Id
+    String id,
+    @NonNull
+    String prompt,
+    String userId,
+    @Indexed
+    @CreatedDate
+    Instant createdAt
 ) {
     public PromptHistory withId(String id) {
         return new PromptHistory(id, prompt, userId, createdAt);

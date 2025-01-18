@@ -11,15 +11,15 @@ import java.time.Instant;
 
 @Document
 public record Comment(
-        @Id
-        String userId,
-        @NotNull
-        String value,
-        @Indexed
-        @CreatedDate
-        Instant createdAt,
-        @Indexed
-        @LastModifiedDate
-        Instant updatedAt
+    @Id
+    String userId,
+    @NotNull
+    String value,
+    @Indexed
+    @CreatedDate
+    Instant createdAt,
+    @Indexed
+    @LastModifiedDate
+    Instant updatedAt
 ) {
 }

@@ -22,38 +22,38 @@ public class UsersController {
     }
 
     @PostMapping(
-            value = {"", "/"},
-            produces = APPLICATION_JSON_VALUE,
-            consumes = APPLICATION_JSON_VALUE
+        value = {"", "/"},
+        produces = APPLICATION_JSON_VALUE,
+        consumes = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<UserDto> createUser(
-            @RequestBody CreateUpdateUserDto userCreateDto
+        @RequestBody CreateUpdateUserDto userCreateDto
     ) {
         return ResponseEntity.ok(this.usersService.saveUser(userCreateDto));
     }
 
     @GetMapping(
-            value = "/{id}",
-            produces = APPLICATION_JSON_VALUE
+        value = "/{id}",
+        produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<UserDto> getUser(@PathVariable String id) {
         return ResponseEntity.ok(this.usersService.getUserById(id));
     }
 
     @GetMapping(value = {"", "/"},
-            produces = APPLICATION_JSON_VALUE)
+        produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(this.usersService.getAllUsers());
     }
 
     @PutMapping(
-            value = "/{id}",
-            consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE
+        value = "/{id}",
+        consumes = APPLICATION_JSON_VALUE,
+        produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<UserDto> updateUser(
-            @PathVariable String id,
-            @RequestBody CreateUpdateUserDto updateUserDto
+        @PathVariable String id,
+        @RequestBody CreateUpdateUserDto updateUserDto
     ) {
         UserDto updatedUser = this.usersService.updateUser(id, updateUserDto);
         if (updatedUser == null) {
@@ -63,7 +63,7 @@ public class UsersController {
     }
 
     @DeleteMapping(
-            value = "/{id}"
+        value = "/{id}"
     )
     public void deleteUser(@PathVariable String id) {
         this.usersService.deleteUser(id);

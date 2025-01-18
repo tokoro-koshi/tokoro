@@ -22,23 +22,26 @@ public class TagsService {
 
     public Response<TagDto> generateTag(String message, String conversationId) {
         return clientService.getResponse(
-                message,
-                TagDto.class,
-                conversationId,
-                TagsService.MODEL,
-                TagsService.TOKENS_LIMIT,
-                TagsService.TEMPERATURE
+            message,
+            TagDto.class,
+            conversationId,
+            TagsService.MODEL,
+            TagsService.TOKENS_LIMIT,
+            TagsService.TEMPERATURE
         );
     }
 
-    public Response<TagsDto> generateTags(String message, String conversationId) {
+    public Response<TagsDto> generateTags(
+        String message,
+        String conversationId
+    ) {
         return clientService.getResponse(
-                message,
-                TagsDto.class,
-                conversationId,
-                TagsService.MODEL,
-                TagsService.TOKENS_LIMIT,
-                TagsService.TEMPERATURE
+            message,
+            TagsDto.class,
+            conversationId,
+            TagsService.MODEL,
+            TagsService.TOKENS_LIMIT,
+            TagsService.TEMPERATURE
         );
     }
 }

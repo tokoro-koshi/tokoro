@@ -4,13 +4,13 @@ import java.time.Instant;
 import java.util.List;
 
 public record BlogDto(
-        String id,
-        String title,
-        String content,
-        List<String> authorId,
-        List<String> tags,
-        List<CommentDto> commentDtos,
-        Instant createdAt,
-        Instant updatedAt
+    String id,
+    String title,
+    String content,
+    List<String> authorId,
+    List<String> tags,
+    List<CommentDto> commentDtos,
+    Instant createdAt,
+    Instant updatedAt
 ) {
 }

@@ -8,8 +8,8 @@ public class Response<C> {
     private final Integer refusalStatus;
 
     public Response(
-            C content,
-            String conversationId
+        C content,
+        String conversationId
     ) {
         this.content = content;
         this.refusal = null;
@@ -18,14 +18,18 @@ public class Response<C> {
     }
 
     public Response(
-            String refusal,
-            Integer refusalStatus,
-            String conversationId
+        String refusal,
+        Integer refusalStatus,
+        String conversationId
     ) {
         this.content = null;
         this.refusal = refusal;
         this.refusalStatus = refusalStatus;
         this.conversationId = conversationId;
+    }
+
+    public static <C> Builder<C> builder() {
+        return new Builder<>();
     }
 
     public C getContent() {
@@ -69,18 +73,13 @@ public class Response<C> {
         }
     }
 
-    public static <C> Builder<C> builder() {
-        return new Builder<>();
-    }
-
     public static class Builder<C> {
-        protected Builder() {
-        }
-
         private String conversationId;
         private C content;
         private String refusal;
         private Integer refusalStatus;
+        protected Builder() {
+        }
 
         public Builder<C> conversationId(String conversationId) {
             this.conversationId = conversationId;
@@ -104,18 +103,20 @@ public class Response<C> {
 
         public Builder<C> refusalStatus(String refusalStatus) {
             this.refusalStatus = refusalStatus == null
-                    ? 500
-                    : Integer.parseInt(refusalStatus);
+                ? 500
+                : Integer.parseInt(refusalStatus);
             return this;
         }
 
         public Response<C> build() {
             if (content == null && refusal == null) {
-                throw new IllegalStateException("Response must have content or refusal");
+                throw new IllegalStateException(
+                    "Response must have content or refusal");
             }
 
             if (content != null && (refusal != null || refusalStatus != null)) {
-                throw new IllegalStateException("Response cannot have both content and refusal");
+                throw new IllegalStateException(
+                    "Response cannot have both content and refusal");
             }
 
             if (content != null) {
