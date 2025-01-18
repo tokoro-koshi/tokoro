@@ -9,6 +9,10 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.moderation.ModerationModel;
+import org.springframework.ai.moderation.ModerationOptionsBuilder;
+import org.springframework.ai.moderation.ModerationPrompt;
+import org.springframework.ai.moderation.Moderation;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +26,15 @@ import java.util.Objects;
 @Service
 public class OpenAiClientService implements AiClientService {
     private final ChatModel chatClient;
+    private final ModerationModel moderationModel;
 
     @Autowired
-    public OpenAiClientService(ChatModel chatClient) {
+    public OpenAiClientService(
+        ChatModel chatClient,
+        ModerationModel moderationModel
+    ) {
         this.chatClient = chatClient;
+        this.moderationModel = moderationModel;
     }
 
     /**
@@ -251,5 +260,21 @@ public class OpenAiClientService implements AiClientService {
                                    : "500"
                            ).build();
         }
+    }
+
+    @Override
+    public Moderation checkRequest(String message) {
+        var moderationOptions = ModerationOptionsBuilder
+            .builder()
+            .model("omni-moderation-latest")
+            .build();
+        ModerationPrompt moderationPrompt = new ModerationPrompt(
+            message,
+            moderationOptions
+        );
+        return this.moderationModel
+            .call(moderationPrompt)
+            .getResult()
+            .getOutput();
     }
 }
