@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TagsService {
     private static final String MODEL = "gpt-4o-mini";
-    private static final int TOKENS_LIMIT = 1000;
-    private static final double TEMPERATURE = 0.7;
+    private static final int TOKENS_LIMIT = 2000;
+    private static final double TEMPERATURE = 0.0;
 
     private final AiClientService clientService;
 
@@ -22,7 +22,7 @@ public class TagsService {
 
     public Response<TagDto> generateTag(String message, String conversationId) {
         return clientService.getResponse(
-            message,
+            TagsPromptEnhancer.enhancePrompt(message),
             TagDto.class,
             conversationId,
             TagsService.MODEL,
@@ -36,7 +36,7 @@ public class TagsService {
         String conversationId
     ) {
         return clientService.getResponse(
-            message,
+            TagsPromptEnhancer.enhancePrompt(message),
             TagsDto.class,
             conversationId,
             TagsService.MODEL,
