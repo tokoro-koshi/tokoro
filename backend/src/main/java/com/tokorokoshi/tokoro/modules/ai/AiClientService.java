@@ -1,6 +1,8 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
 import jakarta.annotation.Nullable;
+import org.springframework.ai.moderation.Moderation;
+import org.springframework.ai.moderation.ModerationResult;
 
 import java.util.List;
 
@@ -89,4 +91,25 @@ public interface AiClientService {
         @Nullable Integer maxTokens,
         @Nullable Double temperature
     );
+
+    /**
+     * Check request for AI model
+     *
+     * @param prompt prompt to send to AI model
+     * @return moderation response
+     */
+    Moderation checkRequest(String prompt);
+
+    /**
+     * Check if prompt is valid
+     *
+     * @param prompt prompt to check
+     * @return true if prompt is valid, false otherwise
+     */
+    default boolean isPromptValid(String prompt) {
+        return this.checkRequest(prompt)
+            .getResults()
+            .stream()
+            .anyMatch(ModerationResult::isFlagged);
+    }
 }

@@ -1,5 +1,7 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
+import org.json.JSONObject;
+
 public class Response<C> {
     private final String conversationId;
 
@@ -55,6 +57,13 @@ public class Response<C> {
             throw new IllegalStateException("Response is successful");
         }
         return refusalStatus;
+    }
+
+    public String getJsonRefusal() {
+        var jo = new JSONObject();
+        jo.put("message", this.refusal);
+        jo.put("status", this.refusalStatus);
+        return jo.toString();
     }
 
     public boolean isSuccessful() {
