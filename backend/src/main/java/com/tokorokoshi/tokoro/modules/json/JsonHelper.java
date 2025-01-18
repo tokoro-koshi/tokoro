@@ -10,16 +10,16 @@ public class JsonHelper {
     public static <T> String getJsonSchema(Class<T> type) {
         // Set up schema configuration
         SchemaGeneratorConfigBuilder configBuilder =
-                new SchemaGeneratorConfigBuilder(
-                        SchemaVersion.DRAFT_2020_12,
-                        OptionPreset.PLAIN_JSON
-                );
+            new SchemaGeneratorConfigBuilder(
+                SchemaVersion.DRAFT_2020_12,
+                OptionPreset.PLAIN_JSON
+            );
 
         // Add additional properties false to all objects
         SchemaGeneratorConfig config = configBuilder
-                .with(Option.EXTRA_OPEN_API_FORMAT_VALUES)
-                .without(Option.FLATTENED_ENUMS_FROM_TOSTRING)
-                .build();
+            .with(Option.EXTRA_OPEN_API_FORMAT_VALUES)
+            .without(Option.FLATTENED_ENUMS_FROM_TOSTRING)
+            .build();
 
         // Generate schema
         SchemaGenerator generator = new SchemaGenerator(config);
@@ -42,14 +42,14 @@ public class JsonHelper {
         // Check if the object contains "properties" and set additionalProperties to false
         if (objectNode.has("properties")) {
             objectNode.put(
-                    "additionalProperties",
-                    false
+                "additionalProperties",
+                false
             );
         }
 
         // Recursively apply to all objects inside
         objectNode.fields()
-                .forEachRemaining(entry -> addAdditionalPropertiesFalse(entry.getValue()));
+                  .forEachRemaining(entry -> addAdditionalPropertiesFalse(entry.getValue()));
     }
 
     private static void addRequired(JsonNode node) {
@@ -65,7 +65,7 @@ public class JsonHelper {
 
         // Recursively apply to all objects inside
         objectNode.fields()
-                .forEachRemaining(entry -> addRequired(entry.getValue()));
+                  .forEachRemaining(entry -> addRequired(entry.getValue()));
     }
 
     public static <T> T fromJson(String json, Class<T> type) {

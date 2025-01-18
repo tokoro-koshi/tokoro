@@ -9,14 +9,15 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PromptHistoryMapper {
-
-    PromptHistory toPromptHistorySchema(CreateUpdatePromptHistoryDto createUpdatePromptHistoryDto);
+    PromptHistory toPromptHistorySchema(
+        CreateUpdatePromptHistoryDto createUpdatePromptHistoryDto
+    );
 
     PromptHistoryDto toPromptHistoryDto(PromptHistory promptHistory);
 
-    List<PromptHistoryDto> toPromptHistoryDto(List<PromptHistory> promptHistories);
+    List<PromptHistoryDto> toPromptHistoryDto(
+        List<PromptHistory> promptHistories
+    );
 
     PromptHistory toPromptHistorySchema(PromptHistoryDto promptHistoryDto);
-
-
 }

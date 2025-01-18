@@ -16,8 +16,9 @@ public class BlogsService {
 
     @Autowired
     public BlogsService(
-            MongoTemplate mongoTemplate,
-            BlogMapper blogMapper) {
+        MongoTemplate mongoTemplate,
+        BlogMapper blogMapper
+    ) {
         this.blogMapper = blogMapper;
         this.mongoTemplate = mongoTemplate;
     }

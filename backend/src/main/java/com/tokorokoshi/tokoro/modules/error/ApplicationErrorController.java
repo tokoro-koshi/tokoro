@@ -19,33 +19,33 @@ import java.util.regex.Pattern;
 @RestController
 public class ApplicationErrorController implements ErrorController {
     private final Logger logger =
-            LoggerFactory.getLogger(ApplicationErrorController.class);
+        LoggerFactory.getLogger(ApplicationErrorController.class);
 
     private final Pattern notFoundRegex =
-            Pattern.compile("^No static resource (.*?)\\.$");
+        Pattern.compile("^No static resource (.*?)\\.$");
 
     @RequestMapping(value = "/error",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> handleError(WebRequest webRequest) {
         Object statusObj = webRequest.getAttribute(
-                RequestDispatcher.ERROR_STATUS_CODE,
-                WebRequest.SCOPE_REQUEST
+            RequestDispatcher.ERROR_STATUS_CODE,
+            WebRequest.SCOPE_REQUEST
         );
         Integer status = statusObj != null
-                ? Integer.parseInt(statusObj.toString())
-                : null;
+            ? Integer.parseInt(statusObj.toString())
+            : null;
 
         Object messageObj = webRequest.getAttribute(
-                RequestDispatcher.ERROR_MESSAGE,
-                WebRequest.SCOPE_REQUEST
+            RequestDispatcher.ERROR_MESSAGE,
+            WebRequest.SCOPE_REQUEST
         );
         String message = messageObj != null
-                ? messageObj.toString()
-                : "Something wrong happened";
+            ? messageObj.toString()
+            : "Something wrong happened";
 
         Object exception = webRequest.getAttribute(
-                RequestDispatcher.ERROR_EXCEPTION,
-                WebRequest.SCOPE_REQUEST
+            RequestDispatcher.ERROR_EXCEPTION,
+            WebRequest.SCOPE_REQUEST
         );
 
         // Extract URL from message if it's a 404 error
@@ -56,15 +56,17 @@ public class ApplicationErrorController implements ErrorController {
         }
 
         HttpStatus httpStatus = status != null
-                ? HttpStatus.valueOf(Integer.parseInt(status.toString()))
-                : HttpStatus.INTERNAL_SERVER_ERROR;
+            ? HttpStatus.valueOf(Integer.parseInt(status.toString()))
+            : HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (logger.isErrorEnabled() &&
-                (exception != null || (status != null && status >= 500)))
-            logger.error("Error Status: {}, Message: {}, Exception: {}",
-                    status,
-                    message,
-                    exception);
+            (exception != null || (status != null && status >= 500)))
+            logger.error(
+                "Error Status: {}, Message: {}, Exception: {}",
+                status,
+                message,
+                exception
+            );
 
         var jo = new JSONObject();
         jo.put("message", message);

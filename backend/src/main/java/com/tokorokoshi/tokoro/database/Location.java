@@ -6,14 +6,14 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document
 public record Location(
-        @NonNull
-        String address,
-        @NonNull
-        String city,
-        @NonNull
-        String country,
-        @NonNull
-        @Field
-        Coordinate coordinate
+    @NonNull
+    String address,
+    @NonNull
+    String city,
+    @NonNull
+    String country,
+    @NonNull
+    @Field
+    Coordinate coordinate
 ) {
 }

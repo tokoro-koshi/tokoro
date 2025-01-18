@@ -7,11 +7,11 @@ import java.util.List;
 
 @Document
 public record UserPreferences(
-        @NonNull
-        String language,
-        @NonNull
-        List<String> tags,
-        @NonNull
-        List<String> categories
+    @NonNull
+    String language,
+    @NonNull
+    List<String> tags,
+    @NonNull
+    List<String> categories
 ) {
 }

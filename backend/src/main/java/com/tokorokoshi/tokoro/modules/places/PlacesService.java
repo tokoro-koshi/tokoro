@@ -15,14 +15,18 @@ public class PlacesService {
     private final PlaceMapper placeMapper;
 
     @Autowired
-    public PlacesService(MongoTemplate mongoTemplate,
-                         PlaceMapper placeMapper) {
+    public PlacesService(
+        MongoTemplate mongoTemplate,
+        PlaceMapper placeMapper
+    ) {
         this.mongoTemplate = mongoTemplate;
         this.placeMapper = placeMapper;
     }
 
     public PlaceDto savePlace(CreateUpdatePlaceDto place) {
-        return placeMapper.toPlaceDto(mongoTemplate.save(placeMapper.toPlaceSchema(place)));
+        return placeMapper.toPlaceDto(
+            mongoTemplate.save(placeMapper.toPlaceSchema(place))
+        );
     }
 
     public PlaceDto getPlaceById(String id) {
