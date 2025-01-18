@@ -82,7 +82,7 @@ public class TagsController {
         } else {
             return ResponseEntity
                 .status(response.getRefusalStatus())
-                .body(response.getRefusal());
+                .body(response.getJsonRefusal());
         }
     }
 }
