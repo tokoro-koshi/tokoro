@@ -20,9 +20,6 @@ public class UserRatingsService {
         this.userRatingMapper = userRatingMapper;
     }
 
-
-    //Crud
-
     public UserRatingDto saveUserRating(CreateUpdateUserRatingDto userRating) {
         return userRatingMapper.
                 toUserRatingDto(mongoTemplate.

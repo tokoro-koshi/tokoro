@@ -20,34 +20,42 @@ public class UserRatingsController {
         this.userRatingsService = userRatingsService;
     }
 
-    //Crud
     @PostMapping(value = {"", "/"},
-            consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
+        consumes = APPLICATION_JSON_VALUE,
+        produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRatingDto> createUserRating(
-            @RequestBody CreateUpdateUserRatingDto userRating) {
-        return ResponseEntity.ok(this.userRatingsService.saveUserRating(userRating));
+        @RequestBody CreateUpdateUserRatingDto userRating
+    ) {
+        return ResponseEntity.ok(
+            this.userRatingsService.saveUserRating(userRating)
+        );
     }
 
     @GetMapping(value = "/{id}",
-            produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserRatingDto> getUserRating(@PathVariable String id) {
-        return ResponseEntity.ok(this.userRatingsService.findUserRatingById(id));
+        produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserRatingDto> getUserRating(
+        @PathVariable String id
+    ) {
+        return ResponseEntity.ok(
+            this.userRatingsService.findUserRatingById(id)
+        );
     }
 
     @GetMapping(value = {"", "/"},
-            produces = APPLICATION_JSON_VALUE)
+        produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserRatingDto>> getAllUserRatings() {
         return ResponseEntity.ok(this.userRatingsService.findAllUserRatings());
     }
 
     @PutMapping(value = "/{id}",
-            consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
+        consumes = APPLICATION_JSON_VALUE,
+        produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRatingDto> updateUserRating(
-            @RequestBody CreateUpdateUserRatingDto userRating,
-            @PathVariable String id) {
-        UserRatingDto updatedUserRating = this.userRatingsService.updateUserRating(id, userRating);
+        @RequestBody CreateUpdateUserRatingDto userRating,
+        @PathVariable String id
+    ) {
+        UserRatingDto updatedUserRating = this.userRatingsService
+            .updateUserRating(id, userRating);
         if (updatedUserRating == null) {
             return ResponseEntity.notFound().build();
         }

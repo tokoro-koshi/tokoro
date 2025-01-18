@@ -35,12 +35,12 @@ public class TagsController {
     }
 
     @PostMapping(
-            value = "/single",
-            produces = "application/json",
-            consumes = "application/json"
+        value = "/single",
+        produces = "application/json",
+        consumes = "application/json"
     )
     public ResponseEntity<?> getTag(
-            @RequestBody Map<String, String> requestBody
+        @RequestBody Map<String, String> requestBody
     ) {
         String message = requestBody.get("message");
         String conversationId = requestBody.get("conversationId");
@@ -48,7 +48,10 @@ public class TagsController {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Response<TagDto> response = tagsService.generateTag(message, conversationId);
+        Response<TagDto> response = tagsService.generateTag(
+            message,
+            conversationId
+        );
         if (response.isSuccessful()) {
             return ResponseEntity.ok(response.getContent());
         } else {
@@ -57,12 +60,12 @@ public class TagsController {
     }
 
     @PostMapping(
-            value = {"", "/"},
-            produces = "application/json",
-            consumes = "application/json"
+        value = {"", "/"},
+        produces = "application/json",
+        consumes = "application/json"
     )
     public ResponseEntity<?> getTags(
-            @RequestBody Map<String, String> requestBody
+        @RequestBody Map<String, String> requestBody
     ) {
         String message = requestBody.get("message");
         String conversationId = requestBody.get("conversationId");
@@ -70,13 +73,16 @@ public class TagsController {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Response<TagsDto> response = tagsService.generateTags(message, conversationId);
+        Response<TagsDto> response = tagsService.generateTags(
+            message,
+            conversationId
+        );
         if (response.isSuccessful()) {
             return ResponseEntity.ok(response.getContent());
         } else {
             return ResponseEntity
-                    .status(response.getRefusalStatus())
-                    .body(response.getRefusal());
+                .status(response.getRefusalStatus())
+                .body(response.getRefusal());
         }
     }
 }

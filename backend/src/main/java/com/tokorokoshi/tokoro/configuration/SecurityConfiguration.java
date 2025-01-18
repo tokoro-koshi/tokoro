@@ -35,8 +35,8 @@ public class SecurityConfiguration {
 
     @Autowired
     public SecurityConfiguration(
-            Environment env,
-            CorsConfigurationSource corsConfigurationSource
+        Environment env,
+        CorsConfigurationSource corsConfigurationSource
     ) {
         this.activeProfiles = env.getActiveProfiles();
         this.corsConfigurationSource = corsConfigurationSource;
@@ -48,34 +48,34 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+        throws Exception {
         if (isDevelopment()) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                    .authorizeHttpRequests(
-                            auth -> auth.anyRequest().permitAll()
-                    )
-                    .csrf(AbstractHttpConfigurer::disable);
+                .authorizeHttpRequests(
+                    auth -> auth.anyRequest().permitAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable);
         } else {
             // Production & staging configuration
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                    .oauth2ResourceServer(
-                            oauth2 -> oauth2.jwt(
-                                    jwt -> jwt.decoder(jwtDecoder())
-                            )
+                .oauth2ResourceServer(
+                    oauth2 -> oauth2.jwt(
+                        jwt -> jwt.decoder(jwtDecoder())
                     )
-                    .authorizeHttpRequests(
-                            auth -> auth.requestMatchers("/error")
-                                    .permitAll()
-                                    .requestMatchers("/actuator/health")
-                                    .permitAll()
-                                    .requestMatchers(HttpMethod.OPTIONS, "/**")
-                                    .permitAll()
-                                    .requestMatchers("/api/**")
-                                    .authenticated()
-                                    .anyRequest()
-                                    .denyAll()
-                    )
-                    .csrf(AbstractHttpConfigurer::disable);
+                )
+                .authorizeHttpRequests(
+                    auth -> auth.requestMatchers("/error")
+                                .permitAll()
+                                .requestMatchers("/actuator/health")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**")
+                                .permitAll()
+                                .requestMatchers("/api/**")
+                                .authenticated()
+                                .anyRequest()
+                                .denyAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable);
         }
         return http.build();
     }
@@ -84,16 +84,16 @@ public class SecurityConfiguration {
     @Profile("prod")
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = JwtDecoders
-                .fromOidcIssuerLocation(Objects.requireNonNull(issuer));
+            .fromOidcIssuerLocation(Objects.requireNonNull(issuer));
 
         OAuth2TokenValidator<Jwt> audienceValidator
-                = new AudienceValidator(audience);
+            = new AudienceValidator(audience);
         OAuth2TokenValidator<Jwt> withIssuer
-                = JwtValidators.createDefaultWithIssuer(issuer);
+            = JwtValidators.createDefaultWithIssuer(issuer);
         OAuth2TokenValidator<Jwt> withAudience
-                = new DelegatingOAuth2TokenValidator<>(
-                withIssuer,
-                audienceValidator
+            = new DelegatingOAuth2TokenValidator<>(
+            withIssuer,
+            audienceValidator
         );
 
         jwtDecoder.setJwtValidator(withAudience);

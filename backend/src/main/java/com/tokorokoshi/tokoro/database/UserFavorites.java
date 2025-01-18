@@ -7,9 +7,9 @@ import java.util.List;
 
 @Document
 public record UserFavorites(
-        @NonNull
-        List<String> places,
-        @NonNull
-        List<String> prompts
+    @NonNull
+    List<String> places,
+    @NonNull
+    List<String> prompts
 ) {
 }

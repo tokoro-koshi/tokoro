@@ -16,14 +16,12 @@ public class UsersService {
 
     @Autowired
     public UsersService(
-            MongoTemplate mongoTemplate,
-            UserMapper userMapper
+        MongoTemplate mongoTemplate,
+        UserMapper userMapper
     ) {
         this.userMapper = userMapper;
         this.mongoTemplate = mongoTemplate;
     }
-
-    // CRUD operations
 
     public UserDto saveUser(CreateUpdateUserDto user) {
         User userSchema = this.userMapper.toUserSchema(user);
@@ -32,7 +30,9 @@ public class UsersService {
     }
 
     public UserDto getUserById(String id) {
-        return this.userMapper.toUserDto(mongoTemplate.findById(id, User.class));
+        return this.userMapper.toUserDto(
+            mongoTemplate.findById(id, User.class)
+        );
     }
 
     public List<UserDto> getAllUsers() {
@@ -44,7 +44,9 @@ public class UsersService {
             return null;
         }
         User userSchema = this.userMapper.toUserSchema(user);
-        return this.userMapper.toUserDto(mongoTemplate.save(userSchema.withId(id)));
+        return this.userMapper.toUserDto(
+            mongoTemplate.save(userSchema.withId(id))
+        );
     }
 
     public void deleteUser(String id) {

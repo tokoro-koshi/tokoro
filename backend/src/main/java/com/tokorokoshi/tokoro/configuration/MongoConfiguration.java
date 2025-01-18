@@ -23,9 +23,9 @@ public class MongoConfiguration {
     public MongoClient client() {
         ConnectionString connectionString = new ConnectionString(uri);
         MongoClientSettings mongoClientSettings = MongoClientSettings
-                .builder()
-                .applyConnectionString(connectionString)
-                .build();
+            .builder()
+            .applyConnectionString(connectionString)
+            .build();
         return MongoClients.create(mongoClientSettings);
     }
 
