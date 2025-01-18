@@ -6,10 +6,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "hashTag")
 public record HashTag(
-        @Id
-        @NonNull
-        String id,
-        @NonNull
-        String name
+    @Id
+    @NonNull
+    String id,
+    @NonNull
+    String name
 ) {
 }

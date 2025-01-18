@@ -18,34 +18,42 @@ public class PromptHistoryController {
         this.promptHistoryService = promptHistoryService;
     }
 
-    //CRUD
     @PostMapping(value = {"", "/"},
-            consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PromptHistoryDto> savePromptHistory(@RequestBody CreateUpdatePromptHistoryDto promptHistory) {
-        return ResponseEntity.ok(promptHistoryService.savePromptHistory(promptHistory));
+        consumes = APPLICATION_JSON_VALUE,
+        produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PromptHistoryDto> savePromptHistory(
+        @RequestBody CreateUpdatePromptHistoryDto promptHistory
+    ) {
+        return ResponseEntity.ok(promptHistoryService.savePromptHistory(
+            promptHistory));
     }
 
     @GetMapping(value = "/{id}",
-            produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PromptHistoryDto> findPromptHistoryById(@PathVariable String id) {
+        produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PromptHistoryDto> findPromptHistoryById(
+        @PathVariable String id
+    ) {
         return ResponseEntity.ok(promptHistoryService.findPromptHistoryById(id));
     }
 
     @GetMapping(value = {"", "/"},
-            produces = APPLICATION_JSON_VALUE)
+        produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PromptHistoryDto>> findAllPromptHistories() {
         return ResponseEntity.ok(promptHistoryService.findAllPromptHistories());
     }
 
     @PutMapping(value = "/{id}",
-            consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
+        consumes = APPLICATION_JSON_VALUE,
+        produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PromptHistoryDto> updatePromptHistory(
-            @RequestBody CreateUpdatePromptHistoryDto promptHistory,
-            @PathVariable String id
+        @RequestBody CreateUpdatePromptHistoryDto promptHistory,
+        @PathVariable String id
     ) {
-        PromptHistoryDto updatedPromptHistory = promptHistoryService.updatePromptHistory(id, promptHistory);
+        PromptHistoryDto updatedPromptHistory = promptHistoryService
+            .updatePromptHistory(
+                id,
+                promptHistory
+            );
         if (updatedPromptHistory == null) {
             return ResponseEntity.notFound().build();
         }

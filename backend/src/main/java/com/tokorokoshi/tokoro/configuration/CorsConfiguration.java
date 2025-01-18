@@ -18,23 +18,23 @@ public class CorsConfiguration {
         var config = new org.springframework.web.cors.CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList(allowedOrigins));
         config.setAllowedMethods(Arrays.asList(
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE",
-                "PATCH",
-                "OPTIONS"
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH",
+            "OPTIONS"
         ));
         config.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin",
-                "X-Requested-With"
+            "Authorization",
+            "Content-Type",
+            "Accept",
+            "Origin",
+            "X-Requested-With"
         ));
         config.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Disposition"
+            "Authorization",
+            "Content-Disposition"
         ));
         config.setAllowCredentials(true);
 

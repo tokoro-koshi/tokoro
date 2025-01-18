@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BlogMapper {
-
     @Mapping(target = "comments", source = "commentDtos")
     Blog toBlogSchema(CreateUpdateBlogDto createUpdateBlogDto);
 
@@ -22,5 +21,4 @@ public interface BlogMapper {
 
     @Mapping(target = "comments", source = "commentDtos")
     Blog toBlogSchema(BlogDto blogDto);
-
 }

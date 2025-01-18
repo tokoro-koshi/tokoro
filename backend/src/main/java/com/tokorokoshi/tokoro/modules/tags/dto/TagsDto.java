@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 
 public record TagsDto(
-        @Nonnull TagDto[] tags
+    @Nonnull TagDto[] tags
 ) {
     public Integer count() {
         return tags.length;
@@ -13,13 +13,13 @@ public record TagsDto(
 
     public String toString() {
         return "Tags (%s): [%s]".formatted(
-                this.count(),
-                String.join(
-                        ", ",
-                        Arrays.stream(tags)
-                                .map(TagDto::toString)
-                                .toArray(String[]::new)
-                )
+            this.count(),
+            String.join(
+                ", ",
+                Arrays.stream(tags)
+                      .map(TagDto::toString)
+                      .toArray(String[]::new)
+            )
         );
     }
 }

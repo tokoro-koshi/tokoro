@@ -20,11 +20,11 @@ public interface AiClientService {
      * @throws IllegalStateException if prompt is null
      */
     String getResponse(
-            String prompt,
-            @Nullable String conversationId,
-            @Nullable String model,
-            @Nullable Integer maxTokens,
-            @Nullable Double temperature
+        String prompt,
+        @Nullable String conversationId,
+        @Nullable String model,
+        @Nullable Integer maxTokens,
+        @Nullable Double temperature
     );
 
     /**
@@ -41,12 +41,12 @@ public interface AiClientService {
      * or unsuccessful and contain a string refusal reason
      */
     <T> Response<T> getResponse(
-            String prompt,
-            Class<T> responseType,
-            @Nullable String conversationId,
-            @Nullable String model,
-            @Nullable Integer maxTokens,
-            @Nullable Double temperature
+        String prompt,
+        Class<T> responseType,
+        @Nullable String conversationId,
+        @Nullable String model,
+        @Nullable Integer maxTokens,
+        @Nullable Double temperature
     );
 
     /**
@@ -61,11 +61,11 @@ public interface AiClientService {
      * or unsuccessful and contain a string refusal reason
      */
     String getResponse(
-            List<Message> messages,
-            @Nullable String conversationId,
-            @Nullable String model,
-            @Nullable Integer maxTokens,
-            @Nullable Double temperature
+        List<Message> messages,
+        @Nullable String conversationId,
+        @Nullable String model,
+        @Nullable Integer maxTokens,
+        @Nullable Double temperature
     );
 
     /**
@@ -82,11 +82,11 @@ public interface AiClientService {
      * or unsuccessful and contain a string refusal reason
      */
     <T> Response<T> getResponse(
-            List<Message> messages,
-            Class<T> responseType,
-            @Nullable String conversationId,
-            @Nullable String model,
-            @Nullable Integer maxTokens,
-            @Nullable Double temperature
+        List<Message> messages,
+        Class<T> responseType,
+        @Nullable String conversationId,
+        @Nullable String model,
+        @Nullable Integer maxTokens,
+        @Nullable Double temperature
     );
 }

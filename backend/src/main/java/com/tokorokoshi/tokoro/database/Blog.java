@@ -12,25 +12,34 @@ import java.util.List;
 
 @Document(collection = "blog")
 public record Blog(
-        @Id
-        String id,
-        @NonNull
-        String title,
-        @NonNull
-        String content,
-        @NonNull
-        List<String> authorId,
-        @NonNull
-        List<String> tags,
-        List<Comment> comments,
-        @Indexed
-        @CreatedDate
-        Instant createdAt,
-        @Indexed
-        @LastModifiedDate
-        Instant updatedAt
+    @Id
+    String id,
+    @NonNull
+    String title,
+    @NonNull
+    String content,
+    @NonNull
+    List<String> authorId,
+    @NonNull
+    List<String> tags,
+    List<Comment> comments,
+    @Indexed
+    @CreatedDate
+    Instant createdAt,
+    @Indexed
+    @LastModifiedDate
+    Instant updatedAt
 ) {
     public Blog withId(String id) {
-        return new Blog(id, title, content, authorId, tags, comments, createdAt, updatedAt);
+        return new Blog(
+            id,
+            title,
+            content,
+            authorId,
+            tags,
+            comments,
+            createdAt,
+            updatedAt
+        );
     }
 }

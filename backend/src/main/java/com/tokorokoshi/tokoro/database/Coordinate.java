@@ -5,9 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public record Coordinate(
-        @NonNull
-        double latitude,
-        @NonNull
-        double longitude
+    @NonNull
+    double latitude,
+    @NonNull
+    double longitude
 ) {
 }

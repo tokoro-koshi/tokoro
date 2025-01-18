@@ -15,43 +15,53 @@ public class PromptHistoryService {
     private final PromptHistoryMapper promptHistoryMapper;
 
     @Autowired
-    public PromptHistoryService(MongoTemplate mongoTemplate,
-                                PromptHistoryMapper promptHistoryMapper) {
+    public PromptHistoryService(
+        MongoTemplate mongoTemplate,
+        PromptHistoryMapper promptHistoryMapper
+    ) {
         this.mongoTemplate = mongoTemplate;
         this.promptHistoryMapper = promptHistoryMapper;
     }
 
-
-    //CRUD
-
-    public PromptHistoryDto savePromptHistory(CreateUpdatePromptHistoryDto promptHistory) {
-        PromptHistory promptHistorySchema = promptHistoryMapper.toPromptHistorySchema(promptHistory);
-        return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.save(promptHistorySchema));
+    public PromptHistoryDto savePromptHistory(
+        CreateUpdatePromptHistoryDto promptHistory
+    ) {
+        PromptHistory promptHistorySchema = promptHistoryMapper
+            .toPromptHistorySchema(promptHistory);
+        return promptHistoryMapper.toPromptHistoryDto(
+            mongoTemplate.save(promptHistorySchema)
+        );
     }
 
-
     public PromptHistoryDto findPromptHistoryById(String id) {
-        return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.findById(id, PromptHistory.class));
+        return promptHistoryMapper.toPromptHistoryDto(
+            mongoTemplate.findById(id, PromptHistory.class)
+        );
     }
 
     public List<PromptHistoryDto> findAllPromptHistories() {
-        return promptHistoryMapper.toPromptHistoryDto(mongoTemplate.findAll(PromptHistory.class));
-
+        return promptHistoryMapper.toPromptHistoryDto(
+            mongoTemplate.findAll(PromptHistory.class)
+        );
     }
 
-    public PromptHistoryDto updatePromptHistory(String id, CreateUpdatePromptHistoryDto promptHistory) {
+    public PromptHistoryDto updatePromptHistory(
+        String id,
+        CreateUpdatePromptHistoryDto promptHistory
+    ) {
         if (findPromptHistoryById(id) == null) {
             return null;
         }
-        PromptHistory promptHistorySchema = promptHistoryMapper.toPromptHistorySchema(promptHistory);
+        PromptHistory promptHistorySchema = promptHistoryMapper
+            .toPromptHistorySchema(promptHistory);
         return promptHistoryMapper.toPromptHistoryDto(
-                mongoTemplate.save(promptHistorySchema.withId(id))
+            mongoTemplate.save(promptHistorySchema.withId(id))
         );
     }
 
     public void deletePromptHistory(String id) {
-        mongoTemplate.remove(promptHistoryMapper.toPromptHistorySchema(findPromptHistoryById(id)));
+        mongoTemplate.remove(
+            promptHistoryMapper.toPromptHistorySchema(findPromptHistoryById(id))
+        );
     }
-
-
 }
