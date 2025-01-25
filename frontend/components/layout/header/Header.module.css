@@ -7,10 +7,9 @@
 }
 
 .nav {
-  @apply hidden md:flex space-x-4;
+  @apply hidden md:flex space-x-4 items-center;
 }
 
 .navLink {
   @apply text-muted-foreground hover:text-primary transition-colors;
 }
-
