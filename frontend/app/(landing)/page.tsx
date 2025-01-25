@@ -9,7 +9,7 @@ import CallToAction from '@/components/landing/call-to-action/CallToAction';
 import Footer from '@/components/layout/footer/Footer';
 
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

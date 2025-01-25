@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import routes from '@/lib/constants/routes';
+import LoginButton from '@/components/buttons/Login';
 import styles from './Header.module.css'
 
 export default function Header() {
@@ -7,13 +10,9 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.logo}>Tokoro</div>
       <nav className={styles.nav}>
-        <Link href="/" className={styles.navLink}>Home</Link>
-        <Link href="#features" className={styles.navLink}>Features</Link>
-        <Link href="#about" className={styles.navLink}>About</Link>
-        <Link href="/login" className={styles.navLink}>Login</Link>
+        <Link href={routes.home} className={styles.navLink}>Home</Link>
+        <LoginButton />
       </nav>
-      <Button variant="outline">Register</Button>
     </header>
   )
 }
-

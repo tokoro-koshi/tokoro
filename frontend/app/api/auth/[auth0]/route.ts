@@ -1,4 +1,8 @@
-﻿// import auth0 from "@/lib/helpers/auth0";
-import { handleAuth } from '@auth0/nextjs-auth0';
+﻿import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
 
-export const GET = handleAuth();
+/**
+ * /api/auth/[auth0], where [auth0] - login, logout, callback, me
+ */
+export const GET = handleAuth({
+  signup: handleLogin({ authorizationParams: { screen_hint: 'signup' } })
+});
