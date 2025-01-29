@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Project Metadata -->
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -12,20 +15,57 @@
     <artifactId>tokoro</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>tokoro</name>
-    <description>tokoro</description>
-    <url/>
+    <description>Tokoro Application</description>
+    <url>https://github.com/tokoro-koshi/tokoro</url>
+
+    <!-- Licensing Information -->
     <licenses>
-        <license/>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
     </licenses>
+
+    <!-- Developer Information -->
     <developers>
-        <developer/>
+        <developer>
+            <id>olehio-p</id>
+            <name>Oleh Popovych</name>
+            <email>oleh.popovych.shi.2023@lpnu.ua</email>
+        </developer>
+        <developer>
+            <id>rojikaru</id>
+            <name>Alex Ivanov</name>
+            <email>oleksii120@gmail.com</email>
+        </developer>
+        <developer>
+            <id>AndrewVynnytskyi</id>
+            <name>Andrew Vynnytskyi</name>
+        </developer>
+        <developer>
+            <id>shliakhetko</id>
+            <name>Danylo Shliakhetko</name>
+        </developer>
+        <developer>
+            <id>Ania-Savchuk</id>
+            <name>Ania Savchuk</name>
+            <email>ania.savchuk.shi.2023@lpnu.ua</email>
+        </developer>
+        <developer>
+            <id>yuliia-pedchenko</id>
+            <name>Yulia Pedchenko</name>
+        </developer>
     </developers>
+
+    <!-- Source Control Management -->
     <scm>
         <connection/>
         <developerConnection/>
         <tag/>
         <url/>
     </scm>
+
+    <!-- Project Properties -->
     <properties>
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
@@ -33,18 +73,14 @@
         <spring-ai.version>1.0.0-M5</spring-ai.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
     </properties>
+
+    <!-- Dependencies -->
     <dependencies>
+        <!-- Spring Boot Starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -58,10 +94,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
@@ -73,6 +105,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <!-- JSON Schema Generator -->
         <dependency>
             <groupId>com.github.victools</groupId>
             <artifactId>jsonschema-generator</artifactId>
@@ -88,12 +137,41 @@
             <artifactId>jsonschema-module-jakarta-validation</artifactId>
             <version>4.31.1</version>
         </dependency>
+
+        <!-- Spring AI -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Auth0 -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>auth0</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+
+        <!-- Caffeine Cache -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
+        <!-- Spring Retry -->
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
+
+        <!-- Dev Tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+
+        <!-- Testing Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -112,6 +190,7 @@
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
@@ -119,6 +198,8 @@
             <version>20240303</version>
         </dependency>
     </dependencies>
+
+    <!-- Dependency Management -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -131,29 +212,34 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- Build Configuration -->
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.8.1</version> <!-- Updated to a more recent version -->
                 <configuration>
-                    <source>1.8</source> <!-- depending on your project -->
-                    <target>1.8</target> <!-- depending on your project -->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${org.mapstruct.version}</version>
                         </path>
-                        <!-- other annotation processors -->
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- JSON Schema Maven Plugin -->
             <plugin>
                 <groupId>com.github.victools</groupId>
                 <artifactId>jsonschema-maven-plugin</artifactId>
@@ -168,6 +254,8 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- Repositories -->
     <repositories>
         <repository>
             <id>spring-milestones</id>
