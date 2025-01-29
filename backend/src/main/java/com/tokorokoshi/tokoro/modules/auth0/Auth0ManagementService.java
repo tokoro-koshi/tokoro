@@ -46,7 +46,7 @@ public class Auth0ManagementService {
      * @throws UserFetchException if there is an error during the fetching process.
      */
     public User getUser(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -66,7 +66,7 @@ public class Auth0ManagementService {
      * @throws UserSearchException if there is an error during the search process.
      */
     public List<User> searchUsers(String query) {
-        if (query == null || query.isEmpty()) {
+        if (query == null || query.isBlank()) {
             throw new IllegalArgumentException("Query must not be null or empty");
         }
         try {
@@ -87,7 +87,7 @@ public class Auth0ManagementService {
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserMetadata(String userId, Map<String, Object> metadata) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         if (metadata == null) {
@@ -111,7 +111,7 @@ public class Auth0ManagementService {
      * @throws UserDeleteException if there is an error during the deletion process.
      */
     public void deleteUser(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -132,13 +132,13 @@ public class Auth0ManagementService {
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserFirstNameAndLastName(String userId, String firstName, String lastName) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
-        if (firstName == null || firstName.isEmpty()) {
+        if (firstName == null || firstName.isBlank()) {
             throw new IllegalArgumentException("First name must not be null or empty");
         }
-        if (lastName == null || lastName.isEmpty()) {
+        if (lastName == null || lastName.isBlank()) {
             throw new IllegalArgumentException("Last name must not be null or empty");
         }
         try {
@@ -161,10 +161,10 @@ public class Auth0ManagementService {
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserAvatar(String userId, String avatarUrl) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
-        if (avatarUrl == null || avatarUrl.isEmpty()) {
+        if (avatarUrl == null || avatarUrl.isBlank()) {
             throw new IllegalArgumentException("Avatar URL must not be null or empty");
         }
         try {
@@ -186,7 +186,7 @@ public class Auth0ManagementService {
      * @throws UserFetchException if there is an error during the fetch process.
      */
     public String getUserAvatar(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -207,7 +207,7 @@ public class Auth0ManagementService {
      * @throws RoleAssignmentException if there is an error during the assignment process.
      */
     public void assignRolesToUser(String userId, List<String> roleIds) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         if (roleIds == null || roleIds.isEmpty()) {
@@ -230,7 +230,7 @@ public class Auth0ManagementService {
      * @throws RoleRemovalException if there is an error during the removal process.
      */
     public void removeRolesFromUser(String userId, List<String> roleIds) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         if (roleIds == null || roleIds.isEmpty()) {
@@ -253,7 +253,7 @@ public class Auth0ManagementService {
      * @throws RoleFetchException if there is an error during the fetching process.
      */
     public List<String> getUserRoles(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -307,7 +307,7 @@ public class Auth0ManagementService {
      * @throws UserUpdateException if there is an error during the blocking process.
      */
     public void blockUser(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -328,7 +328,7 @@ public class Auth0ManagementService {
      * @throws UserUpdateException if there is an error during the unblocking process.
      */
     public void unblockUser(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -350,7 +350,7 @@ public class Auth0ManagementService {
      * @throws UserFetchException if there is an error during the fetching process.
      */
     public String getUserNickname(String userId) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
@@ -371,10 +371,10 @@ public class Auth0ManagementService {
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserNickname(String userId, String nickname) {
-        if (userId == null || userId.isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
-        if (nickname == null || nickname.isEmpty()) {
+        if (nickname == null || nickname.isBlank()) {
             throw new IllegalArgumentException("Nickname must not be null or empty");
         }
         try {

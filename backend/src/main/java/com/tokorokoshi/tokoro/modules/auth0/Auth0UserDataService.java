@@ -236,7 +236,7 @@ public class Auth0UserDataService {
      */
     public void updateAuthenticatedUserAvatar(String avatarUrl) {
         String userId = getAuthenticatedUserId();
-        if (avatarUrl == null || avatarUrl.isEmpty()) {
+        if (avatarUrl == null || avatarUrl.isBlank()) {
             throw new IllegalArgumentException("Avatar URL must not be null or empty");
         }
         auth0ManagementService.updateUserAvatar(userId, avatarUrl);
@@ -265,10 +265,10 @@ public class Auth0UserDataService {
      */
     public void updateAuthenticatedUserName(String firstName, String lastName) {
         String userId = getAuthenticatedUserId();
-        if (firstName == null || firstName.isEmpty()) {
+        if (firstName == null || firstName.isBlank()) {
             throw new IllegalArgumentException("First name must not be null or empty");
         }
-        if (lastName == null || lastName.isEmpty()) {
+        if (lastName == null || lastName.isBlank()) {
             throw new IllegalArgumentException("Last name must not be null or empty");
         }
         auth0ManagementService.updateUserFirstNameAndLastName(userId, firstName, lastName);
@@ -296,7 +296,7 @@ public class Auth0UserDataService {
      */
     public void updateAuthenticatedUserNickname(String nickname) {
         String userId = getAuthenticatedUserId();
-        if (nickname == null || nickname.isEmpty()) {
+        if (nickname == null || nickname.isBlank()) {
             throw new IllegalArgumentException("Nickname must not be null or empty");
         }
         auth0ManagementService.updateUserNickname(userId, nickname);

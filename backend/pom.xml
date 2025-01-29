@@ -33,6 +33,28 @@
             <name>Oleh Popovych</name>
             <email>oleh.popovych.shi.2023@lpnu.ua</email>
         </developer>
+        <developer>
+            <id>rojikaru</id>
+            <name>Alex Ivanov</name>
+            <email>oleksii120@gmail.com</email>
+        </developer>
+        <developer>
+            <id>AndrewVynnytskyi</id>
+            <name>Andrew Vynnytskyi</name>
+        </developer>
+        <developer>
+            <id>shliakhetko</id>
+            <name>Danylo Shliakhetko</name>
+        </developer>
+        <developer>
+            <id>Ania-Savchuk</id>
+            <name>Ania Savchuk</name>
+            <email>ania.savchuk.shi.2023@lpnu.ua</email>
+        </developer>
+        <developer>
+            <id>yuliia-pedchenko</id>
+            <name>Yulia Pedchenko</name>
+        </developer>
     </developers>
 
     <!-- Source Control Management -->

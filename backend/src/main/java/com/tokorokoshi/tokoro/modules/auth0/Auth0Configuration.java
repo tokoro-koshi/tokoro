@@ -43,7 +43,7 @@ public class Auth0Configuration {
         String managementApiToken = tokenService.getManagementApiToken();
 
         // Validate the token before using it
-        if (managementApiToken == null || managementApiToken.isEmpty()) {
+        if (managementApiToken == null || managementApiToken.isBlank()) {
             throw new Auth0ManagementException("Retrieved Management API token is null or empty");
         }
 
