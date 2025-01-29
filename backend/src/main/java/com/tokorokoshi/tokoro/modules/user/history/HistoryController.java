@@ -84,7 +84,7 @@ public class HistoryController {
             @PathVariable @NotNull @NotBlank String action) {
         try {
             historyService.rollbackHistoryEntryByAction(action);
-            return ResponseEntity.ok("Last history entry with action '" + action + "' rolled back successfully");
+            return ResponseEntity.ok("Last history entry rolled back successfully");
         } catch (Exception e) {
             log.error("Error rolling back history entry by action", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
