@@ -50,11 +50,11 @@ public class PreferencesController {
             return ResponseEntity.ok("Preferences set successfully");
         } catch (InvalidPreferenceException e) {
             log.error("Invalid preferences provided", e);
-            return ResponseEntity.badRequest().body("Invalid preferences: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid preferences");
         } catch (Exception e) {
             log.error("Error setting preferences", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to set preferences: " + e.getMessage());
+                    .body("Failed to set preferences");
         }
     }
 
@@ -95,11 +95,11 @@ public class PreferencesController {
             return ResponseEntity.ok("Language preference updated successfully");
         } catch (InvalidPreferenceException e) {
             log.error("Invalid language provided", e);
-            return ResponseEntity.badRequest().body("Invalid language: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid language");
         } catch (Exception e) {
             log.error("Error updating language preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update language preference: " + e.getMessage());
+                    .body("Failed to update language preference");
         }
     }
 
@@ -118,11 +118,11 @@ public class PreferencesController {
             return ResponseEntity.ok("Categories preference updated successfully");
         } catch (InvalidPreferenceException e) {
             log.error("Invalid categories provided", e);
-            return ResponseEntity.badRequest().body("Invalid categories: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid categories");
         } catch (Exception e) {
             log.error("Error updating categories preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update categories preference: " + e.getMessage());
+                    .body("Failed to update categories preference");
         }
     }
 
@@ -141,11 +141,11 @@ public class PreferencesController {
             return ResponseEntity.ok("Timezone preference updated successfully");
         } catch (InvalidPreferenceException e) {
             log.error("Invalid timezone provided", e);
-            return ResponseEntity.badRequest().body("Invalid timezone: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid timezone");
         } catch (Exception e) {
             log.error("Error updating timezone preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update timezone preference: " + e.getMessage());
+                    .body("Failed to update timezone preference");
         }
     }
 
@@ -165,7 +165,7 @@ public class PreferencesController {
         } catch (Exception e) {
             log.error("Error updating notifications enabled preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update notifications enabled preference: " + e.getMessage());
+                    .body("Failed to update notifications enabled preference");
         }
     }
 
@@ -187,7 +187,7 @@ public class PreferencesController {
         } catch (Exception e) {
             log.error("Error clearing preferences", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to clear preferences: " + e.getMessage());
+                    .body("Failed to clear preferences");
         }
     }
 }

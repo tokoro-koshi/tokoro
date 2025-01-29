@@ -54,11 +54,11 @@ public class HistoryController {
             return ResponseEntity.ok("History entry added successfully");
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment provided", e);
-            return ResponseEntity.badRequest().body("Invalid establishment: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid establishment");
         } catch (Exception e) {
             log.error("Error adding history entry", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to add history entry: " + e.getMessage());
+                    .body("Failed to add history entry");
         }
     }
 
@@ -80,7 +80,7 @@ public class HistoryController {
         } catch (Exception e) {
             log.error("Error rolling back history entry", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to roll back history entry: " + e.getMessage());
+                    .body("Failed to roll back history entry");
         }
     }
 
@@ -104,7 +104,7 @@ public class HistoryController {
         } catch (Exception e) {
             log.error("Error rolling back history entry by action", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to roll back history entry by action: " + e.getMessage());
+                    .body("Failed to roll back history entry by action");
         }
     }
 
@@ -130,7 +130,7 @@ public class HistoryController {
         } catch (Exception e) {
             log.error("Error rolling back history entries by timestamp range", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to roll back history entries by timestamp range: " + e.getMessage());
+                    .body("Failed to roll back history entries by timestamp range");
         }
     }
 
@@ -257,7 +257,7 @@ public class HistoryController {
         } catch (Exception e) {
             log.error("Error clearing history entries", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to clear history entries: " + e.getMessage());
+                    .body("Failed to clear history entries");
         }
     }
 

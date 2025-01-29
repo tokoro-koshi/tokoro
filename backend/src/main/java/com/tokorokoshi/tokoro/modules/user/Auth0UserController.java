@@ -46,7 +46,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error retrieving authenticated user email", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to retrieve authenticated user email: " + e.getMessage());
+                    .body("Failed to retrieve authenticated user email");
         }
     }
 
@@ -63,7 +63,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error retrieving authenticated user name", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to retrieve authenticated user name: " + e.getMessage());
+                    .body("Failed to retrieve authenticated user name");
         }
     }
 
@@ -241,7 +241,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error blocking user", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to block user: " + e.getMessage());
+                    .body("Failed to block user");
         }
     }
 
@@ -258,7 +258,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error unblocking user", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to unblock user: " + e.getMessage());
+                    .body("Failed to unblock user");
         }
     }
 
@@ -278,7 +278,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error updating user metadata", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user metadata: " + e.getMessage());
+                    .body("Failed to update user metadata");
         }
     }
 
@@ -297,7 +297,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error updating user avatar", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user avatar: " + e.getMessage());
+                    .body("Failed to update user avatar");
         }
     }
 
@@ -314,7 +314,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error fetching user avatar", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to fetch user avatar: " + e.getMessage());
+                    .body("Failed to fetch user avatar");
         }
     }
 
@@ -335,7 +335,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error updating user name", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user name: " + e.getMessage());
+                    .body("Failed to update user name");
         }
     }
 
@@ -352,7 +352,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error retrieving authenticated user nickname", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to retrieve authenticated user nickname: " + e.getMessage());
+                    .body("Failed to retrieve authenticated user nickname");
         }
     }
 
@@ -371,7 +371,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error updating user nickname", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user nickname: " + e.getMessage());
+                    .body("Failed to update user nickname");
         }
     }
 
@@ -417,11 +417,11 @@ public class Auth0UserController {
         } catch (Auth0ManagementException e) {
             log.error("Error deleting user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to delete user: " + e.getMessage());
+                    .body("Failed to delete user");
         } catch (Exception e) {
             log.error("Error deleting user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to delete user: " + e.getMessage());
+                    .body("Failed to delete user");
         }
     }
 
@@ -445,11 +445,11 @@ public class Auth0UserController {
         } catch (Auth0ManagementException e) {
             log.error("Error assigning roles to user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to assign roles: " + e.getMessage());
+                    .body("Failed to assign roles");
         } catch (Exception e) {
             log.error("Error assigning roles to user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to assign roles: " + e.getMessage());
+                    .body("Failed to assign roles");
         }
     }
 
@@ -473,11 +473,11 @@ public class Auth0UserController {
         } catch (Auth0ManagementException e) {
             log.error("Error removing roles from user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to remove roles: " + e.getMessage());
+                    .body("Failed to remove roles");
         } catch (Exception e) {
             log.error("Error removing roles from user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to remove roles: " + e.getMessage());
+                    .body("Failed to remove roles");
         }
     }
 }

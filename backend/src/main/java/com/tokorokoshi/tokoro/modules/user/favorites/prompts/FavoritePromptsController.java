@@ -55,11 +55,11 @@ public class FavoritePromptsController {
             return ResponseEntity.ok("Favorite prompt added successfully");
         } catch (InvalidPromptIdException e) {
             log.error("Invalid request: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid request: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid request");
         } catch (Exception e) {
             log.error("Error adding favorite prompt", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to add favorite prompt: " + e.getMessage());
+                    .body("Failed to add favorite prompt");
         }
     }
 
@@ -83,7 +83,7 @@ public class FavoritePromptsController {
             return ResponseEntity.ok("Favorite prompt updated successfully");
         } catch (InvalidPromptIdException e) {
             log.error("Invalid prompt ID: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid prompt ID: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid prompt ID");
         } catch (FavoritePromptNotFoundException e) {
             log.warn("Favorite prompt with prompt ID {} not found", promptId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -91,7 +91,7 @@ public class FavoritePromptsController {
         } catch (Exception e) {
             log.error("Error updating favorite prompt", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update favorite prompt: " + e.getMessage());
+                    .body("Failed to update favorite prompt");
         }
     }
 
@@ -113,7 +113,7 @@ public class FavoritePromptsController {
             return ResponseEntity.ok("Favorite prompt removed successfully");
         } catch (InvalidPromptIdException e) {
             log.error("Invalid prompt ID: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid prompt ID: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid prompt ID");
         } catch (FavoritePromptNotFoundException e) {
             log.warn("Favorite prompt with prompt ID {} not found", promptId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -121,7 +121,7 @@ public class FavoritePromptsController {
         } catch (Exception e) {
             log.error("Error removing favorite prompt", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to remove favorite prompt: " + e.getMessage());
+                    .body("Failed to remove favorite prompt");
         }
     }
 
@@ -205,7 +205,7 @@ public class FavoritePromptsController {
         } catch (Exception e) {
             log.error("Error clearing favorite prompts", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to clear favorite prompts: " + e.getMessage());
+                    .body("Failed to clear favorite prompts");
         }
     }
 

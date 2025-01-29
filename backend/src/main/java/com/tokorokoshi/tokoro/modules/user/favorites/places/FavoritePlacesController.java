@@ -53,11 +53,11 @@ public class FavoritePlacesController {
             return ResponseEntity.ok("Favorite place added successfully");
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment provided", e);
-            return ResponseEntity.badRequest().body("Invalid establishment: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid establishment");
         } catch (Exception e) {
             log.error("Error adding favorite place", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to add favorite place: " + e.getMessage());
+                    .body("Failed to add favorite place");
         }
     }
 
@@ -81,7 +81,7 @@ public class FavoritePlacesController {
             return ResponseEntity.ok("Favorite place updated successfully");
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment ID: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid establishment ID: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid establishment ID");
         } catch (FavoritePlaceNotFoundException e) {
             log.warn("Favorite place with establishment ID {} not found", establishmentId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -89,7 +89,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error updating favorite place", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update favorite place: " + e.getMessage());
+                    .body("Failed to update favorite place");
         }
     }
 
@@ -111,7 +111,7 @@ public class FavoritePlacesController {
             return ResponseEntity.ok("Favorite place removed successfully");
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment ID: {}", e.getMessage());
-            return ResponseEntity.badRequest().body("Invalid establishment ID: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid establishment ID");
         } catch (FavoritePlaceNotFoundException e) {
             log.warn("Favorite place with establishment ID {} not found", establishmentId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -119,7 +119,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error removing favorite place", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to remove favorite place: " + e.getMessage());
+                    .body("Failed to remove favorite place");
         }
     }
 
@@ -203,7 +203,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error clearing favorite places", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to clear favorite places: " + e.getMessage());
+                    .body("Failed to clear favorite places");
         }
     }
 
@@ -372,7 +372,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error rolling back last favorite place", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to roll back last favorite place: " + e.getMessage());
+                    .body("Failed to roll back last favorite place");
         }
     }
 }
