@@ -1,8 +1,6 @@
 package com.tokorokoshi.tokoro.modules.user.history;
 
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
-import com.tokorokoshi.tokoro.modules.exceptions.history.HistoryEntryNotFoundException;
-import com.tokorokoshi.tokoro.modules.exceptions.history.NoHistoryEntriesException;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.user.history.dto.HistoryEntryDto;
 import jakarta.validation.Valid;
@@ -34,9 +32,6 @@ public class HistoryController {
 
     @Autowired
     public HistoryController(HistoryService historyService) {
-        if (historyService == null) {
-            throw new IllegalArgumentException("HistoryService must not be null");
-        }
         this.historyService = historyService;
     }
 
@@ -50,7 +45,6 @@ public class HistoryController {
     public ResponseEntity<String> addHistoryEntry(@Valid @RequestBody HistoryEntryDto historyEntryDto) {
         try {
             historyService.addHistoryEntry(historyEntryDto);
-            log.info("History entry added successfully for user");
             return ResponseEntity.ok("History entry added successfully");
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment provided", e);
@@ -71,12 +65,7 @@ public class HistoryController {
     public ResponseEntity<String> rollbackHistoryEntry() {
         try {
             historyService.rollbackHistoryEntry();
-            log.info("Last history entry rolled back successfully for user");
             return ResponseEntity.ok("Last history entry rolled back successfully");
-        } catch (NoHistoryEntriesException e) {
-            log.warn("No history entries to rollback for user");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No history entries to rollback");
         } catch (Exception e) {
             log.error("Error rolling back history entry", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -95,12 +84,7 @@ public class HistoryController {
             @PathVariable @NotNull @NotBlank String action) {
         try {
             historyService.rollbackHistoryEntryByAction(action);
-            log.info("Last history entry with action '{}' rolled back successfully for user", action);
             return ResponseEntity.ok("Last history entry with action '" + action + "' rolled back successfully");
-        } catch (NoHistoryEntriesException e) {
-            log.warn("No history entries with action '{}' to rollback for user", action);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No history entries with action '" + action + "' to rollback");
         } catch (Exception e) {
             log.error("Error rolling back history entry by action", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -121,12 +105,7 @@ public class HistoryController {
             @RequestParam @NotNull Date endDate) {
         try {
             historyService.rollbackHistoryEntriesByTimestampRange(startDate, endDate);
-            log.info("History entries within the specified timestamp range rolled back successfully for user");
             return ResponseEntity.ok("History entries within the specified timestamp range rolled back successfully");
-        } catch (NoHistoryEntriesException e) {
-            log.warn("No history entries within the specified timestamp range to rollback for user");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No history entries within the specified timestamp range to rollback");
         } catch (Exception e) {
             log.error("Error rolling back history entries by timestamp range", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -143,12 +122,10 @@ public class HistoryController {
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntries() {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntries();
-            log.info("History entries retrieved successfully for user");
             return ResponseEntity.ok(historyEntries);
         } catch (Exception e) {
             log.error("Error retrieving history entries", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -161,12 +138,10 @@ public class HistoryController {
     public ResponseEntity<List<PlaceDto>> getHistoryEntriesAsPlaces() {
         try {
             List<PlaceDto> historyEntriesAsPlaces = historyService.getHistoryEntriesAsPlaces();
-            log.info("History entries as places retrieved successfully for user");
             return ResponseEntity.ok(historyEntriesAsPlaces);
         } catch (Exception e) {
             log.error("Error retrieving history entries as places", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -181,12 +156,10 @@ public class HistoryController {
             @PathVariable @NotNull @NotBlank String action) {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntriesByAction(action);
-            log.info("History entries by action '{}' retrieved successfully for user", action);
             return ResponseEntity.ok(historyEntries);
         } catch (Exception e) {
             log.error("Error retrieving history entries by action", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -201,15 +174,13 @@ public class HistoryController {
             @PathVariable @NotNull @NotBlank String establishmentId) {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntriesByEstablishmentId(establishmentId);
-            log.info("History entries by establishment ID '{}' retrieved successfully for user", establishmentId);
             return ResponseEntity.ok(historyEntries);
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment provided", e);
-            return ResponseEntity.badRequest().body(List.of());
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             log.error("Error retrieving history entries by establishment ID", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -225,21 +196,13 @@ public class HistoryController {
         try {
             HistoryEntryDto historyEntry = historyService.getHistoryEntryByTimestamp(timestamp);
             if (historyEntry != null) {
-                log.info("History entry by timestamp '{}' retrieved successfully for user", timestamp);
                 return ResponseEntity.ok(historyEntry);
             } else {
-                log.warn("History entry with timestamp '{}' not found for user", timestamp);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null); // Return null for not found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (HistoryEntryNotFoundException e) {
-            log.warn("History entry with timestamp '{}' not found for user", timestamp);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null); // Return null for not found
         } catch (Exception e) {
             log.error("Error retrieving history entry by timestamp", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -252,7 +215,6 @@ public class HistoryController {
     public ResponseEntity<String> clearHistoryEntries() {
         try {
             historyService.clearHistoryEntries();
-            log.info("All history entries cleared successfully for user");
             return ResponseEntity.ok("All history entries cleared successfully");
         } catch (Exception e) {
             log.error("Error clearing history entries", e);
@@ -272,12 +234,10 @@ public class HistoryController {
             @RequestParam @NotNull Date timestamp) {
         try {
             boolean exists = historyService.isHistoryEntryExists(timestamp);
-            log.info("Checked if history entry with timestamp '{}' exists for user: {}", timestamp, exists);
             return ResponseEntity.ok(exists);
         } catch (Exception e) {
             log.error("Error checking if history entry exists", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(false); // Return false for internal server error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -290,14 +250,12 @@ public class HistoryController {
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntriesSortedByTimestamp() {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntries();
-            log.info("History entries sorted by timestamp in ascending order for user");
             return ResponseEntity.ok(historyEntries.stream()
                     .sorted(Comparator.comparing(HistoryEntryDto::timestamp))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
             log.error("Error sorting history entries by timestamp", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -310,14 +268,12 @@ public class HistoryController {
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntriesSortedByTimestampDescending() {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntries();
-            log.info("History entries sorted by timestamp in descending order for user");
             return ResponseEntity.ok(historyEntries.stream()
                             .sorted(Comparator.comparing(HistoryEntryDto::timestamp).reversed())
                             .collect(Collectors.toList()));
         } catch (Exception e) {
             log.error("Error sorting history entries by timestamp in descending order", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -332,12 +288,10 @@ public class HistoryController {
             @RequestParam @NotNull @NotBlank String action) {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntriesByAction(action);
-            log.info("History entries searched by action '{}' for user", action);
             return ResponseEntity.ok(historyEntries);
         } catch (Exception e) {
             log.error("Error searching history entries by action", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -352,15 +306,13 @@ public class HistoryController {
             @RequestParam @NotNull @NotBlank String establishmentId) {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntriesByEstablishmentId(establishmentId);
-            log.info("History entries searched by establishment ID '{}' for user", establishmentId);
             return ResponseEntity.ok(historyEntries);
         } catch (InvalidEstablishmentException e) {
             log.error("Invalid establishment provided", e);
-            return ResponseEntity.badRequest().body(List.of());
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             log.error("Error searching history entries by establishment ID", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -373,12 +325,10 @@ public class HistoryController {
     public ResponseEntity<Integer> countHistoryEntries() {
         try {
             int count = historyService.getHistoryEntries().size();
-            log.info("History entries count retrieved successfully for user: {}", count);
             return ResponseEntity.ok(count);
         } catch (Exception e) {
             log.error("Error counting history entries", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(0); // Return 0 for internal server error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

@@ -33,15 +33,8 @@ public class TokenService {
      *
      * @param authAPIFactory factory for creating AuthAPI instances.
      * @param auth0Properties properties containing necessary configuration for Auth0.
-     * @throws IllegalArgumentException if authAPIFactory or auth0Properties is null.
      */
     public TokenService(AuthAPIFactory authAPIFactory, Auth0Properties auth0Properties) {
-        if (authAPIFactory == null) {
-            throw new IllegalArgumentException("AuthAPIFactory must not be null");
-        }
-        if (auth0Properties == null) {
-            throw new IllegalArgumentException("Auth0Properties must not be null");
-        }
         this.authAPIFactory = authAPIFactory;
         this.auth0Properties = auth0Properties;
     }
@@ -60,8 +53,6 @@ public class TokenService {
     @Cacheable(value = "auth0ManagementToken", unless = "#result == null")
     public String getManagementApiToken() throws Auth0ManagementException {
         try {
-            log.debug("Attempting to obtain Management API token");
-
             // Create an AuthAPI instance
             AuthAPI authAPI = authAPIFactory.createAuthAPI();
 
@@ -77,15 +68,11 @@ public class TokenService {
                 throw new Auth0ManagementException("Failed to obtain Management API token");
             }
 
-            log.debug("Successfully obtained new Management API token");
             return holder.getAccessToken();
 
         } catch (Auth0Exception e) {
             log.error("Error obtaining Management API token due to Auth0 exception", e);
             throw new Auth0ManagementException("Failed to obtain Management API token due to Auth0 exception", e);
-        } catch (Exception e) {
-            log.error("Unexpected error obtaining Management API token", e);
-            throw new Auth0ManagementException("Failed to obtain Management API token due to unexpected error", e);
         }
     }
 
@@ -96,6 +83,5 @@ public class TokenService {
     @Scheduled(fixedRate = 23 * 60 * 60 * 1000) // 23 hours
     @CacheEvict(value = "auth0ManagementToken", allEntries = true)
     public void evictManagementTokenCache() {
-        log.debug("Evicting Management API token cache");
     }
 }

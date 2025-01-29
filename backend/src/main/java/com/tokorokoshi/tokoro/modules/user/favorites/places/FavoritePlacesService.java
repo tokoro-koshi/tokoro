@@ -1,6 +1,5 @@
 package com.tokorokoshi.tokoro.modules.user.favorites.places;
 
-import com.auth0.json.mgmt.users.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
@@ -8,8 +7,6 @@ import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablish
 import com.tokorokoshi.tokoro.modules.places.PlacesService;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.user.favorites.places.dto.FavoritePlaceDto;
-import com.tokorokoshi.tokoro.modules.exceptions.favorites.places.FavoritePlaceNotFoundException;
-import com.tokorokoshi.tokoro.modules.exceptions.favorites.places.NoFavoritePlacesException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,15 +35,6 @@ public class FavoritePlacesService {
 
     @Autowired
     public FavoritePlacesService(Auth0UserDataService auth0UserDataService, PlacesService placesService, ObjectMapper objectMapper) {
-        if (auth0UserDataService == null) {
-            throw new IllegalArgumentException("Auth0UserDataService must not be null");
-        }
-        if (placesService == null) {
-            throw new IllegalArgumentException("PlacesService must not be null");
-        }
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("ObjectMapper must not be null");
-        }
         this.auth0UserDataService = auth0UserDataService;
         this.placesService = placesService;
         this.objectMapper = objectMapper;
@@ -59,22 +47,18 @@ public class FavoritePlacesService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      * @throws InvalidEstablishmentException if the establishment ID is invalid.
      */
-    public void addFavoritePlace(@Valid FavoritePlaceDto favoritePlaceDto) throws Auth0ManagementException {
+    public void addFavoritePlace(@Valid FavoritePlaceDto favoritePlaceDto) {
         validateEstablishmentId(favoritePlaceDto.establishmentId());
 
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
         if (favoritePlaces.stream().anyMatch(fp -> fp.establishmentId().equals(favoritePlaceDto.establishmentId()))) {
-            log.warn("Favorite place with establishment ID {} already exists for user {}", favoritePlaceDto.establishmentId(), userId);
             return;
         }
 
         favoritePlaces.add(favoritePlaceDto);
         auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PLACES_KEY, favoritePlaces));
-        log.info("Added favorite place with establishment ID {} for user {}", favoritePlaceDto.establishmentId(), userId);
     }
 
     /**
@@ -84,19 +68,15 @@ public class FavoritePlacesService {
      * @param favoritePlaceDto the updated favorite place.
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      * @throws InvalidEstablishmentException if the establishment ID is invalid.
-     * @throws FavoritePlaceNotFoundException if the favorite place with the specified establishment ID does not exist.
      */
-    public void updateFavoritePlace(@NotNull String establishmentId, @Valid FavoritePlaceDto favoritePlaceDto) throws Auth0ManagementException {
+    public void updateFavoritePlace(@NotNull String establishmentId, @Valid FavoritePlaceDto favoritePlaceDto) {
         validateEstablishmentId(favoritePlaceDto.establishmentId());
 
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
         if (favoritePlaces.stream().noneMatch(fp -> fp.establishmentId().equals(establishmentId))) {
-            log.warn("Favorite place with establishment ID {} does not exist for user {}", establishmentId, userId);
-            throw new FavoritePlaceNotFoundException("Favorite place with establishment ID " + establishmentId + " does not exist for user " + userId);
+            return;
         }
 
         favoritePlaces = favoritePlaces.stream()
@@ -104,7 +84,6 @@ public class FavoritePlacesService {
                 .toList();
 
         auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PLACES_KEY, favoritePlaces));
-        log.info("Updated favorite place with establishment ID {} for user {}", establishmentId, userId);
     }
 
     /**
@@ -113,19 +92,15 @@ public class FavoritePlacesService {
      * @param establishmentId the establishment ID of the favorite place to remove.
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      * @throws InvalidEstablishmentException if the establishment ID is invalid.
-     * @throws FavoritePlaceNotFoundException if the favorite place with the specified establishment ID does not exist.
      */
-    public void removeFavoritePlace(@NotNull String establishmentId) throws Auth0ManagementException {
+    public void removeFavoritePlace(@NotNull String establishmentId) {
         validateEstablishmentId(establishmentId);
 
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
         if (favoritePlaces.stream().noneMatch(fp -> fp.establishmentId().equals(establishmentId))) {
-            log.warn("Favorite place with establishment ID {} does not exist for user {}", establishmentId, userId);
-            throw new FavoritePlaceNotFoundException("Favorite place with establishment ID " + establishmentId + " does not exist for user " + userId);
+            return;
         }
 
         favoritePlaces = favoritePlaces.stream()
@@ -133,7 +108,6 @@ public class FavoritePlacesService {
                 .toList();
 
         auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PLACES_KEY, favoritePlaces));
-        log.info("Removed favorite place with establishment ID {} for user {}", establishmentId, userId);
     }
 
     /**
@@ -142,19 +116,15 @@ public class FavoritePlacesService {
      * @return a list of {@link PlaceDto} objects.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
-    public List<PlaceDto> getFavoritePlaces() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public List<PlaceDto> getFavoritePlaces() {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        List<PlaceDto> places = favoritePlaces.stream()
+
+        return favoritePlaces.stream()
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-
-        log.debug("Retrieved {} favorite places for user {}", places.size(), userId);
-        return places;
     }
 
     /**
@@ -164,13 +134,10 @@ public class FavoritePlacesService {
      * @return the {@link PlaceDto} object if found, otherwise null.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      * @throws InvalidEstablishmentException if the establishment ID is invalid.
-     * @throws FavoritePlaceNotFoundException if the favorite place with the specified establishment ID does not exist.
      */
-    public PlaceDto getFavoritePlaceById(@NotNull String establishmentId) throws Auth0ManagementException {
+    public PlaceDto getFavoritePlaceById(@NotNull String establishmentId) {
         validateEstablishmentId(establishmentId);
 
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
@@ -178,14 +145,7 @@ public class FavoritePlacesService {
                 .filter(fp -> fp.establishmentId().equals(establishmentId))
                 .findFirst();
 
-        if (favoritePlace.isPresent()) {
-            PlaceDto place = placesService.getPlaceById(favoritePlace.get().establishmentId());
-            log.debug("Retrieved favorite place with establishment ID {} for user {}", establishmentId, userId);
-            return place;
-        }
-
-        log.warn("Favorite place with establishment ID {} does not exist for user {}", establishmentId, userId);
-        throw new FavoritePlaceNotFoundException("Favorite place with establishment ID " + establishmentId + " does not exist for user " + userId);
+        return favoritePlace.map(favoritePlaceDto -> placesService.getPlaceById(favoritePlaceDto.establishmentId())).orElse(null);
     }
 
     /**
@@ -193,11 +153,8 @@ public class FavoritePlacesService {
      *
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
-    public void clearFavoritePlaces() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public void clearFavoritePlaces() {
         auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PLACES_KEY, new ArrayList<>()));
-        log.info("Cleared all favorite places for user {}", userId);
     }
 
     /**
@@ -208,18 +165,14 @@ public class FavoritePlacesService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      * @throws InvalidEstablishmentException if the establishment ID is invalid.
      */
-    public boolean isFavoritePlace(@NotNull String establishmentId) throws Auth0ManagementException {
+    public boolean isFavoritePlace(@NotNull String establishmentId) {
         validateEstablishmentId(establishmentId);
 
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        boolean isFavorite = favoritePlaces.stream().anyMatch(fp -> fp.establishmentId().equals(establishmentId));
 
-        log.debug("Checked if establishment ID {} is a favorite for user {}: {}", establishmentId, userId, isFavorite);
-        return isFavorite;
+        return favoritePlaces.stream().anyMatch(fp -> fp.establishmentId().equals(establishmentId));
     }
 
     /**
@@ -228,20 +181,16 @@ public class FavoritePlacesService {
      * @return a sorted list of {@link PlaceDto} objects.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
-    public List<PlaceDto> getFavoritePlacesSortedByDate() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public List<PlaceDto> getFavoritePlacesSortedByDate() {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        List<PlaceDto> places = favoritePlaces.stream()
+
+        return favoritePlaces.stream()
                 .sorted(Comparator.comparing(FavoritePlaceDto::addedAt))
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-
-        log.debug("Retrieved and sorted {} favorite places by date for user {}", places.size(), userId);
-        return places;
     }
 
     /**
@@ -250,20 +199,16 @@ public class FavoritePlacesService {
      * @return a sorted list of {@link PlaceDto} objects.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
-    public List<PlaceDto> getFavoritePlacesSortedByDateDescending() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public List<PlaceDto> getFavoritePlacesSortedByDateDescending() {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        List<PlaceDto> places = favoritePlaces.stream()
+
+        return favoritePlaces.stream()
                 .sorted(Comparator.comparing(FavoritePlaceDto::addedAt).reversed())
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-
-        log.debug("Retrieved and sorted {} favorite places by date in descending order for user {}", places.size(), userId);
-        return places;
     }
 
     /**
@@ -272,21 +217,17 @@ public class FavoritePlacesService {
      * @return a sorted list of {@link PlaceDto} objects.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
-    public List<PlaceDto> getFavoritePlacesSortedByRating() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public List<PlaceDto> getFavoritePlacesSortedByRating() {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        List<PlaceDto> places = favoritePlaces.stream()
+
+        return favoritePlaces.stream()
                 .filter(fp -> fp.rating() != null)
                 .sorted(Comparator.comparing(FavoritePlaceDto::rating).reversed())
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-
-        log.debug("Retrieved and sorted {} favorite places by rating for user {}", places.size(), userId);
-        return places;
     }
 
     /**
@@ -296,20 +237,16 @@ public class FavoritePlacesService {
      * @return a list of {@link PlaceDto} objects that match the search criteria.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
-    public List<PlaceDto> searchFavoritePlacesByName(@NotNull @NotBlank String name) throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public List<PlaceDto> searchFavoritePlacesByName(@NotNull @NotBlank String name) {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        List<PlaceDto> places = favoritePlaces.stream()
+
+        return favoritePlaces.stream()
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
                 .filter(place -> place.name().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
-
-        log.debug("Searched favorite places by name '{}' for user {}: found {} results", name, userId, places.size());
-        return places;
     }
 
     /**
@@ -318,52 +255,38 @@ public class FavoritePlacesService {
      * @return the number of favorite places.
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
-    public int countFavoritePlaces() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public int countFavoritePlaces() {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
-        int count = favoritePlaces.size();
 
-        log.debug("Counted favorite places for user {}: {}", userId, count);
-        return count;
+        return favoritePlaces.size();
     }
 
     /**
      * Rolls back the last favorite place added for the currently authenticated user.
      *
      * @throws Auth0ManagementException if there is an error updating the user metadata.
-     * @throws NoFavoritePlacesException if there are no favorite places to rollback.
      */
-    public void rollbackLastFavoritePlace() throws Auth0ManagementException {
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        String userId = user.getId();
+    public void rollbackLastFavoritePlace() {
         Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
 
         List<FavoritePlaceDto> favoritePlaces = getFavoritePlacesFromMetadata(userMetadata);
         if (favoritePlaces.isEmpty()) {
-            log.warn("No favorite places to rollback for user {}", userId);
-            throw new NoFavoritePlacesException("No favorite places to rollback for user " + userId);
+            return;
         }
 
-        FavoritePlaceDto rolledBackPlace = favoritePlaces.removeLast();
+        favoritePlaces.removeLast();
         auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PLACES_KEY, favoritePlaces));
-        log.info("Rolled back the last favorite place for user {}: {}", userId, rolledBackPlace);
     }
 
     /**
      * Validates that the provided establishment ID is not null or empty and exists.
      *
      * @param establishmentId the establishment ID to validate.
-     * @throws InvalidEstablishmentException if the establishment ID is null or empty.
      * @throws InvalidEstablishmentException if the establishment does not exist.
      */
     private void validateEstablishmentId(String establishmentId) {
-        if (establishmentId == null || establishmentId.trim().isEmpty()) {
-            log.error("Establishment ID must not be null or empty");
-            throw new InvalidEstablishmentException("Establishment ID must not be null or empty");
-        }
         PlaceDto place = placesService.getPlaceById(establishmentId);
         if (place == null) {
             log.error("Establishment with ID {} does not exist", establishmentId);

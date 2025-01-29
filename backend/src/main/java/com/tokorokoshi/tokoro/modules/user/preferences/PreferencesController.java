@@ -1,7 +1,5 @@
 package com.tokorokoshi.tokoro.modules.user.preferences;
 
-import com.tokorokoshi.tokoro.modules.exceptions.preferences.InvalidPreferenceException;
-import com.tokorokoshi.tokoro.modules.exceptions.preferences.NoPreferencesException;
 import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -30,9 +28,6 @@ public class PreferencesController {
 
     @Autowired
     public PreferencesController(PreferencesService preferencesService) {
-        if (preferencesService == null) {
-            throw new IllegalArgumentException("PreferencesService must not be null");
-        }
         this.preferencesService = preferencesService;
     }
 
@@ -46,11 +41,7 @@ public class PreferencesController {
     public ResponseEntity<String> setPreferences(@Valid @RequestBody PreferencesDto preferencesDto) {
         try {
             preferencesService.setPreferences(preferencesDto);
-            log.info("Preferences set successfully for user");
             return ResponseEntity.ok("Preferences set successfully");
-        } catch (InvalidPreferenceException e) {
-            log.error("Invalid preferences provided", e);
-            return ResponseEntity.badRequest().body("Invalid preferences");
         } catch (Exception e) {
             log.error("Error setting preferences", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -67,16 +58,12 @@ public class PreferencesController {
     public ResponseEntity<PreferencesDto> getPreferences() {
         try {
             PreferencesDto preferences = preferencesService.getPreferences();
-            log.info("Preferences retrieved successfully for user");
+            if (preferences == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
             return ResponseEntity.ok(preferences);
-        } catch (NoPreferencesException e) {
-            log.warn("No preferences found for user");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null); // Return null for not found
         } catch (Exception e) {
-            log.error("Error retrieving preferences", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -91,13 +78,8 @@ public class PreferencesController {
             @RequestParam @NotNull @NotBlank String language) {
         try {
             preferencesService.updateLanguagePreference(language);
-            log.info("Language preference updated successfully for user");
             return ResponseEntity.ok("Language preference updated successfully");
-        } catch (InvalidPreferenceException e) {
-            log.error("Invalid language provided", e);
-            return ResponseEntity.badRequest().body("Invalid language");
         } catch (Exception e) {
-            log.error("Error updating language preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update language preference");
         }
@@ -114,11 +96,7 @@ public class PreferencesController {
             @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> categories) {
         try {
             preferencesService.updateCategoriesPreference(categories);
-            log.info("Categories preference updated successfully for user");
             return ResponseEntity.ok("Categories preference updated successfully");
-        } catch (InvalidPreferenceException e) {
-            log.error("Invalid categories provided", e);
-            return ResponseEntity.badRequest().body("Invalid categories");
         } catch (Exception e) {
             log.error("Error updating categories preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -137,11 +115,7 @@ public class PreferencesController {
             @RequestParam @NotNull @NotBlank String timezone) {
         try {
             preferencesService.updateTimezonePreference(timezone);
-            log.info("Timezone preference updated successfully for user");
             return ResponseEntity.ok("Timezone preference updated successfully");
-        } catch (InvalidPreferenceException e) {
-            log.error("Invalid timezone provided", e);
-            return ResponseEntity.badRequest().body("Invalid timezone");
         } catch (Exception e) {
             log.error("Error updating timezone preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -160,7 +134,6 @@ public class PreferencesController {
             @RequestParam @NotNull boolean notificationsEnabled) {
         try {
             preferencesService.updateNotificationsEnabledPreference(notificationsEnabled);
-            log.info("Notifications enabled preference updated successfully for user");
             return ResponseEntity.ok("Notifications enabled preference updated successfully");
         } catch (Exception e) {
             log.error("Error updating notifications enabled preference", e);
@@ -178,12 +151,7 @@ public class PreferencesController {
     public ResponseEntity<String> clearPreferences() {
         try {
             preferencesService.clearPreferences();
-            log.info("All preferences cleared successfully for user");
             return ResponseEntity.ok("All preferences cleared successfully");
-        } catch (NoPreferencesException e) {
-            log.warn("No preferences to clear for user");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No preferences to clear");
         } catch (Exception e) {
             log.error("Error clearing preferences", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

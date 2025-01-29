@@ -31,7 +31,6 @@ public class AuthAPIFactory {
      * @return a new {@link AuthAPI} instance configured with client ID, client secret, and domain.
      */
     public AuthAPI createAuthAPI() {
-        log.info("Creating AuthAPI instance for Auth0 domain: {}", auth0Properties.getDomain());
 
         // Build and return the AuthAPI instance
         return AuthAPI.newBuilder(

@@ -3,7 +3,6 @@ package com.tokorokoshi.tokoro.modules.user;
 import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
-import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -150,7 +149,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error checking if user has permission", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(false); // Return false for internal server error
+                    .body(null); // Return null for internal server error
         }
     }
 
@@ -169,7 +168,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error checking if user has any of the specified permissions", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(false); // Return false for internal server error
+                    .body(null); // Return null for internal server error
         }
     }
 
@@ -188,7 +187,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error checking if user has role", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(false); // Return false for internal server error
+                    .body(null); // Return null for internal server error
         }
     }
 
@@ -207,7 +206,7 @@ public class Auth0UserController {
         } catch (Exception e) {
             log.error("Error checking if user has any of the specified roles", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(false); // Return false for internal server error
+                    .body(null); // Return null for internal server error
         }
     }
 
@@ -404,20 +403,13 @@ public class Auth0UserController {
      *
      * @param userId the user ID of the user to delete.
      * @return a response indicating success or failure.
-     * @throws Auth0ManagementException if there is an error deleting the user.
      */
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(
             @PathVariable @NotNull @NotBlank String userId) {
         try {
-            log.debug("Deleting user with user ID: {}", userId);
             auth0ManagementService.deleteUser(userId);
-            log.info("Successfully deleted user with user ID: {}", userId);
             return ResponseEntity.ok("User deleted successfully");
-        } catch (Auth0ManagementException e) {
-            log.error("Error deleting user with user ID: {}", userId, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to delete user");
         } catch (Exception e) {
             log.error("Error deleting user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -431,21 +423,14 @@ public class Auth0UserController {
      * @param userId the user ID of the user to assign roles to.
      * @param roles the list of role IDs to assign.
      * @return a response indicating success or failure.
-     * @throws Auth0ManagementException if there is an error assigning roles.
      */
     @PostMapping("/{userId}/roles")
     public ResponseEntity<String> assignRolesToUser(
             @PathVariable @NotNull @NotBlank String userId,
             @RequestBody @NotNull @NotEmpty List<@NotEmpty @NotBlank String> roles) {
         try {
-            log.debug("Assigning roles {} to user with user ID: {}", roles, userId);
             auth0ManagementService.assignRolesToUser(userId, roles);
-            log.info("Successfully assigned roles {} to user with user ID: {}", roles, userId);
             return ResponseEntity.ok("Roles assigned successfully");
-        } catch (Auth0ManagementException e) {
-            log.error("Error assigning roles to user with user ID: {}", userId, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to assign roles");
         } catch (Exception e) {
             log.error("Error assigning roles to user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -459,21 +444,14 @@ public class Auth0UserController {
      * @param userId the user ID of the user to remove roles from.
      * @param roles the list of role IDs to remove.
      * @return a response indicating success or failure.
-     * @throws Auth0ManagementException if there is an error removing roles.
      */
     @DeleteMapping("/{userId}/roles")
     public ResponseEntity<String> removeRolesFromUser(
             @PathVariable @NotNull @NotBlank String userId,
             @RequestBody @NotNull @NotEmpty List<@NotEmpty @NotBlank String> roles) {
         try {
-            log.debug("Removing roles {} from user with user ID: {}", roles, userId);
             auth0ManagementService.removeRolesFromUser(userId, roles);
-            log.info("Successfully removed roles {} from user with user ID: {}", roles, userId);
             return ResponseEntity.ok("Roles removed successfully");
-        } catch (Auth0ManagementException e) {
-            log.error("Error removing roles from user with user ID: {}", userId, e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Failed to remove roles");
         } catch (Exception e) {
             log.error("Error removing roles from user with user ID: {}", userId, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

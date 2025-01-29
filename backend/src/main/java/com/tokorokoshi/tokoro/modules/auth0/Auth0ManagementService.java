@@ -32,12 +32,8 @@ public class Auth0ManagementService {
      * Constructs an instance of Auth0ManagementService.
      *
      * @param managementAPI the ManagementAPI instance used for making requests to the Auth0 Management API.
-     * @throws IllegalArgumentException if the managementAPI is null.
      */
     public Auth0ManagementService(ManagementAPI managementAPI) {
-        if (managementAPI == null) {
-            throw new IllegalArgumentException("ManagementAPI must not be null");
-        }
         this.managementAPI = managementAPI;
     }
 
@@ -54,7 +50,6 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Fetching user with ID: {}", userId);
             return managementAPI.users().get(userId, null).execute().getBody();
         } catch (Auth0Exception e) {
             log.error("Error fetching user with ID: {}", userId, e);
@@ -75,7 +70,6 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Query must not be null or empty");
         }
         try {
-            log.info("Searching users with query: {}", query);
             UsersPage usersPage = managementAPI.users().list(new UserFilter().withQuery(query)).execute().getBody();
             return usersPage.getItems();
         } catch (Auth0Exception e) {
@@ -100,11 +94,9 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Metadata must not be null");
         }
         try {
-            log.info("Updating user metadata for ID: {}", userId);
             User updateRequest = new User();
             updateRequest.setUserMetadata(metadata);
             managementAPI.users().update(userId, updateRequest).execute();
-            log.info("Successfully updated metadata for user ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error updating user metadata for ID: {}", userId, e);
             throw new UserUpdateException("Error updating user metadata for ID: " + userId, e);
@@ -123,9 +115,7 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Deleting user with ID: {}", userId);
             managementAPI.users().delete(userId).execute();
-            log.info("Successfully deleted user with ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error deleting user with ID: {}", userId, e);
             throw new UserDeleteException("Error deleting user with ID: " + userId, e);
@@ -152,12 +142,10 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Last name must not be null or empty");
         }
         try {
-            log.info("Updating user name for ID: {}", userId);
             User updateRequest = new User();
             updateRequest.setGivenName(firstName);
             updateRequest.setFamilyName(lastName);
             managementAPI.users().update(userId, updateRequest).execute();
-            log.info("Successfully updated name for user ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error updating user name for ID: {}", userId, e);
             throw new UserUpdateException("Error updating user name for ID: " + userId, e);
@@ -180,11 +168,9 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Avatar URL must not be null or empty");
         }
         try {
-            log.info("Updating user avatar for ID: {}", userId);
             User updateRequest = new User();
             updateRequest.setPicture(avatarUrl);
             managementAPI.users().update(userId, updateRequest).execute();
-            log.info("Successfully updated avatar for user ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error updating user avatar for ID: {}", userId, e);
             throw new UserUpdateException("Error updating user avatar for ID: " + userId, e);
@@ -204,11 +190,8 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Fetching user avatar for ID: {}", userId);
             User user = managementAPI.users().get(userId, null).execute().getBody();
-            String avatarUrl = user.getPicture();
-            log.info("Successfully fetched avatar for user ID: {}. Avatar URL: {}", userId, avatarUrl);
-            return avatarUrl;
+            return user.getPicture();
         } catch (Auth0Exception e) {
             log.error("Error fetching user avatar for ID: {}", userId, e);
             throw new UserFetchException("Error fetching user avatar for ID: " + userId, e);
@@ -231,9 +214,7 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Role IDs must not be null or empty");
         }
         try {
-            log.info("Assigning roles to user with ID: {}", userId);
             managementAPI.users().addRoles(userId, roleIds).execute();
-            log.info("Successfully assigned roles to user ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error assigning roles to user with ID: {}", userId, e);
             throw new RoleAssignmentException("Error assigning roles to user with ID: " + userId, e);
@@ -256,9 +237,7 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Role IDs must not be null or empty");
         }
         try {
-            log.info("Removing roles from user with ID: {}", userId);
             managementAPI.users().removeRoles(userId, roleIds).execute();
-            log.info("Successfully removed roles from user ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error removing roles from user with ID: {}", userId, e);
             throw new RoleRemovalException("Error removing roles from user with ID: " + userId, e);
@@ -278,7 +257,6 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Fetching roles for user with ID: {}", userId);
             RolesPage rolesPage = managementAPI.users().listRoles(userId, new RolesFilter()).execute().getBody();
             return rolesPage.getItems().stream().map(Role::getName).collect(Collectors.toList());
         } catch (Auth0Exception e) {
@@ -295,7 +273,6 @@ public class Auth0ManagementService {
      */
     public List<String> getAllRoles() {
         try {
-            log.info("Fetching all roles");
             RolesPage rolesPage = managementAPI.roles().list(new RolesFilter()).execute().getBody();
             return rolesPage.getItems().stream().map(Role::getName).collect(Collectors.toList());
         } catch (Auth0Exception e) {
@@ -312,18 +289,13 @@ public class Auth0ManagementService {
      * @throws UserNotAuthenticatedException if the user is not authenticated or the token is invalid.
      * @throws Auth0ManagementException if there is an error fetching the user from Auth0.
      */
-    public boolean isUserBlocked(String userId) {
+    public Boolean isUserBlocked(String userId) {
         try {
             User user = managementAPI.users().get(userId, new UserFilter()).execute().getBody();
-            boolean isBlocked = user.isBlocked() != null ? user.isBlocked() : false;
-            log.info("User with ID {} is blocked: {}", userId, isBlocked);
-            return isBlocked;
+            return user.isBlocked();
         } catch (Auth0Exception e) {
             log.error("Error fetching user with ID {}", userId, e);
             throw new Auth0ManagementException("Failed to fetch user with ID " + userId, e);
-        } catch (Exception e) {
-            log.error("Unexpected error checking if user with ID {} is blocked", userId, e);
-            throw new Auth0ManagementException("Unexpected error checking if user with ID " + userId + " is blocked", e);
         }
     }
 
@@ -339,11 +311,9 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Blocking user with ID: {}", userId);
             User updateRequest = new User();
             updateRequest.setBlocked(true);
             managementAPI.users().update(userId, updateRequest).execute();
-            log.info("Successfully blocked user with ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error blocking user with ID: {}", userId, e);
             throw new UserUpdateException("Error blocking user with ID: " + userId, e);
@@ -362,11 +332,9 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Unblocking user with ID: {}", userId);
             User updateRequest = new User();
             updateRequest.setBlocked(false);
             managementAPI.users().update(userId, updateRequest).execute();
-            log.info("Successfully unblocked user with ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error unblocking user with ID: {}", userId, e);
             throw new UserUpdateException("Error unblocking user with ID: " + userId, e);
@@ -386,7 +354,6 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("User ID must not be null or empty");
         }
         try {
-            log.info("Fetching nickname for user with ID: {}", userId);
             User user = managementAPI.users().get(userId, null).execute().getBody();
             return user.getNickname();
         } catch (Auth0Exception e) {
@@ -411,11 +378,9 @@ public class Auth0ManagementService {
             throw new IllegalArgumentException("Nickname must not be null or empty");
         }
         try {
-            log.info("Updating nickname for user with ID: {}", userId);
             User updateRequest = new User();
             updateRequest.setNickname(nickname);
             managementAPI.users().update(userId, updateRequest).execute();
-            log.info("Successfully updated nickname for user ID: {}", userId);
         } catch (Auth0Exception e) {
             log.error("Error updating nickname for user with ID: {}", userId, e);
             throw new UserUpdateException("Error updating nickname for user with ID: " + userId, e);

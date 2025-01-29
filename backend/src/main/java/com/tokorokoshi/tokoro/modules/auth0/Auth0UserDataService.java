@@ -201,9 +201,7 @@ public class Auth0UserDataService {
      * @throws Auth0UserNotFoundException if there is an error fetching the user from Auth0.
      */
     public User getUserByEmail(String email) {
-        Assert.hasText(email, "Email must not be null or empty");
         try {
-            log.info("Fetching user with email: {}", email);
             List<User> users = auth0ManagementService.searchUsers(String.format("email:%s", email));
             return users.isEmpty() ? null : users.getFirst();
         } catch (Exception e) {
