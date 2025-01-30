@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service class responsible for managing favorite places for users.
@@ -124,7 +123,7 @@ public class FavoritePlacesService {
         return favoritePlaces.stream()
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -190,7 +189,7 @@ public class FavoritePlacesService {
                 .sorted(Comparator.comparing(FavoritePlaceDto::addedAt))
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -208,7 +207,7 @@ public class FavoritePlacesService {
                 .sorted(Comparator.comparing(FavoritePlaceDto::addedAt).reversed())
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -227,7 +226,7 @@ public class FavoritePlacesService {
                 .sorted(Comparator.comparing(FavoritePlaceDto::rating).reversed())
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -246,7 +245,7 @@ public class FavoritePlacesService {
                 .map(fp -> placesService.getPlaceById(fp.establishmentId()))
                 .filter(Objects::nonNull)
                 .filter(place -> place.name().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -307,7 +306,7 @@ public class FavoritePlacesService {
             List<Map<String, Object>> favoritePlacesMap = (List<Map<String, Object>>) userMetadata.get(FAVORITE_PLACES_KEY);
             favoritePlaces = favoritePlacesMap.stream()
                     .map(map -> objectMapper.convertValue(map, FavoritePlaceDto.class))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return favoritePlaces;
     }
