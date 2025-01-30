@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing favorite prompts for users.
@@ -175,7 +174,7 @@ public class FavoritePromptsController {
             List<FavoritePromptDto> favoritePrompts = favoritePromptsService.getFavoritePrompts();
             List<FavoritePromptDto> sortedPrompts = favoritePrompts.stream()
                     .sorted(Comparator.comparing(FavoritePromptDto::addedAt))
-                    .collect(Collectors.toList());
+                    .toList();
             return ResponseEntity.ok(sortedPrompts);
         } catch (Exception e) {
             log.error("Error sorting favorite prompts by date", e);
@@ -194,7 +193,7 @@ public class FavoritePromptsController {
             List<FavoritePromptDto> favoritePrompts = favoritePromptsService.getFavoritePrompts();
             List<FavoritePromptDto> sortedPrompts = favoritePrompts.stream()
                     .sorted(Comparator.comparing(FavoritePromptDto::addedAt).reversed())
-                    .collect(Collectors.toList());
+                    .toList();
             return ResponseEntity.ok(sortedPrompts);
         } catch (Exception e) {
             log.error("Error sorting favorite prompts by date in descending order", e);
@@ -215,7 +214,7 @@ public class FavoritePromptsController {
             List<FavoritePromptDto> favoritePrompts = favoritePromptsService.getFavoritePrompts();
             List<FavoritePromptDto> filteredPrompts = favoritePrompts.stream()
                     .filter(fp -> fp.content().toLowerCase().contains(content.toLowerCase()))
-                    .collect(Collectors.toList());
+                    .toList();
             return ResponseEntity.ok(filteredPrompts);
         } catch (Exception e) {
             log.error("Error searching favorite prompts by content", e);

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service class responsible for managing user history entries.
@@ -156,7 +155,7 @@ public class HistoryService {
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream()
                 .map(he -> placesService.getPlaceById(he.establishmentId()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -172,7 +171,7 @@ public class HistoryService {
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream()
                 .filter(he -> he.action().equals(action))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -191,7 +190,7 @@ public class HistoryService {
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream()
                 .filter(he -> he.establishmentId().equals(establishmentId))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -268,7 +267,7 @@ public class HistoryService {
             List<Map<String, Object>> historyEntriesMap = (List<Map<String, Object>>) userMetadata.get(HISTORY_KEY);
             historyEntries = historyEntriesMap.stream()
                     .map(map -> objectMapper.convertValue(map, HistoryEntryDto.class))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return historyEntries;
     }

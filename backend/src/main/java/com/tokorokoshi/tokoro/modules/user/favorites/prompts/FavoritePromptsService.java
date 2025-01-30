@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service class responsible for managing favorite prompts for users.
@@ -171,7 +170,7 @@ public class FavoritePromptsService {
             List<Map<String, Object>> favoritePromptsMap = (List<Map<String, Object>>) userMetadata.get(FAVORITE_PROMPTS_KEY);
             favoritePrompts = favoritePromptsMap.stream()
                     .map(map -> objectMapper.convertValue(map, FavoritePromptDto.class))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return favoritePrompts;
     }

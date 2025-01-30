@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Service class that provides operations for interacting with the Auth0 Management API.
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class Auth0ManagementService {
-
     private static final Logger log = LoggerFactory.getLogger(Auth0ManagementService.class);
 
     private final ManagementAPI managementAPI;
@@ -258,7 +256,7 @@ public class Auth0ManagementService {
         }
         try {
             RolesPage rolesPage = managementAPI.users().listRoles(userId, new RolesFilter()).execute().getBody();
-            return rolesPage.getItems().stream().map(Role::getName).collect(Collectors.toList());
+            return rolesPage.getItems().stream().map(Role::getName).toList();
         } catch (Auth0Exception e) {
             log.error("Error fetching roles for user with ID: {}", userId, e);
             throw new RoleFetchException("Error fetching roles for user with ID: " + userId, e);
@@ -274,7 +272,7 @@ public class Auth0ManagementService {
     public List<String> getAllRoles() {
         try {
             RolesPage rolesPage = managementAPI.roles().list(new RolesFilter()).execute().getBody();
-            return rolesPage.getItems().stream().map(Role::getName).collect(Collectors.toList());
+            return rolesPage.getItems().stream().map(Role::getName).toList();
         } catch (Auth0Exception e) {
             log.error("Error fetching all roles", e);
             throw new RoleFetchException("Error fetching all roles", e);

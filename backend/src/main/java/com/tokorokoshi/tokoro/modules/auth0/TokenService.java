@@ -47,7 +47,6 @@ public class TokenService {
      */
     @Retryable(
             retryFor = {Auth0Exception.class},
-            maxAttempts = 3,
             backoff = @Backoff(delay = 2000, multiplier = 2)
     )
     @Cacheable(value = "auth0ManagementToken", unless = "#result == null")

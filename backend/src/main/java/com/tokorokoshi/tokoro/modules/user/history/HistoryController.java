@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for managing user history entries.
@@ -252,7 +251,7 @@ public class HistoryController {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntries();
             return ResponseEntity.ok(historyEntries.stream()
                     .sorted(Comparator.comparing(HistoryEntryDto::timestamp))
-                    .collect(Collectors.toList()));
+                    .toList());
         } catch (Exception e) {
             log.error("Error sorting history entries by timestamp", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -270,7 +269,7 @@ public class HistoryController {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntries();
             return ResponseEntity.ok(historyEntries.stream()
                             .sorted(Comparator.comparing(HistoryEntryDto::timestamp).reversed())
-                            .collect(Collectors.toList()));
+                            .toList());
         } catch (Exception e) {
             log.error("Error sorting history entries by timestamp in descending order", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
