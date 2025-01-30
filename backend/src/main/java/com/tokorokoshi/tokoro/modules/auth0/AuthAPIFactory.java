@@ -1,8 +1,6 @@
 package com.tokorokoshi.tokoro.modules.auth0;
 
 import com.auth0.client.auth.AuthAPI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,9 +9,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AuthAPIFactory {
-
-    private static final Logger log = LoggerFactory.getLogger(AuthAPIFactory.class);
-
     private final Auth0Properties auth0Properties;
 
     /**

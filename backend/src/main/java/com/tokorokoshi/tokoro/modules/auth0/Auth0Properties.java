@@ -1,7 +1,5 @@
 package com.tokorokoshi.tokoro.modules.auth0;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,9 +12,6 @@ import jakarta.validation.constraints.NotBlank;
 @Validated
 @ConfigurationProperties(prefix = "auth0")
 public class Auth0Properties {
-
-    private static final Logger log = LoggerFactory.getLogger(Auth0Properties.class);
-
     @NotBlank(message = "Auth0 domain is required")
     private String domain;
 

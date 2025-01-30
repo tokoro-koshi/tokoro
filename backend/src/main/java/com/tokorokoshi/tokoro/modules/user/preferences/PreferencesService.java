@@ -1,6 +1,5 @@
 package com.tokorokoshi.tokoro.modules.user.preferences;
 
-import com.auth0.json.mgmt.users.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
