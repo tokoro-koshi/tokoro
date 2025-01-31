@@ -3,7 +3,7 @@
 }
 
 .logo {
-  @apply text-2xl font-bold text-primary;
+  @apply text-2xl md:flex font-bold text-primary;
 }
 
 .nav {
@@ -11,5 +11,7 @@
 }
 
 .navLink {
-  @apply text-muted-foreground hover:text-primary transition-colors;
+  @apply text-muted-foreground hover:text-primary transition-colors ;
 }
+
+/*text-violet-900*/

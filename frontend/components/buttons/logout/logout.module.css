@@ -1,0 +1,3 @@
+.logoutButton {
+    @apply text-muted-foreground hover:text-primary transition-colors;
+}
