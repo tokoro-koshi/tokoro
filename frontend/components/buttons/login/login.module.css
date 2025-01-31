@@ -1,7 +1,3 @@
-﻿.loginButton {
+.loginButton {
     @apply text-muted-foreground hover:text-primary transition-colors;
-}
-
-.registerButton {
-    @apply md:ml-auto;
 }
