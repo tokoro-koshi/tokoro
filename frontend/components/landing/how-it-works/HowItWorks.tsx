@@ -1,4 +1,4 @@
-import styles from './HowItWorks.module.css'
+import styles from './HowItWorks.module.css';
 import { steps } from '@/lib/constants/landing/steps';
 
 export default function HowItWorks() {
@@ -15,6 +15,5 @@ export default function HowItWorks() {
         ))}
       </div>
     </section>
-  )
+  );
 }
-

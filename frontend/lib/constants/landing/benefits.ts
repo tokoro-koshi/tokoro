@@ -5,4 +5,4 @@
   'Save and organize favorites',
   'Offline access to saved places',
   'Regular updates with new locations',
-]
+];

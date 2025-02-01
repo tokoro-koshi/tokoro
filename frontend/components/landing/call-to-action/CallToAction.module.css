@@ -1,16 +1,15 @@
 .cta {
-  @apply py-20 px-4 text-center bg-primary text-primary-foreground;
+  @apply bg-primary px-4 py-20 text-center text-primary-foreground;
 }
 
 .title {
-  @apply text-3xl md:text-4xl font-bold mb-4;
+  @apply mb-4 text-3xl font-bold md:text-4xl;
 }
 
 .description {
-  @apply text-xl mb-8 max-w-2xl mx-auto;
+  @apply mx-auto mb-8 max-w-2xl text-xl;
 }
 
 .button {
-  @apply text-lg px-8 py-3 bg-background text-foreground hover:bg-accent;
+  @apply bg-background px-8 py-3 text-lg text-foreground hover:bg-accent;
 }
-
