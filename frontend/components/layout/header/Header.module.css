@@ -1,17 +1,15 @@
 .header {
-  @apply flex items-center justify-between p-4 bg-background;
+  @apply flex items-center px-2.5 py-1.5 bg-background ;
 }
 
 .logo {
-  @apply text-2xl md:flex font-bold text-primary;
+  @apply text-2xl md:flex md:text-3xl items-center font-extrabold text-popover-foreground;
 }
 
 .nav {
-  @apply hidden md:flex space-x-4 items-center;
+  @apply flex-1 hidden md:flex justify-center gap-12 items-center font-semibold;
 }
 
 .navLink {
-  @apply text-muted-foreground hover:text-primary transition-colors ;
+  @apply text-popover-foreground hover:text-primary transition-colors hover:underline;
 }
-
-/*text-violet-900*/
