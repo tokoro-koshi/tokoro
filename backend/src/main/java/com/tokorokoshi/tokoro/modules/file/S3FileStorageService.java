@@ -2,6 +2,8 @@ package com.tokorokoshi.tokoro.modules.file;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
@@ -23,36 +25,51 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Implementation of FileStorageService using AWS S3.
  */
+@Service
 public class S3FileStorageService implements FileStorageService {
-    private static final Logger logger = LoggerFactory.getLogger(S3FileStorageService.class);
+    private static final Logger logger = LoggerFactory.getLogger(
+        S3FileStorageService.class);
 
     private final S3Client s3Client;
     private final S3Presigner presigner;
-    private final String bucketName;
+
+    @Value("${aws.accessKeyId}")
+    private String accessKey;
+
+    @Value("${aws.secretKey}")
+    private String secretKey;
+
+    @Value("${aws.region}")
+    private String region;
+
+    @Value("${aws.bucket}")
+    private String bucketName;
 
     /**
      * Constructs an S3FileStorageService instance.
-     *
-     * @param accessKey  The AWS access key.
-     * @param secretKey  The AWS secret key.
-     * @param region     The AWS region.
-     * @param bucketName The S3 bucket name.
      */
-    public S3FileStorageService(String accessKey, String secretKey, String region, String bucketName) {
-        this.bucketName = bucketName;
-
-        AwsCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
+    public S3FileStorageService() {
+        AwsCredentials credentials = AwsBasicCredentials.create(
+            accessKey,
+            secretKey
+        );
         this.s3Client = S3Client.builder()
-                .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(credentials))
-                .build();
+                                .region(Region.of(region))
+                                .credentialsProvider(StaticCredentialsProvider.create(
+                                    credentials))
+                                .build();
 
         this.presigner = S3Presigner.builder()
-                .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(credentials))
-                .build();
+                                    .region(Region.of(region))
+                                    .credentialsProvider(
+                                        StaticCredentialsProvider.create(
+                                            credentials))
+                                    .build();
 
-        logger.trace("S3FileStorageService initialized with bucket: {}", bucketName);
+        logger.trace(
+            "S3FileStorageService initialized with bucket: {}",
+            bucketName
+        );
     }
 
     @Override
@@ -60,9 +77,9 @@ public class S3FileStorageService implements FileStorageService {
         logger.trace("Creating folder: {}", folder);
         String normalizedFolder = normalizeFolderPath(folder);
         PutObjectRequest request = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(normalizedFolder)
-                .build();
+                                                   .bucket(bucketName)
+                                                   .key(normalizedFolder)
+                                                   .build();
 
         return CompletableFuture.supplyAsync(() -> {
             s3Client.putObject(request, RequestBody.empty());
@@ -75,58 +92,84 @@ public class S3FileStorageService implements FileStorageService {
     }
 
     @Override
-    public CompletableFuture<String> uploadFile(MultipartFile file, String folder) {
-        logger.trace("Uploading file: {} to folder: {}", file.getOriginalFilename(), folder);
+    public CompletableFuture<String> uploadFile(
+        MultipartFile file,
+        String folder
+    ) {
+        logger.trace(
+            "Uploading file: {} to folder: {}",
+            file.getOriginalFilename(),
+            folder
+        );
         return CompletableFuture.supplyAsync(() -> {
             try {
                 String extension = getFileExtension(
-                        Objects.requireNonNull(file.getOriginalFilename())
+                    Objects.requireNonNull(file.getOriginalFilename())
                 );
                 String key = buildObjectKey(folder, extension);
 
                 PutObjectRequest request = PutObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(key)
-                        .contentDisposition("inline; filename=\"" + file.getOriginalFilename() + "\"")
-                        .contentType(file.getContentType())
-                        .contentLength(file.getSize())
-                        .build();
+                                                           .bucket(bucketName)
+                                                           .key(key)
+                                                           .contentDisposition(
+                                                               "inline; filename=\"" + file.getOriginalFilename() + "\"")
+                                                           .contentType(file.getContentType())
+                                                           .contentLength(file.getSize())
+                                                           .build();
 
-                s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
+                s3Client.putObject(
+                    request,
+                    RequestBody.fromBytes(file.getBytes())
+                );
                 logger.trace("File uploaded successfully: {}", key);
                 return key;
             } catch (Exception ex) {
-                logger.error("Failed to upload file: {}", file.getOriginalFilename(), ex);
+                logger.error(
+                    "Failed to upload file: {}",
+                    file.getOriginalFilename(),
+                    ex
+                );
                 throw new RuntimeException("File upload failed", ex);
             }
         });
     }
 
     @Override
-    public CompletableFuture<List<String>> uploadFiles(List<MultipartFile> files, String folder) {
+    public CompletableFuture<List<String>> uploadFiles(
+        List<MultipartFile> files,
+        String folder
+    ) {
         logger.trace("Uploading {} files to folder: {}", files.size(), folder);
         List<CompletableFuture<String>> futures = files.stream()
-                .map(file -> uploadFile(file, folder))
-                .toList();
+                                                       .map(file -> uploadFile(
+                                                           file,
+                                                           folder
+                                                       ))
+                                                       .toList();
 
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenApply(v -> futures.stream()
-                        .map(CompletableFuture::join)
-                        .toList())
-                .exceptionally(ex -> {
-                    logger.error("Failed to upload files", ex);
-                    throw new RuntimeException("Failed to upload files", ex);
-                });
+                                .thenApply(v -> futures.stream()
+                                                       .map(CompletableFuture::join)
+                                                       .toList())
+                                .exceptionally(ex -> {
+                                    logger.error("Failed to upload files", ex);
+                                    throw new RuntimeException(
+                                        "Failed to upload files",
+                                        ex
+                                    );
+                                });
     }
 
     @Override
     public CompletableFuture<byte[]> getFile(String key) {
         logger.trace("Retrieving file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
-            var response = s3Client.getObject(GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .build(), ResponseTransformer.toBytes());
+            var response = s3Client.getObject(
+                GetObjectRequest.builder()
+                                .bucket(bucketName)
+                                .key(key)
+                                .build(), ResponseTransformer.toBytes()
+            );
 
             logger.trace("File retrieved successfully: {}", key);
             return response.asByteArray();
@@ -137,28 +180,41 @@ public class S3FileStorageService implements FileStorageService {
     }
 
     @Override
-    public CompletableFuture<String> generateSignedUrl(String key, Integer expirationInSeconds) {
+    public CompletableFuture<String> generateSignedUrl(
+        String key,
+        Integer expirationInSeconds
+    ) {
         return generateSignedUrl(key, expirationInSeconds, null);
     }
 
     @Override
-    public CompletableFuture<String> generateSignedUrl(String key, Integer expirationInSeconds, String overrideContentDisposition) {
+    public CompletableFuture<String> generateSignedUrl(
+        String key,
+        Integer expirationInSeconds,
+        String overrideContentDisposition
+    ) {
         logger.trace("Generating signed URL for file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
             GetObjectRequest.Builder requestBuilder = GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key);
+                                                                      .bucket(
+                                                                          bucketName)
+                                                                      .key(key);
 
             if (overrideContentDisposition != null) {
-                requestBuilder.responseContentDisposition(overrideContentDisposition);
+                requestBuilder.responseContentDisposition(
+                    overrideContentDisposition);
             }
 
             GetObjectRequest request = requestBuilder.build();
             Duration expiration = Duration.ofSeconds(
-                    expirationInSeconds != null ? expirationInSeconds : S3Constants.COMMON_EXPIRATION);
+                expirationInSeconds != null ? expirationInSeconds : S3Constants.COMMON_EXPIRATION);
 
-            String signedUrl = presigner.presignGetObject(r -> r.getObjectRequest(request)
-                    .signatureDuration(expiration)).url().toString();
+            String signedUrl = presigner.presignGetObject(r -> r.getObjectRequest(
+                                                                    request)
+                                                                .signatureDuration(
+                                                                    expiration))
+                                        .url()
+                                        .toString();
             logger.trace("Signed URL generated successfully: {}", signedUrl);
             return signedUrl;
         }).exceptionally(ex -> {
@@ -171,10 +227,11 @@ public class S3FileStorageService implements FileStorageService {
     public CompletableFuture<Boolean> deleteFile(String key) {
         logger.trace("Deleting file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
-            DeleteObjectResponse response = s3Client.deleteObject(DeleteObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .build());
+            DeleteObjectResponse response = s3Client.deleteObject(
+                DeleteObjectRequest.builder()
+                                   .bucket(bucketName)
+                                   .key(key)
+                                   .build());
             boolean success = response.sdkHttpResponse().isSuccessful();
             if (success) {
                 logger.trace("File deleted successfully: {}", key);
@@ -191,26 +248,38 @@ public class S3FileStorageService implements FileStorageService {
         return CompletableFuture.supplyAsync(() -> {
             String normalizedFolder = normalizeFolderPath(folder);
             ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
-                    .bucket(bucketName)
-                    .prefix(normalizedFolder)
-                    .build();
+                                                                   .bucket(
+                                                                       bucketName)
+                                                                   .prefix(
+                                                                       normalizedFolder)
+                                                                   .build();
 
-            List<S3Object> objects = s3Client.listObjectsV2(listRequest).contents();
+            List<S3Object> objects = s3Client.listObjectsV2(listRequest)
+                                             .contents();
             if (objects.isEmpty()) {
                 logger.trace("Folder is empty: {}", folder);
                 return true;
             }
 
             List<ObjectIdentifier> identifiers = objects.stream()
-                    .map(obj -> ObjectIdentifier.builder().key(obj.key()).build())
-                    .toList();
+                                                        .map(obj -> ObjectIdentifier.builder()
+                                                                                    .key(
+                                                                                        obj.key())
+                                                                                    .build())
+                                                        .toList();
 
             DeleteObjectsRequest deleteRequest = DeleteObjectsRequest.builder()
-                    .bucket(bucketName)
-                    .delete(Delete.builder().objects(identifiers).build())
-                    .build();
+                                                                     .bucket(
+                                                                         bucketName)
+                                                                     .delete(
+                                                                         Delete.builder()
+                                                                               .objects(
+                                                                                   identifiers)
+                                                                               .build())
+                                                                     .build();
 
-            DeleteObjectsResponse response = s3Client.deleteObjects(deleteRequest);
+            DeleteObjectsResponse response = s3Client.deleteObjects(
+                deleteRequest);
             boolean success = !response.hasErrors();
             if (success) {
                 logger.trace("Folder deleted successfully: {}", folder);
@@ -222,42 +291,56 @@ public class S3FileStorageService implements FileStorageService {
     }
 
     @Override
-    public CompletableFuture<List<FileEntry>> listFileEntries(String directory, boolean groupByFolder) {
+    public CompletableFuture<List<FileEntry>> listFileEntries(
+        String directory,
+        boolean groupByFolder
+    ) {
         logger.trace("Listing entries in directory: {}", directory);
         return CompletableFuture.supplyAsync(() -> {
             String normalizedDir = normalizeDirectoryPath(directory);
             ListObjectsV2Request request = ListObjectsV2Request.builder()
-                    .bucket(bucketName)
-                    .prefix(normalizedDir)
-                    .delimiter(groupByFolder ? "/" : null)
-                    .build();
+                                                               .bucket(
+                                                                   bucketName)
+                                                               .prefix(
+                                                                   normalizedDir)
+                                                               .delimiter(
+                                                                   groupByFolder ? "/" : null)
+                                                               .build();
 
             ListObjectsV2Response response = s3Client.listObjectsV2(request);
             List<FileEntry> entries = new ArrayList<>();
 
             // Process common prefixes (folders)
             response.commonPrefixes().forEach(prefix ->
-                    entries.add(new FileEntry(
-                            prefix.prefix(),
-                            S3Constants.DIRECTORY_TYPE,
-                            null,
-                            null
-                    )));
+                                                  entries.add(new FileEntry(
+                                                      prefix.prefix(),
+                                                      S3Constants.DIRECTORY_TYPE,
+                                                      null,
+                                                      null
+                                                  )));
 
             // Process files
             response.contents().stream()
                     .filter(obj -> !obj.key().equals(normalizedDir))
                     .forEach(obj -> entries.add(new FileEntry(
-                            obj.key(),
-                            "file",
-                            obj.size(),
-                            obj.lastModified()
+                        obj.key(),
+                        "file",
+                        obj.size(),
+                        obj.lastModified()
                     )));
 
-            logger.trace("Retrieved {} entries from directory: {}", entries.size(), directory);
+            logger.trace(
+                "Retrieved {} entries from directory: {}",
+                entries.size(),
+                directory
+            );
             return entries;
         }).exceptionally(ex -> {
-            logger.error("Failed to list entries in directory: {}", directory, ex);
+            logger.error(
+                "Failed to list entries in directory: {}",
+                directory,
+                ex
+            );
             throw new RuntimeException("Failed to list entries", ex);
         });
     }
@@ -281,7 +364,7 @@ public class S3FileStorageService implements FileStorageService {
 
     private String getFileExtension(String filename) {
         return filename.contains(".")
-                ? filename.substring(filename.lastIndexOf(".") + 1)
-                : "";
+            ? filename.substring(filename.lastIndexOf(".") + 1)
+            : "";
     }
 }
