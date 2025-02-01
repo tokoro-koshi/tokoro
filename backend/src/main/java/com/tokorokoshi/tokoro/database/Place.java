@@ -10,22 +10,33 @@ import java.util.List;
 
 @Document(collection = "place")
 public record Place(
-        @Id
-        String id,
-        @NonNull
-        @Indexed(unique = true)
-        String name,
-        String description,
-        @NonNull
-        @Field
-        Location location,
-        String categoryId,
-        @NonNull
-        List<HashTag> hashTags,
-        @NonNull
-        double rating
+    @Id
+    String id,
+    @NonNull
+    @Indexed(unique = true)
+    String name,
+    String description,
+    @NonNull
+    @Field
+    Location location,
+    String categoryId,
+    @NonNull
+    List<HashTag> hashTags,
+    @NonNull
+    List<String> pictures,
+    @NonNull
+    double rating
 ) {
     public Place withId(String id) {
-        return new Place(id, name, description, location, categoryId, hashTags, rating);
+        return new Place(
+            id,
+            name,
+            description,
+            location,
+            categoryId,
+            hashTags,
+            pictures,
+            rating
+        );
     }
 }

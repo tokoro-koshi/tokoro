@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
-
     @Mapping(target = "location", source = "locationDto")
     @Mapping(target = "hashTags", source = "hashTagsDto")
     Place toPlaceSchema(CreateUpdatePlaceDto placeDto);
