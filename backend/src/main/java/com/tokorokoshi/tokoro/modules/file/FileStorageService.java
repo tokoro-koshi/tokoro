@@ -49,6 +49,15 @@ public interface FileStorageService {
      *
      * @param key                        The key of the file to generate a signed URL for.
      * @param expirationInSeconds        The expiration time of the signed URL in seconds.
+     * @return A CompletableFuture containing the signed URL.
+     */
+    CompletableFuture<String> generateSignedUrl(String key, Integer expirationInSeconds);
+
+    /**
+     * Generates a signed URL for a file in the storage service.
+     *
+     * @param key                        The key of the file to generate a signed URL for.
+     * @param expirationInSeconds        The expiration time of the signed URL in seconds.
      * @param overrideContentDisposition The desired content disposition for the file.
      * @return A CompletableFuture containing the signed URL.
      */
