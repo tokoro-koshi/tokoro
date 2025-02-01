@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useUser } from '@/lib/stores/user';
 import routes from '@/lib/constants/routes';
 import Logo from '@/public/logo_without_text.svg';
-import AuthButton from '@/components/buttons/AuthButtons';
-import styles from './Header.module.css';
+import AuthButton from '@/components/buttons/auth-buttons';
+import styles from './header.module.css';
 
 export default function Header() {
   const { user, isLoading } = useUser();
@@ -27,11 +27,13 @@ export default function Header() {
           About
         </Link>
       </nav>
-      {!user && !isLoading && (
+      {!isLoading && (
         <div className={styles.authButtons}>
-          <Link href={routes.auth.login} className={styles.navLink}>
-            Login
-          </Link>
+          {!user && (
+            <Link href={routes.auth.login} className={styles.navLink}>
+              Login
+            </Link>
+          )}
           <AuthButton user={user} />
         </div>
       )}

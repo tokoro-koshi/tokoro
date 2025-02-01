@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import styles from './InteractiveShowcase.module.css';
+import styles from './interactive-showcase.module.css';
 import { places } from '@/lib/constants/landing/interactive-showcase';
 
 export default function InteractiveShowcase() {

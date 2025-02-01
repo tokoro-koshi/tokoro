@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import styles from './Testimonials.module.css';
+import styles from './testimonials.module.css';
 import { testimonials } from '@/lib/constants/landing/testimonials';
 
 export default function Testimonials() {

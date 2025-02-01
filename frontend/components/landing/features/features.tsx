@@ -4,7 +4,7 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import styles from './Features.module.css';
+import styles from './features.module.css';
 import { features } from '@/lib/constants/landing/features';
 
 export default function Features() {

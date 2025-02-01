@@ -1,5 +1,5 @@
 import { Facebook, Twitter, Instagram } from 'lucide-react';
-import styles from './Footer.module.css';
+import styles from './footer.module.css';
 import { footerButtons } from '@/lib/constants/components/footer';
 import { Button } from '@/components/buttons/button';
 
