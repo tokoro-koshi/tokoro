@@ -1,7 +1,7 @@
-import { Facebook, Twitter, Instagram } from 'lucide-react';
-import styles from './footer.module.css';
+import { siFacebook, siX, siInstagram } from 'simple-icons';
 import { footerButtons } from '@/lib/constants/components/footer';
 import { Button } from '@/components/buttons/button';
+import styles from './footer.module.css';
 
 export default function Footer() {
   return (
@@ -24,23 +24,20 @@ export default function Footer() {
             href='https://facebook.com'
             aria-label='Facebook'
             className={styles.socialLink}
-          >
-            <Facebook />
-          </a>
+            dangerouslySetInnerHTML={{ __html: siFacebook.svg }}
+          />
           <a
             href='https://twitter.com'
             aria-label='Twitter'
             className={styles.socialLink}
-          >
-            <Twitter />
-          </a>
+            dangerouslySetInnerHTML={{ __html: siX.svg }}
+          />
           <a
             href='https://instagram.com'
             aria-label='Instagram'
             className={styles.socialLink}
-          >
-            <Instagram />
-          </a>
+            dangerouslySetInnerHTML={{ __html: siInstagram.svg }}
+          />
         </div>
       </div>
     </footer>

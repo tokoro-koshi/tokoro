@@ -19,7 +19,7 @@
 }
 
 .socialLink {
-  @apply text-popover-foreground transition-colors hover:text-primary;
+  @apply h-5 w-5 text-popover-foreground transition-colors hover:text-primary;
 }
 
 .copyright {

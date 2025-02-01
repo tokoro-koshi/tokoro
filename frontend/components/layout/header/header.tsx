@@ -30,9 +30,9 @@ export default function Header() {
       {!isLoading && (
         <div className={styles.authButtons}>
           {!user && (
-            <Link href={routes.auth.login} className={styles.navLink}>
+            <a href={routes.auth.login} className={styles.navLink}>
               Login
-            </Link>
+            </a>
           )}
           <AuthButton user={user} />
         </div>
