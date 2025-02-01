@@ -1,5 +1,5 @@
 import { CheckCircle } from 'lucide-react';
-import styles from './UserBenefits.module.css';
+import styles from './user-benefits.module.css';
 import { benefits } from '@/lib/constants/landing/benefits';
 
 export default function UserBenefits() {
