@@ -57,7 +57,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<String> createFolder(String folder) {
-        logger.debug("Creating folder: {}", folder);
+        logger.trace("Creating folder: {}", folder);
         String normalizedFolder = normalizeFolderPath(folder);
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -76,7 +76,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<String> uploadFile(MultipartFile file, String folder) {
-        logger.debug("Uploading file: {} to folder: {}", file.getOriginalFilename(), folder);
+        logger.trace("Uploading file: {} to folder: {}", file.getOriginalFilename(), folder);
         return CompletableFuture.supplyAsync(() -> {
             try {
                 String extension = getFileExtension(
@@ -104,7 +104,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<List<String>> uploadFiles(List<MultipartFile> files, String folder) {
-        logger.debug("Uploading {} files to folder: {}", files.size(), folder);
+        logger.trace("Uploading {} files to folder: {}", files.size(), folder);
         List<CompletableFuture<String>> futures = files.stream()
                 .map(file -> uploadFile(file, folder))
                 .toList();
@@ -121,7 +121,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<byte[]> getFile(String key) {
-        logger.debug("Retrieving file: {}", key);
+        logger.trace("Retrieving file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
             var response = s3Client.getObject(GetObjectRequest.builder()
                     .bucket(bucketName)
@@ -137,8 +137,13 @@ public class S3FileStorageService implements FileStorageService {
     }
 
     @Override
+    public CompletableFuture<String> generateSignedUrl(String key, Integer expirationInSeconds) {
+        return generateSignedUrl(key, expirationInSeconds, null);
+    }
+
+    @Override
     public CompletableFuture<String> generateSignedUrl(String key, Integer expirationInSeconds, String overrideContentDisposition) {
-        logger.debug("Generating signed URL for file: {}", key);
+        logger.trace("Generating signed URL for file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
             GetObjectRequest.Builder requestBuilder = GetObjectRequest.builder()
                     .bucket(bucketName)
@@ -164,7 +169,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<Boolean> deleteFile(String key) {
-        logger.debug("Deleting file: {}", key);
+        logger.trace("Deleting file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
             DeleteObjectResponse response = s3Client.deleteObject(DeleteObjectRequest.builder()
                     .bucket(bucketName)
@@ -182,7 +187,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<Boolean> deleteFolder(String folder) {
-        logger.debug("Deleting folder: {}", folder);
+        logger.trace("Deleting folder: {}", folder);
         return CompletableFuture.supplyAsync(() -> {
             String normalizedFolder = normalizeFolderPath(folder);
             ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
@@ -218,7 +223,7 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<List<FileEntry>> listFileEntries(String directory, boolean groupByFolder) {
-        logger.debug("Listing entries in directory: {}", directory);
+        logger.trace("Listing entries in directory: {}", directory);
         return CompletableFuture.supplyAsync(() -> {
             String normalizedDir = normalizeDirectoryPath(directory);
             ListObjectsV2Request request = ListObjectsV2Request.builder()
