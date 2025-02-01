@@ -1,16 +1,15 @@
 .hero {
-  @apply text-center py-20 px-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground;
+  @apply bg-gradient-to-r from-primary to-secondary px-4 py-20 text-center text-primary-foreground;
 }
 
 .title {
-  @apply text-4xl md:text-6xl font-bold mb-4;
+  @apply mb-4 text-4xl font-bold md:text-6xl;
 }
 
 .subtitle {
-  @apply text-xl md:text-2xl mb-8 max-w-2xl mx-auto;
+  @apply mx-auto mb-8 max-w-2xl text-xl md:text-2xl;
 }
 
 .cta {
-  @apply text-lg px-8 py-3;
+  @apply px-8 py-3 text-lg;
 }
-

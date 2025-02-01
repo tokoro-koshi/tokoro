@@ -1,28 +1,27 @@
 .howItWorks {
-  @apply py-16 px-4;
+  @apply px-4 py-16;
 }
 
 .title {
-  @apply text-3xl font-bold text-center mb-12;
+  @apply mb-12 text-center text-3xl font-bold;
 }
 
 .stepsContainer {
-  @apply flex flex-col md:flex-row justify-center items-center md:items-start space-y-8 md:space-y-0 md:space-x-12;
+  @apply flex flex-col items-center justify-center space-y-8 md:flex-row md:items-start md:space-x-12 md:space-y-0;
 }
 
 .step {
-  @apply flex flex-col items-center text-center max-w-xs;
+  @apply flex max-w-xs flex-col items-center text-center;
 }
 
 .iconWrapper {
-  @apply mb-4 p-4 rounded-full bg-primary text-primary-foreground;
+  @apply mb-4 rounded-full bg-primary p-4 text-primary-foreground;
 }
 
 .stepTitle {
-  @apply text-xl font-semibold mb-2;
+  @apply mb-2 text-xl font-semibold;
 }
 
 .stepDescription {
   @apply text-muted-foreground;
 }
-

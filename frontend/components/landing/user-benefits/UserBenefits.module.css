@@ -1,13 +1,13 @@
 .benefits {
-  @apply py-16 px-4 bg-muted;
+  @apply bg-muted px-4 py-16;
 }
 
 .title {
-  @apply text-3xl font-bold text-center mb-8;
+  @apply mb-8 text-center text-3xl font-bold;
 }
 
 .list {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto;
+  @apply mx-auto grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3;
 }
 
 .item {
@@ -15,6 +15,5 @@
 }
 
 .icon {
-  @apply text-primary h-5 w-5;
+  @apply h-5 w-5 text-primary;
 }
-
