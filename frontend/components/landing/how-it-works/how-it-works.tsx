@@ -1,5 +1,5 @@
-import styles from './HowItWorks.module.css';
 import { steps } from '@/lib/constants/landing/steps';
+import styles from './how-it-works.module.css';
 
 export default function HowItWorks() {
   return (

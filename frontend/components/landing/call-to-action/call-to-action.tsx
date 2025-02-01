@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import styles from './CallToAction.module.css';
+import styles from './call-to-action.module.css';
 
 export default function CallToAction() {
   return (

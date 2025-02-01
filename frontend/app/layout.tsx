@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import Provider from '@/app/providers';
-import Header from '@/components/layout/header/Header';
-import Footer from '@/components/layout/footer/Footer';
+import Header from '@/components/layout/header/header';
+import Footer from '@/components/layout/footer/footer';
 import '@/app/styles/globals.css';
 
 export const metadata: Metadata = {
