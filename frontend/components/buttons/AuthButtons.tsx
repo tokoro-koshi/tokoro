@@ -1,21 +1,17 @@
 ﻿'use client';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import LogoutButton from "@/components/buttons/logout/Logout";
-import LoginButton from "@/components/buttons/login/Login";
-import RegisterButton from "@/components/buttons/register/Register";
 
-export default function AuthButtons() {
-  const { user, isLoading } = useUser();
-  if (isLoading) return null;
-  
+import { UserProfile } from '@auth0/nextjs-auth0/client';
+import { Button } from '@/components/buttons/button';
+import routes from '@/lib/constants/routes';
+import styles from './auth-buttons.module.css';
+
+export default function AuthButton({ user }: { user?: UserProfile }) {
   return (
-    <div>{user ? (
-        <LogoutButton />
-    ) : (
-        <>
-            <LoginButton />
-            <RegisterButton />
-        </>
-    )}</div>
+    <Button
+      className={styles.roundedBtn}
+      action={user ? routes.auth.logout : routes.auth.register}
+    >
+      {user ? 'Logout' : 'Sign up'}
+    </Button>
   );
 }

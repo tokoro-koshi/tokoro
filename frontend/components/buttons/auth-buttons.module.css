@@ -1,0 +1,7 @@
+.authButtons {
+    @apply flex-1 flex justify-between items-center;
+}
+
+.roundedBtn {
+    @apply  text-background bg-muted-foreground hover:bg-muted active:bg-primary  rounded-md px-4 py-2 font-semibold;
+}
