@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { UserProvider } from '@auth0/nextjs-auth0/client';
+import Provider from '@/app/providers';
 import Header from '@/components/layout/header/Header';
 import Footer from '@/components/layout/footer/Footer';
 import '@/app/styles/globals.css';
@@ -18,13 +18,13 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body className={`antialiased`}>
-        <UserProvider>
+        <Provider>
           <div className='flex min-h-screen flex-col'>
             <Header />
             <main className='flex-grow'>{children}</main>
             <Footer />
           </div>
-        </UserProvider>
+        </Provider>
       </body>
     </html>
   );
