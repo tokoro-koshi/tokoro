@@ -11,7 +11,7 @@
 }
 
 .navLink {
-  @apply font-semibold text-popover-foreground transition-colors hover:text-primary hover:underline;
+  @apply font-medium text-popover-foreground transition-colors hover:text-primary hover:underline;
 }
 
 .authButtons {
