@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useUser } from '@/lib/stores/user';
 import routes from '@/lib/constants/routes';
-import Logo from '@/public/logo_without_text.svg';
+import Logo from '@/public/logo.svg';
 import AuthButton from '@/components/buttons/auth-buttons';
 import styles from './header.module.css';
 
