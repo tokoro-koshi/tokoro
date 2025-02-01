@@ -9,6 +9,19 @@ type ButtonArgs = {
 };
 
 export function Button({ children, action, className }: ButtonArgs) {
+  if (
+    typeof action === 'string' &&
+    (action.startsWith('http') ||
+      action.startsWith('mailto') ||
+      action.startsWith('/api'))
+  ) {
+    return (
+      <a href={action} className={className}>
+        {children}
+      </a>
+    );
+  }
+
   return typeof action === 'string' ? (
     <Link href={action} className={className}>
       {children}
