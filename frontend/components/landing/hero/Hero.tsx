@@ -8,8 +8,9 @@ export default function Hero() {
       <p className={styles.subtitle}>
         Find interesting places to visit based on your preferences with ease.
       </p>
-      <Button size="lg" className={styles.cta}>Start Exploring</Button>
+      <Button size='lg' className={styles.cta}>
+        Start Exploring
+      </Button>
     </section>
-  )
+  );
 }
-

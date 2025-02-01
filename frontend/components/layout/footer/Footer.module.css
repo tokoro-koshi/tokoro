@@ -3,25 +3,25 @@
 }
 
 .content {
-  @apply flex md:flex justify-between items-center px-8;
+  @apply flex items-center justify-between px-8 md:flex;
 }
 
 .links {
-  @apply flex md:flex gap-10 items-center order-first;
+  @apply order-first flex items-center gap-10 md:flex;
 }
 
 .link {
-  @apply text-popover-foreground hover:text-primary transition-colors hover:underline;
+  @apply text-popover-foreground transition-colors hover:text-primary hover:underline;
 }
 
 .social {
-  @apply flex md:flex gap-4 items-center order-last;
+  @apply order-last flex items-center gap-4 md:flex;
 }
 
 .socialLink {
-  @apply text-popover-foreground hover:text-primary transition-colors ;
+  @apply text-popover-foreground transition-colors hover:text-primary;
 }
 
 .copyright {
-  @apply text-center text-secondary absolute left-1/2 -translate-x-1/2;
+  @apply absolute left-1/2 -translate-x-1/2 text-center text-secondary;
 }

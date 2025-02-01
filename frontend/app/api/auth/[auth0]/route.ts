@@ -4,5 +4,5 @@
  * /api/auth/[auth0], where [auth0] - login, logout, callback, me
  */
 export const GET = handleAuth({
-  signup: handleLogin({ authorizationParams: { screen_hint: 'signup' } })
+  signup: handleLogin({ authorizationParams: { screen_hint: 'signup' } }),
 });

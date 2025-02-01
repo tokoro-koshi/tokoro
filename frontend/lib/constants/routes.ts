@@ -12,9 +12,7 @@
     me: '/api/auth/me',
   },
 
-  api: {
-    
-  },
+  api: {},
 };
 
 export default routes;
