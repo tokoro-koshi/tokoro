@@ -23,6 +23,7 @@ public class PlacesService {
         this.placeMapper = placeMapper;
     }
 
+    // TODO: Add file upload support
     public PlaceDto savePlace(CreateUpdatePlaceDto place) {
         return placeMapper.toPlaceDto(
             mongoTemplate.save(placeMapper.toPlaceSchema(place))
