@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.file;
 
+import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -136,10 +137,15 @@ public class S3FileStorageService implements FileStorageService {
 
     @Override
     public CompletableFuture<List<String>> uploadFiles(
-        List<MultipartFile> files,
+        @Nullable List<MultipartFile> files,
         String folder
     ) {
+        if (files == null || files.isEmpty()) {
+            return CompletableFuture.completedFuture(new ArrayList<>());
+        }
+
         logger.trace("Uploading {} files to folder: {}", files.size(), folder);
+
         List<CompletableFuture<String>> futures = files.stream()
                                                        .map(file -> uploadFile(
                                                            file,
