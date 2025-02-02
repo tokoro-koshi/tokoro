@@ -1,15 +1,19 @@
 .cta {
-  @apply bg-primary px-4 py-20 text-center text-primary-foreground;
+  @apply bg-secondary py-14 text-center relative;
+}
+
+.wave {
+  @apply absolute top-0 left-0 w-full;
+  transform: translateY(-67%);
+  pointer-events: none;
 }
 
 .title {
-  @apply mb-4 text-3xl font-bold md:text-4xl;
+  @apply mb-5 text-5xl font-extrabold md:text-6xl text-background;
 }
 
 .description {
-  @apply mx-auto mb-8 max-w-2xl text-xl;
+  @apply mx-auto mb-9 text-2xl md:text-3xl text-muted-foreground;
 }
 
-.button {
-  @apply bg-background px-8 py-3 text-lg text-foreground hover:bg-accent;
-}
+
