@@ -21,6 +21,13 @@ public class TagsService {
         this.clientService = clientService;
     }
 
+    /**
+     * Generates a tag for the given message.
+     *
+     * @param message        message to generate tag for
+     * @param conversationId conversation ID
+     * @return response with the tag
+     */
     public Response<TagDto> generateTag(String message, String conversationId) {
         boolean isInappropriate = clientService.isPromptValid(message);
         if (isInappropriate) {
@@ -40,6 +47,23 @@ public class TagsService {
         );
     }
 
+    /**
+     * Generates a tag for the given message.
+     *
+     * @param message message to generate tag for
+     * @return response with the tag
+     */
+    public Response<TagDto> generateTag(String message) {
+        return generateTag(message, null);
+    }
+
+    /**
+     * Generates tags for the given message.
+     *
+     * @param message        message to generate tags for
+     * @param conversationId conversation ID
+     * @return response with the tags
+     */
     public Response<TagsDto> generateTags(
         String message,
         String conversationId
@@ -60,5 +84,15 @@ public class TagsService {
             TagsService.TOKENS_LIMIT,
             TagsService.TEMPERATURE
         );
+    }
+
+    /**
+     * Generates tags for the given message.
+     *
+     * @param message message to generate tags for
+     * @return response with the tags
+     */
+    public Response<TagsDto> generateTags(String message) {
+        return generateTags(message, null);
     }
 }
