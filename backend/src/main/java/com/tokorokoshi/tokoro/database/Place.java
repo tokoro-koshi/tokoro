@@ -21,7 +21,7 @@ public record Place(
     Location location,
     String categoryId,
     @NonNull
-    List<HashTag> hashTags,
+    List<HashTag> tags,
     @NonNull
     List<String> pictures,
     @NonNull
@@ -34,7 +34,33 @@ public record Place(
             description,
             location,
             categoryId,
-            hashTags,
+            tags,
+            pictures,
+            rating
+        );
+    }
+
+    public Place withPictures(List<String> pictures) {
+        return new Place(
+            id,
+            name,
+            description,
+            location,
+            categoryId,
+            tags,
+            pictures,
+            rating
+        );
+    }
+
+    public Place withTags(List<HashTag> tags) {
+        return new Place(
+            id,
+            name,
+            description,
+            location,
+            categoryId,
+            tags,
             pictures,
             rating
         );
