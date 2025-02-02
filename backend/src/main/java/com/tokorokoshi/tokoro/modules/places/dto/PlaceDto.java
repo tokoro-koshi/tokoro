@@ -1,14 +1,14 @@
 package com.tokorokoshi.tokoro.modules.places.dto;
 
-import java.util.List;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 
 public record PlaceDto(
     String id,
     String name,
     String description,
-    LocationDto locationDto,
+    LocationDto location,
     String categoryId,
-    List<HashTagDto> hashTagsDto,
+    TagsDto tags,
     double rating
 ) {
 }

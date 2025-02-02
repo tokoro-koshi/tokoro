@@ -9,7 +9,7 @@ public record BlogDto(
     String content,
     List<String> authorId,
     List<String> tags,
-    List<CommentDto> commentDtos,
+    List<CommentDto> comments,
     Instant createdAt,
     Instant updatedAt
 ) {
