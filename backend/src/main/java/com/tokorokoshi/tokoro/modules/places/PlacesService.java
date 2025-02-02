@@ -8,10 +8,14 @@ import com.tokorokoshi.tokoro.modules.tags.TagsService;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 @Service
 public class PlacesService {
@@ -50,6 +54,16 @@ public class PlacesService {
             }
         }
         return false;
+    }
+
+    /**
+     * Get a place with pictures URLs.
+     */
+    private PlaceDto getPlaceWithPicturesUrls(Place place) {
+        List<String> picturesUrls = place.pictures().stream().map(
+            key -> fileStorageService.generateSignedUrl(key, 3600).join()
+        ).toList();
+        return placeMapper.toPlaceDto(place.withPictures(picturesUrls));
     }
 
     /**
@@ -107,6 +121,14 @@ public class PlacesService {
             throw new IllegalArgumentException("Invalid file type");
         }
 
+        // For update, we assume replacing pictures with new ones.
+        // Remove existing pictures from storage if there are any new pictures.
+        if (existingPlaceDto.pictures() != null && pictures != null) {
+            for (String key : existingPlaceDto.pictures()) {
+                fileStorageService.deleteFile(key);
+            }
+        }
+
         // Map DTO to Place schema (for update)
         var placeSchema = placeMapper.toPlaceSchema(place);
 
@@ -130,7 +152,9 @@ public class PlacesService {
      * @return the place
      */
     public PlaceDto getPlaceById(String id) {
-        return placeMapper.toPlaceDto(mongoTemplate.findById(id, Place.class));
+        var place = mongoTemplate.findById(id, Place.class);
+        if (place == null) return null;
+        return getPlaceWithPicturesUrls(place);
     }
 
     /**
@@ -139,7 +163,10 @@ public class PlacesService {
      * @return all places
      */
     public List<PlaceDto> getAllPlaces() {
-        return placeMapper.toPlaceDto(mongoTemplate.findAll(Place.class));
+        return mongoTemplate.findAll(Place.class)
+                            .stream()
+                            .map(this::getPlaceWithPicturesUrls)
+                            .toList();
     }
 
     /**
@@ -148,7 +175,18 @@ public class PlacesService {
      * @param id place ID
      */
     public void deletePlace(String id) {
-        mongoTemplate.remove(placeMapper.toPlaceSchema(getPlaceById(id)));
+        var place = mongoTemplate.findById(id, Place.class);
+        if (place == null) {
+            throw new IllegalArgumentException("Place not found for id: " + id);
+        }
+
+        // Remove files from storage
+        for (String key : place.pictures()) {
+            fileStorageService.deleteFile(key);
+        }
+
+        // Remove place from database
+        mongoTemplate.remove(place);
     }
 
     /**
