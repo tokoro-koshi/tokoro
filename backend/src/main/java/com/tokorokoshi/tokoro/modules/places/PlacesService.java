@@ -38,6 +38,29 @@ public class PlacesService {
     }
 
     /**
+     * Generates tags for a place.
+     *
+     * @param id place ID
+     * @return the generated tags
+     */
+    private TagsDto generateTagsForPlace(String id) {
+        var place = mongoTemplate.findById(id, Place.class);
+        if (place == null) {
+            throw new IllegalArgumentException("Place not found for id: " + id);
+        }
+
+        var response = tagsService.generateTags(
+            "Generate tags for place: " + place
+        );
+        if (response.isRefusal()) {
+            throw new IllegalStateException(
+                "Failed to generate tags: " + response.getRefusal()
+            );
+        }
+        return response.getContent();
+    }
+
+    /**
      * Validates the files to be images.
      *
      * @param files files to validate
@@ -190,25 +213,19 @@ public class PlacesService {
     }
 
     /**
-     * Generates tags for a place.
+     * Gets random places.
      *
-     * @param id place ID
-     * @return the generated tags
+     * @param count number of places to get
+     * @return the random places
      */
-    private TagsDto generateTagsForPlace(String id) {
-        var place = mongoTemplate.findById(id, Place.class);
-        if (place == null) {
-            throw new IllegalArgumentException("Place not found for id: " + id);
-        }
-
-        var response = tagsService.generateTags(
-            "Generate tags for place: " + place
+    public List<PlaceDto> getRandomPlaces(int count) {
+        AggregationResults<Place> results = mongoTemplate.aggregate(
+            newAggregation(Aggregation.sample(count)),
+            Place.class,
+            Place.class
         );
-        if (response.isRefusal()) {
-            throw new IllegalStateException(
-                "Failed to generate tags: " + response.getRefusal()
-            );
-        }
-        return response.getContent();
+        return results.getMappedResults().stream()
+            .map(this::getPlaceWithPicturesUrls)
+            .toList();
     }
 }

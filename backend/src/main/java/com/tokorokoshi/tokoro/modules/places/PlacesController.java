@@ -42,6 +42,13 @@ public class PlacesController {
         return ResponseEntity.ok(placesService.getAllPlaces());
     }
 
+    @GetMapping(value = "/random/{count}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PlaceDto>> getRandomPlaces(
+        @PathVariable int count
+    ) {
+        return ResponseEntity.ok(placesService.getRandomPlaces(count));
+    }
+
     @PutMapping(value = "/{id}",
         consumes = MULTIPART_FORM_DATA_VALUE,
         produces = APPLICATION_JSON_VALUE)
