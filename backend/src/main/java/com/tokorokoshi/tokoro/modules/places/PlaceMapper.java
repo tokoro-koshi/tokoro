@@ -1,12 +1,16 @@
 package com.tokorokoshi.tokoro.modules.places;
 
+import com.tokorokoshi.tokoro.database.HashTag;
 import com.tokorokoshi.tokoro.database.Place;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
@@ -18,4 +22,19 @@ public interface PlaceMapper {
     List<PlaceDto> toPlaceDto(List<Place> places);
 
     Place toPlaceSchema(PlaceDto placeDto);
+
+    default TagsDto map(List<HashTag> tags) {
+        return new TagsDto(
+            tags.stream()
+                .map(tag -> new TagDto(tag.lang(), tag.name()))
+                .toArray(TagDto[]::new)
+        );
+    }
+
+    default List<HashTag> map(TagsDto tagsDto) {
+        return Stream.of(tagsDto.tags())
+                     .map(tagDto ->
+                              new HashTag(null, tagDto.lang(), tagDto.name())
+                     ).toList();
+    }
 }
