@@ -4,6 +4,7 @@
   privacyPolicy: '/privacy',
   termsOfService: '/tos',
   contactUs: '/contact',
+  explore: '/explore',
 
   auth: {
     login: '/api/auth/login',
