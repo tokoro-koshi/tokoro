@@ -1,0 +1,3 @@
+.exploreBtn {
+    @apply rounded-md bg-muted-foreground py-3 px-14 font-semibold text-background hover:bg-muted active:bg-primary;
+}
