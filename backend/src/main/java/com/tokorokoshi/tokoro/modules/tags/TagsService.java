@@ -2,7 +2,6 @@ package com.tokorokoshi.tokoro.modules.tags;
 
 import com.tokorokoshi.tokoro.modules.ai.AiClientService;
 import com.tokorokoshi.tokoro.modules.ai.Response;
-import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,42 +18,6 @@ public class TagsService {
     @Autowired
     public TagsService(AiClientService clientService) {
         this.clientService = clientService;
-    }
-
-    /**
-     * Generates a tag for the given message.
-     *
-     * @param message        message to generate tag for
-     * @param conversationId conversation ID
-     * @return response with the tag
-     */
-    public Response<TagDto> generateTag(String message, String conversationId) {
-        boolean isInappropriate = clientService.isPromptValid(message);
-        if (isInappropriate) {
-            return Response.<TagDto>builder()
-                            .refusal("Message contains inappropriate content")
-                            .refusalStatus(HttpStatus.BAD_REQUEST.value())
-                            .build();
-        }
-
-        return clientService.getResponse(
-            TagsPromptEnhancer.enhancePrompt(message),
-            TagDto.class,
-            conversationId,
-            TagsService.MODEL,
-            TagsService.TOKENS_LIMIT,
-            TagsService.TEMPERATURE
-        );
-    }
-
-    /**
-     * Generates a tag for the given message.
-     *
-     * @param message message to generate tag for
-     * @return response with the tag
-     */
-    public Response<TagDto> generateTag(String message) {
-        return generateTag(message, null);
     }
 
     /**
