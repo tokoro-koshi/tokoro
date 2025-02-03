@@ -21,8 +21,6 @@ public interface PlaceMapper {
 
     List<PlaceDto> toPlaceDto(List<Place> places);
 
-    Place toPlaceSchema(PlaceDto placeDto);
-
     default TagsDto map(List<HashTag> tags) {
         return new TagsDto(
             tags.stream()
@@ -34,7 +32,7 @@ public interface PlaceMapper {
     default List<HashTag> map(TagsDto tagsDto) {
         return Stream.of(tagsDto.tags())
                      .map(tagDto ->
-                              new HashTag(null, tagDto.lang(), tagDto.name())
+                              new HashTag(tagDto.lang(), tagDto.name())
                      ).toList();
     }
 }

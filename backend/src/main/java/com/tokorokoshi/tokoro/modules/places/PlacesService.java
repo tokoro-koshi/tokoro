@@ -1,11 +1,11 @@
 package com.tokorokoshi.tokoro.modules.places;
 
+import com.tokorokoshi.tokoro.database.HashTag;
 import com.tokorokoshi.tokoro.database.Place;
 import com.tokorokoshi.tokoro.modules.file.FileStorageService;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
-import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -13,7 +13,9 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
@@ -26,10 +28,10 @@ public class PlacesService {
 
     @Autowired
     public PlacesService(
-        MongoTemplate mongoTemplate,
-        PlaceMapper placeMapper,
-        FileStorageService fileStorageService,
-        TagsService tagsService
+            MongoTemplate mongoTemplate,
+            PlaceMapper placeMapper,
+            FileStorageService fileStorageService,
+            TagsService tagsService
     ) {
         this.mongoTemplate = mongoTemplate;
         this.placeMapper = placeMapper;
@@ -40,24 +42,23 @@ public class PlacesService {
     /**
      * Generates tags for a place.
      *
-     * @param id place ID
+     * @param place Place to generate tags for
      * @return the generated tags
      */
-    private TagsDto generateTagsForPlace(String id) {
-        var place = mongoTemplate.findById(id, Place.class);
-        if (place == null) {
-            throw new IllegalArgumentException("Place not found for id: " + id);
-        }
+    private List<HashTag> generateTagsForPlace(Place place) {
+        Objects.requireNonNull(place, "Place cannot be null");
 
         var response = tagsService.generateTags(
-            "Generate tags for place: " + place
+                "Generate tags for place: " + place
         );
         if (response.isRefusal()) {
             throw new IllegalStateException(
-                "Failed to generate tags: " + response.getRefusal()
+                    "Failed to generate tags: " + response.getRefusal()
             );
         }
-        return response.getContent();
+        return Arrays.stream(response.getContent().tags())
+                .map(tag -> new HashTag(tag.lang(), tag.name()))
+                .toList();
     }
 
     /**
@@ -84,7 +85,7 @@ public class PlacesService {
      */
     private PlaceDto getPlaceWithPicturesUrls(Place place) {
         List<String> picturesUrls = place.pictures().stream().map(
-            key -> fileStorageService.generateSignedUrl(key, 3600).join()
+                key -> fileStorageService.generateSignedUrl(key, 3600).join()
         ).toList();
         return placeMapper.toPlaceDto(place.withPictures(picturesUrls));
     }
@@ -97,8 +98,8 @@ public class PlacesService {
      * @return the saved place
      */
     public PlaceDto savePlace(
-        CreateUpdatePlaceDto place,
-        MultipartFile[] pictures
+            CreateUpdatePlaceDto place,
+            MultipartFile[] pictures
     ) {
         // Validate pictures
         if (isFilesInvalid(pictures)) {
@@ -110,11 +111,17 @@ public class PlacesService {
 
         // Process picture files if provided
         List<String> pictureKeys = fileStorageService
-            .uploadFiles(List.of(pictures), "places")
-            .join();
+                .uploadFiles(
+                        pictures != null ? List.of(pictures) : List.of(),
+                        "places"
+                )
+                .join();
 
         // Create a new Place instance with the uploaded picture keys.
         placeSchema = placeSchema.withPictures(pictureKeys);
+
+        // Update tags
+        placeSchema = placeSchema.withTags(generateTagsForPlace(placeSchema));
 
         // Save to MongoDB
         var savedPlace = mongoTemplate.save(placeSchema);
@@ -130,9 +137,9 @@ public class PlacesService {
      * @return the updated place
      */
     public PlaceDto updatePlace(
-        String id,
-        CreateUpdatePlaceDto place,
-        MultipartFile[] pictures
+            String id,
+            CreateUpdatePlaceDto place,
+            MultipartFile[] pictures
     ) {
         PlaceDto existingPlaceDto = getPlaceById(id);
         if (existingPlaceDto == null) {
@@ -157,13 +164,21 @@ public class PlacesService {
 
         // Process new picture files if provided
         List<String> pictureKeys = fileStorageService
-            .uploadFiles(List.of(pictures), "places")
-            .join();
+                .uploadFiles(
+                        pictures != null ? List.of(pictures) : List.of(),
+                        "places"
+                )
+                .join();
 
         // For update, we assume replacing pictures with new ones.
         placeSchema = pictureKeys.isEmpty()
-            ? placeSchema.withPictures(placeSchema.pictures())
-            : placeSchema.withPictures(pictureKeys);
+                ? placeSchema.withPictures(placeSchema.pictures())
+                : placeSchema.withPictures(pictureKeys);
+
+        // Update tags
+        placeSchema = placeSchema.withTags(generateTagsForPlace(placeSchema));
+
+        // Update the place in MongoDB
         var savedPlace = mongoTemplate.save(placeSchema);
         return placeMapper.toPlaceDto(savedPlace);
     }
@@ -187,9 +202,9 @@ public class PlacesService {
      */
     public List<PlaceDto> getAllPlaces() {
         return mongoTemplate.findAll(Place.class)
-                            .stream()
-                            .map(this::getPlaceWithPicturesUrls)
-                            .toList();
+                .stream()
+                .map(this::getPlaceWithPicturesUrls)
+                .toList();
     }
 
     /**
@@ -205,7 +220,7 @@ public class PlacesService {
 
         // Remove files from storage
         for (String key : place.pictures()) {
-            fileStorageService.deleteFile(key);
+            fileStorageService.deleteFile(key).join();
         }
 
         // Remove place from database
@@ -220,12 +235,12 @@ public class PlacesService {
      */
     public List<PlaceDto> getRandomPlaces(int count) {
         AggregationResults<Place> results = mongoTemplate.aggregate(
-            newAggregation(Aggregation.sample(count)),
-            Place.class,
-            Place.class
+                newAggregation(Aggregation.sample(count)),
+                Place.class,
+                Place.class
         );
         return results.getMappedResults().stream()
-            .map(this::getPlaceWithPicturesUrls)
-            .toList();
+                .map(this::getPlaceWithPicturesUrls)
+                .toList();
     }
 }

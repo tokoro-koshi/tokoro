@@ -27,19 +27,6 @@ public record Place(
     @NonNull
     double rating
 ) {
-    public Place withId(String id) {
-        return new Place(
-            id,
-            name,
-            description,
-            location,
-            categoryId,
-            tags,
-            pictures,
-            rating
-        );
-    }
-
     public Place withPictures(List<String> pictures) {
         return new Place(
             id,
