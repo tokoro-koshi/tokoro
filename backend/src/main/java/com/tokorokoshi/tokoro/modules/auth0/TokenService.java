@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * with retry mechanisms and scheduled cache eviction.
  */
 @Service
-@EnableRetry // Enable retry functionality in the service
+@EnableRetry
 public class TokenService {
 
     private static final Logger log = LoggerFactory.getLogger(TokenService.class);
