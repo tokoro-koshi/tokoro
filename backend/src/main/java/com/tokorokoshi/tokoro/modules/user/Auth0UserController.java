@@ -4,6 +4,7 @@ import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -172,7 +173,12 @@ public class Auth0UserController {
     )
     @GetMapping("/permissions/check")
     public ResponseEntity<Boolean> hasPermission(
-            @RequestParam @NotNull @NotBlank String permission) {
+            @Parameter(description = "The permission to check", required = true, example = "read:users")
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String permission
+    ) {
         try {
             boolean hasPermission = auth0UserDataService.hasPermission(permission);
             return ResponseEntity.ok(hasPermission);
@@ -195,7 +201,12 @@ public class Auth0UserController {
     )
     @GetMapping("/permissions/check-any")
     public ResponseEntity<Boolean> hasAnyPermission(
-            @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> permissions) {
+            @Parameter(description = "The list of permissions to check", required = true, example = "[\"read:users\", \"write:users\"]")
+            @RequestParam
+            @NotNull
+            @NotEmpty
+            List<@NotEmpty @NotBlank String> permissions
+    ) {
         try {
             boolean hasAnyPermission = auth0UserDataService.hasAnyPermission(permissions);
             return ResponseEntity.ok(hasAnyPermission);
@@ -218,7 +229,12 @@ public class Auth0UserController {
     )
     @GetMapping("/roles/check")
     public ResponseEntity<Boolean> hasRole(
-            @RequestParam @NotNull @NotBlank String role) {
+            @Parameter(description = "The role to check", required = true, example = "admin")
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String role
+    ) {
         try {
             boolean hasRole = auth0UserDataService.hasRole(role);
             return ResponseEntity.ok(hasRole);
@@ -241,7 +257,12 @@ public class Auth0UserController {
     )
     @GetMapping("/roles/check-any")
     public ResponseEntity<Boolean> hasAnyRole(
-            @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> roles) {
+            @Parameter(description = "The list of roles to check", required = true, example = "[\"admin\", \"user\"]")
+            @RequestParam
+            @NotNull
+            @NotEmpty
+            List<@NotEmpty @NotBlank String> roles
+    ) {
         try {
             boolean hasAnyRole = auth0UserDataService.hasAnyRole(roles);
             return ResponseEntity.ok(hasAnyRole);
@@ -262,7 +283,13 @@ public class Auth0UserController {
             description = "Checks if the user is blocked"
     )
     @GetMapping("/{userId}/blocked")
-    public ResponseEntity<Boolean> isUserBlocked(@PathVariable @NotNull @NotBlank String userId) {
+    public ResponseEntity<Boolean> isUserBlocked(
+            @Parameter(description = "The user ID to check", required = true, example = "auth0|60f1b3b3b3b3b3b3b3b3b3b")
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String userId
+    ) {
         try {
             boolean isBlocked = auth0ManagementService.isUserBlocked(userId);
             return ResponseEntity.ok(isBlocked);
@@ -283,7 +310,13 @@ public class Auth0UserController {
             description = "Blocks the user and returns the string with operation status"
     )
     @PostMapping("/{userId}/block")
-    public ResponseEntity<String> blockUser(@PathVariable @NotNull @NotBlank String userId) {
+    public ResponseEntity<String> blockUser(
+            @Parameter(description = "The user ID to block", required = true, example = "auth0|60f1b3b3b3b3b3b3b3b3b3b")
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String userId
+    ) {
         try {
             auth0ManagementService.blockUser(userId);
             return ResponseEntity.ok("User blocked successfully");
@@ -304,7 +337,13 @@ public class Auth0UserController {
             description = "Unblocks the user and returns the string with operation status"
     )
     @PostMapping("/{userId}/unblock")
-    public ResponseEntity<String> unblockUser(@PathVariable @NotNull @NotBlank String userId) {
+    public ResponseEntity<String> unblockUser(
+            @Parameter(description = "The user ID to unblock", required = true, example = "auth0|60f1b3b3b3b3b3b3b3b3b3b")
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String userId
+    ) {
         try {
             auth0ManagementService.unblockUser(userId);
             return ResponseEntity.ok("User unblocked successfully");
@@ -328,7 +367,11 @@ public class Auth0UserController {
     )
     @PutMapping("/metadata")
     public ResponseEntity<String> updateAuthenticatedUserMetadata(
-            @RequestBody @NotNull Map<String, Object> metadata) {
+            @Parameter(description = "The metadata to update", required = true)
+            @RequestBody
+            @NotNull
+            Map<String, Object> metadata
+    ) {
         try {
             auth0UserDataService.updateAuthenticatedUserMetadata(metadata);
             return ResponseEntity.ok("User metadata updated successfully");
@@ -351,7 +394,16 @@ public class Auth0UserController {
     )
     @PutMapping("/avatar")
     public ResponseEntity<String> updateAuthenticatedUserAvatar(
-            @RequestParam @NotNull @NotBlank String avatarUrl) {
+            @Parameter(
+                    description = "The avatar URL to update",
+                    required = true,
+                    example = "https://example.com/avatar.jpg"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String avatarUrl
+    ) {
         try {
             auth0UserDataService.updateAuthenticatedUserAvatar(avatarUrl);
             return ResponseEntity.ok("User avatar updated successfully");
@@ -396,8 +448,25 @@ public class Auth0UserController {
     )
     @PutMapping("/name")
     public ResponseEntity<String> updateAuthenticatedUserName(
-            @RequestParam @NotNull @NotBlank String firstName,
-            @RequestParam @NotNull @NotBlank String lastName) {
+            @Parameter(
+                    description = "The first name to update",
+                    required = true,
+                    example = "John"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String firstName,
+            @Parameter(
+                    description = "The last name to update",
+                    required = true,
+                    example = "Doe"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String lastName
+    ) {
         try {
             auth0UserDataService.updateAuthenticatedUserName(firstName, lastName);
             return ResponseEntity.ok("User name updated successfully");
@@ -441,7 +510,16 @@ public class Auth0UserController {
     )
     @PutMapping("/nickname")
     public ResponseEntity<String> updateAuthenticatedUserNickname(
-            @RequestParam @NotNull @NotBlank String nickname) {
+            @Parameter(
+                    description = "The nickname to update",
+                    required = true,
+                    example = "johndoe"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String nickname
+    ) {
         try {
             auth0UserDataService.updateAuthenticatedUserNickname(nickname);
             return ResponseEntity.ok("User nickname updated successfully");
@@ -464,7 +542,16 @@ public class Auth0UserController {
     )
     @GetMapping("/by-email")
     public ResponseEntity<User> getUserByEmail(
-            @RequestParam @NotNull @NotBlank String email) {
+            @Parameter(
+                    description = "The email of the user to fetch",
+                    required = true,
+                    example = "johndoe@example.com"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String email
+    ) {
         try {
             User user = auth0UserDataService.getUserByEmail(email);
             if (user != null) {
@@ -492,7 +579,16 @@ public class Auth0UserController {
     )
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(
-            @PathVariable @NotNull @NotBlank String userId) {
+            @Parameter(
+                    description = "The user ID of the user to delete",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String userId
+    ) {
         try {
             auth0ManagementService.deleteUser(userId);
             return ResponseEntity.ok("User deleted successfully");
@@ -516,8 +612,25 @@ public class Auth0UserController {
     )
     @PostMapping("/{userId}/roles")
     public ResponseEntity<String> assignRolesToUser(
-            @PathVariable @NotNull @NotBlank String userId,
-            @RequestBody @NotNull @NotEmpty List<@NotEmpty @NotBlank String> roles) {
+            @Parameter(
+                    description = "The user ID of the user to assign roles to",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String userId,
+            @Parameter(
+                    description = "The list of roles to assign",
+                    required = true,
+                    example = "[\"admin\", \"user\"]"
+            )
+            @RequestBody
+            @NotNull
+            @NotEmpty
+            List<@NotEmpty @NotBlank String> roles
+    ) {
         try {
             auth0ManagementService.assignRolesToUser(userId, roles);
             return ResponseEntity.ok("Roles assigned successfully");
@@ -541,8 +654,25 @@ public class Auth0UserController {
     )
     @DeleteMapping("/{userId}/roles")
     public ResponseEntity<String> removeRolesFromUser(
-            @PathVariable @NotNull @NotBlank String userId,
-            @RequestBody @NotNull @NotEmpty List<@NotEmpty @NotBlank String> roles) {
+            @Parameter(
+                    description = "The user ID of the user to remove roles from",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String userId,
+            @Parameter(
+                    description = "The list of roles to remove",
+                    required = true,
+                    example = "[\"admin\", \"user\"]"
+            )
+            @RequestBody
+            @NotNull
+            @NotEmpty
+            List<@NotEmpty @NotBlank String> roles
+    ) {
         try {
             auth0ManagementService.removeRolesFromUser(userId, roles);
             return ResponseEntity.ok("Roles removed successfully");
