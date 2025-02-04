@@ -94,15 +94,13 @@ public class PlacesService {
      * Saves a new place with optional pictures.
      *
      * @param place    place data
-     * @param pictures optional pictures
      * @return the saved place
      */
     public PlaceDto savePlace(
-            CreateUpdatePlaceDto place,
-            MultipartFile[] pictures
+            CreateUpdatePlaceDto place
     ) {
         // Validate pictures
-        if (isFilesInvalid(pictures)) {
+        if (isFilesInvalid(place.pictures())) {
             throw new IllegalArgumentException("Invalid file type");
         }
 
@@ -112,7 +110,9 @@ public class PlacesService {
         // Process picture files if provided
         List<String> pictureKeys = fileStorageService
                 .uploadFiles(
-                        pictures != null ? List.of(pictures) : List.of(),
+                        place.pictures() != null
+                                ? List.of(place.pictures())
+                                : List.of(),
                         "places"
                 )
                 .join();
@@ -125,7 +125,7 @@ public class PlacesService {
 
         // Save to MongoDB
         var savedPlace = mongoTemplate.save(placeSchema);
-        return placeMapper.toPlaceDto(savedPlace);
+        return getPlaceWithPicturesUrls(savedPlace);
     }
 
     /**
@@ -133,13 +133,11 @@ public class PlacesService {
      *
      * @param id       place ID
      * @param place    place data
-     * @param pictures optional pictures
      * @return the updated place
      */
     public PlaceDto updatePlace(
             String id,
-            CreateUpdatePlaceDto place,
-            MultipartFile[] pictures
+            CreateUpdatePlaceDto place
     ) {
         PlaceDto existingPlaceDto = getPlaceById(id);
         if (existingPlaceDto == null) {
@@ -147,13 +145,13 @@ public class PlacesService {
         }
 
         // Validate pictures
-        if (isFilesInvalid(pictures)) {
+        if (isFilesInvalid(place.pictures())) {
             throw new IllegalArgumentException("Invalid file type");
         }
 
         // For update, we assume replacing pictures with new ones.
         // Remove existing pictures from storage if there are any new pictures.
-        if (existingPlaceDto.pictures() != null && pictures != null) {
+        if (existingPlaceDto.pictures() != null && place.pictures() != null) {
             for (String key : existingPlaceDto.pictures()) {
                 fileStorageService.deleteFile(key);
             }
@@ -165,7 +163,9 @@ public class PlacesService {
         // Process new picture files if provided
         List<String> pictureKeys = fileStorageService
                 .uploadFiles(
-                        pictures != null ? List.of(pictures) : List.of(),
+                        place.pictures() != null
+                                ? List.of(place.pictures())
+                                : List.of(),
                         "places"
                 )
                 .join();
@@ -180,7 +180,7 @@ public class PlacesService {
 
         // Update the place in MongoDB
         var savedPlace = mongoTemplate.save(placeSchema);
-        return placeMapper.toPlaceDto(savedPlace);
+        return getPlaceWithPicturesUrls(savedPlace);
     }
 
     /**
