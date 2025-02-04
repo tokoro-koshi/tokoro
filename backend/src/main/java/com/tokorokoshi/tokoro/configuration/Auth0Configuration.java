@@ -1,6 +1,8 @@
-package com.tokorokoshi.tokoro.modules.auth0;
+package com.tokorokoshi.tokoro.configuration;
 
 import com.auth0.client.mgmt.ManagementAPI;
+import com.tokorokoshi.tokoro.modules.auth0.Auth0Properties;
+import com.tokorokoshi.tokoro.modules.auth0.TokenService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(Auth0Properties.class)
 public class Auth0Configuration {
-
     private final Auth0Properties authProperties;
     private final TokenService tokenService;
 
