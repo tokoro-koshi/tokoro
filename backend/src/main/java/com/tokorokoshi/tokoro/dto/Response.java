@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.ai;
+package com.tokorokoshi.tokoro.dto;
 
 import org.json.JSONObject;
 

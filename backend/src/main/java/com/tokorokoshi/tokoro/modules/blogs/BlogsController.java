@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.blogs;
 
+import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.BlogDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.CreateUpdateBlogDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,7 +84,7 @@ public class BlogsController {
             value = {"", "/"},
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<PagedModel<EntityModel<BlogDto>>> getAllBlogs(
+    public ResponseEntity<PaginationDto<BlogDto>> getAllBlogs(
             @Parameter(
                     description = "The page number to get",
                     example = "0"
@@ -101,7 +100,10 @@ public class BlogsController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         var blogs = this.blogsService.getAllBlogs(pageable);
-        return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(blogs));
+        var pagination = PaginationDto.fromEntityModel(
+                this.pagedResourcesAssembler.toModel(blogs)
+        );
+        return ResponseEntity.ok(pagination);
     }
 
     @Operation(
