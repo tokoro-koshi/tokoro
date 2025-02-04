@@ -33,7 +33,11 @@ public class BlogsService {
     }
 
     public BlogDto getBlogById(String id) {
-        return blogMapper.toBlogDto(mongoTemplate.findById(id, Blog.class));
+        Blog blog = mongoTemplate.findById(id, Blog.class);
+        if (blog == null) {
+            return null;
+        }
+        return blogMapper.toBlogDto(blog);
     }
 
     public Page<BlogDto> getAllBlogs(Pageable pageable) {
