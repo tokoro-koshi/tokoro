@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * Represents a user rating in the database.
  */
-@Document(collection = "userRating")
-public record UserRating(
+@Document(collection = "rating")
+public record Rating(
         @Id
         String id,
         @Nonnull
@@ -22,7 +22,7 @@ public record UserRating(
      *
      * @param value The value of the rating
      */
-    public UserRating {
+    public Rating {
         if (value < 1 || value > 5) {
             throw new IllegalArgumentException(
                     "Rating value must be between 1 and 5"
@@ -36,7 +36,7 @@ public record UserRating(
      * @param id The ID of the user rating
      * @return A new user rating with the given ID
      */
-    public UserRating withId(String id) {
-        return new UserRating(id, userId, placeId, value);
+    public Rating withId(String id) {
+        return new Rating(id, userId, placeId, value);
     }
 }

@@ -1,7 +1,7 @@
-package com.tokorokoshi.tokoro.modules.userRatings;
+package com.tokorokoshi.tokoro.modules.ratings;
 
-import com.tokorokoshi.tokoro.modules.userRatings.dto.CreateUpdateUserRatingDto;
-import com.tokorokoshi.tokoro.modules.userRatings.dto.UserRatingDto;
+import com.tokorokoshi.tokoro.modules.ratings.dto.CreateUpdateRatingDto;
+import com.tokorokoshi.tokoro.modules.ratings.dto.RatingDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,17 +16,20 @@ import java.util.logging.Logger;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Tag(name = "User Ratings", description = "API for managing user ratings")
+@Tag(
+        name = "Places Ratings",
+        description = "API for managing user ratings of places"
+)
 @RestController
 @RequestMapping("/api/user-ratings")
-public class UserRatingsController {
-    private final UserRatingsService userRatingsService;
+public class RatingsController {
+    private final RatingsService ratingsService;
     private final Logger logger;
 
     @Autowired
-    public UserRatingsController(UserRatingsService userRatingsService) {
-        this.userRatingsService = userRatingsService;
-        this.logger = Logger.getLogger(UserRatingsController.class.getName());
+    public RatingsController(RatingsService ratingsService) {
+        this.ratingsService = ratingsService;
+        this.logger = Logger.getLogger(RatingsController.class.getName());
     }
 
     @Operation(
@@ -38,16 +41,16 @@ public class UserRatingsController {
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<UserRatingDto> createUserRating(
+    public ResponseEntity<RatingDto> create(
             @Parameter(
                     description = "The user rating to create",
                     required = true
             )
             @RequestBody
-            CreateUpdateUserRatingDto userRating
+            CreateUpdateRatingDto rating
     ) {
         return ResponseEntity.ok(
-                this.userRatingsService.saveUserRating(userRating)
+                this.ratingsService.saveRating(rating)
         );
     }
 
@@ -59,7 +62,7 @@ public class UserRatingsController {
             value = "/{id}",
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<UserRatingDto> getUserRating(
+    public ResponseEntity<RatingDto> get(
             @Parameter(
                     description = "The ID of the user rating to get",
                     required = true,
@@ -68,11 +71,11 @@ public class UserRatingsController {
             @PathVariable
             String id
     ) {
-        var userRating = this.userRatingsService.findUserRatingById(id);
-        if (userRating == null) {
+        var rating = this.ratingsService.findRatingById(id);
+        if (rating == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userRating);
+        return ResponseEntity.ok(rating);
     }
 
     @Operation(
@@ -83,7 +86,7 @@ public class UserRatingsController {
             value = {"", "/"},
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Page<UserRatingDto>> getAllUserRatings(
+    public ResponseEntity<Page<RatingDto>> getAllRatings(
             @Parameter(
                     description = "The page number to get",
                     example = "0"
@@ -99,7 +102,7 @@ public class UserRatingsController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
-                this.userRatingsService.findAllUserRatings(pageable)
+                this.ratingsService.findAllRatings(pageable)
         );
     }
 
@@ -112,13 +115,13 @@ public class UserRatingsController {
             consumes = APPLICATION_JSON_VALUE,
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<UserRatingDto> updateUserRating(
+    public ResponseEntity<RatingDto> update(
             @Parameter(
                     description = "The user rating to update",
                     required = true
             )
             @RequestBody
-            CreateUpdateUserRatingDto userRating,
+            CreateUpdateRatingDto rating,
             @Parameter(
                     description = "The ID of the user rating to update",
                     required = true,
@@ -127,12 +130,12 @@ public class UserRatingsController {
             @PathVariable
             String id
     ) {
-        UserRatingDto updatedUserRating = this.userRatingsService
-                .updateUserRating(id, userRating);
-        if (updatedUserRating == null) {
+        RatingDto updatedRating = this.ratingsService
+                .updateRating(id, rating);
+        if (updatedRating == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedUserRating);
+        return ResponseEntity.ok(updatedRating);
     }
 
     @Operation(
@@ -140,7 +143,7 @@ public class UserRatingsController {
             description = "Deletes the user rating with the given ID"
     )
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteUserRating(
+    public ResponseEntity<?> delete(
             @Parameter(
                     description = "The ID of the user rating to delete",
                     required = true,
@@ -150,7 +153,7 @@ public class UserRatingsController {
             String id
     ) {
         try {
-            this.userRatingsService.deleteUserRating(id);
+            this.ratingsService.deleteRating(id);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
