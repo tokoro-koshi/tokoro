@@ -25,7 +25,10 @@ public class FavoritePromptsService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public FavoritePromptsService(Auth0UserDataService auth0UserDataService, ObjectMapper objectMapper) {
+    public FavoritePromptsService(
+            Auth0UserDataService auth0UserDataService,
+            ObjectMapper objectMapper
+    ) {
         this.auth0UserDataService = auth0UserDataService;
         this.objectMapper = objectMapper;
     }
@@ -36,43 +39,67 @@ public class FavoritePromptsService {
      * @param createUpdateFavoritePromptDto the favorite prompt to add.
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
-    public void addFavoritePrompt(@Valid CreateUpdateFavoritePromptDto createUpdateFavoritePromptDto) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+    public void addFavoritePrompt(
+            @Valid CreateUpdateFavoritePromptDto createUpdateFavoritePromptDto
+    ) {
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
-        List<FavoritePromptDto> favoritePrompts = getFavoritePromptsFromMetadata(userMetadata);
+        List<FavoritePromptDto> favoritePrompts =
+                getFavoritePromptsFromMetadata(userMetadata);
 
         String promptId = UUID.randomUUID().toString();
         FavoritePromptDto favoritePromptDto = new FavoritePromptDto(
                 promptId,
                 createUpdateFavoritePromptDto.content(),
-                createUpdateFavoritePromptDto.addedAt()
+                createUpdateFavoritePromptDto.addedAt() != null
+                    ? createUpdateFavoritePromptDto.addedAt()
+                    : new Date()
         );
 
         favoritePrompts.add(favoritePromptDto);
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PROMPTS_KEY, favoritePrompts));
+        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
+                FAVORITE_PROMPTS_KEY,
+                favoritePrompts
+        ));
     }
 
     /**
      * Updates a favorite prompt in the currently authenticated user's metadata.
      *
-     * @param promptId the prompt ID of the favorite prompt to update.
+     * @param promptId                      the prompt ID of the favorite prompt to update.
      * @param createUpdateFavoritePromptDto the updated favorite prompt.
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
-    public void updateFavoritePrompt(@NotNull String promptId, @Valid CreateUpdateFavoritePromptDto createUpdateFavoritePromptDto) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+    public void updateFavoritePrompt(
+            @NotNull String promptId,
+            @Valid
+            CreateUpdateFavoritePromptDto createUpdateFavoritePromptDto
+    ) {
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
-        List<FavoritePromptDto> favoritePrompts = getFavoritePromptsFromMetadata(userMetadata);
-        if (favoritePrompts.stream().noneMatch(fp -> fp.promptId().equals(promptId))) {
+        List<FavoritePromptDto> favoritePrompts =
+                getFavoritePromptsFromMetadata(userMetadata);
+        if (favoritePrompts.stream()
+                           .noneMatch(fp -> fp.promptId().equals(promptId))) {
             return;
         }
 
         favoritePrompts = favoritePrompts.stream()
-                .map(fp -> fp.promptId().equals(promptId) ?
-                        new FavoritePromptDto(promptId, createUpdateFavoritePromptDto.content(), createUpdateFavoritePromptDto.addedAt()) : fp)
-                .toList();
+                                         .map(fp -> fp.promptId()
+                                                      .equals(promptId) ?
+                                                    new FavoritePromptDto(
+                                                            promptId,
+                                                            createUpdateFavoritePromptDto.content(),
+                                                            createUpdateFavoritePromptDto.addedAt()
+                                                    ) : fp)
+                                         .toList();
 
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PROMPTS_KEY, favoritePrompts));
+        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
+                FAVORITE_PROMPTS_KEY,
+                favoritePrompts
+        ));
     }
 
     /**
@@ -82,18 +109,25 @@ public class FavoritePromptsService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void removeFavoritePrompt(@NotNull String promptId) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
-        List<FavoritePromptDto> favoritePrompts = getFavoritePromptsFromMetadata(userMetadata);
-        if (favoritePrompts.stream().noneMatch(fp -> fp.promptId().equals(promptId))) {
+        List<FavoritePromptDto> favoritePrompts =
+                getFavoritePromptsFromMetadata(userMetadata);
+        if (favoritePrompts.stream()
+                           .noneMatch(fp -> fp.promptId().equals(promptId))) {
             return;
         }
 
         favoritePrompts = favoritePrompts.stream()
-                .filter(fp -> !fp.promptId().equals(promptId))
-                .toList();
+                                         .filter(fp -> !fp.promptId()
+                                                          .equals(promptId))
+                                         .toList();
 
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PROMPTS_KEY, favoritePrompts));
+        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
+                FAVORITE_PROMPTS_KEY,
+                favoritePrompts
+        ));
     }
 
     /**
@@ -103,7 +137,8 @@ public class FavoritePromptsService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public List<FavoritePromptDto> getFavoritePrompts() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
         return getFavoritePromptsFromMetadata(userMetadata);
     }
@@ -116,12 +151,15 @@ public class FavoritePromptsService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public FavoritePromptDto getFavoritePromptById(@NotNull String promptId) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
-        List<FavoritePromptDto> favoritePrompts = getFavoritePromptsFromMetadata(userMetadata);
+        List<FavoritePromptDto> favoritePrompts =
+                getFavoritePromptsFromMetadata(userMetadata);
         Optional<FavoritePromptDto> favoritePrompt = favoritePrompts.stream()
-                .filter(fp -> fp.promptId().equals(promptId))
-                .findFirst();
+                                                                    .filter(fp -> fp.promptId()
+                                                                                    .equals(promptId))
+                                                                    .findFirst();
 
         return favoritePrompt.orElse(null);
     }
@@ -132,14 +170,19 @@ public class FavoritePromptsService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void clearFavoritePrompts() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
-        List<FavoritePromptDto> favoritePrompts = getFavoritePromptsFromMetadata(userMetadata);
+        List<FavoritePromptDto> favoritePrompts =
+                getFavoritePromptsFromMetadata(userMetadata);
         if (favoritePrompts.isEmpty()) {
             return;
         }
 
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(FAVORITE_PROMPTS_KEY, new ArrayList<>()));
+        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
+                FAVORITE_PROMPTS_KEY,
+                new ArrayList<>()
+        ));
     }
 
     /**
@@ -150,11 +193,14 @@ public class FavoritePromptsService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public boolean isFavoritePrompt(@NotNull String promptId) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata =
+                auth0UserDataService.getAuthenticatedUserMetadata();
 
-        List<FavoritePromptDto> favoritePrompts = getFavoritePromptsFromMetadata(userMetadata);
+        List<FavoritePromptDto> favoritePrompts =
+                getFavoritePromptsFromMetadata(userMetadata);
 
-        return favoritePrompts.stream().anyMatch(fp -> fp.promptId().equals(promptId));
+        return favoritePrompts.stream()
+                              .anyMatch(fp -> fp.promptId().equals(promptId));
     }
 
     /**
@@ -167,10 +213,15 @@ public class FavoritePromptsService {
     private List<FavoritePromptDto> getFavoritePromptsFromMetadata(Map<String, Object> userMetadata) {
         List<FavoritePromptDto> favoritePrompts = new ArrayList<>();
         if (userMetadata.containsKey(FAVORITE_PROMPTS_KEY)) {
-            List<Map<String, Object>> favoritePromptsMap = (List<Map<String, Object>>) userMetadata.get(FAVORITE_PROMPTS_KEY);
+            List<Map<String, Object>> favoritePromptsMap =
+                    (List<Map<String, Object>>) userMetadata.get(
+                            FAVORITE_PROMPTS_KEY);
             favoritePrompts = favoritePromptsMap.stream()
-                    .map(map -> objectMapper.convertValue(map, FavoritePromptDto.class))
-                    .toList();
+                                                .map(map -> objectMapper.convertValue(
+                                                        map,
+                                                        FavoritePromptDto.class
+                                                ))
+                                                .toList();
         }
         return favoritePrompts;
     }

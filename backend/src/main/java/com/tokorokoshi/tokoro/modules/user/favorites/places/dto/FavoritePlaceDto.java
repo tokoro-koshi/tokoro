@@ -17,7 +17,6 @@ public record FavoritePlaceDto(
         @NotBlank(message = "Establishment ID must not be blank")
         String establishmentId,
 
-        @NotNull(message = "Added date must not be null")
         Date addedAt,
 
         String notes,

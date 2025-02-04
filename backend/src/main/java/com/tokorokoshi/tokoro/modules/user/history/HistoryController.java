@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -139,8 +140,22 @@ public class HistoryController {
     )
     @DeleteMapping("/rollback/timestamp-range")
     public ResponseEntity<String> rollbackHistoryEntriesByTimestampRange(
-            @RequestParam @NotNull Date startDate,
-            @RequestParam @NotNull Date endDate
+            @Parameter(
+                    description = "The start timestamp of the range",
+                    required = true
+            )
+            @RequestParam
+            @NotNull
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            Date startDate,
+            @Parameter(
+                    description = "The end timestamp of the range",
+                    required = true
+            )
+            @RequestParam
+            @NotNull
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            Date endDate
     ) {
         try {
             historyService.rollbackHistoryEntriesByTimestampRange(
@@ -288,7 +303,14 @@ public class HistoryController {
     )
     @GetMapping("/timestamp")
     public ResponseEntity<HistoryEntryDto> getHistoryEntryByTimestamp(
-            @RequestParam @NotNull Date timestamp
+            @Parameter(
+                    description = "The timestamp of the history entry to retrieve",
+                    required = true
+            )
+            @RequestParam
+            @NotNull
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            Date timestamp
     ) {
         try {
             HistoryEntryDto historyEntry =
@@ -338,7 +360,14 @@ public class HistoryController {
     )
     @GetMapping("/exists/timestamp")
     public ResponseEntity<Boolean> isHistoryEntryExists(
-            @RequestParam @NotNull Date timestamp
+            @Parameter(
+                    description = "The timestamp to check",
+                    required = true
+            )
+            @RequestParam
+            @NotNull
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            Date timestamp
     ) {
         try {
             boolean exists = historyService.isHistoryEntryExists(timestamp);
