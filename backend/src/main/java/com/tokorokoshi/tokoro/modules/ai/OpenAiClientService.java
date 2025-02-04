@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
+import com.tokorokoshi.tokoro.dto.Response;
 import com.tokorokoshi.tokoro.modules.json.JsonHelper;
 import jakarta.annotation.Nullable;
 import org.springframework.ai.chat.messages.AssistantMessage;

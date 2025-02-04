@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.places;
 
+import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,8 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +78,7 @@ public class PlacesController {
             description = "Returns a paginated list of all places"
     )
     @GetMapping(value = {"", "/"}, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PagedModel<EntityModel<PlaceDto>>> getAllPlaces(
+    public ResponseEntity<PaginationDto<PlaceDto>> getAllPlaces(
             @Parameter(description = "The page number to get", example = "0")
             @RequestParam(defaultValue = "0")
             int page,
@@ -92,7 +91,10 @@ public class PlacesController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         var places = this.placesService.getAllPlaces(pageable);
-        return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(places));
+        var pagination = PaginationDto.fromEntityModel(
+                this.pagedResourcesAssembler.toModel(places)
+        );
+        return ResponseEntity.ok(pagination);
     }
 
     @Operation(
