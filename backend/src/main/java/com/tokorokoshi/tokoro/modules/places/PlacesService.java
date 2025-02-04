@@ -7,9 +7,13 @@ import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -196,15 +200,20 @@ public class PlacesService {
     }
 
     /**
-     * Retrieves all places.
+     * Retrieves paginated places.
      *
-     * @return all places
+     * @param pageable pagination information (page, size)
+     * @return paginated list of places
      */
-    public List<PlaceDto> getAllPlaces() {
-        return mongoTemplate.findAll(Place.class)
-                .stream()
+    public Page<PlaceDto> getAllPlaces(Pageable pageable) {
+        Query query = new Query().with(pageable);
+        List<Place> places = mongoTemplate.find(query, Place.class);
+        long total = mongoTemplate.count(new Query(), Place.class); // Total count of all places
+
+        List<PlaceDto> content = places.stream()
                 .map(this::getPlaceWithPicturesUrls)
                 .toList();
+        return new PageImpl<>(content, pageable, total);
     }
 
     /**
