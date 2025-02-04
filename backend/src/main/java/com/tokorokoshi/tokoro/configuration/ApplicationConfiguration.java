@@ -6,6 +6,9 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
+
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
 /**
  * Configuration class for the application.
@@ -20,6 +23,8 @@ import org.springframework.context.annotation.PropertySources;
  * </p>
  */
 @Configuration
+@EnableCaching
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @PropertySources(
         {
                 @PropertySource(
@@ -32,7 +37,6 @@ import org.springframework.context.annotation.PropertySources;
                 )
         }
 )
-@EnableCaching
 @OpenAPIDefinition(
         info = @Info(
                 title = "Tokoro API",

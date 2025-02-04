@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +23,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         description = "API for managing ratings of places"
 )
 @RestController
-@RequestMapping("/api/user-ratings")
+@RequestMapping("/api/ratings")
 public class RatingsController {
     private final RatingsService ratingsService;
     private final Logger logger;
+    private final PagedResourcesAssembler<RatingDto> pagedResourcesAssembler;
 
     @Autowired
-    public RatingsController(RatingsService ratingsService) {
+    public RatingsController(
+            RatingsService ratingsService,
+            PagedResourcesAssembler<RatingDto> pagedResourcesAssembler
+    ) {
         this.ratingsService = ratingsService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.logger = Logger.getLogger(RatingsController.class.getName());
     }
 
@@ -86,7 +93,7 @@ public class RatingsController {
             value = {"", "/"},
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Page<RatingDto>> getAllRatings(
+    public ResponseEntity<PagedModel<EntityModel<RatingDto>>> getAllRatings(
             @Parameter(
                     description = "The page number to get",
                     example = "0"
@@ -113,9 +120,12 @@ public class RatingsController {
             String placeId
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(
-                this.ratingsService.findAllRatings(pageable, userId, placeId)
+        var ratings = this.ratingsService.findAllRatings(
+                pageable,
+                userId,
+                placeId
         );
+        return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(ratings));
     }
 
     @Operation(
@@ -142,8 +152,7 @@ public class RatingsController {
             @PathVariable
             String id
     ) {
-        RatingDto updatedRating = this.ratingsService
-                .updateRating(id, rating);
+        RatingDto updatedRating = this.ratingsService.updateRating(id, rating);
         if (updatedRating == null) {
             return ResponseEntity.notFound().build();
         }
