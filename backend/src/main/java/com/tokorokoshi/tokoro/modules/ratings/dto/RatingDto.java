@@ -3,16 +3,16 @@ package com.tokorokoshi.tokoro.modules.ratings.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * A DTO for a user rating
+ * A DTO for a rating
  */
 @Schema(
         name = "RatingDto",
-        description = "A DTO for a user rating"
+        description = "A DTO for a rating"
 )
 public record RatingDto(
         @Schema(
                 name = "id",
-                description = "The ID of the user rating"
+                description = "The ID of the rating"
         )
         String id,
         @Schema(

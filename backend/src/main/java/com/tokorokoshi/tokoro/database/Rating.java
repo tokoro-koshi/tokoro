@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * Represents a user rating in the database.
+ * Represents a rating in the database.
  */
 @Document(collection = "rating")
 public record Rating(
@@ -18,7 +18,7 @@ public record Rating(
         int value
 ) {
     /**
-     * Creates a new user rating with the given value.
+     * Creates a new rating with the given value.
      *
      * @param value The value of the rating
      */
@@ -31,10 +31,10 @@ public record Rating(
     }
 
     /**
-     * Creates a new user rating with the given ID.
+     * Creates a new rating with the given ID.
      *
-     * @param id The ID of the user rating
-     * @return A new user rating with the given ID
+     * @param id The ID of the rating
+     * @return A new rating with the given ID
      */
     public Rating withId(String id) {
         return new Rating(id, userId, placeId, value);
