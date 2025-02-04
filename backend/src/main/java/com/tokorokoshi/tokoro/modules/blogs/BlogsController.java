@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +24,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class BlogsController {
     private final BlogsService blogsService;
     private final Logger logger;
+    private final PagedResourcesAssembler<BlogDto> pagedResourcesAssembler;
 
     @Autowired
-    public BlogsController(BlogsService blogsService) {
+    public BlogsController(
+            BlogsService blogsService,
+            PagedResourcesAssembler<BlogDto> pagedResourcesAssembler
+    ) {
         this.blogsService = blogsService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.logger = Logger.getLogger(BlogsController.class.getName());
     }
 
@@ -78,7 +85,7 @@ public class BlogsController {
             value = {"", "/"},
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<Page<BlogDto>> getAllBlogs(
+    public ResponseEntity<PagedModel<EntityModel<BlogDto>>> getAllBlogs(
             @Parameter(
                     description = "The page number to get",
                     example = "0"
@@ -93,7 +100,8 @@ public class BlogsController {
             int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(this.blogsService.getAllBlogs(pageable));
+        var blogs = this.blogsService.getAllBlogs(pageable);
+        return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(blogs));
     }
 
     @Operation(
