@@ -4,7 +4,11 @@ import com.tokorokoshi.tokoro.database.Blog;
 import com.tokorokoshi.tokoro.modules.blogs.dto.BlogDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.CreateUpdateBlogDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +36,13 @@ public class BlogsService {
         return blogMapper.toBlogDto(mongoTemplate.findById(id, Blog.class));
     }
 
-    public List<BlogDto> getAllBlogs() {
-        return blogMapper.toBlogDto(mongoTemplate.findAll(Blog.class));
+    public Page<BlogDto> getAllBlogs(Pageable pageable) {
+        Query query = new Query().with(pageable);
+        List<BlogDto> blogDtos = blogMapper.toBlogDto(
+                mongoTemplate.find(query, Blog.class)
+        );
+        long count = mongoTemplate.count(query, Blog.class);
+        return new PageImpl<>(blogDtos, pageable, count);
     }
 
     public BlogDto updateBlog(String id, CreateUpdateBlogDto blog) {
