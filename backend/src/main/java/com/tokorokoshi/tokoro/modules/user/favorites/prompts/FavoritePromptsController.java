@@ -20,7 +20,7 @@ import java.util.List;
  * This controller provides endpoints to add, update, remove, and retrieve favorite prompts.
  */
 @RestController
-@RequestMapping("/api/v1/users/favorite-prompts")
+@RequestMapping("/api/users/favorite-prompts")
 public class FavoritePromptsController {
 
     private static final Logger log = LoggerFactory.getLogger(FavoritePromptsController.class);
