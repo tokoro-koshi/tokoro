@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.places.dto;
 
-import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public record PlaceDto(
     String description,
     LocationDto location,
     String categoryId,
-    TagsDto tags,
+    List<TagDto> tags,
     List<String> pictures,
     double rating
 ) {
