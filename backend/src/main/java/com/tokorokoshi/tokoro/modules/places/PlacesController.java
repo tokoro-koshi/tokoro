@@ -4,7 +4,6 @@ import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,12 +23,9 @@ public class PlacesController {
         consumes = MULTIPART_FORM_DATA_VALUE,
         produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PlaceDto> savePlace(
-        @RequestPart("data")
-        CreateUpdatePlaceDto place,
-        @RequestPart(value = "pictures", required = false)
-        MultipartFile[] pictures
+        @ModelAttribute CreateUpdatePlaceDto place
     ) {
-        return ResponseEntity.ok(placesService.savePlace(place, pictures));
+        return ResponseEntity.ok(placesService.savePlace(place));
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
@@ -54,12 +50,9 @@ public class PlacesController {
         produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PlaceDto> updatePlace(
         @PathVariable String id,
-        @RequestPart("data")
-        CreateUpdatePlaceDto place,
-        @RequestPart(value = "pictures", required = false)
-        MultipartFile[] pictures
+        @ModelAttribute CreateUpdatePlaceDto place
     ) {
-        PlaceDto updatedPlace = placesService.updatePlace(id, place, pictures);
+        PlaceDto updatedPlace = placesService.updatePlace(id, place);
         if (updatedPlace == null) {
             return ResponseEntity.notFound().build();
         }
