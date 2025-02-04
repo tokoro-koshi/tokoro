@@ -20,7 +20,7 @@ import java.util.List;
  * This controller provides endpoints to add, update, remove, and retrieve favorite places.
  */
 @RestController
-@RequestMapping("/api/v1/users/favorite-places")
+@RequestMapping("/api/users/favorite-places")
 public class FavoritePlacesController {
 
     private static final Logger log = LoggerFactory.getLogger(FavoritePlacesController.class);

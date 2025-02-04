@@ -22,7 +22,7 @@ import java.util.List;
  * This controller provides endpoints to add, rollback, retrieve, and clear history entries.
  */
 @RestController
-@RequestMapping("/api/v1/users/history")
+@RequestMapping("/api/users/history")
 public class HistoryController {
 
     private static final Logger log = LoggerFactory.getLogger(HistoryController.class);

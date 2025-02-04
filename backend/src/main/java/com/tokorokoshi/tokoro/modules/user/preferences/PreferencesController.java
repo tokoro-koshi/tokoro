@@ -19,7 +19,7 @@ import java.util.List;
  * This controller provides endpoints to set, retrieve, update, and clear user preferences.
  */
 @RestController
-@RequestMapping("/api/v1/users/preferences")
+@RequestMapping("/api/users/preferences")
 public class PreferencesController {
 
     private static final Logger log = LoggerFactory.getLogger(PreferencesController.class);
