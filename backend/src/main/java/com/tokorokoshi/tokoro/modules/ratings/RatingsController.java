@@ -18,7 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(
         name = "Places Ratings",
-        description = "API for managing user ratings of places"
+        description = "API for managing ratings of places"
 )
 @RestController
 @RequestMapping("/api/user-ratings")
@@ -33,8 +33,8 @@ public class RatingsController {
     }
 
     @Operation(
-            summary = "Create a new user rating",
-            description = "Accepts a request with a JSON body to create a new user rating, and returns the created user rating"
+            summary = "Create a new rating",
+            description = "Accepts a request with a JSON body to create a new rating, and returns the created rating"
     )
     @PostMapping(
             value = {"", "/"},
@@ -43,7 +43,7 @@ public class RatingsController {
     )
     public ResponseEntity<RatingDto> create(
             @Parameter(
-                    description = "The user rating to create",
+                    description = "The rating to create",
                     required = true
             )
             @RequestBody
@@ -55,8 +55,8 @@ public class RatingsController {
     }
 
     @Operation(
-            summary = "Get a user rating by ID",
-            description = "Returns the user rating with the given ID"
+            summary = "Get a rating by ID",
+            description = "Returns the rating with the given ID"
     )
     @GetMapping(
             value = "/{id}",
@@ -64,7 +64,7 @@ public class RatingsController {
     )
     public ResponseEntity<RatingDto> get(
             @Parameter(
-                    description = "The ID of the user rating to get",
+                    description = "The ID of the rating to get",
                     required = true,
                     example = "60f1b3b3b3b3b3b3b3b3b3b"
             )
@@ -79,8 +79,8 @@ public class RatingsController {
     }
 
     @Operation(
-            summary = "Get all user ratings",
-            description = "Returns a paginated list of all user ratings"
+            summary = "Get all ratings",
+            description = "Returns a paginated list of all ratings"
     )
     @GetMapping(
             value = {"", "/"},
@@ -98,17 +98,29 @@ public class RatingsController {
                     example = "20"
             )
             @RequestParam(defaultValue = "20")
-            int size
+            int size,
+            @Parameter(
+                    description = "The user ID to filter by",
+                    example = "60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @RequestParam(defaultValue = "null")
+            String userId,
+            @Parameter(
+                    description = "The place ID to filter by",
+                    example = "60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @RequestParam(defaultValue = "null")
+            String placeId
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
-                this.ratingsService.findAllRatings(pageable)
+                this.ratingsService.findAllRatings(pageable, userId, placeId)
         );
     }
 
     @Operation(
-            summary = "Update a user rating",
-            description = "Accepts a request with a JSON body to update a user rating, and returns the updated user rating"
+            summary = "Update a rating",
+            description = "Accepts a request with a JSON body to update a rating, and returns the updated rating"
     )
     @PutMapping(
             value = "/{id}",
@@ -117,13 +129,13 @@ public class RatingsController {
     )
     public ResponseEntity<RatingDto> update(
             @Parameter(
-                    description = "The user rating to update",
+                    description = "The rating to update",
                     required = true
             )
             @RequestBody
             CreateUpdateRatingDto rating,
             @Parameter(
-                    description = "The ID of the user rating to update",
+                    description = "The ID of the rating to update",
                     required = true,
                     example = "60f1b3b3b3b3b3b3b3b3b3b"
             )
@@ -139,13 +151,13 @@ public class RatingsController {
     }
 
     @Operation(
-            summary = "Delete a user rating",
-            description = "Deletes the user rating with the given ID"
+            summary = "Delete a rating",
+            description = "Deletes the rating with the given ID"
     )
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(
             @Parameter(
-                    description = "The ID of the user rating to delete",
+                    description = "The ID of the rating to delete",
                     required = true,
                     example = "60f1b3b3b3b3b3b3b3b3b3b"
             )
