@@ -3,6 +3,7 @@ package com.tokorokoshi.tokoro.modules.blogs;
 import com.tokorokoshi.tokoro.modules.blogs.dto.BlogDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.CreateUpdateBlogDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,11 +29,15 @@ public class BlogsController {
             summary = "Create a new blog",
             description = "Accepts a request with a JSON body to create a new blog, and returns the created blog"
     )
-    @PostMapping(value = {"", "/"},
+    @PostMapping(
+            value = {"", "/"},
             consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<BlogDto> createBlog(
-            @RequestBody CreateUpdateBlogDto createUpdateBlogDto
+            @Parameter(description = "The blog to create", required = true)
+            @RequestBody
+            CreateUpdateBlogDto createUpdateBlogDto
     ) {
         return ResponseEntity.ok(this.blogsService.saveBlog(createUpdateBlogDto));
     }
@@ -41,9 +46,19 @@ public class BlogsController {
             summary = "Get a blog by ID",
             description = "Returns the blog with the given ID"
     )
-    @GetMapping(value = "/{id}",
-            produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BlogDto> getBlog(@PathVariable String id) {
+    @GetMapping(
+            value = "/{id}",
+            produces = APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<BlogDto> getBlog(
+            @Parameter(
+                    description = "The ID of the blog to get",
+                    required = true,
+                    example = "60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id
+    ) {
         return ResponseEntity.ok(this.blogsService.getBlogById(id));
     }
 
@@ -51,11 +66,23 @@ public class BlogsController {
             summary = "Get all blogs",
             description = "Returns a paginated list of all blogs"
     )
-    @GetMapping(value = {"", "/"},
-            produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = {"", "/"},
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<Page<BlogDto>> getAllBlogs(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @Parameter(
+                    description = "The page number to get",
+                    example = "0"
+            )
+            @RequestParam(defaultValue = "0")
+            int page,
+            @Parameter(
+                    description = "The number of items per page",
+                    example = "20"
+            )
+            @RequestParam(defaultValue = "20")
+            int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(this.blogsService.getAllBlogs(pageable));
@@ -65,12 +92,22 @@ public class BlogsController {
             summary = "Update a blog",
             description = "Accepts a request with a JSON body to update a blog, and returns the updated blog"
     )
-    @PutMapping(value = "/{id}",
+    @PutMapping(
+            value = "/{id}",
             consumes = APPLICATION_JSON_VALUE,
-            produces = APPLICATION_JSON_VALUE)
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<BlogDto> updateBlog(
-            @RequestBody CreateUpdateBlogDto createUpdateBlogDto,
-            @PathVariable String id
+            @Parameter(description = "The blog to update", required = true)
+            @RequestBody
+            CreateUpdateBlogDto createUpdateBlogDto,
+            @Parameter(
+                    description = "The ID of the blog to update",
+                    required = true,
+                    example = "60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id
     ) {
         BlogDto updatedBlog = this.blogsService.updateBlog(
                 id,
@@ -87,7 +124,15 @@ public class BlogsController {
             description = "Deletes the blog with the given ID"
     )
     @DeleteMapping(value = "/{id}")
-    public void deleteBlog(@PathVariable String id) {
+    public void deleteBlog(
+            @Parameter(
+                    description = "The ID of the blog to delete",
+                    required = true,
+                    example = "60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id
+    ) {
         this.blogsService.deleteBlog(id);
     }
 }

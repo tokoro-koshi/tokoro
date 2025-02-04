@@ -2,6 +2,7 @@ package com.tokorokoshi.tokoro.modules.user.preferences;
 
 import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -20,11 +21,15 @@ import java.util.List;
  * REST controller for managing user preferences.
  * This controller provides endpoints to set, retrieve, update, and clear user preferences.
  */
-@Tag(name = "User Preferences", description = "API for managing user preferences")
+@Tag(
+        name = "User Preferences",
+        description = "API for managing user preferences"
+)
 @RestController
 @RequestMapping("/api/users/preferences")
 public class PreferencesController {
-    private static final Logger log = LoggerFactory.getLogger(PreferencesController.class);
+    private static final Logger log =
+            LoggerFactory.getLogger(PreferencesController.class);
 
     private final PreferencesService preferencesService;
 
@@ -44,14 +49,22 @@ public class PreferencesController {
             description = "Accepts a request with a JSON body to set user preferences"
     )
     @PostMapping
-    public ResponseEntity<String> setPreferences(@Valid @RequestBody PreferencesDto preferencesDto) {
+    public ResponseEntity<String> setPreferences(
+            @Parameter(
+                    description = "The preferences to set",
+                    required = true
+            )
+            @Valid
+            @RequestBody
+            PreferencesDto preferencesDto
+    ) {
         try {
             preferencesService.setPreferences(preferencesDto);
             return ResponseEntity.ok("Preferences set successfully");
         } catch (Exception e) {
             log.error("Error setting preferences", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to set preferences");
+                                 .body("Failed to set preferences");
         }
     }
 
@@ -73,7 +86,8 @@ public class PreferencesController {
             }
             return ResponseEntity.ok(preferences);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .build();
         }
     }
 
@@ -89,13 +103,22 @@ public class PreferencesController {
     )
     @PutMapping("/language")
     public ResponseEntity<String> updateLanguagePreference(
-            @RequestParam @NotNull @NotBlank String language) {
+            @Parameter(
+                    description = "The new language preference",
+                    required = true,
+                    example = "en"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String language
+    ) {
         try {
             preferencesService.updateLanguagePreference(language);
             return ResponseEntity.ok("Language preference updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update language preference");
+                                 .body("Failed to update language preference");
         }
     }
 
@@ -111,14 +134,24 @@ public class PreferencesController {
     )
     @PutMapping("/categories")
     public ResponseEntity<String> updateCategoriesPreference(
-            @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> categories) {
+            @Parameter(
+                    description = "The new categories preference",
+                    required = true,
+                    example = "[\"food\", \"travel\"]"
+            )
+            @RequestParam
+            @NotNull
+            @NotEmpty
+            List<@NotEmpty @NotBlank String> categories
+    ) {
         try {
             preferencesService.updateCategoriesPreference(categories);
-            return ResponseEntity.ok("Categories preference updated successfully");
+            return ResponseEntity.ok(
+                    "Categories preference updated successfully");
         } catch (Exception e) {
             log.error("Error updating categories preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update categories preference");
+                                 .body("Failed to update categories preference");
         }
     }
 
@@ -134,14 +167,23 @@ public class PreferencesController {
     )
     @PutMapping("/timezone")
     public ResponseEntity<String> updateTimezonePreference(
-            @RequestParam @NotNull @NotBlank String timezone) {
+            @Parameter(
+                    description = "The new timezone preference",
+                    required = true,
+                    example = "America/New_York"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String timezone
+    ) {
         try {
             preferencesService.updateTimezonePreference(timezone);
             return ResponseEntity.ok("Timezone preference updated successfully");
         } catch (Exception e) {
             log.error("Error updating timezone preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update timezone preference");
+                                 .body("Failed to update timezone preference");
         }
     }
 
@@ -157,14 +199,24 @@ public class PreferencesController {
     )
     @PutMapping("/notifications-enabled")
     public ResponseEntity<String> updateNotificationsEnabledPreference(
-            @RequestParam @NotNull boolean notificationsEnabled) {
+            @Parameter(
+                    description = "The new notifications enabled preference",
+                    required = true,
+                    example = "true"
+            )
+            @RequestParam
+            @NotNull
+            boolean notificationsEnabled
+    ) {
         try {
-            preferencesService.updateNotificationsEnabledPreference(notificationsEnabled);
-            return ResponseEntity.ok("Notifications enabled preference updated successfully");
+            preferencesService.updateNotificationsEnabledPreference(
+                    notificationsEnabled);
+            return ResponseEntity.ok(
+                    "Notifications enabled preference updated successfully");
         } catch (Exception e) {
             log.error("Error updating notifications enabled preference", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update notifications enabled preference");
+                                 .body("Failed to update notifications enabled preference");
         }
     }
 
@@ -185,7 +237,7 @@ public class PreferencesController {
         } catch (Exception e) {
             log.error("Error clearing preferences", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to clear preferences");
+                                 .body("Failed to clear preferences");
         }
     }
 }

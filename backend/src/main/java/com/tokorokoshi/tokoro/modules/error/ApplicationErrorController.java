@@ -17,7 +17,10 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Tag(name = "Error", description = "API for handling errors (should not be used directly)")
+@Tag(
+        name = "Error",
+        description = "API for handling errors (should not be used directly)"
+)
 @RestController
 public class ApplicationErrorController implements ErrorController {
     private final Logger logger =
@@ -30,8 +33,10 @@ public class ApplicationErrorController implements ErrorController {
             summary = "Handle errors",
             description = "Returns a JSON response with the error message and status code"
     )
-    @RequestMapping(value = "/error",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(
+            value = "/error",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<String> handleError(WebRequest webRequest) {
         Object statusObj = webRequest.getAttribute(
                 RequestDispatcher.ERROR_STATUS_CODE,
