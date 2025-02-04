@@ -9,17 +9,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 
+/**
+ * Represents a comment in the database.
+ */
 @Document
 public record Comment(
-    @Id
-    String userId,
-    @NotNull
-    String value,
-    @Indexed
-    @CreatedDate
-    Instant createdAt,
-    @Indexed
-    @LastModifiedDate
-    Instant updatedAt
+        @Id
+        String userId,
+        @NotNull
+        String value,
+        @Indexed
+        @CreatedDate
+        Instant createdAt,
+        @Indexed
+        @LastModifiedDate
+        Instant updatedAt
 ) {
 }
