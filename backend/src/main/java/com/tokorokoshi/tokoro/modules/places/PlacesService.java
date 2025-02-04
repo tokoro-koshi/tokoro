@@ -85,7 +85,7 @@ public class PlacesService {
      */
     private PlaceDto getPlaceWithPicturesUrls(Place place) {
         List<String> picturesUrls = place.pictures().stream().map(
-                key -> fileStorageService.generateSignedUrl(key, 3600).join()
+                key -> fileStorageService.generateSignedUrl(key).join()
         ).toList();
         return placeMapper.toPlaceDto(place.withPictures(picturesUrls));
     }
