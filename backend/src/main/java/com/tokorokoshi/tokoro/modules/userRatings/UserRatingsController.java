@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(name = "User Ratings", description = "API for managing user ratings")
@@ -19,10 +21,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/user-ratings")
 public class UserRatingsController {
     private final UserRatingsService userRatingsService;
+    private final Logger logger;
 
     @Autowired
     public UserRatingsController(UserRatingsService userRatingsService) {
         this.userRatingsService = userRatingsService;
+        this.logger = Logger.getLogger(UserRatingsController.class.getName());
     }
 
     @Operation(
@@ -64,9 +68,11 @@ public class UserRatingsController {
             @PathVariable
             String id
     ) {
-        return ResponseEntity.ok(
-                this.userRatingsService.findUserRatingById(id)
-        );
+        var userRating = this.userRatingsService.findUserRatingById(id);
+        if (userRating == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userRating);
     }
 
     @Operation(
@@ -134,7 +140,7 @@ public class UserRatingsController {
             description = "Deletes the user rating with the given ID"
     )
     @DeleteMapping(value = "/{id}")
-    public void deleteUserRating(
+    public ResponseEntity<?> deleteUserRating(
             @Parameter(
                     description = "The ID of the user rating to delete",
                     required = true,
@@ -143,6 +149,14 @@ public class UserRatingsController {
             @PathVariable
             String id
     ) {
-        this.userRatingsService.deleteUserRating(id);
+        try {
+            this.userRatingsService.deleteUserRating(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            this.logger.severe(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
