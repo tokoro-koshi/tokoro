@@ -3,10 +3,11 @@ package com.tokorokoshi.tokoro.modules.blogs;
 import com.tokorokoshi.tokoro.modules.blogs.dto.BlogDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.CreateUpdateBlogDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -37,8 +38,12 @@ public class BlogsController {
 
     @GetMapping(value = {"", "/"},
         produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BlogDto>> getAllBlogs() {
-        return ResponseEntity.ok(this.blogsService.getAllBlogs());
+    public ResponseEntity<Page<BlogDto>> getAllBlogs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(this.blogsService.getAllBlogs(pageable));
     }
 
     @PutMapping(value = "/{id}",
