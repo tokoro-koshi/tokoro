@@ -1,7 +1,7 @@
 package com.tokorokoshi.tokoro.modules.tags;
 
 import com.tokorokoshi.tokoro.modules.ai.AiClientService;
-import com.tokorokoshi.tokoro.modules.ai.Response;
+import com.tokorokoshi.tokoro.dto.Response;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.ratings;
 
+import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.ratings.dto.CreateUpdateRatingDto;
 import com.tokorokoshi.tokoro.modules.ratings.dto.RatingDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,7 +92,7 @@ public class RatingsController {
             value = {"", "/"},
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<PagedModel<EntityModel<RatingDto>>> getAllRatings(
+    public ResponseEntity<PaginationDto<RatingDto>> getAllRatings(
             @Parameter(
                     description = "The page number to get",
                     example = "0"
@@ -125,7 +124,10 @@ public class RatingsController {
                 userId,
                 placeId
         );
-        return ResponseEntity.ok(this.pagedResourcesAssembler.toModel(ratings));
+        var pagination = PaginationDto.fromEntityModel(
+                this.pagedResourcesAssembler.toModel(ratings)
+        );
+        return ResponseEntity.ok(pagination);
     }
 
     @Operation(
