@@ -1,5 +1,7 @@
 package com.tokorokoshi.tokoro.modules.error;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.RequestDispatcher;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -15,37 +17,41 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@Tag(name = "Error", description = "API for handling errors (should not be used directly)")
 @RestController
 public class ApplicationErrorController implements ErrorController {
     private final Logger logger =
-        LoggerFactory.getLogger(ApplicationErrorController.class);
+            LoggerFactory.getLogger(ApplicationErrorController.class);
 
     private final Pattern notFoundRegex =
-        Pattern.compile("^No static resource (.*?)\\.$");
+            Pattern.compile("^No static resource (.*?)\\.$");
 
+    @Operation(
+            summary = "Handle errors",
+            description = "Returns a JSON response with the error message and status code"
+    )
     @RequestMapping(value = "/error",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> handleError(WebRequest webRequest) {
         Object statusObj = webRequest.getAttribute(
-            RequestDispatcher.ERROR_STATUS_CODE,
-            WebRequest.SCOPE_REQUEST
+                RequestDispatcher.ERROR_STATUS_CODE,
+                WebRequest.SCOPE_REQUEST
         );
         Integer status = statusObj != null
-            ? Integer.parseInt(statusObj.toString())
-            : null;
+                ? Integer.parseInt(statusObj.toString())
+                : null;
 
         Object messageObj = webRequest.getAttribute(
-            RequestDispatcher.ERROR_MESSAGE,
-            WebRequest.SCOPE_REQUEST
+                RequestDispatcher.ERROR_MESSAGE,
+                WebRequest.SCOPE_REQUEST
         );
         String message = messageObj != null
-            ? messageObj.toString()
-            : "Something wrong happened";
+                ? messageObj.toString()
+                : "Something wrong happened";
 
         Object exception = webRequest.getAttribute(
-            RequestDispatcher.ERROR_EXCEPTION,
-            WebRequest.SCOPE_REQUEST
+                RequestDispatcher.ERROR_EXCEPTION,
+                WebRequest.SCOPE_REQUEST
         );
 
         // Extract URL from message if it's a 404 error
@@ -56,16 +62,16 @@ public class ApplicationErrorController implements ErrorController {
         }
 
         HttpStatus httpStatus = status != null
-            ? HttpStatus.valueOf(Integer.parseInt(status.toString()))
-            : HttpStatus.INTERNAL_SERVER_ERROR;
+                ? HttpStatus.valueOf(Integer.parseInt(status.toString()))
+                : HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (logger.isErrorEnabled() &&
-            (exception != null || (status != null && status >= 500)))
+                (exception != null || (status != null && status >= 500)))
             logger.error(
-                "Error Status: {}, Message: {}, Exception: {}",
-                status,
-                message,
-                exception
+                    "Error Status: {}, Message: {}, Exception: {}",
+                    status,
+                    message,
+                    exception
             );
 
         var jo = new JSONObject();

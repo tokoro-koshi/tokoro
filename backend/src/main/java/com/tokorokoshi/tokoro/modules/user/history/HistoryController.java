@@ -3,6 +3,8 @@ package com.tokorokoshi.tokoro.modules.user.history;
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.user.history.dto.HistoryEntryDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,10 +23,10 @@ import java.util.List;
  * REST controller for managing user history entries.
  * This controller provides endpoints to add, rollback, retrieve, and clear history entries.
  */
+@Tag(name = "History", description = "API for managing user history entries")
 @RestController
 @RequestMapping("/api/users/history")
 public class HistoryController {
-
     private static final Logger log = LoggerFactory.getLogger(HistoryController.class);
 
     private final HistoryService historyService;
@@ -40,6 +42,10 @@ public class HistoryController {
      * @param historyEntryDto the history entry to add.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Add a history entry",
+            description = "Accepts a request with a JSON body to add a history entry"
+    )
     @PostMapping
     public ResponseEntity<String> addHistoryEntry(@Valid @RequestBody HistoryEntryDto historyEntryDto) {
         try {
@@ -60,6 +66,10 @@ public class HistoryController {
      *
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Roll back the last history entry",
+            description = "Rolls back the last history entry for the currently authenticated user"
+    )
     @DeleteMapping("/rollback")
     public ResponseEntity<String> rollbackHistoryEntry() {
         try {
@@ -78,6 +88,10 @@ public class HistoryController {
      * @param action the action to rollback.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Roll back the last history entry by action",
+            description = "Rolls back the last history entry with a specific action for the currently authenticated user"
+    )
     @DeleteMapping("/rollback/action/{action}")
     public ResponseEntity<String> rollbackHistoryEntryByAction(
             @PathVariable @NotNull @NotBlank String action) {
@@ -98,6 +112,10 @@ public class HistoryController {
      * @param endDate   the end timestamp of the range.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Roll back history entries by timestamp range",
+            description = "Rolls back all history entries within a specified timestamp range for the currently authenticated user"
+    )
     @DeleteMapping("/rollback/timestamp-range")
     public ResponseEntity<String> rollbackHistoryEntriesByTimestampRange(
             @RequestParam @NotNull Date startDate,
@@ -117,6 +135,10 @@ public class HistoryController {
      *
      * @return a list of {@link HistoryEntryDto} objects.
      */
+    @Operation(
+            summary = "Get all history entries",
+            description = "Returns a list of all history entries for the currently authenticated user"
+    )
     @GetMapping
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntries() {
         try {
@@ -133,6 +155,10 @@ public class HistoryController {
      *
      * @return a list of {@link PlaceDto} objects.
      */
+    @Operation(
+            summary = "Get all history entries as places",
+            description = "Returns a list of all history entries for the currently authenticated user as places"
+    )
     @GetMapping("/as-places")
     public ResponseEntity<List<PlaceDto>> getHistoryEntriesAsPlaces() {
         try {
@@ -150,7 +176,11 @@ public class HistoryController {
      * @param action the action to filter by.
      * @return a list of {@link HistoryEntryDto} objects.
      */
-    @GetMapping("/by-action/{action}")
+    @Operation(
+            summary = "Get history entries by action",
+            description = "Returns a list of history entries for a specific action for the currently authenticated user"
+    )
+    @GetMapping("/action/{action}")
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntriesByAction(
             @PathVariable @NotNull @NotBlank String action) {
         try {
@@ -168,7 +198,11 @@ public class HistoryController {
      * @param establishmentId the establishment ID to filter by.
      * @return a list of {@link HistoryEntryDto} objects.
      */
-    @GetMapping("/by-establishment-id/{establishmentId}")
+    @Operation(
+            summary = "Get history entries by establishment ID",
+            description = "Returns a list of history entries for a specific establishment ID for the currently authenticated user"
+    )
+    @GetMapping("/establishment-id/{establishmentId}")
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntriesByEstablishmentId(
             @PathVariable @NotNull @NotBlank String establishmentId) {
         try {
@@ -189,7 +223,11 @@ public class HistoryController {
      * @param timestamp the timestamp of the history entry to retrieve.
      * @return the {@link HistoryEntryDto} object if found, otherwise a not found response.
      */
-    @GetMapping("/by-timestamp")
+    @Operation(
+            summary = "Get history entry by timestamp",
+            description = "Returns a specific history entry by its timestamp"
+    )
+    @GetMapping("/timestamp")
     public ResponseEntity<HistoryEntryDto> getHistoryEntryByTimestamp(
             @RequestParam @NotNull Date timestamp) {
         try {
@@ -210,6 +248,10 @@ public class HistoryController {
      *
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Clear all history entries",
+            description = "Clears all history entries for the currently authenticated user"
+    )
     @DeleteMapping
     public ResponseEntity<String> clearHistoryEntries() {
         try {
@@ -228,7 +270,11 @@ public class HistoryController {
      * @param timestamp the timestamp to check.
      * @return a response indicating whether the history entry exists.
      */
-    @GetMapping("/exists/by-timestamp")
+    @Operation(
+            summary = "Check if history entry exists",
+            description = "Checks if a history entry with the specified timestamp exists for the currently authenticated user"
+    )
+    @GetMapping("/exists/timestamp")
     public ResponseEntity<Boolean> isHistoryEntryExists(
             @RequestParam @NotNull Date timestamp) {
         try {
@@ -245,6 +291,10 @@ public class HistoryController {
      *
      * @return a sorted list of {@link HistoryEntryDto} objects.
      */
+    @Operation(
+            summary = "Sort history entries by timestamp",
+            description = "Sorts history entries by the timestamp in ascending order"
+    )
     @GetMapping("/sort/timestamp")
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntriesSortedByTimestamp() {
         try {
@@ -263,6 +313,10 @@ public class HistoryController {
      *
      * @return a sorted list of {@link HistoryEntryDto} objects.
      */
+    @Operation(
+            summary = "Sort history entries by timestamp in descending order",
+            description = "Sorts history entries by the timestamp in descending order"
+    )
     @GetMapping("/sort/timestamp-desc")
     public ResponseEntity<List<HistoryEntryDto>> getHistoryEntriesSortedByTimestampDescending() {
         try {
@@ -282,7 +336,11 @@ public class HistoryController {
      * @param action the action to search for.
      * @return a list of {@link HistoryEntryDto} objects that match the search criteria.
      */
-    @GetMapping("/search/by-action")
+    @Operation(
+            summary = "Search history entries by action",
+            description = "Searches history entries by action"
+    )
+    @GetMapping("/search/action")
     public ResponseEntity<List<HistoryEntryDto>> searchHistoryEntriesByAction(
             @RequestParam @NotNull @NotBlank String action) {
         try {
@@ -300,7 +358,11 @@ public class HistoryController {
      * @param establishmentId the establishment ID to search for.
      * @return a list of {@link HistoryEntryDto} objects that match the search criteria.
      */
-    @GetMapping("/search/by-establishment-id")
+    @Operation(
+            summary = "Search history entries by establishment ID",
+            description = "Searches history entries by establishment ID"
+    )
+    @GetMapping("/search/establishment-id")
     public ResponseEntity<List<HistoryEntryDto>> searchHistoryEntriesByEstablishmentId(
             @RequestParam @NotNull @NotBlank String establishmentId) {
         try {
@@ -320,6 +382,10 @@ public class HistoryController {
      *
      * @return the number of history entries.
      */
+    @Operation(
+            summary = "Count history entries",
+            description = "Counts the number of history entries for the currently authenticated user"
+    )
     @GetMapping("/count")
     public ResponseEntity<Integer> countHistoryEntries() {
         try {

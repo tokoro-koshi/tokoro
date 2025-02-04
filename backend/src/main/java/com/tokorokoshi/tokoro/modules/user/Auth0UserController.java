@@ -3,6 +3,8 @@ package com.tokorokoshi.tokoro.modules.user;
 import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,10 +19,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Tag(name = "Users", description = "API for managing users")
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/users")
 public class Auth0UserController {
-
     private static final Logger log = LoggerFactory.getLogger(Auth0UserController.class);
 
     private final Auth0UserDataService auth0UserDataService;
@@ -37,6 +39,10 @@ public class Auth0UserController {
      *
      * @return the email of the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user email",
+            description = "Returns the email of the currently authenticated user"
+    )
     @GetMapping("/email")
     public ResponseEntity<String> getAuthenticatedUserEmail() {
         try {
@@ -54,6 +60,10 @@ public class Auth0UserController {
      *
      * @return the name of the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user name",
+            description = "Returns the name of the currently authenticated user"
+    )
     @GetMapping("/name")
     public ResponseEntity<String> getAuthenticatedUserName() {
         try {
@@ -71,6 +81,10 @@ public class Auth0UserController {
      *
      * @return a list of permissions for the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user permissions",
+            description = "Returns the permissions of the currently authenticated user"
+    )
     @GetMapping("/permissions")
     public ResponseEntity<List<String>> getAuthenticatedUserPermissions() {
         try {
@@ -88,6 +102,10 @@ public class Auth0UserController {
      *
      * @return a map of metadata for the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user metadata",
+            description = "Returns the metadata of the currently authenticated user"
+    )
     @GetMapping("/metadata")
     public ResponseEntity<Map<String, Object>> getAuthenticatedUserMetadata() {
         try {
@@ -105,6 +123,10 @@ public class Auth0UserController {
      *
      * @return a list of roles for the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user roles",
+            description = "Returns the roles of the currently authenticated user"
+    )
     @GetMapping("/roles")
     public ResponseEntity<List<String>> getAuthenticatedUserRoles() {
         try {
@@ -122,6 +144,10 @@ public class Auth0UserController {
      *
      * @return the {@link User} object representing the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user details",
+            description = "Returns the details of the currently authenticated user"
+    )
     @GetMapping("/details")
     public ResponseEntity<User> getAuthenticatedUserDetails() {
         try {
@@ -140,6 +166,10 @@ public class Auth0UserController {
      * @param permission the permission to check.
      * @return a response indicating whether the user has the permission.
      */
+    @Operation(
+            summary = "Check if user has permission",
+            description = "Checks if the currently authenticated user has a specific permission"
+    )
     @GetMapping("/permissions/check")
     public ResponseEntity<Boolean> hasPermission(
             @RequestParam @NotNull @NotBlank String permission) {
@@ -159,6 +189,10 @@ public class Auth0UserController {
      * @param permissions the list of permissions to check.
      * @return a response indicating whether the user has any of the permissions.
      */
+    @Operation(
+            summary = "Check if user has any permission",
+            description = "Checks if the currently authenticated user has any of the specified permissions"
+    )
     @GetMapping("/permissions/check-any")
     public ResponseEntity<Boolean> hasAnyPermission(
             @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> permissions) {
@@ -178,6 +212,10 @@ public class Auth0UserController {
      * @param role the role to check.
      * @return a response indicating whether the user has the role.
      */
+    @Operation(
+            summary = "Check if user has role",
+            description = "Checks if the currently authenticated user has a specific role"
+    )
     @GetMapping("/roles/check")
     public ResponseEntity<Boolean> hasRole(
             @RequestParam @NotNull @NotBlank String role) {
@@ -197,6 +235,10 @@ public class Auth0UserController {
      * @param roles the list of roles to check.
      * @return a response indicating whether the user has any of the roles.
      */
+    @Operation(
+            summary = "Check if user has any role",
+            description = "Checks if the currently authenticated user has any of the specified roles"
+    )
     @GetMapping("/roles/check-any")
     public ResponseEntity<Boolean> hasAnyRole(
             @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> roles) {
@@ -215,6 +257,10 @@ public class Auth0UserController {
      *
      * @return a response indicating whether the user is blocked.
      */
+    @Operation(
+            summary = "Check if user is blocked",
+            description = "Checks if the user is blocked"
+    )
     @GetMapping("/{userId}/blocked")
     public ResponseEntity<Boolean> isUserBlocked(@PathVariable @NotNull @NotBlank String userId) {
         try {
@@ -232,6 +278,10 @@ public class Auth0UserController {
      *
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Block user",
+            description = "Blocks the user and returns the string with operation status"
+    )
     @PostMapping("/{userId}/block")
     public ResponseEntity<String> blockUser(@PathVariable @NotNull @NotBlank String userId) {
         try {
@@ -249,6 +299,10 @@ public class Auth0UserController {
      *
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Unblock user",
+            description = "Unblocks the user and returns the string with operation status"
+    )
     @PostMapping("/{userId}/unblock")
     public ResponseEntity<String> unblockUser(@PathVariable @NotNull @NotBlank String userId) {
         try {
@@ -268,6 +322,10 @@ public class Auth0UserController {
      * @param metadata a map containing the metadata to be updated.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update authenticated user metadata",
+            description = "Updates the metadata for the currently authenticated user"
+    )
     @PutMapping("/metadata")
     public ResponseEntity<String> updateAuthenticatedUserMetadata(
             @RequestBody @NotNull Map<String, Object> metadata) {
@@ -287,6 +345,10 @@ public class Auth0UserController {
      * @param avatarUrl the new avatar URL for the user.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update authenticated user avatar",
+            description = "Updates the avatar URL for the currently authenticated user"
+    )
     @PutMapping("/avatar")
     public ResponseEntity<String> updateAuthenticatedUserAvatar(
             @RequestParam @NotNull @NotBlank String avatarUrl) {
@@ -305,6 +367,10 @@ public class Auth0UserController {
      *
      * @return a response containing the avatar URL or an error message.
      */
+    @Operation(
+            summary = "Get authenticated user avatar",
+            description = "Returns the avatar URL of the currently authenticated user"
+    )
     @GetMapping("/avatar")
     public ResponseEntity<String> getAuthenticatedUserAvatar() {
         try {
@@ -321,9 +387,13 @@ public class Auth0UserController {
      * Updates the first and last name for the currently authenticated user.
      *
      * @param firstName the new first name for the user.
-     * @param lastName the new last name for the user.
+     * @param lastName  the new last name for the user.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update authenticated user name",
+            description = "Updates the first and last name for the currently authenticated user"
+    )
     @PutMapping("/name")
     public ResponseEntity<String> updateAuthenticatedUserName(
             @RequestParam @NotNull @NotBlank String firstName,
@@ -343,6 +413,10 @@ public class Auth0UserController {
      *
      * @return the nickname of the currently authenticated user.
      */
+    @Operation(
+            summary = "Get authenticated user nickname",
+            description = "Returns the nickname of the currently authenticated user"
+    )
     @GetMapping("/nickname")
     public ResponseEntity<String> getAuthenticatedUserNickname() {
         try {
@@ -361,6 +435,10 @@ public class Auth0UserController {
      * @param nickname the new nickname for the user.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update authenticated user nickname",
+            description = "Updates the nickname for the currently authenticated user"
+    )
     @PutMapping("/nickname")
     public ResponseEntity<String> updateAuthenticatedUserNickname(
             @RequestParam @NotNull @NotBlank String nickname) {
@@ -380,6 +458,10 @@ public class Auth0UserController {
      * @param email the email address of the user to fetch.
      * @return the {@link User} object representing the user, or a not found response.
      */
+    @Operation(
+            summary = "Get user by email",
+            description = "Returns the user with the given email"
+    )
     @GetMapping("/by-email")
     public ResponseEntity<User> getUserByEmail(
             @RequestParam @NotNull @NotBlank String email) {
@@ -404,6 +486,10 @@ public class Auth0UserController {
      * @param userId the user ID of the user to delete.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Delete user",
+            description = "Deletes the user with the given user ID"
+    )
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(
             @PathVariable @NotNull @NotBlank String userId) {
@@ -421,9 +507,13 @@ public class Auth0UserController {
      * Assigns roles to a user by their user ID.
      *
      * @param userId the user ID of the user to assign roles to.
-     * @param roles the list of role IDs to assign.
+     * @param roles  the list of role IDs to assign.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Assign roles to user",
+            description = "Assigns roles to the user with the given user ID"
+    )
     @PostMapping("/{userId}/roles")
     public ResponseEntity<String> assignRolesToUser(
             @PathVariable @NotNull @NotBlank String userId,
@@ -442,9 +532,13 @@ public class Auth0UserController {
      * Removes roles from a user by their user ID.
      *
      * @param userId the user ID of the user to remove roles from.
-     * @param roles the list of role IDs to remove.
+     * @param roles  the list of role IDs to remove.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Remove roles from user",
+            description = "Removes roles from the user with the given user ID"
+    )
     @DeleteMapping("/{userId}/roles")
     public ResponseEntity<String> removeRolesFromUser(
             @PathVariable @NotNull @NotBlank String userId,

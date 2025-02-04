@@ -1,6 +1,8 @@
 package com.tokorokoshi.tokoro.modules.user.preferences;
 
 import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -18,10 +20,10 @@ import java.util.List;
  * REST controller for managing user preferences.
  * This controller provides endpoints to set, retrieve, update, and clear user preferences.
  */
+@Tag(name = "User Preferences", description = "API for managing user preferences")
 @RestController
 @RequestMapping("/api/users/preferences")
 public class PreferencesController {
-
     private static final Logger log = LoggerFactory.getLogger(PreferencesController.class);
 
     private final PreferencesService preferencesService;
@@ -37,6 +39,10 @@ public class PreferencesController {
      * @param preferencesDto the preferences to set.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Set user preferences",
+            description = "Accepts a request with a JSON body to set user preferences"
+    )
     @PostMapping
     public ResponseEntity<String> setPreferences(@Valid @RequestBody PreferencesDto preferencesDto) {
         try {
@@ -54,6 +60,10 @@ public class PreferencesController {
      *
      * @return the {@link PreferencesDto} object if found, otherwise a not found response.
      */
+    @Operation(
+            summary = "Get user preferences",
+            description = "Returns the user preferences"
+    )
     @GetMapping
     public ResponseEntity<PreferencesDto> getPreferences() {
         try {
@@ -73,6 +83,10 @@ public class PreferencesController {
      * @param language the new language preference.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update language preference",
+            description = "Accepts a request with a query parameter to update the language preference"
+    )
     @PutMapping("/language")
     public ResponseEntity<String> updateLanguagePreference(
             @RequestParam @NotNull @NotBlank String language) {
@@ -91,6 +105,10 @@ public class PreferencesController {
      * @param categories the new categories' preference.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update categories preference",
+            description = "Accepts a request with a query parameter to update the categories preference"
+    )
     @PutMapping("/categories")
     public ResponseEntity<String> updateCategoriesPreference(
             @RequestParam @NotNull @NotEmpty List<@NotEmpty @NotBlank String> categories) {
@@ -110,6 +128,10 @@ public class PreferencesController {
      * @param timezone the new timezone preference.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update timezone preference",
+            description = "Accepts a request with a query parameter to update the timezone preference"
+    )
     @PutMapping("/timezone")
     public ResponseEntity<String> updateTimezonePreference(
             @RequestParam @NotNull @NotBlank String timezone) {
@@ -129,6 +151,10 @@ public class PreferencesController {
      * @param notificationsEnabled the new notifications enabled preference.
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Update notifications enabled preference",
+            description = "Accepts a request with a query parameter to update the notifications enabled preference"
+    )
     @PutMapping("/notifications-enabled")
     public ResponseEntity<String> updateNotificationsEnabledPreference(
             @RequestParam @NotNull boolean notificationsEnabled) {
@@ -147,6 +173,10 @@ public class PreferencesController {
      *
      * @return a response indicating success or failure.
      */
+    @Operation(
+            summary = "Clear all preferences",
+            description = "Clears all preferences for the currently authenticated user"
+    )
     @DeleteMapping
     public ResponseEntity<String> clearPreferences() {
         try {
