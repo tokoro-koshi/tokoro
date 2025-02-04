@@ -95,7 +95,7 @@ public class HistoryController {
      * Rolls back all history entries within a specified timestamp range for the currently authenticated user.
      *
      * @param startDate the start timestamp of the range.
-     * @param endDate the end timestamp of the range.
+     * @param endDate   the end timestamp of the range.
      * @return a response indicating success or failure.
      */
     @DeleteMapping("/rollback/timestamp-range")
@@ -268,8 +268,8 @@ public class HistoryController {
         try {
             List<HistoryEntryDto> historyEntries = historyService.getHistoryEntries();
             return ResponseEntity.ok(historyEntries.stream()
-                            .sorted(Comparator.comparing(HistoryEntryDto::timestamp).reversed())
-                            .toList());
+                    .sorted(Comparator.comparing(HistoryEntryDto::timestamp).reversed())
+                    .toList());
         } catch (Exception e) {
             log.error("Error sorting history entries by timestamp in descending order", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
