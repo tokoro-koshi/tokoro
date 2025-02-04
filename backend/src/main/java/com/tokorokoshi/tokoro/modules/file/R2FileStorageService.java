@@ -190,6 +190,11 @@ public class R2FileStorageService implements FileStorageService {
     }
 
     @Override
+    public CompletableFuture<String> generateSignedUrl(String key) {
+        return generateSignedUrl(key, S3Constants.COMMON_EXPIRATION, null);
+    }
+
+    @Override
     public CompletableFuture<String> generateSignedUrl(
             String key,
             Integer expirationInSeconds
