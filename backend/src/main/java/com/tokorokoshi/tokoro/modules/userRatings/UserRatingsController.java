@@ -3,10 +3,11 @@ package com.tokorokoshi.tokoro.modules.userRatings;
 import com.tokorokoshi.tokoro.modules.userRatings.dto.CreateUpdateUserRatingDto;
 import com.tokorokoshi.tokoro.modules.userRatings.dto.UserRatingDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -21,41 +22,45 @@ public class UserRatingsController {
     }
 
     @PostMapping(value = {"", "/"},
-        consumes = APPLICATION_JSON_VALUE,
-        produces = APPLICATION_JSON_VALUE)
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRatingDto> createUserRating(
-        @RequestBody CreateUpdateUserRatingDto userRating
+            @RequestBody CreateUpdateUserRatingDto userRating
     ) {
         return ResponseEntity.ok(
-            this.userRatingsService.saveUserRating(userRating)
+                this.userRatingsService.saveUserRating(userRating)
         );
     }
 
     @GetMapping(value = "/{id}",
-        produces = APPLICATION_JSON_VALUE)
+            produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRatingDto> getUserRating(
-        @PathVariable String id
+            @PathVariable String id
     ) {
         return ResponseEntity.ok(
-            this.userRatingsService.findUserRatingById(id)
+                this.userRatingsService.findUserRatingById(id)
         );
     }
 
     @GetMapping(value = {"", "/"},
-        produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UserRatingDto>> getAllUserRatings() {
-        return ResponseEntity.ok(this.userRatingsService.findAllUserRatings());
+            produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<UserRatingDto>> getAllUserRatings(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(this.userRatingsService.findAllUserRatings(pageable));
     }
 
     @PutMapping(value = "/{id}",
-        consumes = APPLICATION_JSON_VALUE,
-        produces = APPLICATION_JSON_VALUE)
+            consumes = APPLICATION_JSON_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRatingDto> updateUserRating(
-        @RequestBody CreateUpdateUserRatingDto userRating,
-        @PathVariable String id
+            @RequestBody CreateUpdateUserRatingDto userRating,
+            @PathVariable String id
     ) {
         UserRatingDto updatedUserRating = this.userRatingsService
-            .updateUserRating(id, userRating);
+                .updateUserRating(id, userRating);
         if (updatedUserRating == null) {
             return ResponseEntity.notFound().build();
         }
