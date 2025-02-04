@@ -4,6 +4,7 @@ import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablish
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.user.favorites.places.dto.FavoritePlaceDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -21,11 +22,15 @@ import java.util.List;
  * REST controller for managing favorite places for users.
  * This controller provides endpoints to add, update, remove, and retrieve favorite places.
  */
-@Tag(name = "Favorite Places", description = "API for managing favorite places for users")
+@Tag(
+        name = "Favorite Places",
+        description = "API for managing favorite places for users"
+)
 @RestController
 @RequestMapping("/api/users/favorite-places")
 public class FavoritePlacesController {
-    private static final Logger log = LoggerFactory.getLogger(FavoritePlacesController.class);
+    private static final Logger log
+            = LoggerFactory.getLogger(FavoritePlacesController.class);
 
     private final FavoritePlacesService favoritePlacesService;
 
@@ -45,16 +50,31 @@ public class FavoritePlacesController {
             description = "Accepts a request with a JSON body to add a favorite place"
     )
     @PostMapping
-    public ResponseEntity<String> addFavoritePlace(@Valid @RequestBody FavoritePlaceDto favoritePlaceDto) {
+    public ResponseEntity<String> addFavoritePlace(
+            @Parameter(
+                    description = "The favorite place to add",
+                    required = true,
+                    example = "{\"establishmentId\": \"60f1b3b3b3b3b3b3b3b3b3b3\"}"
+            )
+            @Valid
+            @RequestBody
+            FavoritePlaceDto favoritePlaceDto
+    ) {
         try {
             favoritePlacesService.addFavoritePlace(favoritePlaceDto);
             return ResponseEntity.ok("Favorite place added successfully");
         } catch (InvalidEstablishmentException e) {
-            log.error("Error adding favorite place because of invalid establishment", e);
-            return ResponseEntity.badRequest().body("Invalid establishment");
+            log.error(
+                    "Error adding favorite place because of invalid establishment",
+                    e
+            );
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid establishment");
         } catch (Exception e) {
             log.error("Error adding favorite place", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to add favorite place");
         }
     }
@@ -72,17 +92,37 @@ public class FavoritePlacesController {
     )
     @PutMapping("/{establishmentId}")
     public ResponseEntity<String> updateFavoritePlace(
-            @PathVariable @NotNull @NotBlank String establishmentId,
-            @Valid @RequestBody FavoritePlaceDto favoritePlaceDto) {
+            @Parameter(
+                    description = "The establishment ID of the favorite place to update",
+                    required = true,
+                    example = "60f1b3b3b3b3b3b3b3b3b3"
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String establishmentId,
+            @Valid
+            @RequestBody
+            FavoritePlaceDto favoritePlaceDto
+    ) {
         try {
-            favoritePlacesService.updateFavoritePlace(establishmentId, favoritePlaceDto);
+            favoritePlacesService.updateFavoritePlace(
+                    establishmentId,
+                    favoritePlaceDto
+            );
             return ResponseEntity.ok("Favorite place updated successfully");
         } catch (InvalidEstablishmentException e) {
-            log.error("Error updating favorite place because of invalid establishment", e);
-            return ResponseEntity.badRequest().body("Invalid establishment ID");
+            log.error(
+                    "Error updating favorite place because of invalid establishment",
+                    e
+            );
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid establishment ID");
         } catch (Exception e) {
             log.error("Error updating favorite place", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update favorite place");
         }
     }
@@ -99,16 +139,31 @@ public class FavoritePlacesController {
     )
     @DeleteMapping("/{establishmentId}")
     public ResponseEntity<String> removeFavoritePlace(
-            @PathVariable @NotNull @NotBlank String establishmentId) {
+            @Parameter(
+                    description = "The establishment ID of the favorite place to remove",
+                    required = true,
+                    example = "60f1b3b3b3b3b3b3b3b3b3"
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String establishmentId
+    ) {
         try {
             favoritePlacesService.removeFavoritePlace(establishmentId);
             return ResponseEntity.ok("Favorite place removed successfully");
         } catch (InvalidEstablishmentException e) {
-            log.error("Error removing favorite place because of invalid establishment", e);
-            return ResponseEntity.badRequest().body("Invalid establishment ID");
+            log.error(
+                    "Error removing favorite place because of invalid establishment",
+                    e
+            );
+            return ResponseEntity
+                    .badRequest()
+                    .body("Invalid establishment ID");
         } catch (Exception e) {
             log.error("Error removing favorite place", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to remove favorite place");
         }
     }
@@ -125,11 +180,14 @@ public class FavoritePlacesController {
     @GetMapping
     public ResponseEntity<List<PlaceDto>> getFavoritePlaces() {
         try {
-            List<PlaceDto> favoritePlaces = favoritePlacesService.getFavoritePlaces();
+            List<PlaceDto> favoritePlaces = favoritePlacesService
+                    .getFavoritePlaces();
             return ResponseEntity.ok(favoritePlaces);
         } catch (Exception e) {
             log.error("Error retrieving favorite places", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -145,21 +203,39 @@ public class FavoritePlacesController {
     )
     @GetMapping("/{establishmentId}")
     public ResponseEntity<PlaceDto> getFavoritePlaceById(
-            @PathVariable @NotNull @NotBlank String establishmentId) {
+            @Parameter(
+                    description = "The establishment ID of the favorite place to retrieve",
+                    required = true,
+                    example = "60f1b3b3b3b3b3b3b3b3b3"
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String establishmentId
+    ) {
         try {
-            PlaceDto favoritePlace = favoritePlacesService.getFavoritePlaceById(establishmentId);
+            PlaceDto favoritePlace = favoritePlacesService
+                    .getFavoritePlaceById(establishmentId);
             if (favoritePlace != null) {
                 return ResponseEntity.ok(favoritePlace);
             } else {
-                log.error("Favorite place with establishment ID {} not found", establishmentId);
+                log.error(
+                        "Favorite place with establishment ID {} not found",
+                        establishmentId
+                );
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (InvalidEstablishmentException e) {
-            log.error("Error retrieving favorite place because of invalid establishment", e);
+            log.error(
+                    "Error retrieving favorite place because of invalid establishment",
+                    e
+            );
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             log.error("Error retrieving favorite place by ID", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -179,7 +255,8 @@ public class FavoritePlacesController {
             return ResponseEntity.ok("All favorite places cleared successfully");
         } catch (Exception e) {
             log.error("Error clearing favorite places", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to clear favorite places");
         }
     }
@@ -196,16 +273,30 @@ public class FavoritePlacesController {
     )
     @GetMapping("/check/{establishmentId}")
     public ResponseEntity<Boolean> isFavoritePlace(
-            @PathVariable @NotNull @NotBlank String establishmentId) {
+            @Parameter(
+                    description = "The establishment ID of the place to check",
+                    required = true
+            )
+            @PathVariable
+            @NotNull
+            @NotBlank
+            String establishmentId
+    ) {
         try {
-            boolean isFavorite = favoritePlacesService.isFavoritePlace(establishmentId);
+            boolean isFavorite = favoritePlacesService
+                    .isFavoritePlace(establishmentId);
             return ResponseEntity.ok(isFavorite);
         } catch (InvalidEstablishmentException e) {
-            log.error("Error checking favorite place because of invalid establishment", e);
+            log.error(
+                    "Error checking favorite place because of invalid establishment",
+                    e
+            );
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             log.error("Error checking if place is a favorite", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -221,11 +312,14 @@ public class FavoritePlacesController {
     @GetMapping("/sort/date")
     public ResponseEntity<List<PlaceDto>> getFavoritePlacesSortedByDate() {
         try {
-            List<PlaceDto> favoritePlaces = favoritePlacesService.getFavoritePlacesSortedByDate();
+            List<PlaceDto> favoritePlaces = favoritePlacesService
+                    .getFavoritePlacesSortedByDate();
             return ResponseEntity.ok(favoritePlaces);
         } catch (Exception e) {
             log.error("Error sorting favorite places by date", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -241,11 +335,17 @@ public class FavoritePlacesController {
     @GetMapping("/sort/date-desc")
     public ResponseEntity<List<PlaceDto>> getFavoritePlacesSortedByDateDescending() {
         try {
-            List<PlaceDto> favoritePlaces = favoritePlacesService.getFavoritePlacesSortedByDateDescending();
+            List<PlaceDto> favoritePlaces = favoritePlacesService
+                    .getFavoritePlacesSortedByDateDescending();
             return ResponseEntity.ok(favoritePlaces);
         } catch (Exception e) {
-            log.error("Error sorting favorite places by date in descending order", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error(
+                    "Error sorting favorite places by date in descending order",
+                    e
+            );
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -261,11 +361,14 @@ public class FavoritePlacesController {
     @GetMapping("/sort/rating")
     public ResponseEntity<List<PlaceDto>> getFavoritePlacesSortedByRating() {
         try {
-            List<PlaceDto> favoritePlaces = favoritePlacesService.getFavoritePlacesSortedByRating();
+            List<PlaceDto> favoritePlaces = favoritePlacesService
+                    .getFavoritePlacesSortedByRating();
             return ResponseEntity.ok(favoritePlaces);
         } catch (Exception e) {
             log.error("Error sorting favorite places by rating", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 
@@ -281,16 +384,30 @@ public class FavoritePlacesController {
     )
     @GetMapping("/search")
     public ResponseEntity<List<PlaceDto>> searchFavoritePlacesByName(
-            @RequestParam @NotNull @NotBlank String name) {
+            @Parameter(
+                    description = "The name to search for",
+                    required = true,
+                    example = "Tokoro Sushi"
+            )
+            @RequestParam
+            @NotNull
+            @NotBlank
+            String name
+    ) {
         try {
-            List<PlaceDto> favoritePlaces = favoritePlacesService.searchFavoritePlacesByName(name);
+            List<PlaceDto> favoritePlaces =
+                    favoritePlacesService.searchFavoritePlacesByName(name);
             return ResponseEntity.ok(favoritePlaces);
         } catch (InvalidEstablishmentException e) {
-            log.error("Error searching favorite place because of invalid establishment", e);
+            log.error(
+                    "Error searching favorite place because of invalid establishment",
+                    e
+            );
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             log.error("Error searching favorite places by name", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .build();
         }
     }
 
@@ -310,7 +427,8 @@ public class FavoritePlacesController {
             return ResponseEntity.ok(count);
         } catch (Exception e) {
             log.error("Error counting favorite places", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .build();
         }
     }
 
@@ -327,11 +445,12 @@ public class FavoritePlacesController {
     public ResponseEntity<String> rollbackLastFavoritePlace() {
         try {
             favoritePlacesService.rollbackLastFavoritePlace();
-            return ResponseEntity.ok("Last favorite place rolled back successfully");
+            return ResponseEntity.ok(
+                    "Last favorite place rolled back successfully");
         } catch (Exception e) {
             log.error("Error rolling back last favorite place", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to roll back last favorite place");
+                                 .body("Failed to roll back last favorite place");
         }
     }
 }
