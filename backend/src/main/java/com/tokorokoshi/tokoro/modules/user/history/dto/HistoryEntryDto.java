@@ -18,6 +18,5 @@ public record HistoryEntryDto (
         @NotBlank(message = "Establishment ID must not be blank")
         String establishmentId,
 
-        @NotNull(message = "Timestamp must not be null")
         Date timestamp
 ) {}

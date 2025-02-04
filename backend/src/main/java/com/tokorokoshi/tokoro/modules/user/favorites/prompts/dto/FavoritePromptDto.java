@@ -19,6 +19,5 @@ public record FavoritePromptDto(
         @NotBlank(message = "Content must not be blank")
         String content,
 
-        @NotNull(message = "Added date must not be null")
         Date addedAt
 ) {}
