@@ -3,6 +3,8 @@ package com.tokorokoshi.tokoro.modules.user.favorites.places;
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.user.favorites.places.dto.FavoritePlaceDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,10 +21,10 @@ import java.util.List;
  * REST controller for managing favorite places for users.
  * This controller provides endpoints to add, update, remove, and retrieve favorite places.
  */
+@Tag(name = "Favorite Places", description = "API for managing favorite places for users")
 @RestController
 @RequestMapping("/api/users/favorite-places")
 public class FavoritePlacesController {
-
     private static final Logger log = LoggerFactory.getLogger(FavoritePlacesController.class);
 
     private final FavoritePlacesService favoritePlacesService;
@@ -38,6 +40,10 @@ public class FavoritePlacesController {
      * @param favoritePlaceDto the favorite place to add.
      * @return a response entity indicating success or failure.
      */
+    @Operation(
+            summary = "Add a favorite place",
+            description = "Accepts a request with a JSON body to add a favorite place"
+    )
     @PostMapping
     public ResponseEntity<String> addFavoritePlace(@Valid @RequestBody FavoritePlaceDto favoritePlaceDto) {
         try {
@@ -56,10 +62,14 @@ public class FavoritePlacesController {
     /**
      * Updates a favorite place in the currently authenticated user's metadata.
      *
-     * @param establishmentId the establishment ID of the favorite place to update.
+     * @param establishmentId  the establishment ID of the favorite place to update.
      * @param favoritePlaceDto the updated favorite place.
      * @return a response entity indicating success or failure.
      */
+    @Operation(
+            summary = "Update a favorite place",
+            description = "Accepts a request with a JSON body to update a favorite place"
+    )
     @PutMapping("/{establishmentId}")
     public ResponseEntity<String> updateFavoritePlace(
             @PathVariable @NotNull @NotBlank String establishmentId,
@@ -83,6 +93,10 @@ public class FavoritePlacesController {
      * @param establishmentId the establishment ID of the favorite place to remove.
      * @return a response entity indicating success or failure.
      */
+    @Operation(
+            summary = "Remove a favorite place",
+            description = "Accepts a request with a path variable to remove a favorite place"
+    )
     @DeleteMapping("/{establishmentId}")
     public ResponseEntity<String> removeFavoritePlace(
             @PathVariable @NotNull @NotBlank String establishmentId) {
@@ -104,6 +118,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity containing a list of {@link PlaceDto} objects.
      */
+    @Operation(
+            summary = "Get all favorite places",
+            description = "Returns a list of all favorite places"
+    )
     @GetMapping
     public ResponseEntity<List<PlaceDto>> getFavoritePlaces() {
         try {
@@ -121,6 +139,10 @@ public class FavoritePlacesController {
      * @param establishmentId the establishment ID of the favorite place to retrieve.
      * @return a response entity containing the {@link PlaceDto} object if found, otherwise a not found response.
      */
+    @Operation(
+            summary = "Get a favorite place by ID",
+            description = "Returns the favorite place with the given establishment ID"
+    )
     @GetMapping("/{establishmentId}")
     public ResponseEntity<PlaceDto> getFavoritePlaceById(
             @PathVariable @NotNull @NotBlank String establishmentId) {
@@ -146,6 +168,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity indicating success or failure.
      */
+    @Operation(
+            summary = "Clear all favorite places",
+            description = "Removes all favorite places"
+    )
     @DeleteMapping
     public ResponseEntity<String> clearFavoritePlaces() {
         try {
@@ -164,6 +190,10 @@ public class FavoritePlacesController {
      * @param establishmentId the establishment ID to check.
      * @return a response entity indicating whether the place is a favorite.
      */
+    @Operation(
+            summary = "Check if a place is a favorite",
+            description = "Returns a boolean indicating whether the place is a favorite"
+    )
     @GetMapping("/check/{establishmentId}")
     public ResponseEntity<Boolean> isFavoritePlace(
             @PathVariable @NotNull @NotBlank String establishmentId) {
@@ -184,6 +214,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity containing a sorted list of {@link PlaceDto} objects.
      */
+    @Operation(
+            summary = "Sort favorite places by date",
+            description = "Returns a list of favorite places sorted by the added date"
+    )
     @GetMapping("/sort/date")
     public ResponseEntity<List<PlaceDto>> getFavoritePlacesSortedByDate() {
         try {
@@ -200,6 +234,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity containing a sorted list of {@link PlaceDto} objects.
      */
+    @Operation(
+            summary = "Sort favorite places by date in descending order",
+            description = "Returns a list of favorite places sorted by the added date in descending order"
+    )
     @GetMapping("/sort/date-desc")
     public ResponseEntity<List<PlaceDto>> getFavoritePlacesSortedByDateDescending() {
         try {
@@ -216,6 +254,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity containing a sorted list of {@link PlaceDto} objects.
      */
+    @Operation(
+            summary = "Sort favorite places by rating",
+            description = "Returns a list of favorite places sorted by the rating"
+    )
     @GetMapping("/sort/rating")
     public ResponseEntity<List<PlaceDto>> getFavoritePlacesSortedByRating() {
         try {
@@ -233,6 +275,10 @@ public class FavoritePlacesController {
      * @param name the name to search for.
      * @return a response entity containing a list of {@link PlaceDto} objects that match the search criteria.
      */
+    @Operation(
+            summary = "Search favorite places by name",
+            description = "Returns a list of favorite places that match the search criteria"
+    )
     @GetMapping("/search")
     public ResponseEntity<List<PlaceDto>> searchFavoritePlacesByName(
             @RequestParam @NotNull @NotBlank String name) {
@@ -253,6 +299,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity containing the number of favorite places.
      */
+    @Operation(
+            summary = "Count favorite places",
+            description = "Returns the number of favorite places"
+    )
     @GetMapping("/count")
     public ResponseEntity<Integer> countFavoritePlaces() {
         try {
@@ -269,6 +319,10 @@ public class FavoritePlacesController {
      *
      * @return a response entity indicating success or failure.
      */
+    @Operation(
+            summary = "Roll back last favorite place",
+            description = "Rolls back the last favorite place added"
+    )
     @DeleteMapping("/rollback")
     public ResponseEntity<String> rollbackLastFavoritePlace() {
         try {
