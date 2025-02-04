@@ -8,13 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * Service class for user ratings.
+ * Service class for ratings.
  */
 @Service
 public class RatingsService {
@@ -22,13 +23,12 @@ public class RatingsService {
     private final RatingMapper ratingMapper;
 
     /**
-     * Constructor for the user ratings service.
+     * Constructor for the ratings service.
      *
      * @param mongoTemplate the mongo template
-     * @param ratingMapper  the user rating mapper
+     * @param ratingMapper  the rating mapper
      */
-    @Autowired
-    public RatingsService(
+    @Autowired public RatingsService(
             MongoTemplate mongoTemplate,
             RatingMapper ratingMapper
     ) {
@@ -37,24 +37,21 @@ public class RatingsService {
     }
 
     /**
-     * Saves a user rating.
+     * Saves a rating.
      *
-     * @param rating the user rating to save
-     * @return the saved user rating
+     * @param rating the rating to save
+     * @return the saved rating
      */
     public RatingDto saveRating(CreateUpdateRatingDto rating) {
-        return ratingMapper.toRatingDto(
-                mongoTemplate.save(
-                        ratingMapper.toRatingSchema(rating)
-                )
-        );
+        return ratingMapper.toRatingDto(mongoTemplate.save(ratingMapper.toRatingSchema(
+                rating)));
     }
 
     /**
-     * Finds a user rating by its id.
+     * Finds a rating by its id.
      *
-     * @param id the id of the user rating to find
-     * @return the user rating
+     * @param id the id of the rating to find
+     * @return the rating
      */
     public RatingDto findRatingById(String id) {
         Rating rating = mongoTemplate.findById(id, Rating.class);
@@ -65,13 +62,25 @@ public class RatingsService {
     }
 
     /**
-     * Finds all user ratings.
+     * Finds all ratings.
      *
-     * @param pageable the pageable object
-     * @return a page of user ratings
+     * @param pageable the pageable object  (required)
+     * @param userId   the user id          (optional)
+     * @param placeId  the place id         (optional)
+     * @return a page of ratings
      */
-    public Page<RatingDto> findAllRatings(Pageable pageable) {
+    public Page<RatingDto> findAllRatings(
+            Pageable pageable,
+            String userId,
+            String placeId
+    ) {
         Query query = new Query().with(pageable);
+        if (userId != null) {
+            query.addCriteria(Criteria.where("userId").is(userId));
+        }
+        if (placeId != null) {
+            query.addCriteria(Criteria.where("placeId").is(placeId));
+        }
         List<Rating> ratings = mongoTemplate.find(query, Rating.class);
         long total = mongoTemplate.count(query, Rating.class);
 
@@ -80,34 +89,27 @@ public class RatingsService {
     }
 
     /**
-     * Updates a user rating by its id.
+     * Updates a rating by its id.
      *
-     * @param id     the id of the user rating to update
-     * @param rating the updated user rating
-     * @return the updated user rating
+     * @param id     the id of the rating to update
+     * @param rating the updated rating
+     * @return the updated rating
      */
-    public RatingDto updateRating(
-            String id,
-            CreateUpdateRatingDto rating
-    ) {
+    public RatingDto updateRating(String id, CreateUpdateRatingDto rating) {
         if (findRatingById(id) == null) {
             return null;
         }
         Rating schema = ratingMapper.toRatingSchema(rating);
-        return ratingMapper.toRatingDto(
-                mongoTemplate.save(schema.withId(id))
-        );
+        return ratingMapper.toRatingDto(mongoTemplate.save(schema.withId(id)));
 
     }
 
     /**
-     * Deletes a user rating by its id.
+     * Deletes a rating by its id.
      *
-     * @param id the id of the user rating to delete
+     * @param id the id of the rating to delete
      */
     public void deleteRating(String id) {
-        mongoTemplate.remove(
-                ratingMapper.toRatingSchema(findRatingById(id))
-        );
+        mongoTemplate.remove(ratingMapper.toRatingSchema(findRatingById(id)));
     }
 }
