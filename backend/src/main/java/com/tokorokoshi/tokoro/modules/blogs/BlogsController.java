@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Blogs", description = "API for managing blogs")
@@ -19,10 +21,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api/blogs")
 public class BlogsController {
     private final BlogsService blogsService;
+    private final Logger logger;
 
     @Autowired
     public BlogsController(BlogsService blogsService) {
         this.blogsService = blogsService;
+        this.logger = Logger.getLogger(BlogsController.class.getName());
     }
 
     @Operation(
@@ -59,7 +63,11 @@ public class BlogsController {
             @PathVariable
             String id
     ) {
-        return ResponseEntity.ok(this.blogsService.getBlogById(id));
+        var blog = this.blogsService.getBlogById(id);
+        if (blog == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(blog);
     }
 
     @Operation(
@@ -124,7 +132,7 @@ public class BlogsController {
             description = "Deletes the blog with the given ID"
     )
     @DeleteMapping(value = "/{id}")
-    public void deleteBlog(
+    public ResponseEntity<?> deleteBlog(
             @Parameter(
                     description = "The ID of the blog to delete",
                     required = true,
@@ -133,6 +141,14 @@ public class BlogsController {
             @PathVariable
             String id
     ) {
-        this.blogsService.deleteBlog(id);
+        try {
+            this.blogsService.deleteBlog(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            this.logger.severe(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

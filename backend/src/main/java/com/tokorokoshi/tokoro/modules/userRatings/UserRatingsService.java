@@ -54,9 +54,11 @@ public class UserRatingsService {
      * @return the user rating
      */
     public UserRatingDto findUserRatingById(String id) {
-        return userRatingMapper.toUserRatingDto(
-                mongoTemplate.findById(id, UserRating.class)
-        );
+        UserRating userRating = mongoTemplate.findById(id, UserRating.class);
+        if (userRating == null) {
+            return null;
+        }
+        return userRatingMapper.toUserRatingDto(userRating);
     }
 
     /**

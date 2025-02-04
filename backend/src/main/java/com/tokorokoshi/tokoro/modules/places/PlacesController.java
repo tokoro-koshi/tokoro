@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -21,9 +22,11 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @RequestMapping("/api/places")
 public class PlacesController {
     private final PlacesService placesService;
+    private final Logger logger;
 
     public PlacesController(PlacesService placesService) {
         this.placesService = placesService;
+        this.logger = Logger.getLogger(PlacesController.class.getName());
     }
 
     @Operation(
@@ -57,7 +60,11 @@ public class PlacesController {
             @PathVariable
             String id
     ) {
-        return ResponseEntity.ok(this.placesService.getPlaceById(id));
+        var place = this.placesService.getPlaceById(id);
+        if (place == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(place);
     }
 
     @Operation(
@@ -129,7 +136,7 @@ public class PlacesController {
             description = "Deletes the place with the given ID"
     )
     @DeleteMapping(value = "/{id}")
-    public void deletePlace(
+    public ResponseEntity<?> deletePlace(
             @Parameter(
                     description = "The ID of the place to delete",
                     required = true,
@@ -138,6 +145,14 @@ public class PlacesController {
             @PathVariable
             String id
     ) {
-        this.placesService.deletePlace(id);
+        try {
+            this.placesService.deletePlace(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            this.logger.severe(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
