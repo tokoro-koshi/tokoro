@@ -11,7 +11,7 @@
 }
 
 .cardContent {
-  @apply flex flex-col items-center p-6 text-center text-black text-xl;
+  @apply flex flex-col items-center text-center text-black text-xl ;
 }
 
 .avatar {
@@ -19,9 +19,9 @@
 }
 
 .comment {
-  @apply mb-5 mx-7 italic ;
+  @apply mb-5 mx-7 italic;
 }
 
 .name {
-  @apply font-bold;
+  @apply font-bold inline-block mt-auto;
 }
