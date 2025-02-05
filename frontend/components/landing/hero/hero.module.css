@@ -23,7 +23,7 @@
 }
 
 .btn {
-  @apply ml-9 bg-background py-3 px-14 rounded-md font-semibold text-lg text-muted-foreground hover:bg-white active:bg-background;
+  @apply ml-9 bg-background py-2 px-14 rounded-md font-semibold text-lg text-muted-foreground hover:bg-white active:bg-background;
 }
 
 .image{

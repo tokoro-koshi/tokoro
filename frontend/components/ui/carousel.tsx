@@ -4,7 +4,9 @@ import * as React from 'react';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Image from "next/image";
+import arrowLeft from '@/public/carousel-arrow-left.svg';
+import arrowRight from '@/public/carousel-arrow-right.svg';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -87,10 +89,10 @@ const Carousel = React.forwardRef<
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'ArrowLeft') {
+        if (event.key === 'arrowLeft') {
           event.preventDefault();
           scrollPrev();
-        } else if (event.key === 'ArrowRight') {
+        } else if (event.key === 'arrowRight') {
           event.preventDefault();
           scrollNext();
         }
@@ -161,8 +163,8 @@ const CarouselContent = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          'flex',
-          orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
+          'flex relative',
+          orientation === 'horizontal' ? 'mx-6' : '-mt-6 flex-col',
           className
         )}
         {...props}
@@ -185,7 +187,7 @@ const CarouselItem = React.forwardRef<
       aria-roledescription='slide'
       className={cn(
         'min-w-0 shrink-0 grow-0 basis-full',
-        orientation === 'horizontal' ? 'pl-4' : 'pt-4',
+        orientation === 'horizontal' ? 'pl-14' : 'pt-4',
         className
       )}
       {...props}
@@ -201,25 +203,27 @@ const CarouselPrevious = React.forwardRef<
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
-    <Button
-      ref={ref}
-      variant={variant}
-      size={size}
-      className={cn(
-        'absolute h-8 w-8 rounded-full',
-        orientation === 'horizontal'
-          ? '-left-12 top-1/2 -translate-y-1/2'
-          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
-        className
-      )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
-      {...props}
-    >
-      <ArrowLeft className='h-4 w-4' />
-      <span className='sr-only'>Previous slide</span>
-    </Button>
-  );
+      <Button
+          ref={ref}
+          variant={variant}
+          size={size}
+          className={cn(
+              'absolute',
+              orientation === 'horizontal'
+                  ? '-left-12 top-1/2 -translate-y-1/2 h-full'
+                  : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+              className
+          )}
+          disabled={!canScrollPrev}
+          onClick={scrollPrev}
+          {...props}
+      >
+          <div className="flex items-center justify-center h-full">
+              <Image src={arrowLeft} alt="Previous" className="h-8 w-8 ml-8"/>
+          </div>
+          <span className='sr-only'>Previous slide</span>
+      </Button>
+);
 });
 CarouselPrevious.displayName = 'CarouselPrevious';
 
@@ -235,7 +239,7 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        'absolute h-8 w-8 rounded-full',
+        'absolute',
         orientation === 'horizontal'
           ? '-right-12 top-1/2 -translate-y-1/2'
           : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
@@ -245,7 +249,9 @@ const CarouselNext = React.forwardRef<
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight className='h-4 w-4' />
+      <div className='flex h-full align-content justify-center'>
+        <Image src={arrowRight} alt='Next' className='h-8 w-8 mr-8' />
+      </div>
       <span className='sr-only'>Next slide</span>
     </Button>
   );
@@ -253,7 +259,7 @@ const CarouselNext = React.forwardRef<
 CarouselNext.displayName = 'CarouselNext';
 
 export {
-  type CarouselApi,
+    type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
