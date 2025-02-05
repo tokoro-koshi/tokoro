@@ -22,8 +22,8 @@ export default function Testimonials() {
                   <Image
                     src={testimonial.avatar || '/placeholder.svg'}
                     alt={testimonial.name}
-                    width={64}
-                    height={64}
+                    width={50}
+                    height={50}
                     className={styles.avatar}
                   />
                   <p className={styles.comment}>

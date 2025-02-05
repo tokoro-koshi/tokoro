@@ -163,7 +163,7 @@ const CarouselContent = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          'flex relative',
+          'flex relative h-full',
           orientation === 'horizontal' ? 'mx-6' : '-mt-6 flex-col',
           className
         )}
@@ -186,8 +186,8 @@ const CarouselItem = React.forwardRef<
       role='group'
       aria-roledescription='slide'
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full',
-        orientation === 'horizontal' ? 'pl-14' : 'pt-4',
+        'min-w-0 shrink-0 grow-0 basis-full ',
+        orientation === 'horizontal' ? 'pl-7 pr-7' : 'pt-4',
         className
       )}
       {...props}
@@ -208,7 +208,7 @@ const CarouselPrevious = React.forwardRef<
           variant={variant}
           size={size}
           className={cn(
-              'absolute',
+              'absolute ',
               orientation === 'horizontal'
                   ? '-left-12 top-1/2 -translate-y-1/2 h-full'
                   : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
