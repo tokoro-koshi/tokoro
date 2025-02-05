@@ -1,26 +1,20 @@
-﻿import {
-  PersonStandingIcon as PersonIcon,
-  BookmarkIcon,
-  SearchIcon,
-} from 'lucide-react';
-
-export const features = [
+﻿export const features = [
   {
-    title: 'Personalized Recommendations',
+    title: 'AI-driven Quick Search',
     description:
-      'Get tailored suggestions based on your preferences and past visits.',
-    icon: <PersonIcon className='h-6 w-6' />,
+      'Find exactly what you\'re looking for with our intelligent search feature.',
+    icon: '/icons/search.svg',
   },
   {
     title: 'Saved Places and History',
     description:
       'Keep track of your favorite spots and revisit your journey anytime.',
-    icon: <BookmarkIcon className='h-6 w-6' />,
+    icon: '/icons/bookmark.svg',
   },
   {
-    title: 'AI-driven Quick Search',
+    title: 'Unique Recommendations',
     description:
-      "Find exactly what you're looking for with our intelligent search feature.",
-    icon: <SearchIcon className='h-6 w-6' />,
+      "Get tailored suggestions based on your preferences and past visits.",
+    icon: '/icons/person.svg',
   },
 ];
