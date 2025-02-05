@@ -28,7 +28,7 @@
 }
 
 .stepCard:not(:last-child)::after {
-  content: ""; /* Юнікод стрілки або можна замінити на SVG */
+  content: "";
   background-image: url("/arrow.svg");
   width: 40px;
   height: 40px;

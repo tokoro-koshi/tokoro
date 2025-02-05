@@ -13,7 +13,6 @@ import { testimonials } from '@/lib/constants/landing/testimonials';
 export default function Testimonials() {
   return (
     <section className={styles.testimonials}>
-      <h2 className={styles.title}>What Our Users Say</h2>
       <Carousel className={styles.carousel}>
         <CarouselContent>
           {testimonials.map((testimonial, index) => (
