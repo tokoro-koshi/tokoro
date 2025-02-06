@@ -1,10 +1,34 @@
 ﻿export const places = [
-  { name: 'Scenic Park', category: 'Nature', image: '/placeholder.svg' },
-  { name: 'Cozy Café', category: 'Food & Drink', image: '/placeholder.svg' },
-  { name: 'Art Gallery', category: 'Culture', image: '/placeholder.svg' },
+  {
+    name: 'Galicyjska Kasa Oszczednosci',
+    category: 'Historical Landmark',
+    schedule: '9.00 a.m. - 10 p.m.',
+    description: 'Description...',
+    image: '/place-carousel.svg',
+    rating: 4.9,
+  },
+  {
+    name: 'Cozy Café',
+    category: 'Food & Drink',
+    description: 'Description...',
+    schedule: '9.00 a.m. - 10 p.m.',
+    image: '/place-carousel.svg',
+    rating: 4.9,
+  },
+  {
+    name: 'Art Gallery',
+    category: 'Culture',
+    description: 'Description...',
+    schedule: '9.00 a.m. - 10 p.m.',
+    image: '/place-carousel.svg',
+    rating: 4.9,
+  },
   {
     name: 'Historic Landmark',
     category: 'Sightseeing',
-    image: '/placeholder.svg',
+    description: 'Description...',
+    schedule: '9.00 a.m. - 10 p.m.',
+    image: '/place-carousel.svg',
+    rating: 4.9,
   },
 ];
