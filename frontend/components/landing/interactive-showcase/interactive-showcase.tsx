@@ -9,26 +9,48 @@ import {
 } from '@/components/ui/carousel';
 import styles from './interactive-showcase.module.css';
 import { places } from '@/lib/constants/landing/interactive-showcase';
+import Star from '@/public/star.svg';
 
 export default function InteractiveShowcase() {
   return (
     <section className={styles.showcase}>
-      <h2 className={styles.title}>Explore Amazing Places</h2>
+      <div className={styles.titleSection}>
+        <div className={styles.line}></div>
+        <h2 className={styles.title}>Explore Amazing Places</h2>
+        <div className={styles.line}></div>
+      </div>
       <Carousel className={styles.carousel}>
         <CarouselContent>
           {places.map((place, index) => (
             <CarouselItem key={index} className={styles.carouselItem}>
               <Card>
                 <CardContent className={styles.cardContent}>
+                  <div className={styles.ratingContainer}>
+                    <div className={styles.ratingBackground}></div>
+                    <Image
+                      src={Star}
+                      alt='Rating'
+                      width={12}
+                      height={11}
+                      className={styles.star}
+                    />
+                    <p className={styles.rating}>{place.rating}</p>
+                  </div>
                   <Image
                     src={place.image || '/placeholder.svg'}
                     alt={place.name}
-                    width={300}
-                    height={200}
+                    width={350}
+                    height={195}
                     className={styles.image}
                   />
-                  <h3 className={styles.placeName}>{place.name}</h3>
-                  <p className={styles.category}>{place.category}</p>
+                  <div className={styles.text}>
+                    <h3 className={styles.placeName}>{place.name}</h3>
+                    <div className={styles.placeDescription}>
+                      <p>{place.category}</p>
+                      <p>{place.schedule}</p>
+                      <p>{place.description}</p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </CarouselItem>
