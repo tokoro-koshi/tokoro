@@ -19,7 +19,7 @@ export default function InteractiveShowcase() {
         <h2 className={styles.title}>Explore Amazing Places</h2>
         <div className={styles.line}></div>
       </div>
-      <Carousel className={styles.carousel}>
+      <Carousel autoplay className={styles.carousel}>
         <CarouselContent>
           {places.map((place, index) => (
             <CarouselItem key={index} className={styles.carouselItem}>

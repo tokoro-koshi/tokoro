@@ -4,6 +4,7 @@ import * as React from 'react';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import Image from "next/image";
 import arrowLeft from '@/public/carousel-arrow-left.svg';
 import arrowRight from '@/public/carousel-arrow-right.svg';
@@ -21,6 +22,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
+  autoplay?: boolean;
 };
 
 type CarouselContextProps = {
@@ -54,18 +56,23 @@ const Carousel = React.forwardRef<
       opts,
       setApi,
       plugins,
+      autoplay = false,
       className,
       children,
       ...props
     },
     ref
   ) => {
+    const pluginsArray = autoplay
+      ? [Autoplay(), ...(plugins ? (Array.isArray(plugins) ? plugins : [plugins]) : [])]
+      : (plugins ? (Array.isArray(plugins) ? plugins : [plugins]) : []);
+
     const [carouselRef, api] = useEmblaCarousel(
       {
         ...opts,
         axis: orientation === 'horizontal' ? 'x' : 'y',
       },
-      plugins
+      pluginsArray
     );
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
     const [canScrollNext, setCanScrollNext] = React.useState(false);
@@ -79,13 +86,24 @@ const Carousel = React.forwardRef<
       setCanScrollNext(api.canScrollNext());
     }, []);
 
+    const resetAutoplay = React.useCallback(() => {
+     const autoplayPlugin = api?.plugins()?.autoplay;
+       if (!autoplayPlugin) return;
+          const resetOrStop =
+              autoplayPlugin.options?.stopOnInteraction === false
+                  ? autoplayPlugin.reset
+                  : autoplayPlugin.stop;
+          resetOrStop();
+      }, [api]);
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev();
-    }, [api]);
+      resetAutoplay();
+    }, [api, resetAutoplay]);
 
     const scrollNext = React.useCallback(() => {
       api?.scrollNext();
-    }, [api]);
+        resetAutoplay();
+    }, [api, resetAutoplay]);
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -134,6 +152,9 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
+          autoplay,
+          plugins,
+          setApi,
         }}
       >
         <div
@@ -259,7 +280,7 @@ const CarouselNext = React.forwardRef<
 CarouselNext.displayName = 'CarouselNext';
 
 export {
-    type CarouselApi,
+  type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
