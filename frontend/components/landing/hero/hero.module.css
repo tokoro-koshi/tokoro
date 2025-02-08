@@ -1,13 +1,13 @@
 .hero {
-  @apply py-16 bg-secondary;
+  @apply py-16 bg-secondary overflow-hidden relative z-10;
 }
 
 .content{
-    @apply flex flex-col md:flex-row justify-between gap-12;
+    @apply flex flex-col md:flex-row justify-between gap-12 relative z-10 mb-20;
 }
 
 .container{
-    @apply order-first ml-9;
+    @apply order-first ml-9 ;
 }
 
 .title {
@@ -27,5 +27,13 @@
 }
 
 .image{
-    @apply order-last w-1/2 mr-14 relative;
+    @apply order-last w-1/2 mr-14;
+}
+
+.myImage {
+    @apply absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-1/2 max-w-[680px] max-h-[724px] mx-10 mt-[51px];
+}
+
+.place {
+    @apply object-contain w-full h-auto;
 }
