@@ -22,8 +22,10 @@ export default function Hero() {
                     </Button>
                 </div>
                 <div className={styles.image}>
-                    <Image src={Place} alt='Places' className={styles.place}/>
                 </div>
+            </div>
+            <div className={styles.myImage}>
+                <Image src={Place} alt='Places' className={styles.place}/>
             </div>
         </section>
     );
