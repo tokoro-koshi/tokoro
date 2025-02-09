@@ -1,0 +1,11 @@
+.savedPlace{
+    @apply bg-primary px-10 py-10;
+}
+
+.line{
+    @apply flex bg-background h-2 w-full rounded-2xl;
+}
+
+.title{
+    @apply text-left text-[40px] text-background font-extrabold mt-10 ml-3;
+}
