@@ -80,7 +80,7 @@ public class AboutController {
             CreateUpdateAboutDto createUpdateAboutDto
     ) {
         try {
-            AboutDto aboutDto = this.aboutService.updateAbout(createUpdateAboutDto);
+            AboutDto aboutDto = aboutService.updateAbout(createUpdateAboutDto);
             return ResponseEntity.ok(aboutDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();

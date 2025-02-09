@@ -61,7 +61,7 @@ public class PrivacyController {
             CreateUpdatePrivacyDto createUpdatePrivacyDto
     ) {
         try {
-            PrivacyDto privacyDto = this.privacyService.createPrivacy(createUpdatePrivacyDto);
+            PrivacyDto privacyDto = privacyService.createPrivacy(createUpdatePrivacyDto);
             return ResponseEntity.ok(privacyDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
@@ -83,7 +83,7 @@ public class PrivacyController {
             CreateUpdatePrivacyDto createUpdatePrivacyDto
     ) {
         try {
-            PrivacyDto privacyDto = this.privacyService.updatePrivacy(createUpdatePrivacyDto);
+            PrivacyDto privacyDto = privacyService.updatePrivacy(createUpdatePrivacyDto);
             return ResponseEntity.ok(privacyDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();

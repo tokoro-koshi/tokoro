@@ -50,7 +50,7 @@ public class FeaturesController {
             CreateUpdateFeatureDto feature
     ) {
         try {
-            FeatureDto featureDto = this.featuresService.saveFeature(feature);
+            FeatureDto featureDto = featuresService.saveFeature(feature);
             return ResponseEntity.ok(featureDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
@@ -74,7 +74,7 @@ public class FeaturesController {
             @PathVariable
             String id
     ) {
-        FeatureDto feature = this.featuresService.findFeatureById(id);
+        FeatureDto feature = featuresService.findFeatureById(id);
         if (feature == null) {
             return ResponseEntity.notFound().build();
         }
@@ -90,7 +90,7 @@ public class FeaturesController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<FeatureDto>> getAllFeatures() {
-        List<FeatureDto> features = this.featuresService.findAllFeatures();
+        List<FeatureDto> features = featuresService.findAllFeatures();
         return ResponseEntity.ok(features);
     }
 
@@ -119,7 +119,7 @@ public class FeaturesController {
             String id
     ) {
         try {
-            FeatureDto updatedFeature = this.featuresService.updateFeature(id, feature);
+            FeatureDto updatedFeature = featuresService.updateFeature(id, feature);
             if (updatedFeature == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -144,12 +144,12 @@ public class FeaturesController {
             String id
     ) {
         try {
-            this.featuresService.deleteFeature(id);
+            featuresService.deleteFeature(id);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            this.logger.severe(e.getMessage());
+            logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
