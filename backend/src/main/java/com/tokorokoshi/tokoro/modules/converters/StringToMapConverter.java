@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.converters;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public class StringToMapConverter implements Converter<String, Map<String, Strin
     public Map<String, String> convert(@NotNull String source) {
         try {
             return objectMapper.readValue(source, new TypeReference<>() {});
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Invalid JSON format for conversion", e);
         }
     }
