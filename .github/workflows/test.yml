@@ -5,11 +5,15 @@ on:
     branches:
       - develop
       - dev/*
+    paths:
+      - 'frontend/**'
   pull_request:
     branches:
       - main
       - develop
       - dev/*
+    paths:
+      - 'frontend/**'
 
 jobs:
   build-frontend:
