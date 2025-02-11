@@ -17,7 +17,6 @@ export interface CarouselSectionProps {
 export default function CarouselSection({title, places}: CarouselSectionProps) {
     return (
         <section className={styles.savedPlace}>
-            
             <div className={styles.line}></div>
             <h1 className={styles.title}>{title}</h1>
             <Carousel className={styles.carousel}>
@@ -48,7 +47,7 @@ export default function CarouselSection({title, places}: CarouselSectionProps) {
                                         <div className={styles.placeDescription}>
                                             <p>{place.categoryId}</p>
                                             <p>{place.location.address}</p>
-                                            <p>{place.description}</p>
+                                            <p className={styles.description}>{place.description}</p>
                                         </div>
                                     </div>
                                 </CardContent>
