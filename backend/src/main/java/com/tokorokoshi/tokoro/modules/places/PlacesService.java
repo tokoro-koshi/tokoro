@@ -252,4 +252,6 @@ public class PlacesService {
                 .map(this::getPlaceWithPicturesUrls)
                 .toList();
     }
+
+    //Add tags search method (aggregate query mongodb)
 }
