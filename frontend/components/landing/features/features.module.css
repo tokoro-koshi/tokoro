@@ -1,9 +1,9 @@
 .features {
-  @apply bg-primary px-8 py-9 relative z-20;
+  @apply relative z-20 bg-primary px-8 py-9;
 }
 
 .wave {
-  @apply absolute top-0 left-0 w-full z-30;
+  @apply absolute left-0 top-0 z-30 w-full;
   transform: translateY(-90%);
   pointer-events: none;
 }
@@ -13,11 +13,9 @@
 }
 
 .card {
-  @apply flex flex-col items-center text-center
+  @apply flex flex-col items-center text-center;
 }
 
 .iconWrapper {
   @apply mx-auto mb-4;
 }
-
-

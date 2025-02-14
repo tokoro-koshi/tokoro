@@ -29,7 +29,7 @@ export default function InteractiveShowcase() {
                     <div className={styles.ratingBackground}></div>
                     <Image
                       src={Star}
-                      alt='Rating'
+                      alt={'Rating'}
                       width={12}
                       height={11}
                       className={styles.star}
