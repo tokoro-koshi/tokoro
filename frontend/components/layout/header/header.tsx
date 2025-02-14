@@ -13,14 +13,14 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <Image src={Logo} alt='Tokoro Logo' className={styles.logoImage} />
+        <Image src={Logo} alt={'Tokoro Logo'} className={styles.logoImage} />
         <span>Tokoro</span>
       </div>
       <nav className={styles.nav}>
         <Link href={routes.home} className={styles.navLink}>
           Home
         </Link>
-        <Link href='#features' className={styles.navLink}>
+        <Link href={'#features'} className={styles.navLink}>
           Features
         </Link>
         <Link href={routes.about} className={styles.navLink}>
