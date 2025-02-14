@@ -3,7 +3,7 @@
 }
 
 .carousel {
-  @apply flex flex-col items-center justify-between mx-8 mt-4 mb-32 px-4;
+  @apply mx-8 mb-32 mt-4 flex flex-col items-center justify-between px-4;
 }
 
 .carouselItem {
@@ -11,7 +11,7 @@
 }
 
 .cardContent {
-  @apply flex flex-col items-center p-6 text-center text-black text-xl;
+  @apply flex flex-col items-center p-6 text-center text-xl text-black;
 }
 
 .avatar {
@@ -19,7 +19,7 @@
 }
 
 .comment {
-  @apply mb-5 mx-7 italic ;
+  @apply mx-7 mb-5 italic;
 }
 
 .name {

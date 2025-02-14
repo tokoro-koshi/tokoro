@@ -5,7 +5,7 @@ import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import Image from "next/image";
+import Image from 'next/image';
 import arrowLeft from '@/public/carousel-arrow-left.svg';
 import arrowRight from '@/public/carousel-arrow-right.svg';
 
@@ -64,8 +64,15 @@ const Carousel = React.forwardRef<
     ref
   ) => {
     const pluginsArray = autoplay
-      ? [Autoplay(), ...(plugins ? (Array.isArray(plugins) ? plugins : [plugins]) : [])]
-      : (plugins ? (Array.isArray(plugins) ? plugins : [plugins]) : []);
+      ? [
+          Autoplay(),
+          ...(plugins ? (Array.isArray(plugins) ? plugins : [plugins]) : []),
+        ]
+      : plugins
+        ? Array.isArray(plugins)
+          ? plugins
+          : [plugins]
+        : [];
 
     const [carouselRef, api] = useEmblaCarousel(
       {
@@ -87,14 +94,14 @@ const Carousel = React.forwardRef<
     }, []);
 
     const resetAutoplay = React.useCallback(() => {
-     const autoplayPlugin = api?.plugins()?.autoplay;
-       if (!autoplayPlugin) return;
-          const resetOrStop =
-              autoplayPlugin.options?.stopOnInteraction === false
-                  ? autoplayPlugin.reset
-                  : autoplayPlugin.stop;
-          resetOrStop();
-      }, [api]);
+      const autoplayPlugin = api?.plugins()?.autoplay;
+      if (!autoplayPlugin) return;
+      const resetOrStop =
+        autoplayPlugin.options?.stopOnInteraction === false
+          ? autoplayPlugin.reset
+          : autoplayPlugin.stop;
+      resetOrStop();
+    }, [api]);
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev();
       resetAutoplay();
@@ -102,7 +109,7 @@ const Carousel = React.forwardRef<
 
     const scrollNext = React.useCallback(() => {
       api?.scrollNext();
-        resetAutoplay();
+      resetAutoplay();
     }, [api, resetAutoplay]);
 
     const handleKeyDown = React.useCallback(
@@ -161,8 +168,8 @@ const Carousel = React.forwardRef<
           ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn('relative', className)}
-          role='region'
-          aria-roledescription='carousel'
+          role={'region'}
+          aria-roledescription={'carousel'}
           {...props}
         >
           {children}
@@ -180,11 +187,11 @@ const CarouselContent = React.forwardRef<
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div ref={carouselRef} className='overflow-hidden'>
+    <div ref={carouselRef} className={'overflow-hidden'}>
       <div
         ref={ref}
         className={cn(
-          'flex relative h-full',
+          'relative flex h-full',
           orientation === 'horizontal' ? 'mx-6' : '-mt-6 flex-col',
           className
         )}
@@ -204,10 +211,10 @@ const CarouselItem = React.forwardRef<
   return (
     <div
       ref={ref}
-      role='group'
-      aria-roledescription='slide'
+      role={'group'}
+      aria-roledescription={'slide'}
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full ',
+        'min-w-0 shrink-0 grow-0 basis-full',
         orientation === 'horizontal' ? 'pl-7 pr-7' : 'pt-4',
         className
       )}
@@ -224,27 +231,27 @@ const CarouselPrevious = React.forwardRef<
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
-      <Button
-          ref={ref}
-          variant={variant}
-          size={size}
-          className={cn(
-              'absolute ',
-              orientation === 'horizontal'
-                  ? '-left-12 top-1/2 -translate-y-1/2 h-full'
-                  : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
-              className
-          )}
-          disabled={!canScrollPrev}
-          onClick={scrollPrev}
-          {...props}
-      >
-          <div className="flex items-center justify-center h-full">
-              <Image src={arrowLeft} alt="Previous" className="h-8 w-8 ml-8"/>
-          </div>
-          <span className='sr-only'>Previous slide</span>
-      </Button>
-);
+    <Button
+      ref={ref}
+      variant={variant}
+      size={size}
+      className={cn(
+        'absolute',
+        orientation === 'horizontal'
+          ? '-left-12 top-1/2 h-full -translate-y-1/2'
+          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+        className
+      )}
+      disabled={!canScrollPrev}
+      onClick={scrollPrev}
+      {...props}
+    >
+      <div className={'flex h-full items-center justify-center'}>
+        <Image src={arrowLeft} alt={'Previous'} className={'ml-8 h-8 w-8'} />
+      </div>
+      <span className={'sr-only'}>Previous slide</span>
+    </Button>
+  );
 });
 CarouselPrevious.displayName = 'CarouselPrevious';
 
@@ -270,10 +277,10 @@ const CarouselNext = React.forwardRef<
       onClick={scrollNext}
       {...props}
     >
-      <div className='flex h-full align-content justify-center'>
-        <Image src={arrowRight} alt='Next' className='h-8 w-8 mr-8' />
+      <div className={'align-content flex h-full justify-center'}>
+        <Image src={arrowRight} alt={'Next'} className={'mr-8 h-8 w-8'} />
       </div>
-      <span className='sr-only'>Next slide</span>
+      <span className={'sr-only'}>Next slide</span>
     </Button>
   );
 });

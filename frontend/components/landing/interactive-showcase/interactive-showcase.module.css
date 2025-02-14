@@ -1,52 +1,52 @@
 .showcase {
-  @apply px-8 py-16 bg-primary;
+  @apply bg-primary px-8 py-16;
 }
 
 .titleSection {
-  @apply flex items-center justify-between mb-11 gap-5;
+  @apply mb-11 flex items-center justify-between gap-5;
 }
 
 .line {
-  @apply flex-1 bg-background h-2 rounded-xl justify-center;
+  @apply h-2 flex-1 justify-center rounded-xl bg-background;
 }
 
 .title {
-  @apply text-center text-5xl text-background font-extrabold;
+  @apply text-center text-5xl font-extrabold text-background;
 }
 
 .carousel {
-  @apply flex flex-col items-center mx-4 mb-16 px-32;
+  @apply mx-4 mb-16 flex flex-col items-center px-32;
 }
 
 .carouselItem {
-  @apply md:basis-1/2 lg:basis-1/3 ;
+  @apply md:basis-1/2 lg:basis-1/3;
 }
 
 .cardContent {
-  @apply flex flex-col px-0 relative;
+  @apply relative flex flex-col px-0;
 }
 
-.ratingContainer{
-    @apply flex items-center gap-1 absolute bottom-[136px] z-10;
+.ratingContainer {
+  @apply absolute bottom-[136px] z-10 flex items-center gap-1;
 }
 
 .ratingBackground {
-  @apply flex bg-background rounded-tr-xl rounded-br-xl h-7 w-12;
+  @apply flex h-7 w-12 rounded-br-xl rounded-tr-xl bg-background;
 }
 
-.star{
+.star {
   @apply absolute left-1 z-20;
 }
 
-.rating{
-  @apply text-muted-foreground text-center absolute left-5 mb-1;
+.rating {
+  @apply absolute left-5 mb-1 text-center text-muted-foreground;
 }
 
-.image{
-    @apply rounded-tr-[43px] rounded-tl-[43px] w-full h-[195px] object-cover;
+.image {
+  @apply h-[195px] w-full rounded-tl-[43px] rounded-tr-[43px] object-cover;
 }
 
-.text{
+.text {
   @apply px-[18px] py-2 text-left;
 }
 
@@ -55,5 +55,5 @@
 }
 
 .placeDescription {
-  @apply text-xs font-light text-primary mb-[6px];
+  @apply mb-[6px] text-xs font-light text-primary;
 }

@@ -2,7 +2,7 @@
   {
     title: 'AI-driven Quick Search',
     description:
-      'Find exactly what you\'re looking for with our intelligent search feature.',
+      "Find exactly what you're looking for with our intelligent search feature.",
     icon: '/icons/search.svg',
   },
   {
@@ -14,7 +14,7 @@
   {
     title: 'Unique Recommendations',
     description:
-      "Get tailored suggestions based on your preferences and past visits.",
+      'Get tailored suggestions based on your preferences and past visits.',
     icon: '/icons/person.svg',
   },
 ];

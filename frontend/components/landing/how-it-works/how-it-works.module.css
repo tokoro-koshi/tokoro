@@ -1,41 +1,41 @@
 .howItWorks {
-  @apply px-8 py-12 bg-muted relative;
+  @apply relative bg-muted px-8 py-12;
 }
 .wave {
-  @apply absolute top-0 left-0 w-full;
+  @apply absolute left-0 top-0 w-full;
   transform: translateY(-77%);
   pointer-events: none;
 }
 
 .titleSection {
-    @apply flex items-center justify-between mb-12 gap-5;
+  @apply mb-12 flex items-center justify-between gap-5;
 }
 
 .line {
-  @apply flex-1 bg-background h-2 rounded-xl justify-center;
+  @apply h-2 flex-1 justify-center rounded-xl bg-background;
 }
 
 .title {
-  @apply text-center text-5xl text-background font-extrabold;
+  @apply text-center text-5xl font-extrabold text-background;
 }
 
 .stepsContainer {
-  @apply flex flex-col items-center justify-between gap-20 space-y-8 md:flex-row md:space-x-12 md:space-y-0 relative;
+  @apply relative flex flex-col items-center justify-between gap-20 space-y-8 md:flex-row md:space-x-12 md:space-y-0;
 }
 
 .stepCard {
-  @apply flex flex-col items-center text-center relative;
+  @apply relative flex flex-col items-center text-center;
 }
 
 .stepCard:not(:last-child)::after {
-  content: "";
-  background-image: url("/arrow.svg");
+  content: '';
+  background-image: url('/arrow.svg');
   width: 40px;
   height: 40px;
-  @apply text-4xl text-background absolute right-[-5rem] top-2/4;
+  @apply absolute right-[-5rem] top-2/4 text-4xl text-background;
   transform: translateY(-50%);
 }
 
-.bottomLine{
-    @apply mt-12 bg-background h-2 rounded-xl justify-center;
+.bottomLine {
+  @apply mt-12 h-2 justify-center rounded-xl bg-background;
 }

@@ -1,39 +1,39 @@
 .hero {
-  @apply py-16 bg-secondary overflow-hidden relative z-10;
+  @apply relative z-10 overflow-hidden bg-secondary py-16;
 }
 
-.content{
-    @apply flex flex-col md:flex-row justify-between gap-12 relative z-10 mb-20;
+.content {
+  @apply relative z-10 mb-20 flex flex-col justify-between gap-12 md:flex-row;
 }
 
-.container{
-    @apply order-first ml-9 ;
+.container {
+  @apply order-first ml-9;
 }
 
 .title {
-  @apply mb-7 text-5xl md:text-6xl font-extrabold text-foreground;
+  @apply mb-7 text-5xl font-extrabold text-foreground md:text-6xl;
 }
 
 .highlight {
-  @apply mx-2 inline-block px-2 py-0.5 bg-muted-foreground text-background text-center rounded-xl;
+  @apply mx-2 inline-block rounded-xl bg-muted-foreground px-2 py-0.5 text-center text-background;
 }
 
 .subtitle {
-  @apply mb-52 font-medium max-w-2xl text-2xl text-muted-foreground md:text-3xl;
+  @apply mb-52 max-w-2xl text-2xl font-medium text-muted-foreground md:text-3xl;
 }
 
 .btn {
-  @apply ml-9 bg-background py-2 px-14 rounded-md font-semibold text-lg text-muted-foreground hover:bg-white active:bg-background;
+  @apply ml-9 rounded-md bg-background px-14 py-2 text-lg font-semibold text-muted-foreground hover:bg-white active:bg-background;
 }
 
-.image{
-    @apply order-last w-1/2 mr-14;
+.image {
+  @apply order-last mr-14 w-1/2;
 }
 
 .myImage {
-    @apply absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-1/2 max-w-[680px] max-h-[724px] mx-10 mt-[51px];
+  @apply absolute right-0 top-1/2 z-10 mx-10 mt-[51px] max-h-[724px] w-1/2 max-w-[680px] -translate-y-1/2 transform;
 }
 
 .place {
-    @apply object-contain w-full h-auto;
+  @apply h-auto w-full object-contain;
 }
