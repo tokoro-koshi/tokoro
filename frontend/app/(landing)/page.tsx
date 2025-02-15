@@ -8,7 +8,7 @@ import CallToAction from '@/components/landing/call-to-action/call-to-action';
 
 export default async function Home() {
   return (
-    <main className='flex-grow'>
+    <main className='flex-grow bg-primary'>
       <Header />
       <Hero />
       <Features />
