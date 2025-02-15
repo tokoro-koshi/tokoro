@@ -3,9 +3,7 @@
 }
 
 .wave {
-  @apply absolute left-0 top-0 w-full;
-  transform: translateY(-67%);
-  pointer-events: none;
+  @apply pointer-events-none absolute left-0 top-0 w-full -translate-y-2/3;
 }
 
 .title {

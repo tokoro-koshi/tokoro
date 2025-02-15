@@ -22,18 +22,21 @@ export default function Footer() {
         <div className={styles.social}>
           <a
             href={'https://facebook.com'}
+            target={'_blank'}
             aria-label={'Facebook'}
             className={styles.socialLink}
             dangerouslySetInnerHTML={{ __html: siFacebook.svg }}
           />
           <a
             href={'https://twitter.com'}
+            target={'_blank'}
             aria-label={'Twitter'}
             className={styles.socialLink}
             dangerouslySetInnerHTML={{ __html: siX.svg }}
           />
           <a
             href={'https://instagram.com'}
+            target={'_blank'}
             aria-label={'Instagram'}
             className={styles.socialLink}
             dangerouslySetInnerHTML={{ __html: siInstagram.svg }}
