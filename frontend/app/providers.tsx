@@ -14,7 +14,7 @@ function UserStoreHandler({ children }: { children: ReactNode }) {
     }
   }, [isLoading, user, setUser]);
 
-  return <>{children}</>;
+  return children;
 }
 
 export default function Providers({ children }: { children: ReactNode }) {
