@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 )
 public class SwaggerConfiguration {
     private static final String securitySchemeName = "bearerAuth";
-    private static final String description = "Enter the JWT token with the `Bearer ` prefix, e.g. \"Bearer eyJhbGci...\"";
+    private static final String description = "Enter the JWT token. The 'Bearer ' prefix will be added automatically, e.g. \"eyJhbGci...\"";
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -37,7 +37,7 @@ public class SwaggerConfiguration {
                                 new SecurityScheme()
                                         .name(securitySchemeName)
                                         .type(SecurityScheme.Type.HTTP)
-                                        .scheme("Bearer")
+                                        .scheme("bearer")
                                         .bearerFormat("JWT")
                                         .description(description)
                         )
