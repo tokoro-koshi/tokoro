@@ -18,11 +18,12 @@ type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
 type CarouselProps = {
-  opts?: CarouselOptions;
-  plugins?: CarouselPlugin;
-  orientation?: 'horizontal' | 'vertical';
-  setApi?: (api: CarouselApi) => void;
-  autoplay?: boolean;
+  opts?: CarouselOptions | null;
+  plugins?: CarouselPlugin | null;
+  orientation?: 'horizontal' | 'vertical' | null;
+  setApi?: ((api: CarouselApi) => void) | null;
+  autoplay?: boolean | null;
+  snappedCardClassName?: string | null;
 };
 
 type CarouselContextProps = {
@@ -59,6 +60,7 @@ const Carousel = React.forwardRef<
       autoplay = false,
       className,
       children,
+      snappedCardClassName,
       ...props
     },
     ref
@@ -147,11 +149,34 @@ const Carousel = React.forwardRef<
       };
     }, [api, onSelect]);
 
+    React.useEffect(() => {
+      if (!api || !snappedCardClassName) return;
+
+      const updateSnappedState = () => {
+        const slideNodes = api.slideNodes(),
+          activeIndex = api.selectedScrollSnap() + 1;
+        // Remove the class from all slides
+        slideNodes.forEach((slide) =>
+          slide.classList.remove(snappedCardClassName)
+        );
+        // Add the class to the current active slide
+        slideNodes[activeIndex]?.classList.add(snappedCardClassName);
+      };
+
+      // Update on scroll events
+      updateSnappedState();
+      api.on('select', updateSnappedState);
+
+      return () => {
+        api?.off('select', updateSnappedState);
+      };
+    }, [api, snappedCardClassName]);
+
     return (
       <CarouselContext.Provider
         value={{
           carouselRef,
-          api: api,
+          api,
           opts,
           orientation:
             orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
@@ -187,12 +212,18 @@ const CarouselContent = React.forwardRef<
   const { carouselRef, orientation } = useCarousel();
 
   return (
-    <div ref={carouselRef} className={'overflow-hidden'}>
+    <div
+      ref={carouselRef}
+      className={cn(
+        'w-full overflow-hidden',
+        orientation === 'horizontal' ? 'mx-6' : '-mt-6'
+      )}
+    >
       <div
         ref={ref}
         className={cn(
           'relative flex h-full',
-          orientation === 'horizontal' ? 'mx-6' : '-mt-6 flex-col',
+          orientation === 'horizontal' ? 'flex-row' : 'flex-col',
           className
         )}
         {...props}
@@ -236,7 +267,7 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        'absolute',
+        'absolute disabled:opacity-30',
         orientation === 'horizontal'
           ? '-left-12 top-1/2 h-full -translate-y-1/2'
           : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
@@ -267,7 +298,7 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        'absolute',
+        'absolute disabled:opacity-30',
         orientation === 'horizontal'
           ? '-right-12 top-1/2 -translate-y-1/2'
           : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
