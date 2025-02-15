@@ -3,13 +3,11 @@
 }
 
 .wave {
-  @apply absolute left-0 top-0 z-30 w-full;
-  transform: translateY(-90%);
-  pointer-events: none;
+  @apply pointer-events-none absolute left-0 top-0 z-30 w-full -translate-y-[90%];
 }
 
 .cardContainer {
-  @apply flex flex-col items-center justify-between gap-[30px] space-y-8 md:flex-row md:space-x-12 md:space-y-0;
+  @apply flex flex-col items-center justify-between gap-8 space-y-8 md:flex-row md:space-x-12 md:space-y-0;
 }
 
 .card {

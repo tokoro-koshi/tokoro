@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { cn } from '@/lib/utils';
+import { JetBrainsMono, Raleway } from '@/fonts';
 import Provider from '@/app/providers';
 import Header from '@/components/layout/header/header';
 import Footer from '@/components/layout/footer/footer';
@@ -20,7 +22,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`antialiased`}>
+      <body className={cn(Raleway.variable, JetBrainsMono.variable)}>
         <Provider>
           <div className='flex min-h-screen flex-col'>
             <Header />
