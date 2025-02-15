@@ -257,20 +257,35 @@ public class PlacesService {
                 .toList();
     }
 
-    //Add tags search method (aggregate query mongodb)
+    /**
+     * Gets places that have at least one of the specified tags.
+     *
+     * @param tags tags to search for
+     * @return places that contain at least one of the specified tags
+     */
     public List<PlaceDto> getPlacesByTags(List<TagDto> tags) {
+        if (tags == null || tags.isEmpty()) {
+            throw new IllegalArgumentException("Tags cannot be null or empty");
+        }
 
-        MatchOperation matchOperation = Aggregation.match(Criteria.where("tags").in(tags));
+        // For each tag, create an individual criterion and add it to an OR list
+        var matchers = tags.stream()
+                .map(tag -> Criteria.where("tags")
+                        .elemMatch(Criteria.where("name").is(tag.name())))
+                .toList();
+
+        // Create criteria to check if the place's tags array contains ANY of the specified tags
+        Criteria criteria = new Criteria().orOperator(matchers);
+        MatchOperation operation = Aggregation.match(criteria);
 
         AggregationResults<Place> results = mongoTemplate.aggregate(
-                newAggregation(matchOperation),
+                newAggregation(operation),
                 Place.class,
                 Place.class
         );
+
         return results.getMappedResults().stream()
                 .map(this::getPlaceWithPicturesUrls)
                 .toList();
-
     }
-
 }
