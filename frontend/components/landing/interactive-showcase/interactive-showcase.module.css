@@ -43,7 +43,7 @@
 }
 
 .ratingContainer {
-  @apply absolute bottom-[136px] z-10 flex items-center gap-1;
+  @apply absolute top-[42%] z-10 flex items-center gap-1;
 }
 
 .ratingBackground {
@@ -59,17 +59,31 @@
 }
 
 .image {
-  @apply h-[195px] w-full rounded-tl-[43px] rounded-tr-[43px] object-cover;
+  @apply h-48 w-full rounded-tl-[43px] rounded-tr-[43px] object-cover;
 }
 
 .text {
-  @apply px-[18px] py-2 text-left;
+  @apply px-4 py-2 text-left;
 }
 
 .placeName {
-  @apply mb-[6px] text-lg font-semibold text-muted-foreground;
+  @apply mb-1.5 text-lg font-semibold text-muted-foreground;
 }
 
 .placeDescription {
-  @apply mb-[6px] text-xs font-light text-primary;
+  @apply mb-1.5 text-xs font-light text-primary;
+}
+
+.isSnapped {
+  & .placeName {
+    @apply text-2xl;
+  }
+
+  & .placeDescription {
+      @apply text-base;
+  }
+
+  & .ratingContainer {
+    @apply top-[40%];
+  }
 }

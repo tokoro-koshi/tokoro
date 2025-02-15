@@ -1,39 +1,39 @@
 .hero {
-  @apply relative z-10 overflow-hidden bg-secondary pb-16 pt-32;
-}
+  @apply grid md:grid-cols-3 xl:grid-cols-2 auto-rows-min;
+  @apply relative z-10 overflow-hidden bg-secondary pb-16 pt-32 px-10 gap-5;
 
-.content {
-  @apply relative z-10 mb-20 flex flex-col justify-between gap-12 md:flex-row;
-}
+  & .title {
+    @apply mb-3 xl:mb-8 text-4xl font-extrabold text-foreground xl:text-6xl order-none;
+  }
 
-.container {
-  @apply order-first ml-9;
-}
+  & .buttons {
+    @apply flex flex-wrap gap-4 order-3 place-self-start lg:max-xl:-mt-20;
+  }
 
-.title {
-  @apply mb-7 text-5xl font-extrabold text-foreground md:text-6xl;
-}
+  & .text,
+  & .buttons {
+    @apply max-md:mx-auto max-md:text-center max-md:text-balance;
+  }
 
-.highlight {
-  @apply mx-2 inline-block rounded-xl bg-muted-foreground px-2 py-0.5 text-center text-background;
-}
+  & .highlight {
+    @apply mx-2 inline-block rounded-xl bg-muted-foreground px-2 py-0.5 text-center text-background;
+  }
 
-.subtitle {
-  @apply mb-52 max-w-2xl text-2xl font-medium text-muted-foreground md:text-3xl;
-}
+  & .subtitle {
+    @apply max-w-2xl text-2xl font-medium text-muted-foreground xl:text-3xl order-2;
+  }
 
-.btn {
-  @apply ml-9 rounded-md bg-background px-14 py-2 text-lg font-semibold text-muted-foreground hover:bg-white active:bg-background;
-}
+  & .btn {
+    @apply rounded-md px-14 py-2 text-lg font-semibold;
+    @apply bg-background hover:bg-white active:bg-indigo-900 text-muted-foreground;
+  }
 
-.image {
-  @apply order-last mr-14 w-1/2;
-}
+  & .myImage {
+    @apply z-10 mx-10 max-h-[724px] max-w-[680px] transform;
+    @apply md:col-span-2 xl:col-span-1 row-span-2 order-1;
+  }
 
-.myImage {
-  @apply absolute right-0 top-1/2 z-10 mx-10 mt-[51px] max-h-[724px] w-1/2 max-w-[680px] -translate-y-1/2 transform;
-}
-
-.place {
-  @apply h-auto w-full object-contain;
+  & .place {
+    @apply h-auto w-full object-contain;
+  }
 }
