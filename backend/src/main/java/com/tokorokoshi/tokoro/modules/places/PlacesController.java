@@ -4,6 +4,7 @@ import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.dto.Response;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
+import com.tokorokoshi.tokoro.modules.places.dto.SearchDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
@@ -124,7 +125,8 @@ public class PlacesController {
             summary = "Search places by generated tags",
             description = "Returns a list of places based on the search query"
     )
-    @GetMapping(value = "/search/{query}",
+    @PostMapping(
+            value = "/search",
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> search(
@@ -133,12 +135,14 @@ public class PlacesController {
                     required = true,
                     example = "restaurant"
             )
-            @PathVariable
-            String query) {
-        Response<TagsDto> tagsResponse = tagsService.generateTags(query);
+            @RequestBody
+            SearchDto body
+    ) {
+        Response<TagsDto> tagsResponse =
+                tagsService.generateTags(body.prompt());
         if (tagsResponse.isRefusal()) {
             return ResponseEntity.status(tagsResponse.getRefusalStatus())
-                    .body(tagsResponse.getRefusal());
+                                 .body(tagsResponse.getRefusal());
         }
 
         List<TagDto> tags = List.of(tagsResponse.getContent().tags());
