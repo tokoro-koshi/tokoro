@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/carousel';
 import styles from './interactive-showcase.module.css';
 import { places } from '@/lib/constants/landing/interactive-showcase';
-import Star from '@/public/star.svg';
+import Star from '@/public/icons/star.svg';
 
 export default function InteractiveShowcase() {
   return (

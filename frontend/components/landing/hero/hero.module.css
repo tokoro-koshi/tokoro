@@ -1,5 +1,5 @@
 .hero {
-  @apply relative z-10 overflow-hidden bg-secondary py-16;
+  @apply relative z-10 overflow-hidden bg-secondary pb-16 pt-32;
 }
 
 .content {

@@ -4,16 +4,18 @@ import InteractiveShowcase from '@/components/landing/interactive-showcase/inter
 import HowItWorks from '@/components/landing/how-it-works/how-it-works';
 import Testimonials from '@/components/landing/testimonials/testimonials';
 import CallToAction from '@/components/landing/call-to-action/call-to-action';
+import Header from '@/components/landing/header/header';
 
 export default async function Home() {
   return (
-    <>
+    <main className='flex-grow'>
+      <Header />
       <Hero />
       <Features />
       <InteractiveShowcase />
       <HowItWorks />
       <Testimonials />
       <CallToAction />
-    </>
+    </main>
   );
 }

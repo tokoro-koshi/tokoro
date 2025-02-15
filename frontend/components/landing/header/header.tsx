@@ -2,20 +2,20 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUser } from '@/lib/stores/user';
 import routes from '@/lib/constants/routes';
-import Logo from '@/public/logo.svg';
+import { useUser } from '@/lib/stores/user';
 import AuthButton from '@/components/buttons/auth-buttons';
+import Logo from '@/public/logo.svg';
 import styles from './header.module.css';
 
 export default function Header() {
   const { user, isLoading } = useUser();
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
+      <Link href={routes.home} className={styles.logo}>
         <Image src={Logo} alt={'Tokoro Logo'} className={styles.logoImage} />
-        <span>Tokoro</span>
-      </div>
+        <h1 className={styles.name}>Tokoro</h1>
+      </Link>
       <nav className={styles.nav}>
         <Link href={routes.home} className={styles.navLink}>
           Home
