@@ -9,11 +9,11 @@ export default function Hero() {
     <section className={styles.hero}>
       <div className={styles.content}>
         <div className={styles.container}>
-          <h1 className={styles.title}>
+          <h2 className={styles.title}>
             Discover Amazing
             <span className={styles.highlight}>Places</span>
             Near You
-          </h1>
+          </h2>
           <p className={styles.subtitle}>
             Find interesting places to visit based on your preferences with
             ease.

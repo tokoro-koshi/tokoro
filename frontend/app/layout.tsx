@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import { JetBrainsMono, Raleway } from '@/fonts';
 import Provider from '@/app/providers';
-import Header from '@/components/layout/header/header';
+import Header from '@/components/landing/header/header';
 import Footer from '@/components/layout/footer/footer';
 import '@/styles/globals.css';
 
@@ -25,8 +25,7 @@ export default async function RootLayout({
       <body className={cn(Raleway.variable, JetBrainsMono.variable)}>
         <Provider>
           <div className='flex min-h-screen flex-col'>
-            <Header />
-            <main className='flex-grow'>{children}</main>
+            {children}
             <Footer />
           </div>
         </Provider>
