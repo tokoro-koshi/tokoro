@@ -1,9 +1,12 @@
 package com.tokorokoshi.tokoro.modules.places;
 
 import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.dto.Response;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
+import com.tokorokoshi.tokoro.modules.tags.TagsService;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,16 +27,19 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @RequestMapping("/api/places")
 public class PlacesController {
     private final PlacesService placesService;
+    private final TagsService tagsService;
     private final Logger logger;
     private final PagedResourcesAssembler<PlaceDto> pagedResourcesAssembler;
 
     public PlacesController(
             PlacesService placesService,
-            PagedResourcesAssembler<PlaceDto> pagedResourcesAssembler
+            PagedResourcesAssembler<PlaceDto> pagedResourcesAssembler,
+            TagsService tagsService
     ) {
         this.placesService = placesService;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.logger = Logger.getLogger(PlacesController.class.getName());
+        this.tagsService = tagsService;
     }
 
     @Operation(
@@ -115,19 +121,28 @@ public class PlacesController {
     }
 
     @Operation(
-            summary = "Get a places by tags",
-            description = "Returns the places, which contain the given tags"
+            summary = "Search places by generated tags",
+            description = "Returns a list of places based on the search query"
     )
-    @GetMapping(value = "/{tags}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PlaceDto>> getPlacesByTags(
+    @GetMapping(value = "/search/{query}",
+            produces = APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> search(
             @Parameter(
-                    description = "The tags to search for",
+                    description = "The search query",
                     required = true,
-                    example = "['tag1', 'tag2']"
+                    example = "restaurant"
             )
             @PathVariable
-            List<TagDto> tags) {
-           return ResponseEntity.ok(this.placesService.getPlacesByTags(tags));
+            String query) {
+        Response<TagsDto> tagsResponse = tagsService.generateTags(query);
+        if (tagsResponse.isRefusal()) {
+            return ResponseEntity.status(tagsResponse.getRefusalStatus())
+                    .body(tagsResponse.getRefusal());
+        }
+
+        List<TagDto> tags = List.of(tagsResponse.getContent().tags());
+        return ResponseEntity.ok(placesService.getPlacesByTags(tags));
     }
 
     @Operation(
