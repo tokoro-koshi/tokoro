@@ -1,5 +1,6 @@
-package com.tokorokoshi.tokoro.modules.security;
+package com.tokorokoshi.tokoro.configuration;
 
+import com.tokorokoshi.tokoro.security.AudienceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -66,41 +67,47 @@ public class SecurityConfiguration {
             throws Exception {
         if (isDevelopment()) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .authorizeHttpRequests(
-                        auth -> auth.anyRequest().permitAll()
-                )
-                .csrf(AbstractHttpConfigurer::disable);
+                    .authorizeHttpRequests(
+                            auth -> auth.anyRequest().permitAll()
+                    )
+                    .csrf(AbstractHttpConfigurer::disable);
         } else {
             // Production & staging configuration
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(
-                                jwt -> jwt.decoder(jwtDecoder())
-                        )
-                )
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/error")
-                                    .permitAll()
-                                    .requestMatchers("/actuator/**")
+                    .oauth2ResourceServer(
+                            oauth2 -> oauth2.jwt(
+                                    jwt -> jwt.decoder(jwtDecoder())
+                            )
+                    )
+                    .authorizeHttpRequests(
+                            auth -> auth.requestMatchers("/error")
                                     .permitAll()
                                     .requestMatchers(HttpMethod.OPTIONS, "/**")
                                     .permitAll()
-                                    .requestMatchers(HttpMethod.GET, "/api/blogs/**")
+                                    .requestMatchers("/actuator/**")
                                     .permitAll()
-                                    .requestMatchers(HttpMethod.GET, "/api/about/**")
+                                    .requestMatchers(
+                                            HttpMethod.GET,
+                                            "/api/blogs/**",
+                                            "/api/privacy/**",
+                                            "/api/about/**",
+                                            "/api/features/**",
+                                            "/api/places/**"
+                                    )
                                     .permitAll()
-                                    .requestMatchers(HttpMethod.GET, "/api/privacy/**")
-                                    .permitAll()
-                                    .requestMatchers(HttpMethod.GET, "/api/features/**")
-                                    .permitAll()
-                                    .requestMatchers(HttpMethod.GET, "/api/places/**")
+                                    .requestMatchers(
+                                            "/swagger-ui/**",
+                                            "/swagger-ui.html",
+                                            "/v3/api-docs/**",
+                                            "/swagger-resources/**"
+                                    )
                                     .permitAll()
                                     .requestMatchers("/api/**")
                                     .authenticated()
                                     .anyRequest()
                                     .denyAll()
-                )
-                .csrf(AbstractHttpConfigurer::disable);
+                    )
+                    .csrf(AbstractHttpConfigurer::disable);
         }
         return http.build();
     }
