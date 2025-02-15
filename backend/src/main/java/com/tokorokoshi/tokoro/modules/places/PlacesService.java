@@ -1,11 +1,13 @@
 package com.tokorokoshi.tokoro.modules.places;
 
+
 import com.tokorokoshi.tokoro.database.HashTag;
 import com.tokorokoshi.tokoro.database.Place;
 import com.tokorokoshi.tokoro.modules.file.FileStorageService;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,7 +101,7 @@ public class PlacesService {
     /**
      * Saves a new place with optional pictures.
      *
-     * @param place    place data
+     * @param place place data
      * @return the saved place
      */
     public PlaceDto savePlace(
@@ -135,8 +139,8 @@ public class PlacesService {
     /**
      * Updates an existing place with optional pictures.
      *
-     * @param id       place ID
-     * @param place    place data
+     * @param id    place ID
+     * @param place place data
      * @return the updated place
      */
     public PlaceDto updatePlace(
@@ -254,4 +258,19 @@ public class PlacesService {
     }
 
     //Add tags search method (aggregate query mongodb)
+    public List<PlaceDto> getPlacesByTags(List<TagDto> tags) {
+
+        MatchOperation matchOperation = Aggregation.match(Criteria.where("tags").in(tags));
+
+        AggregationResults<Place> results = mongoTemplate.aggregate(
+                newAggregation(matchOperation),
+                Place.class,
+                Place.class
+        );
+        return results.getMappedResults().stream()
+                .map(this::getPlaceWithPicturesUrls)
+                .toList();
+
+    }
+
 }

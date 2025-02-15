@@ -27,14 +27,13 @@ public class SearchService {
         Response<TagsDto> tagsResponse = tagsService.generateTags(query);
         if (tagsResponse.isRefusal()) {
             return Response.<List<PlaceDto>>builder()
-                           .refusal(tagsResponse.getRefusal())
-                           .refusalStatus(tagsResponse.getRefusalStatus())
-                           .build();
+                    .refusal(tagsResponse.getRefusal())
+                    .refusalStatus(tagsResponse.getRefusalStatus())
+                    .build();
         }
-
         List<TagDto> tags = List.of(tagsResponse.getContent().tags());
-          return Response.<List<PlaceDto>>builder()
-                       .content(List.of())
-                       .build();
+        return Response.<List<PlaceDto>>builder()
+                .content(placesService.getPlacesByTags(tags))
+                .build();
     }
 }
