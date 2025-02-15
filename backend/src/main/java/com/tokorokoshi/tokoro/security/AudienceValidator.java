@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.security;
+package com.tokorokoshi.tokoro.security;
 
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
