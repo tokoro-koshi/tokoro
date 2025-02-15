@@ -6,7 +6,8 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription, CardContent,
+  CardDescription,
+  CardContent,
 } from '@/components/ui/card';
 
 export default function HowItWorks() {

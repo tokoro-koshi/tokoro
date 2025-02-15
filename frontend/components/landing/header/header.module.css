@@ -1,0 +1,24 @@
+.header {
+  @apply fixed left-0 right-0 top-0 z-50 flex items-center px-2.5 py-1.5;
+  @apply bg-background bg-opacity-65 transition-all duration-300 hover:bg-opacity-100;
+
+  & .logo {
+    @apply items-center text-2xl font-extrabold text-popover-foreground md:flex md:text-3xl;
+  }
+
+  & .nav {
+    @apply hidden flex-1 items-center justify-center gap-12 md:flex;
+  }
+
+  & .navLink {
+    @apply font-medium text-popover-foreground transition-colors hover:text-primary hover:underline;
+  }
+
+  & .authButtons {
+    @apply flex items-center gap-4;
+  }
+
+  & .name {
+    @apply inline-block;
+  }
+}

@@ -2,7 +2,8 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription, CardContent,
+  CardDescription,
+  CardContent,
 } from '@/components/ui/card';
 import styles from './features.module.css';
 import { features } from '@/lib/constants/landing/features';

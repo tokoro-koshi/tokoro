@@ -6,8 +6,8 @@ import useEmblaCarousel, {
 } from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
-import arrowLeft from '@/public/carousel-arrow-left.svg';
-import arrowRight from '@/public/carousel-arrow-right.svg';
+import arrowLeft from '@/public/icons/carousel-arrow-left.svg';
+import arrowRight from '@/public/icons/carousel-arrow-right.svg';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
