@@ -1,5 +1,5 @@
 .showcase {
-  @apply bg-primary px-8 py-16;
+  @apply bg-primary px-32 py-16;
 }
 
 .titleSection {
@@ -15,11 +15,27 @@
 }
 
 .carousel {
-  @apply mx-4 mb-16 flex flex-col items-center px-32;
+  @apply m-16 flex flex-col items-center;
+
+  & .prevButton {
+    @apply -left-20;
+  }
+
+  & .nextButton {
+    @apply -right-20;
+  }
 }
 
 .carouselItem {
-  @apply md:basis-1/2 lg:basis-1/3;
+  /* Card transition */
+  @apply transition-all duration-300 md:basis-1/2 lg:basis-1/4;
+  /* Inactive card */
+  @apply lg:-translate-y-[12.5%] lg:scale-75 lg:opacity-50;
+
+  /* Active card */
+  &.isSnapped {
+    @apply lg:basis-1/2 lg:translate-y-0 lg:scale-100 lg:opacity-100;
+  }
 }
 
 .cardContent {

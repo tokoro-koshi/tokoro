@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { places } from '@/lib/constants/landing/interactive-showcase';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -7,9 +8,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import styles from './interactive-showcase.module.css';
-import { places } from '@/lib/constants/landing/interactive-showcase';
 import Star from '@/public/icons/star.svg';
+import styles from './interactive-showcase.module.css';
 
 export default function InteractiveShowcase() {
   return (
@@ -19,7 +19,16 @@ export default function InteractiveShowcase() {
         <h2 className={styles.title}>Explore Amazing Places</h2>
         <div className={styles.line}></div>
       </div>
-      <Carousel autoplay className={styles.carousel}>
+      <Carousel
+        autoplay
+        opts={{
+          align: 'center',
+          slidesToScroll: 1,
+          inViewThreshold: 0.7,
+        }}
+        className={styles.carousel}
+        snappedCardClassName={styles.isSnapped}
+      >
         <CarouselContent>
           {places.map((place, index) => (
             <CarouselItem key={index} className={styles.carouselItem}>
@@ -56,8 +65,8 @@ export default function InteractiveShowcase() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className={styles.prevButton} />
+        <CarouselNext className={styles.nextButton} />
       </Carousel>
     </section>
   );
