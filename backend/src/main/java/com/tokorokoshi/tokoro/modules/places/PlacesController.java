@@ -3,6 +3,7 @@ package com.tokorokoshi.tokoro.modules.places;
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
+import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -111,6 +112,22 @@ public class PlacesController {
             int count
     ) {
         return ResponseEntity.ok(this.placesService.getRandomPlaces(count));
+    }
+
+    @Operation(
+            summary = "Get a places by tags",
+            description = "Returns the places, which contain the given tags"
+    )
+    @GetMapping(value = "/{tags}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PlaceDto>> getPlacesByTags(
+            @Parameter(
+                    description = "The tags to search for",
+                    required = true,
+                    example = "['tag1', 'tag2']"
+            )
+            @PathVariable
+            List<TagDto> tags) {
+           return ResponseEntity.ok(this.placesService.getPlacesByTags(tags));
     }
 
     @Operation(
