@@ -46,10 +46,10 @@ export default function InteractiveShowcase() {
                     <p className={styles.rating}>{place.rating}</p>
                   </div>
                   <Image
-                    src={place.image || '/placeholder.svg'}
+                    src={place.image}
                     alt={place.name}
                     width={350}
-                    height={195}
+                    height={192}
                     className={styles.image}
                   />
                   <div className={styles.text}>
