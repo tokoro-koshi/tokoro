@@ -1,7 +1,5 @@
 package com.tokorokoshi.tokoro.configuration;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -36,13 +34,6 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
                         ignoreResourceNotFound = true
                 )
         }
-)
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Tokoro API",
-                version = "1.0",
-                description = "This API provides the functionality to fullfill the Tokoro application needs in data querying and manipulation."
-        )
 )
 public class ApplicationConfiguration {
 }

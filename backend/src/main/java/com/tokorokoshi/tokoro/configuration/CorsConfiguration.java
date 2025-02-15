@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.security;
+package com.tokorokoshi.tokoro.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
