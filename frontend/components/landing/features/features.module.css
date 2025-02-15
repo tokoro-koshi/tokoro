@@ -1,23 +1,34 @@
 .features {
-  @apply relative z-20 bg-primary px-8 py-9;
-}
+  @apply relative flex z-20 px-8 lg:px-16 lg:-top-32 lg:-mb-32 max-lg:pt-20 bg-primary;
 
-.wave {
-  @apply pointer-events-none absolute left-0 top-0 z-30 w-full -translate-y-[90%];
-}
+  & .wave {
+    @apply hidden lg:inline absolute left-0 top-0 w-full z-40;
+  }
 
-.cardContainer {
-  @apply flex flex-col items-stretch justify-between gap-8 lg:flex-row lg:gap-x-12 lg:gap-y-0;
-}
+  & .cardContainer {
+    @apply relative z-10 2xl:mt-4 mx-auto;
+    @apply flex flex-col items-stretch justify-between gap-8 lg:flex-row lg:gap-x-12 lg:gap-y-0;
+  }
 
-.card {
-  @apply flex h-auto flex-col items-center text-balance text-center;
+  & .card {
+    @apply flex h-auto flex-col items-center text-balance text-center lg:pt-10;
+    @apply relative z-20;
+  }
 
-  & .content {
+  & .card .content {
     @apply flex flex-1 flex-col justify-between gap-2;
+  }
+
+  & .icon {
+    @apply mx-auto;
+  }
+
+  /* Mask definitions */
+  @media screen and (min-width: 1024px) {
+    & {
+      mask: url("/landing/wave-features-reference.svg") no-repeat;
+      mask-size: 100%;
+    }
   }
 }
 
-.icon {
-  @apply mx-auto;
-}
