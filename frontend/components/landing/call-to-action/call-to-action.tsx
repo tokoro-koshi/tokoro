@@ -1,7 +1,7 @@
-import styles from './call-to-action.module.css';
-import ExploreButton from '@/components/buttons/explore/explore-buttons';
 import Image from 'next/image';
-import Wave from '@/public/wave.svg';
+import ExploreButton from '@/components/buttons/explore/explore-buttons';
+import styles from './call-to-action.module.css';
+import Wave from '@/public/landing/wave.svg';
 
 export default function CallToAction() {
   return (

@@ -7,32 +7,38 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card';
-import Wave from '@/public/wave-features.svg';
+import TopWave from '@/public/landing/wave-features.svg';
 import styles from './features.module.css';
 
 export default function Features() {
   return (
     <section className={styles.features} id={'features'}>
-      <Image src={Wave} alt={'Wave'} className={styles.wave} />
-      <div className={styles.cardContainer}>
+      <Image
+        src={TopWave}
+        alt={'Top wave'}
+        className={styles.wave}
+      />
+      <ul className={styles.cardContainer}>
         {features.map((feature, index) => (
-          <Card key={index} className={styles.card}>
-            <CardHeader>
-              <Image
-                src={feature.icon}
-                alt={'Feature Icon'}
-                width={50}
-                height={60}
-                className={styles.icon}
-              />
-            </CardHeader>
-            <CardContent className={styles.content}>
-              <CardTitle>{feature.title}</CardTitle>
-              <CardDescription>{feature.description}</CardDescription>
-            </CardContent>
-          </Card>
+          <li key={index}>
+            <Card className={styles.card}>
+              <CardHeader>
+                <Image
+                  src={feature.icon}
+                  alt={'Feature Icon'}
+                  width={50}
+                  height={60}
+                  className={styles.icon}
+                />
+              </CardHeader>
+              <CardContent className={styles.content}>
+                <CardTitle>{feature.title}</CardTitle>
+                <CardDescription>{feature.description}</CardDescription>
+              </CardContent>
+            </Card>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
