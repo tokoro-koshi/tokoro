@@ -2,9 +2,7 @@
   @apply relative bg-muted px-8 py-12;
 }
 .wave {
-  @apply absolute left-0 top-0 w-full;
-  transform: translateY(-77%);
-  pointer-events: none;
+  @apply pointer-events-none absolute left-0 top-0 w-full -translate-y-[77%];
 }
 
 .titleSection {
@@ -28,12 +26,10 @@
 }
 
 .stepCard:not(:last-child)::after {
-  content: '';
+  @apply absolute right-[-5rem] top-2/4;
+  @apply h-10 w-10 -translate-y-1/2 text-4xl text-background;
+  @apply bg-contain bg-no-repeat content-[''];
   background-image: url('/arrow.svg');
-  width: 40px;
-  height: 40px;
-  @apply absolute right-[-5rem] top-2/4 text-4xl text-background;
-  transform: translateY(-50%);
 }
 
 .bottomLine {
