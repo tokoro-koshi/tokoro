@@ -4,7 +4,7 @@
     category: 'Historical Landmark',
     schedule: '9.00 a.m. - 10 p.m.',
     description: 'Description...',
-    image: '/place-carousel.svg',
+    image: '/place-carousel.png',
     rating: 4.9,
   },
   {
@@ -12,7 +12,7 @@
     category: 'Food & Drink',
     description: 'Description...',
     schedule: '9.00 a.m. - 10 p.m.',
-    image: '/place-carousel.svg',
+    image: '/place-carousel.png',
     rating: 4.9,
   },
   {
@@ -20,7 +20,7 @@
     category: 'Culture',
     description: 'Description...',
     schedule: '9.00 a.m. - 10 p.m.',
-    image: '/place-carousel.svg',
+    image: '/place-carousel.png',
     rating: 4.9,
   },
   {
@@ -28,7 +28,7 @@
     category: 'Sightseeing',
     description: 'Description...',
     schedule: '9.00 a.m. - 10 p.m.',
-    image: '/place-carousel.svg',
+    image: '/place-carousel.png',
     rating: 4.9,
   },
 ];

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import { features } from '@/lib/constants/landing/features';
 import {
   Card,
   CardHeader,
@@ -5,10 +7,8 @@ import {
   CardDescription,
   CardContent,
 } from '@/components/ui/card';
-import styles from './features.module.css';
-import { features } from '@/lib/constants/landing/features';
-import Image from 'next/image';
 import Wave from '@/public/wave-features.svg';
+import styles from './features.module.css';
 
 export default function Features() {
   return (
@@ -20,10 +20,10 @@ export default function Features() {
             <CardHeader>
               <Image
                 src={feature.icon}
-                alt={'/placeholder.svg'}
+                alt={'Feature Icon'}
                 width={50}
                 height={60}
-                className={styles.iconWrapper}
+                className={styles.icon}
               />
             </CardHeader>
             <CardContent className={styles.content}>

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import styles from './hero.module.css';
 import Image from 'next/image';
-import Place from '@/public/place.svg';
+import Place from '@/public/place.png';
 import ExploreButton from '@/components/buttons/explore/explore-buttons';
 
 export default function Hero() {
@@ -26,7 +26,7 @@ export default function Hero() {
         <div className={styles.image}></div>
       </div>
       <div className={styles.myImage}>
-        <Image src={Place} alt={'Places'} className={styles.place} />
+        <Image src={Place} alt={'Places'} className={styles.place} quality={100} />
       </div>
     </section>
   );

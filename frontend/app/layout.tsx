@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
-import { JetBrainsMono, Raleway } from '@/fonts';
+import { AllFontsVariables } from '@/fonts';
 import Provider from '@/app/providers';
 import Footer from '@/components/layout/footer/footer';
 import '@/styles/globals.css';
@@ -21,7 +21,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={cn(Raleway.variable, JetBrainsMono.variable)}>
+      <body className={cn(AllFontsVariables)}>
         <Provider>
           <div className='flex min-h-screen flex-col'>
             {children}
