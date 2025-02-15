@@ -1,7 +1,7 @@
 import { steps } from '@/lib/constants/landing/steps';
 import styles from './how-it-works.module.css';
 import Image from 'next/image';
-import Wave2 from '@/public/wave-how-it-works.svg';
+import Wave2 from '@/public/landing/wave-how-it-works.svg';
 import {
   Card,
   CardHeader,
