@@ -6,7 +6,7 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
+  CardDescription, CardContent,
 } from '@/components/ui/card';
 
 export default function HowItWorks() {
@@ -24,8 +24,10 @@ export default function HowItWorks() {
           <Card key={index} className={styles.stepCard}>
             <CardHeader>
               <CardTitle>{step.title}</CardTitle>
-              <CardDescription>{step.description}</CardDescription>
             </CardHeader>
+            <CardContent>
+              <CardDescription>{step.description}</CardDescription>
+            </CardContent>
           </Card>
         ))}
       </div>

@@ -7,13 +7,17 @@
 }
 
 .cardContainer {
-  @apply flex flex-col items-center justify-between gap-8 space-y-8 md:flex-row md:space-x-12 md:space-y-0;
+  @apply flex flex-col items-stretch justify-between gap-8 lg:flex-row lg:gap-x-12 lg:gap-y-0;
 }
 
 .card {
-  @apply flex flex-col items-center text-center;
+  @apply h-auto flex flex-col items-center text-center text-balance;
+
+  & .content {
+    @apply flex-1 flex flex-col justify-between gap-2;
+  }
 }
 
 .iconWrapper {
-  @apply mx-auto mb-4;
+  @apply mx-auto;
 }

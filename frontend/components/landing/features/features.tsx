@@ -2,7 +2,7 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
+  CardDescription, CardContent,
 } from '@/components/ui/card';
 import styles from './features.module.css';
 import { features } from '@/lib/constants/landing/features';
@@ -24,9 +24,11 @@ export default function Features() {
                 height={60}
                 className={styles.iconWrapper}
               />
+            </CardHeader>
+            <CardContent className={styles.content}>
               <CardTitle>{feature.title}</CardTitle>
               <CardDescription>{feature.description}</CardDescription>
-            </CardHeader>
+            </CardContent>
           </Card>
         ))}
       </div>
