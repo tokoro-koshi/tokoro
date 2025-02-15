@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import { JetBrainsMono, Raleway } from '@/fonts';
 import Provider from '@/app/providers';
-import Header from '@/components/landing/header/header';
 import Footer from '@/components/layout/footer/footer';
 import '@/styles/globals.css';
 
