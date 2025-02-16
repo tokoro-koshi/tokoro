@@ -9,12 +9,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerErrorException;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error adding favorite place", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .body("Failed to add favorite place");
         }
     }
@@ -122,7 +123,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error updating favorite place", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .body("Failed to update favorite place");
         }
     }
@@ -163,7 +164,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error removing favorite place", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .body("Failed to remove favorite place");
         }
     }
@@ -186,7 +187,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error retrieving favorite places", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .build();
         }
     }
@@ -212,30 +213,19 @@ public class FavoritePlacesController {
             @NotNull
             @NotBlank
             String establishmentId
-    ) {
+    ) throws BadRequestException {
         try {
             PlaceDto favoritePlace = favoritePlacesService
                     .getFavoritePlaceById(establishmentId);
             if (favoritePlace != null) {
                 return ResponseEntity.ok(favoritePlace);
             } else {
-                log.error(
-                        "Favorite place with establishment ID {} not found",
-                        establishmentId
-                );
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                throw new BadRequestException("Favorite place not found");
             }
-        } catch (InvalidEstablishmentException e) {
-            log.error(
-                    "Error retrieving favorite place because of invalid establishment",
-                    e
-            );
-            return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            log.error("Error retrieving favorite place by ID", e);
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .build();
+        } catch (InvalidEstablishmentException ex) {
+            throw new BadRequestException("Invalid establishment ID");
+        } catch (Exception ex) {
+            throw new ServerErrorException(ex.getMessage(), ex);
         }
     }
 
@@ -256,7 +246,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error clearing favorite places", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .body("Failed to clear favorite places");
         }
     }
@@ -295,7 +285,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error checking if place is a favorite", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .build();
         }
     }
@@ -318,7 +308,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error sorting favorite places by date", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .build();
         }
     }
@@ -344,7 +334,7 @@ public class FavoritePlacesController {
                     e
             );
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .build();
         }
     }
@@ -367,7 +357,7 @@ public class FavoritePlacesController {
         } catch (Exception e) {
             log.error("Error sorting favorite places by rating", e);
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .internalServerError()
                     .build();
         }
     }
@@ -404,10 +394,8 @@ public class FavoritePlacesController {
                     e
             );
             return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            log.error("Error searching favorite places by name", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(ex.getMessage(), ex);
         }
     }
 
@@ -425,10 +413,8 @@ public class FavoritePlacesController {
         try {
             int count = favoritePlacesService.countFavoritePlaces();
             return ResponseEntity.ok(count);
-        } catch (Exception e) {
-            log.error("Error counting favorite places", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(ex.getMessage(), ex);
         }
     }
 
@@ -447,10 +433,11 @@ public class FavoritePlacesController {
             favoritePlacesService.rollbackLastFavoritePlace();
             return ResponseEntity.ok(
                     "Last favorite place rolled back successfully");
-        } catch (Exception e) {
-            log.error("Error rolling back last favorite place", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to roll back last favorite place");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to roll back last favorite place",
+                    ex
+            );
         }
     }
 }

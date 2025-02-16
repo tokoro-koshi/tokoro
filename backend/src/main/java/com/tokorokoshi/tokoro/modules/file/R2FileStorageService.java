@@ -91,8 +91,10 @@ public class R2FileStorageService implements FileStorageService {
             logger.trace("Folder created successfully: {}", normalizedFolder);
             return normalizedFolder;
         }).exceptionally(ex -> {
-            logger.error("Failed to create folder: {}", folder, ex);
-            throw new RuntimeException("Failed to create folder", ex);
+            throw new RuntimeException(
+                    "Failed to create folder: " + folder,
+                    ex
+            );
         });
     }
 
@@ -129,12 +131,10 @@ public class R2FileStorageService implements FileStorageService {
                 logger.trace("File uploaded successfully: {}", key);
                 return key;
             } catch (Exception ex) {
-                logger.error(
-                        "Failed to upload file: {}",
-                        file.getOriginalFilename(),
+                throw new RuntimeException(
+                        "Failed to upload file: " + file.getOriginalFilename(),
                         ex
                 );
-                throw new RuntimeException("File upload failed", ex);
             }
         });
     }
@@ -162,7 +162,6 @@ public class R2FileStorageService implements FileStorageService {
                         .map(CompletableFuture::join)
                         .toList())
                 .exceptionally(ex -> {
-                    logger.error("Failed to upload files", ex);
                     throw new RuntimeException(
                             "Failed to upload files",
                             ex
@@ -184,8 +183,8 @@ public class R2FileStorageService implements FileStorageService {
             logger.trace("File retrieved successfully: {}", key);
             return response.asByteArray();
         }).exceptionally(ex -> {
-            logger.error("Failed to retrieve file: {}", key, ex);
-            throw new RuntimeException("Failed to retrieve file", ex);
+            logger.warn("Failed to retrieve file: {}", key, ex);
+            return new byte[0];
         });
     }
 
@@ -211,30 +210,35 @@ public class R2FileStorageService implements FileStorageService {
         logger.trace("Generating signed URL for file: {}", key);
         return CompletableFuture.supplyAsync(() -> {
             GetObjectRequest.Builder requestBuilder = GetObjectRequest.builder()
-                    .bucket(
-                            bucketName)
+                    .bucket(bucketName)
                     .key(key);
 
-            if (overrideContentDisposition != null) {
+            if (overrideContentDisposition != null)
                 requestBuilder.responseContentDisposition(
-                        overrideContentDisposition);
-            }
+                        overrideContentDisposition
+                );
 
             GetObjectRequest request = requestBuilder.build();
             Duration expiration = Duration.ofSeconds(
-                    expirationInSeconds != null ? expirationInSeconds : S3Constants.COMMON_EXPIRATION);
+                    expirationInSeconds != null
+                            ? expirationInSeconds
+                            : S3Constants.COMMON_EXPIRATION
+            );
 
-            String signedUrl = presigner.presignGetObject(r -> r.getObjectRequest(
-                                    request)
-                            .signatureDuration(
-                                    expiration))
+            String signedUrl = presigner
+                    .presignGetObject(r -> r
+                            .getObjectRequest(request)
+                            .signatureDuration(expiration)
+                    )
                     .url()
                     .toString();
             logger.trace("Signed URL generated successfully: {}", signedUrl);
             return signedUrl;
         }).exceptionally(ex -> {
-            logger.error("Failed to generate signed URL for file: {}", key, ex);
-            throw new RuntimeException("Failed to generate signed URL", ex);
+            throw new RuntimeException(
+                    "Failed to generate signed URL for file: " + key,
+                    ex
+            );
         });
     }
 
@@ -278,19 +282,15 @@ public class R2FileStorageService implements FileStorageService {
 
             List<ObjectIdentifier> identifiers = objects.stream()
                     .map(obj -> ObjectIdentifier.builder()
-                            .key(
-                                    obj.key())
+                            .key(obj.key())
                             .build())
                     .toList();
 
             DeleteObjectsRequest deleteRequest = DeleteObjectsRequest.builder()
-                    .bucket(
-                            bucketName)
-                    .delete(
-                            Delete.builder()
-                                    .objects(
-                                            identifiers)
-                                    .build())
+                    .bucket(bucketName)
+                    .delete(Delete.builder()
+                            .objects(identifiers)
+                            .build())
                     .build();
 
             DeleteObjectsResponse response = s3Client.deleteObjects(
@@ -314,12 +314,9 @@ public class R2FileStorageService implements FileStorageService {
         return CompletableFuture.supplyAsync(() -> {
             String normalizedDir = normalizeDirectoryPath(directory);
             ListObjectsV2Request request = ListObjectsV2Request.builder()
-                    .bucket(
-                            bucketName)
-                    .prefix(
-                            normalizedDir)
-                    .delimiter(
-                            groupByFolder ? "/" : null)
+                    .bucket(bucketName)
+                    .prefix(normalizedDir)
+                    .delimiter(groupByFolder ? "/" : null)
                     .build();
 
             ListObjectsV2Response response = s3Client.listObjectsV2(request);
@@ -351,29 +348,33 @@ public class R2FileStorageService implements FileStorageService {
             );
             return entries;
         }).exceptionally(ex -> {
-            logger.error(
-                    "Failed to list entries in directory: {}",
-                    directory,
+            throw new RuntimeException(
+                    "Failed to list entries in directory: " + directory,
                     ex
             );
-            throw new RuntimeException("Failed to list entries", ex);
         });
     }
 
     // Helper methods (same as before)
     private String normalizeFolderPath(String folder) {
-        String path = folder.startsWith(S3Constants.ROOT_FOLDER) ? folder : S3Constants.ROOT_FOLDER + folder;
+        String path = folder.startsWith(S3Constants.ROOT_FOLDER)
+                ? folder
+                : S3Constants.ROOT_FOLDER + folder;
         return path.endsWith("/") ? path : path + "/";
     }
 
     private String normalizeDirectoryPath(String directory) {
         if (directory == null) return S3Constants.ROOT_FOLDER;
-        String path = directory.startsWith(S3Constants.ROOT_FOLDER) ? directory : S3Constants.ROOT_FOLDER + directory;
+        String path = directory.startsWith(S3Constants.ROOT_FOLDER)
+                ? directory
+                : S3Constants.ROOT_FOLDER + directory;
         return path.endsWith("/") ? path : path + "/";
     }
 
     private String buildObjectKey(String folder, String extension) {
-        String normalizedFolder = folder != null ? normalizeFolderPath(folder) : S3Constants.ROOT_FOLDER;
+        String normalizedFolder = folder != null
+                ? normalizeFolderPath(folder)
+                : S3Constants.ROOT_FOLDER;
         return normalizedFolder + UUID.randomUUID() + "." + extension;
     }
 
