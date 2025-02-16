@@ -1,13 +1,13 @@
 .hero {
-  @apply grid md:grid-cols-3 xl:grid-cols-2 auto-rows-min;
-  @apply relative z-10 overflow-hidden bg-secondary pb-16 pt-32 px-10 gap-5;
+  @apply grid auto-rows-min md:grid-cols-3 xl:grid-cols-2;
+  @apply relative z-10 gap-5 overflow-hidden bg-secondary px-10 pb-16 pt-32;
 
   & .title {
-    @apply mb-3 xl:mb-8 text-4xl font-extrabold text-foreground xl:text-6xl order-none;
+    @apply order-none mb-3 text-4xl font-extrabold text-foreground xl:mb-8 xl:text-6xl;
   }
 
   & .buttons {
-    @apply flex flex-col lg:flex-row flex-wrap gap-4 order-3 self-start lg:max-xl:-mt-20;
+    @apply order-3 flex flex-col flex-wrap gap-4 self-start sm:flex-row lg:max-xl:-mt-20 xl:flex-row;
   }
 
   & .buttons > * {
@@ -16,7 +16,7 @@
 
   & .text,
   & .buttons {
-    @apply max-md:mx-auto max-md:text-balance max-md:justify-center;
+    @apply max-md:mx-auto max-md:justify-center max-md:text-balance;
   }
 
   & .highlight {
@@ -24,17 +24,17 @@
   }
 
   & .subtitle {
-    @apply max-w-2xl text-2xl font-medium text-muted-foreground xl:text-3xl order-2;
+    @apply order-2 max-w-2xl text-2xl font-medium text-muted-foreground xl:text-3xl;
   }
 
   & .btn {
     @apply rounded-md px-14 py-2 text-lg font-semibold;
-    @apply bg-background hover:bg-white active:bg-indigo-900 text-muted-foreground;
+    @apply bg-background text-muted-foreground hover:bg-white active:bg-indigo-900;
   }
 
   & .myImage {
     @apply z-10 mx-10 max-h-[724px] max-w-[680px] transform;
-    @apply md:col-span-2 xl:col-span-1 row-span-2 order-1;
+    @apply order-1 row-span-2 md:col-span-2 xl:col-span-1;
   }
 
   & .place {

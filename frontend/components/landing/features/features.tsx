@@ -13,11 +13,7 @@ import styles from './features.module.css';
 export default function Features() {
   return (
     <section className={styles.features} id={'features'}>
-      <Image
-        src={TopWave}
-        alt={'Top wave'}
-        className={styles.wave}
-      />
+      <Image src={TopWave} alt={'Top wave'} className={styles.wave} />
       <ul className={styles.cardContainer}>
         {features.map((feature, index) => (
           <li key={index}>
