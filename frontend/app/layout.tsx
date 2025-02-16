@@ -23,10 +23,8 @@ export default async function RootLayout({
     <html lang='en'>
       <body className={cn(AllFontsVariables)}>
         <Provider>
-          <div className='flex min-h-screen flex-col'>
-            {children}
-            <Footer />
-          </div>
+          {children}
+          <Footer />
         </Provider>
       </body>
     </html>

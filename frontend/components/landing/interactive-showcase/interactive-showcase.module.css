@@ -1,5 +1,5 @@
 .showcase {
-  @apply bg-primary px-32 py-16;
+  @apply bg-primary px-8 py-16 lg:px-12 xl:px-32;
 }
 
 .titleSection {
@@ -80,7 +80,7 @@
   }
 
   & .placeDescription {
-      @apply text-base;
+    @apply text-base;
   }
 
   & .ratingContainer {

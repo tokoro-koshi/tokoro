@@ -6,20 +6,20 @@ import styles from './footer.module.css';
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-      <div className={styles.content}>
-        <ul className={styles.links}>
-          {footerButtons.map((btn, idx) => (
-            <li key={idx}>
-              <Button action={btn.action} className={styles.link}>
-                {btn.title}
-              </Button>
-            </li>
-          ))}
-        </ul>
-        <p className={styles.copyright}>
-          &copy; {new Date().getFullYear()} Tokoro. All rights reserved.
-        </p>
-        <div className={styles.social}>
+      <ul className={styles.links}>
+        {footerButtons.map((btn, idx) => (
+          <li key={idx}>
+            <Button action={btn.action} className={styles.link}>
+              {btn.title}
+            </Button>
+          </li>
+        ))}
+      </ul>
+      <p className={styles.copyright}>
+        &copy; {new Date().getFullYear()} Tokoro. All rights reserved.
+      </p>
+      <ul className={styles.socials}>
+        <li className={styles.socialLink}>
           <a
             href={'https://facebook.com'}
             target={'_blank'}
@@ -27,6 +27,8 @@ export default function Footer() {
             className={styles.socialLink}
             dangerouslySetInnerHTML={{ __html: siFacebook.svg }}
           />
+        </li>
+        <li className={styles.socialLink}>
           <a
             href={'https://twitter.com'}
             target={'_blank'}
@@ -34,6 +36,8 @@ export default function Footer() {
             className={styles.socialLink}
             dangerouslySetInnerHTML={{ __html: siX.svg }}
           />
+        </li>
+        <li className={styles.socialLink}>
           <a
             href={'https://instagram.com'}
             target={'_blank'}
@@ -41,8 +45,8 @@ export default function Footer() {
             className={styles.socialLink}
             dangerouslySetInnerHTML={{ __html: siInstagram.svg }}
           />
-        </div>
-      </div>
+        </li>
+      </ul>
     </footer>
   );
 }
