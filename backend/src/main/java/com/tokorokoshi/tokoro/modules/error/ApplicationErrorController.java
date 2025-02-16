@@ -50,14 +50,20 @@ public class ApplicationErrorController implements ErrorController {
                 RequestDispatcher.ERROR_MESSAGE,
                 WebRequest.SCOPE_REQUEST
         );
-        String message = messageObj != null
+        String webRequestMessage = messageObj != null
                 ? messageObj.toString()
-                : "Something wrong happened";
+                : "";
 
-        Object exception = webRequest.getAttribute(
+        var exception = (Exception) webRequest.getAttribute(
                 RequestDispatcher.ERROR_EXCEPTION,
                 WebRequest.SCOPE_REQUEST
         );
+        String message = !webRequestMessage.isBlank()
+                ? webRequestMessage
+                : exception != null
+                ? exception.getMessage()
+                : "An error occurred";
+
 
         // Extract URL from message if it's a 404 error
         Matcher matcher = notFoundRegex.matcher(message);
@@ -70,14 +76,15 @@ public class ApplicationErrorController implements ErrorController {
                 ? HttpStatus.valueOf(Integer.parseInt(status.toString()))
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        if (logger.isErrorEnabled() &&
-                (exception != null || (status != null && status >= 500)))
-            logger.error(
-                    "Error Status: {}, Message: {}, Exception: {}",
+        if (logger.isErrorEnabled() && status != null && status >= 500) {
+            String log = String.format(
+                    "Error Status: %d, Message: %s, Exception: %s",
                     status,
                     message,
                     exception
             );
+            logger.error(log);
+        }
 
         var jo = new JSONObject();
         jo.put("message", message);

@@ -3,6 +3,7 @@ package com.tokorokoshi.tokoro.modules.blogs;
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.BlogDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.CreateUpdateBlogDto;
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,7 +72,7 @@ public class BlogsController {
     ) {
         var blog = this.blogsService.getBlogById(id);
         if (blog == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Blog not found");
         }
         return ResponseEntity.ok(blog);
     }
@@ -132,7 +133,7 @@ public class BlogsController {
                 createUpdateBlogDto
         );
         if (updatedBlog == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Blog not found");
         }
         return ResponseEntity.ok(updatedBlog);
     }
@@ -155,7 +156,7 @@ public class BlogsController {
             this.blogsService.deleteBlog(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Blog not found");
         } catch (Exception e) {
             this.logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();

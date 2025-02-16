@@ -1,13 +1,10 @@
 package com.tokorokoshi.tokoro.modules.privacy;
 
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.privacy.dto.CreateUpdatePrivacyDto;
 import com.tokorokoshi.tokoro.modules.privacy.dto.PrivacyDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +38,7 @@ public class PrivacyController {
     public ResponseEntity<PrivacyDto> getPrivacy() {
         PrivacyDto privacyDto = privacyService.getPrivacy();
         if (privacyDto == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Privacy information not found");
         }
         return ResponseEntity.ok(privacyDto);
     }
@@ -64,7 +61,7 @@ public class PrivacyController {
             PrivacyDto privacyDto = privacyService.createPrivacy(createUpdatePrivacyDto);
             return ResponseEntity.ok(privacyDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -86,7 +83,7 @@ public class PrivacyController {
             PrivacyDto privacyDto = privacyService.updatePrivacy(createUpdatePrivacyDto);
             return ResponseEntity.ok(privacyDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Privacy information not found");
         }
     }
 
@@ -102,7 +99,7 @@ public class PrivacyController {
             privacyService.deletePrivacy();
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Privacy information not found");
         } catch (Exception e) {
             logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();
