@@ -11,14 +11,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Configures the security settings.
@@ -36,6 +39,9 @@ public class SecurityConfiguration {
     @Value("${AUTH0_AUDIENCE}")
     private String audience;
 
+    @Value("${role_claims}")
+    private String ROLE_CLAIMS;
+
     /**
      * Creates a new instance of the SecurityConfiguration class.
      *
@@ -51,6 +57,11 @@ public class SecurityConfiguration {
         this.corsConfigurationSource = corsConfigurationSource;
     }
 
+    /**
+     * Checks if the current profile is development.
+     *
+     * @return true if the active profile is "dev", false otherwise
+     */
     private boolean isDevelopment() {
         return Arrays.asList(activeProfiles).contains("dev");
     }
@@ -76,7 +87,7 @@ public class SecurityConfiguration {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
                     .oauth2ResourceServer(
                             oauth2 -> oauth2.jwt(
-                                    jwt -> jwt.decoder(jwtDecoder())
+                                    jwt -> jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())
                             )
                     )
                     .authorizeHttpRequests(
@@ -92,7 +103,8 @@ public class SecurityConfiguration {
                                             "/api/privacy/**",
                                             "/api/about/**",
                                             "/api/features/**",
-                                            "/api/places/**"
+                                            "/api/places/**",
+                                            "/api/testimonials/**"
                                     )
                                     .permitAll()
                                     .requestMatchers(
@@ -110,6 +122,35 @@ public class SecurityConfiguration {
                     .csrf(AbstractHttpConfigurer::disable);
         }
         return http.build();
+    }
+
+    /**
+     * Creates a JWT authentication converter.
+     *
+     * @return A new JWT authentication converter
+     */
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(this::extractAuthorities);
+        return converter;
+    }
+
+    /**
+     * Extracts authorities from the JWT claims.
+     *
+     * @param jwt The JWT token
+     * @return A collection of granted authorities
+     */
+    @SuppressWarnings("unchecked")
+    private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+        Map<String, Object> claims = jwt.getClaims();
+
+        List<String> roles = (List<String>) claims.getOrDefault(ROLE_CLAIMS, List.of());
+
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                .collect(Collectors.toList());
     }
 
     /**

@@ -41,7 +41,7 @@ public class Auth0UserDataService {
      * @return the Auth0 user ID of the currently authenticated user.
      * @throws UserNotAuthenticatedException if the user is not authenticated or the token is invalid.
      */
-    private String getAuthenticatedUserId() {
+    public String getAuthenticatedUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Jwt jwt) {
             return jwt.getSubject();
