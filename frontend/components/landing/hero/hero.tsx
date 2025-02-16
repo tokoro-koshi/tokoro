@@ -9,8 +9,8 @@ export default function Hero() {
     <section className={styles.hero}>
           <div className={styles.text}>
             <h2 className={styles.title}>
-              Discover Amazing
-              <span className={styles.highlight}>Places</span>
+              Discover Amazing{' '}
+              <span className={styles.highlight}>Places</span>{' '}
               Near You
             </h2>
             <p className={styles.subtitle}>
