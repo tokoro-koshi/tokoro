@@ -56,12 +56,7 @@ public class TestimonialsController {
             @RequestBody
             CreateUpdateTestimonialDto testimonial
     ) {
-        try {
-            TestimonialDto testimonialDto = testimonialsService.saveTestimonial(testimonial);
-            return ResponseEntity.ok(testimonialDto);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+            return ResponseEntity.ok(testimonialsService.saveTestimonial(testimonial));
     }
 
     @Operation(
