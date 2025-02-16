@@ -48,18 +48,29 @@ public class TestimonialsController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<TestimonialDto> saveTestimonial(
-            @Parameter(description = "The testimonial to save", required = true)
+            @Parameter(
+                    description = "The testimonial to save",
+                    required = true
+            )
             @RequestBody
-            CreateUpdateTestimonialDto testimonialDto
+            CreateUpdateTestimonialDto testimonial
     ) {
-        return ResponseEntity.ok(this.testimonialsService.saveTestimonial(testimonialDto));
+        try {
+            TestimonialDto testimonialDto = testimonialsService.saveTestimonial(testimonial);
+            return ResponseEntity.ok(testimonialDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @Operation(
             summary = "Get a testimonial by ID",
             description = "Returns the testimonial with the given ID"
     )
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = "/{id}",
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<TestimonialDto> getTestimonialById(
             @Parameter(
                     description = "The ID of the testimonial to get",
@@ -69,7 +80,7 @@ public class TestimonialsController {
             @PathVariable
             String id
     ) {
-        var testimonial = this.testimonialsService.getTestimonialById(id);
+        var testimonial = testimonialsService.getTestimonialById(id);
         if (testimonial == null) {
             return ResponseEntity.notFound().build();
         }
@@ -80,7 +91,10 @@ public class TestimonialsController {
             summary = "Get all testimonials",
             description = "Returns a paginated list of all testimonials"
     )
-    @GetMapping(value = {"", "/"}, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = {"", "/"},
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<PaginationDto<TestimonialDto>> getAllTestimonials(
             @Parameter(description = "The page number to get", example = "0")
             @RequestParam(defaultValue = "0")
@@ -93,18 +107,21 @@ public class TestimonialsController {
             int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        var testimonials = this.testimonialsService.getAllTestimonials(pageable);
+        var testimonials = testimonialsService.getAllTestimonials(pageable);
         var pagination = PaginationDto.fromEntityModel(
-                this.pagedResourcesAssembler.toModel(testimonials)
+                pagedResourcesAssembler.toModel(testimonials)
         );
         return ResponseEntity.ok(pagination);
     }
 
     @Operation(
-            summary = "Get testimonials by user ID",
-            description = "Returns a paginated list of testimonials for a specific user"
+            summary = "Get testimonials for a specific user",
+            description = "Returns a paginated list of testimonials associated with a specific user ID."
     )
-    @GetMapping(value = "/user/{userId}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = "/user/{userId}",
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<PaginationDto<TestimonialDto>> getUserTestimonials(
             @Parameter(
                     description = "The ID of the user whose testimonials to get",
@@ -124,9 +141,9 @@ public class TestimonialsController {
             int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        var testimonials = this.testimonialsService.getUserTestimonials(userId, pageable);
+        var testimonials = testimonialsService.getUserTestimonials(userId, pageable);
         var pagination = PaginationDto.fromEntityModel(
-                this.pagedResourcesAssembler.toModel(testimonials)
+                pagedResourcesAssembler.toModel(testimonials)
         );
         return ResponseEntity.ok(pagination);
     }
@@ -135,7 +152,10 @@ public class TestimonialsController {
             summary = "Get testimonials by status",
             description = "Returns a paginated list of testimonials with a specific status"
     )
-    @GetMapping(value = "/by-status", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = "/by-status",
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<PaginationDto<TestimonialDto>> getTestimonialsByStatus(
             @Parameter(
                     description = "The status of the testimonials to get",
@@ -155,9 +175,9 @@ public class TestimonialsController {
             int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        var testimonials = this.testimonialsService.getTestimonialsByStatus(status, pageable);
+        var testimonials = testimonialsService.getTestimonialsByStatus(status, pageable);
         var pagination = PaginationDto.fromEntityModel(
-                this.pagedResourcesAssembler.toModel(testimonials)
+                pagedResourcesAssembler.toModel(testimonials)
         );
         return ResponseEntity.ok(pagination);
     }
@@ -166,7 +186,10 @@ public class TestimonialsController {
             summary = "Get random testimonials with APPROVED status",
             description = "Returns a list of random testimonials with APPROVED status"
     )
-    @GetMapping(value = "/random/{count}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(
+            value = "/random/{count}",
+            produces = APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<List<TestimonialDto>> getRandomApprovedTestimonials(
             @Parameter(
                     description = "The number of random testimonials to get",
@@ -176,7 +199,7 @@ public class TestimonialsController {
             @PathVariable
             int count
     ) {
-        List<TestimonialDto> randomTestimonials = this.testimonialsService.getRandomApprovedTestimonials(count);
+        List<TestimonialDto> randomTestimonials = testimonialsService.getRandomApprovedTestimonials(count);
         return ResponseEntity.ok(randomTestimonials);
     }
 
@@ -201,7 +224,7 @@ public class TestimonialsController {
             @RequestBody
             CreateUpdateTestimonialDto testimonialDto
     ) {
-        TestimonialDto updatedTestimonial = this.testimonialsService.updateTestimonial(id, testimonialDto);
+        TestimonialDto updatedTestimonial = testimonialsService.updateTestimonial(id, testimonialDto);
         return ResponseEntity.ok(updatedTestimonial);
     }
 
@@ -230,7 +253,7 @@ public class TestimonialsController {
             UpdateTestimonialStatusDto statusDto
     ) {
         Testimonial.Status status = statusDto.status();
-        this.testimonialsService.changeTestimonialStatus(id, status);
+        testimonialsService.changeTestimonialStatus(id, status);
         return ResponseEntity.noContent().build();
     }
 
@@ -249,12 +272,12 @@ public class TestimonialsController {
             String id
     ) {
         try {
-            this.testimonialsService.deleteTestimonial(id);
+            testimonialsService.deleteTestimonial(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            this.logger.severe(e.getMessage());
+            logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
