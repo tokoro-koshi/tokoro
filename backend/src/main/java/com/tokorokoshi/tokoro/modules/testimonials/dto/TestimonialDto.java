@@ -5,16 +5,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
 /**
- * A DTO for the Testimonial information
+ * A Data Transfer Object (DTO) for representing testimonial information.
  */
 @Schema(
         name = "TestimonialDto",
-        description = "A DTO for the Testimonial information"
+        description = "A Data Transfer Object (DTO) for representing testimonial information"
 )
 public record TestimonialDto(
         @Schema(
                 name = "id",
-                description = "The ID of the testimonial"
+                description = "The unique identifier for the testimonial"
         )
         String id,
 
