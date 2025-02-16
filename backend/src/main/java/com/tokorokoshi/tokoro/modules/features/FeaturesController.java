@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.features;
 
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.features.dto.CreateUpdateFeatureDto;
 import com.tokorokoshi.tokoro.modules.features.dto.FeatureDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +54,7 @@ public class FeaturesController {
             FeatureDto featureDto = featuresService.saveFeature(feature);
             return ResponseEntity.ok(featureDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -76,7 +77,7 @@ public class FeaturesController {
     ) {
         FeatureDto feature = featuresService.findFeatureById(id);
         if (feature == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Feature not found");
         }
         return ResponseEntity.ok(feature);
     }
@@ -121,11 +122,11 @@ public class FeaturesController {
         try {
             FeatureDto updatedFeature = featuresService.updateFeature(id, feature);
             if (updatedFeature == null) {
-                return ResponseEntity.notFound().build();
+                throw new NotFoundException("Feature not found");
             }
             return ResponseEntity.ok(updatedFeature);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -147,7 +148,7 @@ public class FeaturesController {
             featuresService.deleteFeature(id);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Feature not found");
         } catch (Exception e) {
             logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();

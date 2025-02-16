@@ -2,6 +2,7 @@ package com.tokorokoshi.tokoro.modules.testimonials;
 
 import com.tokorokoshi.tokoro.database.Testimonial;
 import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.CreateUpdateTestimonialDto;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.TestimonialDto;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.UpdateTestimonialStatusDto;
@@ -59,7 +60,7 @@ public class TestimonialsController {
             TestimonialDto testimonialDto = testimonialsService.saveTestimonial(testimonial);
             return ResponseEntity.ok(testimonialDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -82,7 +83,7 @@ public class TestimonialsController {
     ) {
         var testimonial = testimonialsService.getTestimonialById(id);
         if (testimonial == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Testimonial not found");
         }
         return ResponseEntity.ok(testimonial);
     }

@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.user.preferences;
 
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,12 +9,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerErrorException;
 
 import java.util.List;
 
@@ -28,9 +27,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users/preferences")
 public class PreferencesController {
-    private static final Logger log =
-            LoggerFactory.getLogger(PreferencesController.class);
-
     private final PreferencesService preferencesService;
 
     @Autowired
@@ -62,9 +58,7 @@ public class PreferencesController {
             preferencesService.setPreferences(preferencesDto);
             return ResponseEntity.ok("Preferences set successfully");
         } catch (Exception e) {
-            log.error("Error setting preferences", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to set preferences");
+            throw new ServerErrorException("Failed to set preferences", e);
         }
     }
 
@@ -82,12 +76,11 @@ public class PreferencesController {
         try {
             PreferencesDto preferences = preferencesService.getPreferences();
             if (preferences == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                throw new NotFoundException("Preferences not found");
             }
             return ResponseEntity.ok(preferences);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(ex.getMessage(), ex);
         }
     }
 
@@ -116,9 +109,11 @@ public class PreferencesController {
         try {
             preferencesService.updateLanguagePreference(language);
             return ResponseEntity.ok("Language preference updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to update language preference");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update language preference",
+                    ex
+            );
         }
     }
 
@@ -148,10 +143,11 @@ public class PreferencesController {
             preferencesService.updateCategoriesPreference(categories);
             return ResponseEntity.ok(
                     "Categories preference updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating categories preference", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to update categories preference");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update categories preference",
+                    ex
+            );
         }
     }
 
@@ -180,10 +176,11 @@ public class PreferencesController {
         try {
             preferencesService.updateTimezonePreference(timezone);
             return ResponseEntity.ok("Timezone preference updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating timezone preference", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to update timezone preference");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update timezone preference",
+                    ex
+            );
         }
     }
 
@@ -213,10 +210,11 @@ public class PreferencesController {
                     notificationsEnabled);
             return ResponseEntity.ok(
                     "Notifications enabled preference updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating notifications enabled preference", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to update notifications enabled preference");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update notifications enabled preference",
+                    ex
+            );
         }
     }
 
@@ -234,10 +232,8 @@ public class PreferencesController {
         try {
             preferencesService.clearPreferences();
             return ResponseEntity.ok("All preferences cleared successfully");
-        } catch (Exception e) {
-            log.error("Error clearing preferences", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to clear preferences");
+        } catch (Exception ex) {
+            throw new ServerErrorException("Failed to clear preferences", ex);
         }
     }
 }

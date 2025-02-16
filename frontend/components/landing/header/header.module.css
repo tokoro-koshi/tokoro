@@ -1,13 +1,14 @@
 .header {
-  @apply fixed left-0 right-0 top-0 z-50 flex items-center px-2.5 py-1.5;
+  @apply grid grid-cols-2 items-center md:grid-cols-3;
+  @apply fixed left-0 right-0 top-0 z-50 px-2.5 py-1.5;
   @apply bg-background bg-opacity-65 transition-all duration-300 hover:bg-opacity-100;
 
   & .logo {
-    @apply items-center text-2xl font-extrabold text-popover-foreground md:flex md:text-3xl;
+    @apply flex items-center text-2xl font-extrabold text-popover-foreground md:text-3xl;
   }
 
   & .nav {
-    @apply hidden flex-1 items-center justify-center gap-12 md:flex;
+    @apply hidden items-center justify-center gap-12 md:flex;
   }
 
   & .navLink {
@@ -15,7 +16,7 @@
   }
 
   & .authButtons {
-    @apply flex items-center gap-4;
+    @apply flex items-center justify-end gap-4;
   }
 
   & .name {

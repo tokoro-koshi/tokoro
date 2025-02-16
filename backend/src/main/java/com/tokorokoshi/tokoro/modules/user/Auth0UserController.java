@@ -3,18 +3,17 @@ package com.tokorokoshi.tokoro.modules.user;
 import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerErrorException;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +23,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/users")
 public class Auth0UserController {
-    private static final Logger log = LoggerFactory.getLogger(Auth0UserController.class);
-
     private final Auth0UserDataService auth0UserDataService;
     private final Auth0ManagementService auth0ManagementService;
 
@@ -49,10 +46,11 @@ public class Auth0UserController {
         try {
             String email = auth0UserDataService.getAuthenticatedUserEmail();
             return ResponseEntity.ok(email);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user email", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to retrieve authenticated user email");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user email",
+                    ex
+            );
         }
     }
 
@@ -70,10 +68,11 @@ public class Auth0UserController {
         try {
             String name = auth0UserDataService.getAuthenticatedUserName();
             return ResponseEntity.ok(name);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user name", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to retrieve authenticated user name");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user name",
+                    ex
+            );
         }
     }
 
@@ -91,10 +90,11 @@ public class Auth0UserController {
         try {
             List<String> permissions = auth0UserDataService.getAuthenticatedUserPermissions();
             return ResponseEntity.ok(permissions);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user permissions", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user permissions",
+                    ex
+            );
         }
     }
 
@@ -112,10 +112,11 @@ public class Auth0UserController {
         try {
             Map<String, Object> metadata = auth0UserDataService.getAuthenticatedUserMetadata();
             return ResponseEntity.ok(metadata);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user metadata", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of()); // Return an empty map
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user metadata",
+                    ex
+            );
         }
     }
 
@@ -133,10 +134,11 @@ public class Auth0UserController {
         try {
             List<String> roles = auth0UserDataService.getAuthenticatedUserRoles();
             return ResponseEntity.ok(roles);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user roles", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of()); // Return an empty list
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user roles",
+                    ex
+            );
         }
     }
 
@@ -154,10 +156,11 @@ public class Auth0UserController {
         try {
             User userDetails = auth0UserDataService.getAuthenticatedUserDetails();
             return ResponseEntity.ok(userDetails);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user details", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user details",
+                    ex
+            );
         }
     }
 
@@ -182,10 +185,11 @@ public class Auth0UserController {
         try {
             boolean hasPermission = auth0UserDataService.hasPermission(permission);
             return ResponseEntity.ok(hasPermission);
-        } catch (Exception e) {
-            log.error("Error checking if user has permission", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to check if user has permission",
+                    ex
+            );
         }
     }
 
@@ -210,10 +214,11 @@ public class Auth0UserController {
         try {
             boolean hasAnyPermission = auth0UserDataService.hasAnyPermission(permissions);
             return ResponseEntity.ok(hasAnyPermission);
-        } catch (Exception e) {
-            log.error("Error checking if user has any of the specified permissions", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to check if user has any of the specified permissions",
+                    ex
+            );
         }
     }
 
@@ -238,10 +243,11 @@ public class Auth0UserController {
         try {
             boolean hasRole = auth0UserDataService.hasRole(role);
             return ResponseEntity.ok(hasRole);
-        } catch (Exception e) {
-            log.error("Error checking if user has role", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to check if user has role",
+                    ex
+            );
         }
     }
 
@@ -266,10 +272,11 @@ public class Auth0UserController {
         try {
             boolean hasAnyRole = auth0UserDataService.hasAnyRole(roles);
             return ResponseEntity.ok(hasAnyRole);
-        } catch (Exception e) {
-            log.error("Error checking if user has any of the specified roles", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to check if user has any of the specified roles",
+                    ex
+            );
         }
     }
 
@@ -293,10 +300,11 @@ public class Auth0UserController {
         try {
             boolean isBlocked = auth0ManagementService.isUserBlocked(userId);
             return ResponseEntity.ok(isBlocked);
-        } catch (Exception e) {
-            log.error("Error checking if user is blocked", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to check if user is blocked",
+                    ex
+            );
         }
     }
 
@@ -320,10 +328,11 @@ public class Auth0UserController {
         try {
             auth0ManagementService.blockUser(userId);
             return ResponseEntity.ok("User blocked successfully");
-        } catch (Exception e) {
-            log.error("Error blocking user", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to block user");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to block user",
+                    ex
+            );
         }
     }
 
@@ -347,10 +356,11 @@ public class Auth0UserController {
         try {
             auth0ManagementService.unblockUser(userId);
             return ResponseEntity.ok("User unblocked successfully");
-        } catch (Exception e) {
-            log.error("Error unblocking user", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to unblock user");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to unblock user",
+                    ex
+            );
         }
     }
 
@@ -375,10 +385,11 @@ public class Auth0UserController {
         try {
             auth0UserDataService.updateAuthenticatedUserMetadata(metadata);
             return ResponseEntity.ok("User metadata updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating user metadata", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user metadata");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update user metadata",
+                    ex
+            );
         }
     }
 
@@ -407,10 +418,11 @@ public class Auth0UserController {
         try {
             auth0UserDataService.updateAuthenticatedUserAvatar(avatarUrl);
             return ResponseEntity.ok("User avatar updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating user avatar", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user avatar");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update user avatar",
+                    ex
+            );
         }
     }
 
@@ -428,10 +440,11 @@ public class Auth0UserController {
         try {
             String avatarUrl = auth0UserDataService.getAuthenticatedUserAvatar();
             return ResponseEntity.ok(Objects.requireNonNullElse(avatarUrl, "No avatar URL set for the user"));
-        } catch (Exception e) {
-            log.error("Error fetching user avatar", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to fetch user avatar");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to fetch user avatar",
+                    ex
+            );
         }
     }
 
@@ -470,10 +483,11 @@ public class Auth0UserController {
         try {
             auth0UserDataService.updateAuthenticatedUserName(firstName, lastName);
             return ResponseEntity.ok("User name updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating user name", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user name");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update user name",
+                    ex
+            );
         }
     }
 
@@ -491,10 +505,11 @@ public class Auth0UserController {
         try {
             String nickname = auth0UserDataService.getAuthenticatedUserNickname();
             return ResponseEntity.ok(nickname);
-        } catch (Exception e) {
-            log.error("Error retrieving authenticated user nickname", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to retrieve authenticated user nickname");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve authenticated user nickname",
+                    ex
+            );
         }
     }
 
@@ -523,10 +538,11 @@ public class Auth0UserController {
         try {
             auth0UserDataService.updateAuthenticatedUserNickname(nickname);
             return ResponseEntity.ok("User nickname updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating user nickname", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update user nickname");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update user nickname",
+                    ex
+            );
         }
     }
 
@@ -552,19 +568,11 @@ public class Auth0UserController {
             @NotBlank
             String email
     ) {
-        try {
-            User user = auth0UserDataService.getUserByEmail(email);
-            if (user != null) {
-                return ResponseEntity.ok(user);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null); // Return null for not found
-            }
-        } catch (Exception e) {
-            log.error("Error fetching user by email", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // Return null for internal server error
+        User user = auth0UserDataService.getUserByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
         }
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -592,10 +600,11 @@ public class Auth0UserController {
         try {
             auth0ManagementService.deleteUser(userId);
             return ResponseEntity.ok("User deleted successfully");
-        } catch (Exception e) {
-            log.error("Error deleting user with user ID: {}", userId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to delete user");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to delete user with user ID: " + userId,
+                    ex
+            );
         }
     }
 
@@ -634,10 +643,11 @@ public class Auth0UserController {
         try {
             auth0ManagementService.assignRolesToUser(userId, roles);
             return ResponseEntity.ok("Roles assigned successfully");
-        } catch (Exception e) {
-            log.error("Error assigning roles to user with user ID: {}", userId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to assign roles");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to assign roles to user with user ID: " + userId,
+                    ex
+            );
         }
     }
 
@@ -676,10 +686,11 @@ public class Auth0UserController {
         try {
             auth0ManagementService.removeRolesFromUser(userId, roles);
             return ResponseEntity.ok("Roles removed successfully");
-        } catch (Exception e) {
-            log.error("Error removing roles from user with user ID: {}", userId, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to remove roles");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to remove roles from user with user ID: " + userId,
+                    ex
+            );
         }
     }
 }

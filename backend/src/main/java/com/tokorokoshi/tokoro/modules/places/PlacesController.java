@@ -2,6 +2,7 @@ package com.tokorokoshi.tokoro.modules.places;
 
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.dto.Response;
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.SearchDto;
@@ -11,6 +12,7 @@ import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -76,7 +78,7 @@ public class PlacesController {
     ) {
         var place = this.placesService.getPlaceById(id);
         if (place == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Place not found");
         }
         return ResponseEntity.ok(place);
     }
@@ -137,12 +139,11 @@ public class PlacesController {
             )
             @RequestBody
             SearchDto body
-    ) {
+    ) throws BadRequestException {
         Response<TagsDto> tagsResponse =
                 tagsService.generateTags(body.prompt());
         if (tagsResponse.isRefusal()) {
-            return ResponseEntity.status(tagsResponse.getRefusalStatus())
-                                 .body(tagsResponse.getRefusal());
+            throw new BadRequestException(tagsResponse.getRefusal());
         }
 
         List<TagDto> tags = List.of(tagsResponse.getContent().tags());
@@ -172,7 +173,7 @@ public class PlacesController {
     ) {
         PlaceDto updatedPlace = this.placesService.updatePlace(id, place);
         if (updatedPlace == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Place not found");
         }
         return ResponseEntity.ok(updatedPlace);
     }
@@ -195,7 +196,7 @@ public class PlacesController {
             this.placesService.deletePlace(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Place not found");
         } catch (Exception e) {
             this.logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();

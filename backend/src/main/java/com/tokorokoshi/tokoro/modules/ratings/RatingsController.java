@@ -1,6 +1,7 @@
 package com.tokorokoshi.tokoro.modules.ratings;
 
 import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.ratings.dto.CreateUpdateRatingDto;
 import com.tokorokoshi.tokoro.modules.ratings.dto.RatingDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,7 +80,7 @@ public class RatingsController {
     ) {
         var rating = this.ratingsService.findRatingById(id);
         if (rating == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Rating not found");
         }
         return ResponseEntity.ok(rating);
     }
@@ -156,7 +157,7 @@ public class RatingsController {
     ) {
         RatingDto updatedRating = this.ratingsService.updateRating(id, rating);
         if (updatedRating == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Rating not found");
         }
         return ResponseEntity.ok(updatedRating);
     }
@@ -179,7 +180,7 @@ public class RatingsController {
             this.ratingsService.deleteRating(id);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Rating not found");
         } catch (Exception e) {
             this.logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();
