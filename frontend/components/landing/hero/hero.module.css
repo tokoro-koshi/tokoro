@@ -7,16 +7,20 @@
   }
 
   & .buttons {
-    @apply flex flex-wrap gap-4 order-3 place-self-start lg:max-xl:-mt-20;
+    @apply flex flex-col lg:flex-row flex-wrap gap-4 order-3 self-start lg:max-xl:-mt-20;
+  }
+
+  & .buttons > * {
+    @apply flex-1 text-center;
   }
 
   & .text,
   & .buttons {
-    @apply max-md:mx-auto max-md:text-center max-md:text-balance;
+    @apply max-md:mx-auto max-md:text-balance max-md:justify-center;
   }
 
   & .highlight {
-    @apply mx-2 inline-block rounded-xl bg-muted-foreground px-2 py-0.5 text-center text-background;
+    @apply inline-block rounded-xl bg-muted-foreground px-2 py-0.5 text-center text-background;
   }
 
   & .subtitle {
