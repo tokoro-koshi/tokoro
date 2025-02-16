@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.user.favorites.prompts;
 
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto.CreateUpdateFavoritePromptDto;
 import com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto.FavoritePromptDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,9 +12,9 @@ import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerErrorException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,9 +31,6 @@ import java.util.function.Predicate;
 @RestController
 @RequestMapping("/api/users/favorite-prompts")
 public class FavoritePromptsController {
-    private static final Logger log =
-            LoggerFactory.getLogger(FavoritePromptsController.class);
-
     private final FavoritePromptsService favoritePromptsService;
 
     @Autowired
@@ -65,9 +63,7 @@ public class FavoritePromptsController {
                     createUpdateFavoritePromptDto);
             return ResponseEntity.ok("Favorite prompt added successfully");
         } catch (Exception e) {
-            log.error("Error adding favorite prompt", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to add favorite prompt");
+            throw new ServerErrorException("Failed to add favorite prompt", e);
         }
     }
 
@@ -106,11 +102,14 @@ public class FavoritePromptsController {
                     promptId,
                     createUpdateFavoritePromptDto
             );
-            return ResponseEntity.ok("Favorite prompt updated successfully");
-        } catch (Exception e) {
-            log.error("Error updating favorite prompt", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to update favorite prompt");
+            return ResponseEntity.ok(
+                    "Favorite prompt updated successfully"
+            );
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to update favorite prompt",
+                    ex
+            );
         }
     }
 
@@ -139,10 +138,11 @@ public class FavoritePromptsController {
         try {
             favoritePromptsService.removeFavoritePrompt(promptId);
             return ResponseEntity.ok("Favorite prompt removed successfully");
-        } catch (Exception e) {
-            log.error("Error removing favorite prompt", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to remove favorite prompt");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to remove favorite prompt",
+                    ex
+            );
         }
     }
 
@@ -161,10 +161,11 @@ public class FavoritePromptsController {
             List<FavoritePromptDto> favoritePrompts =
                     favoritePromptsService.getFavoritePrompts();
             return ResponseEntity.ok(favoritePrompts);
-        } catch (Exception e) {
-            log.error("Error retrieving favorite prompts", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve favorite prompts",
+                    ex
+            );
         }
     }
 
@@ -196,12 +197,13 @@ public class FavoritePromptsController {
             if (favoritePrompt != null) {
                 return ResponseEntity.ok(favoritePrompt);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                throw new NotFoundException("Favorite prompt not found");
             }
-        } catch (Exception e) {
-            log.error("Error retrieving favorite prompt by ID", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to retrieve favorite prompt by ID",
+                    ex
+            );
         }
     }
 
@@ -219,10 +221,11 @@ public class FavoritePromptsController {
         try {
             favoritePromptsService.clearFavoritePrompts();
             return ResponseEntity.ok("All favorite prompts cleared successfully");
-        } catch (Exception e) {
-            log.error("Error clearing favorite prompts", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Failed to clear favorite prompts");
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to clear favorite prompts",
+                    ex
+            );
         }
     }
 
@@ -252,10 +255,11 @@ public class FavoritePromptsController {
             boolean isFavorite =
                     favoritePromptsService.isFavoritePrompt(promptId);
             return ResponseEntity.ok(isFavorite);
-        } catch (Exception e) {
-            log.error("Error checking if prompt is a favorite", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to check if prompt is a favorite",
+                    ex
+            );
         }
     }
 
@@ -276,13 +280,14 @@ public class FavoritePromptsController {
             var comparer = Comparator.comparing(FavoritePromptDto::addedAt);
             List<FavoritePromptDto> sortedPrompts
                     = favoritePrompts.stream()
-                                     .sorted(comparer)
-                                     .toList();
+                    .sorted(comparer)
+                    .toList();
             return ResponseEntity.ok(sortedPrompts);
-        } catch (Exception e) {
-            log.error("Error sorting favorite prompts by date", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to sort favorite prompts by date",
+                    ex
+            );
         }
     }
 
@@ -301,19 +306,17 @@ public class FavoritePromptsController {
             List<FavoritePromptDto> favoritePrompts =
                     favoritePromptsService.getFavoritePrompts();
             var comparer = Comparator.comparing(FavoritePromptDto::addedAt)
-                                     .reversed();
+                    .reversed();
             List<FavoritePromptDto> sortedPrompts
                     = favoritePrompts.stream()
-                                     .sorted(comparer)
-                                     .toList();
+                    .sorted(comparer)
+                    .toList();
             return ResponseEntity.ok(sortedPrompts);
-        } catch (Exception e) {
-            log.error(
-                    "Error sorting favorite prompts by date in descending order",
-                    e
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to sort favorite prompts by date in descending order",
+                    ex
             );
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
         }
     }
 
@@ -344,17 +347,18 @@ public class FavoritePromptsController {
                     favoritePromptsService.getFavoritePrompts();
             Predicate<FavoritePromptDto> filter = (FavoritePromptDto fp) ->
                     fp.content()
-                      .toLowerCase()
-                      .contains(content.toLowerCase());
+                            .toLowerCase()
+                            .contains(content.toLowerCase());
             List<FavoritePromptDto> filteredPrompts
                     = favoritePrompts.stream()
-                                     .filter(filter)
-                                     .toList();
+                    .filter(filter)
+                    .toList();
             return ResponseEntity.ok(filteredPrompts);
-        } catch (Exception e) {
-            log.error("Error searching favorite prompts by content", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .build();
+        } catch (Exception ex) {
+            throw new ServerErrorException(
+                    "Failed to search favorite prompts by content",
+                    ex
+            );
         }
     }
 }

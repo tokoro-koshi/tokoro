@@ -2,6 +2,7 @@ package com.tokorokoshi.tokoro.modules.about;
 
 import com.tokorokoshi.tokoro.modules.about.dto.AboutDto;
 import com.tokorokoshi.tokoro.modules.about.dto.CreateUpdateAboutDto;
+import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +39,7 @@ public class AboutController {
     public ResponseEntity<AboutDto> getAbout() {
         AboutDto aboutDto = aboutService.getAbout();
         if (aboutDto == null) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("About information not found");
         }
         return ResponseEntity.ok(aboutDto);
     }
@@ -61,7 +62,7 @@ public class AboutController {
             AboutDto aboutDto = this.aboutService.createAbout(createUpdateAboutDto);
             return ResponseEntity.ok(aboutDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -83,7 +84,7 @@ public class AboutController {
             AboutDto aboutDto = aboutService.updateAbout(createUpdateAboutDto);
             return ResponseEntity.ok(aboutDto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("About information not found");
         }
     }
 
@@ -99,7 +100,7 @@ public class AboutController {
             aboutService.deleteAbout();
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("About information not found");
         } catch (Exception e) {
             logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();
