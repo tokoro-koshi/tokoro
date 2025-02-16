@@ -1,27 +1,30 @@
 .footer {
-  @apply bg-background py-4;
-}
-
-.content {
-  @apply flex items-center justify-between px-8 md:flex;
+  @apply grid grid-cols-2 items-center max-xl:grid-rows-2 xl:grid-cols-3;
+  @apply bg-background px-8 py-4;
 }
 
 .links {
-  @apply order-first flex items-center gap-10 md:flex;
+  @apply -order-1 flex justify-start gap-x-10 gap-y-2 max-lg:flex-col lg:items-center;
 }
 
 .link {
   @apply text-popover-foreground transition-colors hover:text-primary hover:underline;
 }
 
-.social {
-  @apply order-last flex items-center gap-4 md:flex;
-}
+.socials {
+  @apply flex gap-4 max-lg:flex-col-reverse;
+  @apply order-last items-end justify-end max-xl:-order-1 lg:items-center;
 
-.socialLink {
-  @apply h-5 w-5 text-popover-foreground transition-colors hover:text-primary;
+  & .social,
+  & .socialLink {
+    @apply h-5 w-5;
+  }
+
+  & .social {
+    @apply text-popover-foreground transition-colors hover:text-primary;
+  }
 }
 
 .copyright {
-  @apply absolute left-1/2 -translate-x-1/2 text-center text-secondary;
+  @apply text-center text-secondary max-xl:order-1 max-xl:col-span-2;
 }
