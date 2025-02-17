@@ -6,7 +6,7 @@ const headers = {
 };
 
 const apiClient = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: headers,
 });
 
