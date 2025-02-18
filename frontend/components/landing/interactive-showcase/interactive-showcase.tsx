@@ -1,17 +1,18 @@
-import Image from 'next/image';
-import { places } from '@/lib/constants/landing/interactive-showcase';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import Star from '@/public/icons/star.svg';
+import { Place } from '@/lib/types/place';
+import PlaceCard from '@/components/landing/interactive-showcase/place-card';
 import styles from './interactive-showcase.module.css';
 
-export default function InteractiveShowcase() {
+interface InteractiveShowcaseProps {
+  places: Place[];
+}
+
+export default function InteractiveShowcase({ places }: InteractiveShowcaseProps) {
   return (
     <section className={styles.showcase}>
       <div className={styles.titleSection}>
@@ -25,44 +26,14 @@ export default function InteractiveShowcase() {
           align: 'center',
           slidesToScroll: 1,
           inViewThreshold: 0.7,
+          // loop: true,
         }}
         className={styles.carousel}
         snappedCardClassName={styles.isSnapped}
       >
         <CarouselContent>
-          {places.map((place, index) => (
-            <CarouselItem key={index} className={styles.carouselItem}>
-              <Card>
-                <CardContent className={styles.cardContent}>
-                  <div className={styles.ratingContainer}>
-                    <div className={styles.ratingBackground}></div>
-                    <Image
-                      src={Star}
-                      alt={'Rating'}
-                      width={12}
-                      height={11}
-                      className={styles.star}
-                    />
-                    <p className={styles.rating}>{place.rating}</p>
-                  </div>
-                  <Image
-                    src={place.image}
-                    alt={place.name}
-                    width={350}
-                    height={192}
-                    className={styles.image}
-                  />
-                  <div className={styles.text}>
-                    <h3 className={styles.placeName}>{place.name}</h3>
-                    <div className={styles.placeDescription}>
-                      <p>{place.category}</p>
-                      <p>{place.schedule}</p>
-                      <p>{place.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </CarouselItem>
+          {places.map((place: Place, index: number) => (
+            <PlaceCard key={index} place={place} />
           ))}
         </CarouselContent>
         <CarouselPrevious className={styles.prevButton} />
