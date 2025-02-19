@@ -114,7 +114,7 @@ public class SecurityConfiguration {
                                             "/swagger-resources/**"
                                     )
                                     .permitAll()
-                                    .requestMatchers("/api/**")
+                                    .requestMatchers("/**")
                                     .authenticated()
                                     .anyRequest()
                                     .denyAll()
