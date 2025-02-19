@@ -1,7 +1,4 @@
-﻿'use client';
-
-import Image from 'next/image';
-import { useState } from 'react';
+﻿import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import Star from '@/public/icons/star.svg';
 import { Place } from '@/lib/types/place';
@@ -13,9 +10,10 @@ interface PlaceCardProps {
 }
 
 export default function PlaceCard({ place }: PlaceCardProps) {
-  const [imageError, setImageError] = useState(false);
-
-  return !imageError ? (
+  const pictures = place.pictures.filter(Boolean);
+  if (!pictures.length) return null;
+  
+  return (
     <CarouselItem className={styles.carouselItem}>
       <Card>
         <CardContent className={styles.cardContent}>
@@ -31,17 +29,17 @@ export default function PlaceCard({ place }: PlaceCardProps) {
             <p className={styles.rating}>{place.rating}</p>
           </div>
           <Image
-            src={place.pictures[0]}
+            src={pictures[0]}
             alt={place.name}
             width={350}
             height={192}
             className={styles.image}
-            onError={() => setImageError(true)}
+            unoptimized
           />
           <div className={styles.text}>
             <h3 className={styles.placeName}>{place.name}</h3>
             <div className={styles.placeDescription}>
-              <p>{place.categoryId}</p>
+              <p className={'capitalize'}>{place.categoryId.replace(/_+/, " ")}</p>
               <p>{place.location.address}</p>
               <p>{place.description}</p>
             </div>
@@ -49,5 +47,5 @@ export default function PlaceCard({ place }: PlaceCardProps) {
         </CardContent>
       </Card>
     </CarouselItem>
-  ) : null;
+  );
 }
