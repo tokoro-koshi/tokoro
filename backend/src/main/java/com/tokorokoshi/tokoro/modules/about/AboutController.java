@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
-@RequestMapping("/api/about")
+@RequestMapping("/about")
 @Tag(name = "About", description = "API for managing About information")
 public class AboutController {
 

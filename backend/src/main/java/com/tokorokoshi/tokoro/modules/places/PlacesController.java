@@ -27,7 +27,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @Tag(name = "Places", description = "API for managing places")
 @RestController
-@RequestMapping("/api/places")
+@RequestMapping("/places")
 public class PlacesController {
     private final PlacesService placesService;
     private final TagsService tagsService;

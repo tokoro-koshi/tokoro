@@ -29,7 +29,7 @@ import java.util.function.Predicate;
         description = "API for managing favorite prompts for users"
 )
 @RestController
-@RequestMapping("/api/users/favorite-prompts")
+@RequestMapping("/users/favorite-prompts")
 public class FavoritePromptsController {
     private final FavoritePromptsService favoritePromptsService;
 

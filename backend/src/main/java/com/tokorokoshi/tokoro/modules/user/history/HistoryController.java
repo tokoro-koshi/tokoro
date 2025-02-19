@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Tag(name = "History", description = "API for managing user history entries")
 @RestController
-@RequestMapping("/api/users/history")
+@RequestMapping("/users/history")
 public class HistoryController {
     private static final Logger log =
             LoggerFactory.getLogger(HistoryController.class);

@@ -21,7 +21,7 @@ import java.util.Objects;
 
 @Tag(name = "Users", description = "API for managing users")
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class Auth0UserController {
     private final Auth0UserDataService auth0UserDataService;
     private final Auth0ManagementService auth0ManagementService;

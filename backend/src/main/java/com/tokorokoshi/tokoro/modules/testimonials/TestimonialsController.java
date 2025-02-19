@@ -23,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Testimonials", description = "API for managing testimonials")
 @RestController
-@RequestMapping("/api/testimonials")
+@RequestMapping("/testimonials")
 public class TestimonialsController {
 
     private final TestimonialsService testimonialsService;
