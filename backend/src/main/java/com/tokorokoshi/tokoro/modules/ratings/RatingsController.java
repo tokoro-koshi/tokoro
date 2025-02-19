@@ -23,7 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         description = "API for managing ratings of places"
 )
 @RestController
-@RequestMapping("/api/ratings")
+@RequestMapping("/ratings")
 public class RatingsController {
     private final RatingsService ratingsService;
     private final Logger logger;

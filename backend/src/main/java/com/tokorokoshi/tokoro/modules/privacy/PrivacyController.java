@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping("/api/privacy")
+@RequestMapping("/privacy")
 @Tag(name = "Privacy", description = "API for managing Privacy information")
 public class PrivacyController {
 

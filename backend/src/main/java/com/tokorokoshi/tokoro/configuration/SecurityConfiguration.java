@@ -99,12 +99,12 @@ public class SecurityConfiguration {
                                     .permitAll()
                                     .requestMatchers(
                                             HttpMethod.GET,
-                                            "/api/blogs/**",
-                                            "/api/privacy/**",
-                                            "/api/about/**",
-                                            "/api/features/**",
-                                            "/api/places/**",
-                                            "/api/testimonials/**"
+                                            "/blogs/**",
+                                            "/privacy/**",
+                                            "/about/**",
+                                            "/features/**",
+                                            "/places/**",
+                                            "/testimonials/**"
                                     )
                                     .permitAll()
                                     .requestMatchers(

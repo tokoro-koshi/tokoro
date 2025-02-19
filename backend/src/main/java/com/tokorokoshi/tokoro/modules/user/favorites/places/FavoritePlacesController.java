@@ -28,7 +28,7 @@ import java.util.List;
         description = "API for managing favorite places for users"
 )
 @RestController
-@RequestMapping("/api/users/favorite-places")
+@RequestMapping("/users/favorite-places")
 public class FavoritePlacesController {
     private static final Logger log
             = LoggerFactory.getLogger(FavoritePlacesController.class);
