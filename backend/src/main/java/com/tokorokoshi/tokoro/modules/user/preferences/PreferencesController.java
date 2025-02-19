@@ -25,7 +25,7 @@ import java.util.List;
         description = "API for managing user preferences"
 )
 @RestController
-@RequestMapping("/api/users/preferences")
+@RequestMapping("/users/preferences")
 public class PreferencesController {
     private final PreferencesService preferencesService;
 

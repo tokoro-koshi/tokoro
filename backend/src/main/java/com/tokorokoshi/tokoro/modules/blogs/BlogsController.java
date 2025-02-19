@@ -20,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Blogs", description = "API for managing blogs")
 @RestController
-@RequestMapping("/api/blogs")
+@RequestMapping("/blogs")
 public class BlogsController {
     private final BlogsService blogsService;
     private final Logger logger;

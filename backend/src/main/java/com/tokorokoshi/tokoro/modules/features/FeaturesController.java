@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
         description = "API for managing features"
 )
 @RestController
-@RequestMapping("/api/features")
+@RequestMapping("/features")
 public class FeaturesController {
 
     private final FeaturesService featuresService;
