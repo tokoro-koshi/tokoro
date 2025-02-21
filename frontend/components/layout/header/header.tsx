@@ -8,8 +8,12 @@ import AuthButton from '@/components/buttons/auth-buttons';
 import Logo from '@/public/logo.svg';
 import styles from './header.module.css';
 
+const baseRoutes = [{path:routes.home, label:"Home"},{path:routes.home+"#features", label:"Features"},{path:routes.home+"#about", label:"About"}];
+const authRoutes = [{path:routes.home, label:"Home"},{path:routes.explore, label:"Explore"},{path:routes.blog, label:"Blog"},{path:routes.aiSearch, label:"AI Search"}];
+
 export default function Header() {
   const { user, isLoading } = useUser();
+  const currentRoutes = user ? authRoutes : baseRoutes;
   return (
     <header className={styles.header}>
       <Link href={routes.home} className={styles.logo}>
@@ -17,15 +21,10 @@ export default function Header() {
         <h1 className={styles.name}>Tokoro</h1>
       </Link>
       <nav className={styles.nav}>
-        <Link href={routes.home} className={styles.navLink}>
-          Home
-        </Link>
-        <Link href={'#features'} className={styles.navLink}>
-          Features
-        </Link>
-        <Link href={routes.about} className={styles.navLink}>
-          About
-        </Link>
+        {currentRoutes.map((route, index) => 
+          (<Link key={index} href={route.path} className={styles.navLink}>
+          {route.label}
+        </Link>))}
       </nav>
       {!isLoading && (
         <div className={styles.authButtons}>
