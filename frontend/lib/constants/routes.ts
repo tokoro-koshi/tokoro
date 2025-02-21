@@ -5,6 +5,8 @@
   termsOfService: '/tos',
   contactUs: '/contact',
   explore: '/explore',
+  blog: '/blog',
+  aiSearch: '/search',
 
   auth: {
     login: '/api/auth/login',

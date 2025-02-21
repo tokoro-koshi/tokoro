@@ -1,4 +1,4 @@
-import Header from '@/components/landing/header/header';
+import Header from '@/components/layout/header/header';
 import Hero from '@/components/landing/hero/hero';
 import Features from '@/components/landing/features/features';
 import InteractiveShowcase from '@/components/landing/interactive-showcase/interactive-showcase';
