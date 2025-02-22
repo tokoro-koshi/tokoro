@@ -154,9 +154,9 @@ public class ReviewsService {
     /**
      * Retrieves reviews for a specific place based on the recommendation status.
      *
-     * @param placeId      place ID
-     * @param recommended  whether to retrieve recommended or non-recommended reviews
-     * @param pageable     pagination information (page, size)
+     * @param placeId     place ID
+     * @param recommended whether to retrieve recommended or non-recommended reviews
+     * @param pageable    pagination information (page, size)
      * @return paginated list of reviews for the place based on the recommendation status
      */
     public Page<ReviewDto> getPlaceReviewsByRecommendation(String placeId, boolean recommended, Pageable pageable) {
@@ -178,7 +178,7 @@ public class ReviewsService {
     /**
      * Updates an existing review.
      *
-     * @param id                         review ID
+     * @param id                    review ID
      * @param createUpdateReviewDto review data to update
      * @return the updated review
      */
@@ -195,7 +195,10 @@ public class ReviewsService {
             throw new IllegalArgumentException("User is not authorized to update this review");
         }
 
-        Review review = reviewMapper.toReviewSchema(createUpdateReviewDto).withId(id);
+        Review review = reviewMapper.toReviewSchema(createUpdateReviewDto)
+                .withId(existingReview.id())
+                .withUserId(userId)
+                .withCreatedAt(existingReview.createdAt());
         Review savedReview = mongoTemplate.save(review);
 
         return reviewMapper.toReviewDto(savedReview);

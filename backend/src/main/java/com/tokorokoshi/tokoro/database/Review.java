@@ -63,4 +63,22 @@ public record Review(
                 updatedAt
         );
     }
+
+    /**
+     * Creates a new review with the specified createdAt timestamp.
+     *
+     * @param createdAt The creation timestamp for this review
+     * @return A new review with the specified createdAt timestamp
+     */
+    public Review withCreatedAt(LocalDate createdAt) {
+        return new Review(
+                id,
+                userId,
+                placeId,
+                comment,
+                recommended,
+                createdAt,
+                updatedAt
+        );
+    }
 }

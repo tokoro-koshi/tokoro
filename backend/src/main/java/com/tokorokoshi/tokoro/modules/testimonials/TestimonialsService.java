@@ -151,7 +151,10 @@ public class TestimonialsService {
             throw new IllegalArgumentException("User is not authorized to update this testimonial");
         }
 
-        Testimonial testimonial = testimonialMapper.toTestimonialSchema(createUpdateTestimonialDto).withId(existingTestimonial.id());
+        Testimonial testimonial = testimonialMapper.toTestimonialSchema(createUpdateTestimonialDto)
+                .withId(existingTestimonial.id())
+                .withUserId(userId)
+                .withCreatedAt(existingTestimonial.createdAt());
 
         // Set the new status to PENDING
         testimonial = testimonial.withStatus(Testimonial.Status.PENDING);
