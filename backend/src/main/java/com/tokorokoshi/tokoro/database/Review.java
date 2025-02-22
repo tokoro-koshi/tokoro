@@ -35,6 +35,32 @@ public record Review(
      * @return A new review with the given ID
      */
     public Review withId(String id) {
-        return new Review(id, userId, placeId, comment, recommended, createdAt, updatedAt);
+        return new Review(
+                id,
+                userId,
+                placeId,
+                comment,
+                recommended,
+                createdAt,
+                updatedAt
+        );
+    }
+
+    /**
+     * Creates a new review with the specified user ID.
+     *
+     * @param userId The user ID associated with this review
+     * @return A new review with the specified user ID
+     */
+    public Review withUserId(String userId) {
+        return new Review(
+                id,
+                userId,
+                placeId,
+                comment,
+                recommended,
+                createdAt,
+                updatedAt
+        );
     }
 }
