@@ -33,9 +33,19 @@ public record ReviewDto(
         )
         String comment,
         @Schema(
+                name = "recommended",
+                description = "Whether the place is recommended by the user"
+        )
+        boolean recommended,
+        @Schema(
                 name = "createdAt",
                 description = "The date and time the review was created"
         )
-        LocalDate createdAt
+        LocalDate createdAt,
+        @Schema(
+                name = "updatedAt",
+                description = "The date and time the review was last updated"
+        )
+        LocalDate updatedAt
 ) {
 }
