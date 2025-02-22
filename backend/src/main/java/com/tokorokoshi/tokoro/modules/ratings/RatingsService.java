@@ -19,20 +19,20 @@ import java.util.List;
  */
 @Service
 public class RatingsService {
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final RatingMapper ratingMapper;
 
     /**
      * Constructor for the ratings service.
      *
-     * @param mongoTemplate the mongo template
+     * @param repository the mongo template
      * @param ratingMapper  the rating mapper
      */
     @Autowired public RatingsService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             RatingMapper ratingMapper
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.ratingMapper = ratingMapper;
     }
 
@@ -43,7 +43,7 @@ public class RatingsService {
      * @return the saved rating
      */
     public RatingDto saveRating(CreateUpdateRatingDto rating) {
-        return ratingMapper.toRatingDto(mongoTemplate.save(ratingMapper.toRatingSchema(
+        return ratingMapper.toRatingDto(repository.save(ratingMapper.toRatingSchema(
                 rating)));
     }
 
@@ -54,7 +54,7 @@ public class RatingsService {
      * @return the rating
      */
     public RatingDto findRatingById(String id) {
-        Rating rating = mongoTemplate.findById(id, Rating.class);
+        Rating rating = repository.findById(id, Rating.class);
         if (rating == null) {
             return null;
         }
@@ -81,8 +81,8 @@ public class RatingsService {
         if (placeId != null) {
             query.addCriteria(Criteria.where("placeId").is(placeId));
         }
-        List<Rating> ratings = mongoTemplate.find(query, Rating.class);
-        long total = mongoTemplate.count(query, Rating.class);
+        List<Rating> ratings = repository.find(query, Rating.class);
+        long total = repository.count(query, Rating.class);
 
         List<RatingDto> dtos = ratingMapper.toRatingDto(ratings);
         return new PageImpl<>(dtos, pageable, total);
@@ -100,7 +100,7 @@ public class RatingsService {
             return null;
         }
         Rating schema = ratingMapper.toRatingSchema(rating);
-        return ratingMapper.toRatingDto(mongoTemplate.save(schema.withId(id)));
+        return ratingMapper.toRatingDto(repository.save(schema.withId(id)));
 
     }
 
@@ -110,6 +110,6 @@ public class RatingsService {
      * @param id the id of the rating to delete
      */
     public void deleteRating(String id) {
-        mongoTemplate.remove(ratingMapper.toRatingSchema(findRatingById(id)));
+        repository.remove(ratingMapper.toRatingSchema(findRatingById(id)));
     }
 }

@@ -22,17 +22,17 @@ import java.util.stream.Collectors;
 @Service
 public class TestimonialsService {
 
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final TestimonialMapper testimonialMapper;
     private final Auth0UserDataService auth0UserDataService;
 
     @Autowired
     public TestimonialsService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             TestimonialMapper testimonialMapper,
             Auth0UserDataService auth0UserDataService
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.testimonialMapper = testimonialMapper;
         this.auth0UserDataService = auth0UserDataService;
     }
@@ -48,7 +48,7 @@ public class TestimonialsService {
 
         Testimonial testimonial = testimonialMapper.toTestimonialSchema(createUpdateTestimonialDto);
         testimonial = testimonial.withUserId(userId);
-        Testimonial savedTestimonial = mongoTemplate.save(testimonial);
+        Testimonial savedTestimonial = repository.save(testimonial);
 
         return testimonialMapper.toTestimonialDto(savedTestimonial);
     }
@@ -60,7 +60,7 @@ public class TestimonialsService {
      * @return the testimonial
      */
     public TestimonialDto getTestimonialById(String id) {
-        Testimonial testimonial = mongoTemplate.findById(id, Testimonial.class);
+        Testimonial testimonial = repository.findById(id, Testimonial.class);
         if (testimonial == null) return null;
 
         return testimonialMapper.toTestimonialDto(testimonial);
@@ -75,10 +75,10 @@ public class TestimonialsService {
     public Page<TestimonialDto> getAllTestimonials(Pageable pageable) {
         // Create a query with pagination information
         Query query = Query.query(new Criteria()).with(pageable);
-        List<Testimonial> testimonials = mongoTemplate.find(query, Testimonial.class);
+        List<Testimonial> testimonials = repository.find(query, Testimonial.class);
 
         // Count the total number of testimonials
-        long total = mongoTemplate.count(new Query(), Testimonial.class);
+        long total = repository.count(new Query(), Testimonial.class);
 
         List<TestimonialDto> content = testimonials.stream()
                 .map(testimonialMapper::toTestimonialDto)
@@ -95,7 +95,7 @@ public class TestimonialsService {
     public void deleteTestimonial(String id) {
         String userId = auth0UserDataService.getAuthenticatedUserId();
 
-        Testimonial testimonial = mongoTemplate.findById(id, Testimonial.class);
+        Testimonial testimonial = repository.findById(id, Testimonial.class);
         if (testimonial == null) {
             throw new IllegalArgumentException("Testimonial not found for id: " + id);
         }
@@ -105,7 +105,7 @@ public class TestimonialsService {
             throw new IllegalArgumentException("User is not authorized to delete this testimonial");
         }
 
-        mongoTemplate.remove(testimonial);
+        repository.remove(testimonial);
     }
 
     /**
@@ -119,10 +119,10 @@ public class TestimonialsService {
         // Create a query with pagination information and filter by user ID
         Query query = Query.query(Criteria.where("userId").is(userId)).with(pageable);
 
-        List<Testimonial> testimonials = mongoTemplate.find(query, Testimonial.class);
+        List<Testimonial> testimonials = repository.find(query, Testimonial.class);
 
         // Count the total number of testimonials for the user
-        long total = mongoTemplate.count(Query.query(Criteria.where("userId").is(userId)), Testimonial.class);
+        long total = repository.count(Query.query(Criteria.where("userId").is(userId)), Testimonial.class);
 
         List<TestimonialDto> content = testimonials.stream()
                 .map(testimonialMapper::toTestimonialDto)
@@ -141,7 +141,7 @@ public class TestimonialsService {
     public TestimonialDto updateTestimonial(String id, CreateUpdateTestimonialDto createUpdateTestimonialDto) {
         String userId = auth0UserDataService.getAuthenticatedUserId();
 
-        Testimonial existingTestimonial = mongoTemplate.findById(id, Testimonial.class);
+        Testimonial existingTestimonial = repository.findById(id, Testimonial.class);
         if (existingTestimonial == null) {
             throw new IllegalArgumentException("Testimonial not found for id: " + id);
         }
@@ -158,7 +158,7 @@ public class TestimonialsService {
 
         // Set the new status to PENDING
         testimonial = testimonial.withStatus(Testimonial.Status.PENDING);
-        Testimonial savedTestimonial = mongoTemplate.save(testimonial);
+        Testimonial savedTestimonial = repository.save(testimonial);
 
         return testimonialMapper.toTestimonialDto(savedTestimonial);
     }
@@ -170,13 +170,13 @@ public class TestimonialsService {
      * @param status new status for the testimonial
      */
     public void changeTestimonialStatus(String id, Testimonial.Status status) {
-        Testimonial existingTestimonial = mongoTemplate.findById(id, Testimonial.class);
+        Testimonial existingTestimonial = repository.findById(id, Testimonial.class);
         if (existingTestimonial == null) {
             throw new IllegalArgumentException("Testimonial not found for id: " + id);
         }
         Testimonial testimonial = existingTestimonial.withStatus(status);
 
-        mongoTemplate.save(testimonial);
+        repository.save(testimonial);
     }
 
     /**
@@ -190,10 +190,10 @@ public class TestimonialsService {
         // Create a query with pagination information and filter by status
         Query query = Query.query(Criteria.where("status").is(status)).with(pageable);
 
-        List<Testimonial> testimonials = mongoTemplate.find(query, Testimonial.class);
+        List<Testimonial> testimonials = repository.find(query, Testimonial.class);
 
         // Count the total number of testimonials with the given status
-        long total = mongoTemplate.count(Query.query(Criteria.where("status").is(status)), Testimonial.class);
+        long total = repository.count(Query.query(Criteria.where("status").is(status)), Testimonial.class);
 
         List<TestimonialDto> content = testimonials.stream()
                 .map(testimonialMapper::toTestimonialDto)
@@ -215,7 +215,7 @@ public class TestimonialsService {
                 Aggregation.sample(count)
         );
 
-        AggregationResults<Testimonial> results = mongoTemplate.aggregate(aggregation, Testimonial.class, Testimonial.class);
+        AggregationResults<Testimonial> results = repository.aggregate(aggregation, Testimonial.class, Testimonial.class);
 
         return results.getMappedResults().stream()
                 .map(testimonialMapper::toTestimonialDto)

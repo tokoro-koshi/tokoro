@@ -114,6 +114,7 @@ public record Testimonial(
 
     /**
      * Enum representing the possible statuses of a testimonial.
+     * The possible statuses of a testimonial.
      */
     public enum Status {
         /**

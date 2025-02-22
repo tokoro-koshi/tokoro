@@ -8,14 +8,14 @@ import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -29,19 +29,19 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 @Service
 public class PlacesService {
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final PlaceMapper placeMapper;
     private final FileStorageService fileStorageService;
     private final TagsService tagsService;
 
     @Autowired
     public PlacesService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             PlaceMapper placeMapper,
             FileStorageService fileStorageService,
             TagsService tagsService
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.placeMapper = placeMapper;
         this.fileStorageService = fileStorageService;
         this.tagsService = tagsService;
@@ -132,7 +132,7 @@ public class PlacesService {
         placeSchema = placeSchema.withTags(generateTagsForPlace(placeSchema));
 
         // Save to MongoDB
-        var savedPlace = mongoTemplate.save(placeSchema);
+        var savedPlace = repository.save(placeSchema);
         return getPlaceWithPicturesUrls(savedPlace);
     }
 
@@ -187,7 +187,7 @@ public class PlacesService {
         placeSchema = placeSchema.withTags(generateTagsForPlace(placeSchema));
 
         // Update the place in MongoDB
-        var savedPlace = mongoTemplate.save(placeSchema);
+        var savedPlace = repository.save(placeSchema);
         return getPlaceWithPicturesUrls(savedPlace);
     }
 
@@ -198,7 +198,7 @@ public class PlacesService {
      * @return the place
      */
     public PlaceDto getPlaceById(String id) {
-        var place = mongoTemplate.findById(id, Place.class);
+        var place = repository.findById(id, Place.class);
         if (place == null) return null;
         return getPlaceWithPicturesUrls(place);
     }
@@ -211,8 +211,8 @@ public class PlacesService {
      */
     public Page<PlaceDto> getAllPlaces(Pageable pageable) {
         Query query = new Query().with(pageable);
-        List<Place> places = mongoTemplate.find(query, Place.class);
-        long total = mongoTemplate.count(new Query(), Place.class); // Total count of all places
+        List<Place> places = repository.find(query, Place.class);
+        long total = repository.count(new Query(), Place.class); // Total count of all places
 
         List<PlaceDto> content = places.stream()
                 .map(this::getPlaceWithPicturesUrls)
@@ -226,7 +226,7 @@ public class PlacesService {
      * @param id place ID
      */
     public void deletePlace(String id) {
-        var place = mongoTemplate.findById(id, Place.class);
+        var place = repository.findById(id, Place.class);
         if (place == null) {
             throw new IllegalArgumentException("Place not found for id: " + id);
         }
@@ -237,7 +237,7 @@ public class PlacesService {
         }
 
         // Remove place from database
-        mongoTemplate.remove(place);
+        repository.remove(place);
     }
 
     /**
@@ -247,7 +247,7 @@ public class PlacesService {
      * @return the random places
      */
     public List<PlaceDto> getRandomPlaces(int count) {
-        AggregationResults<Place> results = mongoTemplate.aggregate(
+        AggregationResults<Place> results = repository.aggregate(
                 newAggregation(Aggregation.sample(count)),
                 Place.class,
                 Place.class
@@ -268,18 +268,47 @@ public class PlacesService {
             throw new IllegalArgumentException("Tags cannot be null or empty");
         }
 
-        // For each tag, create an individual criterion and add it to an OR list
-        var matchers = tags.stream()
+        // Extract tag names from the input DTOs
+        List<String> tagNames = tags.stream()
+                .map(TagDto::name)
+                .toList();
+
+        // Create OR criteria for matching any of the tags
+        List<Criteria> matchers = tags.stream()
                 .map(tag -> Criteria.where("tags")
                         .elemMatch(Criteria.where("name").is(tag.name())))
                 .toList();
-
-        // Create criteria to check if the place's tags array contains ANY of the specified tags
         Criteria criteria = new Criteria().orOperator(matchers);
-        MatchOperation operation = Aggregation.match(criteria);
+        MatchOperation matchStage = Aggregation.match(criteria);
 
-        AggregationResults<Place> results = mongoTemplate.aggregate(
-                newAggregation(operation),
+        // Add a field representing the count of matching tags
+        AggregationOperation addHitsStage = context -> new Document("$addFields",
+                new Document("hits",
+                        new Document("$size",
+                                new Document("$filter",
+                                        new Document("input", "$tags")
+                                                .append("as", "tag")
+                                                .append("cond",
+                                                        new Document("$in", List.of("$$tag.name", tagNames))
+                                                )
+                                )
+                        )
+                )
+        );
+
+        // Sort by the hits in descending order
+        SortOperation sortStage = Aggregation.sort(Sort.by(Sort.Direction.DESC, "hits"));
+
+        // Build the aggregation pipeline
+        Aggregation aggregation = Aggregation.newAggregation(
+                matchStage,
+                addHitsStage,
+                sortStage
+        );
+
+        // Execute the aggregation
+        AggregationResults<Place> results = repository.aggregate(
+                aggregation,
                 Place.class,
                 Place.class
         );
