@@ -29,19 +29,19 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 @Service
 public class PlacesService {
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final PlaceMapper placeMapper;
     private final FileStorageService fileStorageService;
     private final TagsService tagsService;
 
     @Autowired
     public PlacesService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             PlaceMapper placeMapper,
             FileStorageService fileStorageService,
             TagsService tagsService
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.placeMapper = placeMapper;
         this.fileStorageService = fileStorageService;
         this.tagsService = tagsService;
@@ -132,7 +132,7 @@ public class PlacesService {
         placeSchema = placeSchema.withTags(generateTagsForPlace(placeSchema));
 
         // Save to MongoDB
-        var savedPlace = mongoTemplate.save(placeSchema);
+        var savedPlace = repository.save(placeSchema);
         return getPlaceWithPicturesUrls(savedPlace);
     }
 
@@ -187,7 +187,7 @@ public class PlacesService {
         placeSchema = placeSchema.withTags(generateTagsForPlace(placeSchema));
 
         // Update the place in MongoDB
-        var savedPlace = mongoTemplate.save(placeSchema);
+        var savedPlace = repository.save(placeSchema);
         return getPlaceWithPicturesUrls(savedPlace);
     }
 
@@ -198,7 +198,7 @@ public class PlacesService {
      * @return the place
      */
     public PlaceDto getPlaceById(String id) {
-        var place = mongoTemplate.findById(id, Place.class);
+        var place = repository.findById(id, Place.class);
         if (place == null) return null;
         return getPlaceWithPicturesUrls(place);
     }
@@ -211,8 +211,8 @@ public class PlacesService {
      */
     public Page<PlaceDto> getAllPlaces(Pageable pageable) {
         Query query = new Query().with(pageable);
-        List<Place> places = mongoTemplate.find(query, Place.class);
-        long total = mongoTemplate.count(new Query(), Place.class); // Total count of all places
+        List<Place> places = repository.find(query, Place.class);
+        long total = repository.count(new Query(), Place.class); // Total count of all places
 
         List<PlaceDto> content = places.stream()
                 .map(this::getPlaceWithPicturesUrls)
@@ -226,7 +226,7 @@ public class PlacesService {
      * @param id place ID
      */
     public void deletePlace(String id) {
-        var place = mongoTemplate.findById(id, Place.class);
+        var place = repository.findById(id, Place.class);
         if (place == null) {
             throw new IllegalArgumentException("Place not found for id: " + id);
         }
@@ -237,7 +237,7 @@ public class PlacesService {
         }
 
         // Remove place from database
-        mongoTemplate.remove(place);
+        repository.remove(place);
     }
 
     /**
@@ -247,7 +247,7 @@ public class PlacesService {
      * @return the random places
      */
     public List<PlaceDto> getRandomPlaces(int count) {
-        AggregationResults<Place> results = mongoTemplate.aggregate(
+        AggregationResults<Place> results = repository.aggregate(
                 newAggregation(Aggregation.sample(count)),
                 Place.class,
                 Place.class
@@ -278,7 +278,7 @@ public class PlacesService {
         Criteria criteria = new Criteria().orOperator(matchers);
         MatchOperation operation = Aggregation.match(criteria);
 
-        AggregationResults<Place> results = mongoTemplate.aggregate(
+        AggregationResults<Place> results = repository.aggregate(
                 newAggregation(operation),
                 Place.class,
                 Place.class
