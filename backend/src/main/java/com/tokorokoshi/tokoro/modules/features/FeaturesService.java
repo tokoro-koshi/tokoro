@@ -17,17 +17,17 @@ import java.util.List;
 @Service
 public class FeaturesService {
 
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final FeatureMapper featureMapper;
     private final FileStorageService fileStorageService;
 
     @Autowired
     public FeaturesService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             FeatureMapper featureMapper,
             FileStorageService fileStorageService
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.featureMapper = featureMapper;
         this.fileStorageService = fileStorageService;
     }
@@ -74,7 +74,7 @@ public class FeaturesService {
         feature = feature.withPicture(pictureKey);
 
         // Save to MongoDB
-        Feature savedFeature = mongoTemplate.save(feature);
+        Feature savedFeature = repository.save(feature);
         return getFeatureWithPictureUrl(savedFeature);
     }
 
@@ -85,7 +85,7 @@ public class FeaturesService {
      * @return the feature
      */
     public FeatureDto findFeatureById(String id) {
-        Feature feature = mongoTemplate.findById(id, Feature.class);
+        Feature feature = repository.findById(id, Feature.class);
         if (feature == null) {
             return null;
         }
@@ -98,7 +98,7 @@ public class FeaturesService {
      * @return a list of features
      */
     public List<FeatureDto> findAllFeatures() {
-        List<Feature> features = mongoTemplate.findAll(Feature.class);
+        List<Feature> features = repository.findAll(Feature.class);
         return features.stream()
                 .map(this::getFeatureWithPictureUrl)
                 .toList();
@@ -118,7 +118,7 @@ public class FeaturesService {
         }
 
         // Check if a Feature document already exists
-        Feature existingFeature = mongoTemplate.findById(id, Feature.class);
+        Feature existingFeature = repository.findById(id, Feature.class);
         if (existingFeature == null) {
             throw new IllegalArgumentException("Feature document not found");
         }
@@ -138,7 +138,7 @@ public class FeaturesService {
         }
 
         // Save to MongoDB
-        Feature updatedFeature = mongoTemplate.save(feature);
+        Feature updatedFeature = repository.save(feature);
         return getFeatureWithPictureUrl(updatedFeature);
     }
 
@@ -148,13 +148,13 @@ public class FeaturesService {
      * @param id the id of the feature to delete
      */
     public void deleteFeature(String id) {
-        Feature feature = mongoTemplate.findById(id, Feature.class);
+        Feature feature = repository.findById(id, Feature.class);
         if (feature != null) {
             // Delete the picture if it exists
             if (feature.picture() != null) {
                 fileStorageService.deleteFile(feature.picture()).join();
             }
-            mongoTemplate.remove(feature);
+            repository.remove(feature);
         } else {
             throw new IllegalArgumentException("Feature document not found");
         }

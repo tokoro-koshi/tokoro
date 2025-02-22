@@ -131,7 +131,7 @@ public class PlacesController {
             value = "/search",
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<?> search(
+    public ResponseEntity<List<PlaceDto>> search(
             @Parameter(
                     description = "The search query",
                     required = true,

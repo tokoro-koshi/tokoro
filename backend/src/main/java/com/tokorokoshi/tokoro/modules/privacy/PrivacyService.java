@@ -13,15 +13,15 @@ import java.util.Optional;
 @Service
 public class PrivacyService {
 
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final PrivacyMapper privacyMapper;
 
     @Autowired
     public PrivacyService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             PrivacyMapper privacyMapper
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.privacyMapper = privacyMapper;
     }
 
@@ -31,7 +31,7 @@ public class PrivacyService {
      * @return the Privacy document
      */
     public PrivacyDto getPrivacy() {
-        Optional<Privacy> privacyOptional = Optional.ofNullable(mongoTemplate.findOne(new Query(), Privacy.class));
+        Optional<Privacy> privacyOptional = Optional.ofNullable(repository.findOne(new Query(), Privacy.class));
         return privacyOptional.map(privacyMapper::toPrivacyDto).orElse(null);
     }
 
@@ -46,7 +46,7 @@ public class PrivacyService {
         Privacy privacy = privacyMapper.toPrivacy(createUpdatePrivacyDto);
 
         // Save to MongoDB
-        Privacy savedPrivacy = mongoTemplate.save(privacy);
+        Privacy savedPrivacy = repository.save(privacy);
         return privacyMapper.toPrivacyDto(savedPrivacy);
     }
 
@@ -58,7 +58,7 @@ public class PrivacyService {
      */
     public PrivacyDto updatePrivacy(CreateUpdatePrivacyDto createUpdatePrivacyDto) {
         // Check if a Privacy document already exists
-        Privacy existingPrivacy = mongoTemplate.findOne(new Query(), Privacy.class);
+        Privacy existingPrivacy = repository.findOne(new Query(), Privacy.class);
         if (existingPrivacy == null) {
             throw new IllegalArgumentException("Privacy document not found");
         }
@@ -67,7 +67,7 @@ public class PrivacyService {
         Privacy privacy = privacyMapper.toPrivacy(createUpdatePrivacyDto).withId(existingPrivacy.id());
 
         // Save to MongoDB
-        Privacy savedPrivacy = mongoTemplate.save(privacy);
+        Privacy savedPrivacy = repository.save(privacy);
         return privacyMapper.toPrivacyDto(savedPrivacy);
     }
 
@@ -75,9 +75,9 @@ public class PrivacyService {
      * Deletes the Privacy document.
      */
     public void deletePrivacy() {
-        Optional<Privacy> privacyOptional = Optional.ofNullable(mongoTemplate.findOne(new Query(), Privacy.class));
+        Optional<Privacy> privacyOptional = Optional.ofNullable(repository.findOne(new Query(), Privacy.class));
         if (privacyOptional.isPresent()) {
-            mongoTemplate.remove(privacyOptional.get());
+            repository.remove(privacyOptional.get());
         } else {
             throw new IllegalArgumentException("Privacy document not found");
         }
