@@ -3,6 +3,7 @@ package com.tokorokoshi.tokoro.database;
 import jakarta.annotation.Nonnull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -20,9 +21,12 @@ public record Review(
         String placeId,
         @Nonnull
         String comment,
+        boolean recommended,
         @Nonnull
         @CreatedDate
-        LocalDate createdAt
+        LocalDate createdAt,
+        @LastModifiedDate
+        LocalDate updatedAt
 ) {
     /**
      * Creates a new review with the given ID.
@@ -31,6 +35,6 @@ public record Review(
      * @return A new review with the given ID
      */
     public Review withId(String id) {
-        return new Review(id, userId, placeId, comment, createdAt);
+        return new Review(id, userId, placeId, comment, recommended, createdAt, updatedAt);
     }
 }
