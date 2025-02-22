@@ -2,7 +2,7 @@ import styles from './search.module.css';
 import Image from 'next/image';
 import User from '@/public/avatars/avatar-1.svg';
 import { Button } from '@/components/ui/button';
-import Arrow from '@/public/down-arrow.svg';
+import Arrow from '@/public/icons/down-arrow.svg';
 
 export default function Search() {
     return (

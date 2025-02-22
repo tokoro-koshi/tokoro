@@ -5,7 +5,7 @@ import {
     CarouselContent,
     CarouselItem,
 } from '@/components/ui/carousel';
-import Star from '@/public/star.svg';
+import Star from '@/public/icons/star.svg';
 import Image from "next/image";
 import {Place} from "@/lib/types/place";
 
