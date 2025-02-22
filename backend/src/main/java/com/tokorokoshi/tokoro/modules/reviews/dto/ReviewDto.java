@@ -2,7 +2,7 @@ package com.tokorokoshi.tokoro.modules.reviews.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * A DTO for a review
@@ -33,19 +33,19 @@ public record ReviewDto(
         )
         String comment,
         @Schema(
-                name = "recommended",
+                name = "isRecommended",
                 description = "Whether the place is recommended by the user"
         )
-        boolean recommended,
+        boolean isRecommended,
         @Schema(
                 name = "createdAt",
                 description = "The date and time the review was created"
         )
-        LocalDate createdAt,
+        LocalDateTime createdAt,
         @Schema(
                 name = "updatedAt",
                 description = "The date and time the review was last updated"
         )
-        LocalDate updatedAt
+        LocalDateTime updatedAt
 ) {
 }

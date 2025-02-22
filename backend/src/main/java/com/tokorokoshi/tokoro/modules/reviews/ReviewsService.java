@@ -154,19 +154,19 @@ public class ReviewsService {
     /**
      * Retrieves reviews for a specific place based on the recommendation status.
      *
-     * @param placeId     place ID
-     * @param recommended whether to retrieve recommended or non-recommended reviews
-     * @param pageable    pagination information (page, size)
+     * @param placeId       place ID
+     * @param isRecommended whether to retrieve recommended or non-recommended reviews
+     * @param pageable      pagination information (page, size)
      * @return paginated list of reviews for the place based on the recommendation status
      */
-    public Page<ReviewDto> getPlaceReviewsByRecommendation(String placeId, boolean recommended, Pageable pageable) {
+    public Page<ReviewDto> getPlaceReviewsByRecommendation(String placeId, boolean isRecommended, Pageable pageable) {
         // Create a query with pagination information and filter by place ID and recommended flag
-        Query query = Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(recommended)).with(pageable);
+        Query query = Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(isRecommended)).with(pageable);
 
         List<Review> reviews = mongoTemplate.find(query, Review.class);
 
         // Count the total number of reviews for the place based on the recommendation status
-        long total = mongoTemplate.count(Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(recommended)), Review.class);
+        long total = mongoTemplate.count(Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(isRecommended)), Review.class);
 
         List<ReviewDto> content = reviews.stream()
                 .map(reviewMapper::toReviewDto)

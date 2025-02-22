@@ -21,9 +21,9 @@ public record CreateUpdateReviewDto(
         )
         String comment,
         @Schema(
-                name = "recommended",
+                name = "isRecommended",
                 description = "Whether the place is recommended by the user"
         )
-        boolean recommended
+        boolean isRecommended
 ) {
 }

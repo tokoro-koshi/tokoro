@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Tag(name = "Reviews", description = "API for managing reviews")
+@Tag(name = "Places Reviews", description = "API for managing places reviews")
 @RestController
 @RequestMapping("/reviews")
 public class ReviewsController {
@@ -149,7 +149,7 @@ public class ReviewsController {
                     example = "true"
             )
             @RequestParam(required = false)
-            Optional<Boolean> recommended,
+            Optional<Boolean> isRecommended,
 
             @Parameter(description = "The page number to get", example = "0")
             @RequestParam(defaultValue = "0")
@@ -165,8 +165,8 @@ public class ReviewsController {
         Pageable pageable = PageRequest.of(page, size);
         Page<ReviewDto> reviews;
 
-        if (recommended.isPresent()) {
-            reviews = this.reviewsService.getPlaceReviewsByRecommendation(placeId, recommended.get(), pageable);
+        if (isRecommended.isPresent()) {
+            reviews = this.reviewsService.getPlaceReviewsByRecommendation(placeId, isRecommended.get(), pageable);
         } else {
             reviews = this.reviewsService.getPlaceReviews(placeId, pageable);
         }

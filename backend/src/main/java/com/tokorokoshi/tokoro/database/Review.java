@@ -1,12 +1,14 @@
 package com.tokorokoshi.tokoro.database;
 
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Represents a review in the database.
@@ -14,19 +16,25 @@ import java.time.LocalDate;
 @Document(collection = "review")
 public record Review(
         @Id
+        @NotNull(message = "ID cannot be null")
         String id,
-        @Nonnull
+
+        @NotNull(message = "User ID cannot be null")
         String userId,
-        @Nonnull
+        @NotNull(message = "Place ID cannot be null")
         String placeId,
-        @Nonnull
+
+        @NotNull(message = "Comment cannot be null")
+        @NotBlank(message = "Comment cannot be blank")
+        @Length(max = 300, message = "Comment must be at most 300 characters")
         String comment,
-        boolean recommended,
-        @Nonnull
+        boolean isRecommended,
+
         @CreatedDate
-        LocalDate createdAt,
+        LocalDateTime createdAt,
+
         @LastModifiedDate
-        LocalDate updatedAt
+        LocalDateTime updatedAt
 ) {
     /**
      * Creates a new review with the given ID.
@@ -40,7 +48,7 @@ public record Review(
                 userId,
                 placeId,
                 comment,
-                recommended,
+                isRecommended,
                 createdAt,
                 updatedAt
         );
@@ -58,7 +66,7 @@ public record Review(
                 userId,
                 placeId,
                 comment,
-                recommended,
+                isRecommended,
                 createdAt,
                 updatedAt
         );
@@ -70,13 +78,13 @@ public record Review(
      * @param createdAt The creation timestamp for this review
      * @return A new review with the specified createdAt timestamp
      */
-    public Review withCreatedAt(LocalDate createdAt) {
+    public Review withCreatedAt(LocalDateTime createdAt) {
         return new Review(
                 id,
                 userId,
                 placeId,
                 comment,
-                recommended,
+                isRecommended,
                 createdAt,
                 updatedAt
         );
