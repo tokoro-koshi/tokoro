@@ -15,25 +15,25 @@ import java.util.List;
 
 @Service
 public class BlogsService {
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final BlogMapper blogMapper;
 
     @Autowired
     public BlogsService(
-        MongoTemplate mongoTemplate,
+        MongoTemplate repository,
         BlogMapper blogMapper
     ) {
         this.blogMapper = blogMapper;
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
     }
 
     public BlogDto saveBlog(CreateUpdateBlogDto blog) {
         Blog blogSchema = blogMapper.toBlogSchema(blog);
-        return blogMapper.toBlogDto(mongoTemplate.save(blogSchema));
+        return blogMapper.toBlogDto(repository.save(blogSchema));
     }
 
     public BlogDto getBlogById(String id) {
-        Blog blog = mongoTemplate.findById(id, Blog.class);
+        Blog blog = repository.findById(id, Blog.class);
         if (blog == null) {
             return null;
         }
@@ -43,9 +43,9 @@ public class BlogsService {
     public Page<BlogDto> getAllBlogs(Pageable pageable) {
         Query query = new Query().with(pageable);
         List<BlogDto> blogDtos = blogMapper.toBlogDto(
-                mongoTemplate.find(query, Blog.class)
+                repository.find(query, Blog.class)
         );
-        long count = mongoTemplate.count(query, Blog.class);
+        long count = repository.count(query, Blog.class);
         return new PageImpl<>(blogDtos, pageable, count);
     }
 
@@ -54,10 +54,10 @@ public class BlogsService {
             return null;
         }
         Blog blogSchema = blogMapper.toBlogSchema(blog);
-        return blogMapper.toBlogDto(mongoTemplate.save(blogSchema.withId(id)));
+        return blogMapper.toBlogDto(repository.save(blogSchema.withId(id)));
     }
 
     public void deleteBlog(String id) {
-        mongoTemplate.remove(blogMapper.toBlogSchema(getBlogById(id)));
+        repository.remove(blogMapper.toBlogSchema(getBlogById(id)));
     }
 }

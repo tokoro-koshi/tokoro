@@ -15,17 +15,17 @@ import java.util.Optional;
 @Service
 public class AboutService {
 
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final AboutMapper aboutMapper;
     private final FileStorageService fileStorageService;
 
     @Autowired
     public AboutService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             AboutMapper aboutMapper,
             FileStorageService fileStorageService
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.aboutMapper = aboutMapper;
         this.fileStorageService = fileStorageService;
     }
@@ -58,7 +58,7 @@ public class AboutService {
      * @return the About document
      */
     public AboutDto getAbout() {
-        Optional<About> aboutOptional = Optional.ofNullable(mongoTemplate.findOne(new Query(), About.class));
+        Optional<About> aboutOptional = Optional.ofNullable(repository.findOne(new Query(), About.class));
         return aboutOptional.map(this::getAboutWithLogoUrl).orElse(null);
     }
 
@@ -82,7 +82,7 @@ public class AboutService {
         about = about.withLogo(appLogoKey);
 
         // Save to MongoDB
-        About savedAbout = mongoTemplate.save(about);
+        About savedAbout = repository.save(about);
         return getAboutWithLogoUrl(savedAbout);
     }
 
@@ -99,7 +99,7 @@ public class AboutService {
         }
 
         // Check if an About document already exists
-        About existingAbout = mongoTemplate.findOne(new Query(), About.class);
+        About existingAbout = repository.findOne(new Query(), About.class);
         if (existingAbout == null) {
             throw new IllegalArgumentException("About document not found");
         }
@@ -119,7 +119,7 @@ public class AboutService {
         }
 
         // Save to MongoDB
-        About savedAbout = mongoTemplate.save(about);
+        About savedAbout = repository.save(about);
         return getAboutWithLogoUrl(savedAbout);
     }
 
@@ -127,14 +127,14 @@ public class AboutService {
      * Deletes the About document.
      */
     public void deleteAbout() {
-        Optional<About> aboutOptional = Optional.ofNullable(mongoTemplate.findOne(new Query(), About.class));
+        Optional<About> aboutOptional = Optional.ofNullable(repository.findOne(new Query(), About.class));
         if (aboutOptional.isPresent()) {
             About about = aboutOptional.get();
             // Delete the logo if it exists
             if (about.logo() != null) {
                 fileStorageService.deleteFile(about.logo()).join();
             }
-            mongoTemplate.remove(about);
+            repository.remove(about);
         } else {
             throw new IllegalArgumentException("About document not found");
         }
