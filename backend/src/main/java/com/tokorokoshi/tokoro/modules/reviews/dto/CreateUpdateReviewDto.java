@@ -11,11 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 )
 public record CreateUpdateReviewDto(
         @Schema(
-                name = "userId",
-                description = "The ID of the user who wrote the review"
-        )
-        String userId,
-        @Schema(
                 name = "placeId",
                 description = "The ID of the place being reviewed"
         )
