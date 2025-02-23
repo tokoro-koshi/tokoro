@@ -96,6 +96,24 @@ public record Testimonial(
     }
 
     /**
+     * Creates a new testimonial with the specified createdAt timestamp.
+     *
+     * @param createdAt The creation timestamp for this testimonial
+     * @return A new testimonial with the specified createdAt timestamp
+     */
+    public Testimonial withCreatedAt(LocalDate createdAt) {
+        return new Testimonial(
+                id,
+                userId,
+                rating,
+                message,
+                createdAt,
+                status
+        );
+    }
+
+    /**
+     * Enum representing the possible statuses of a testimonial.
      * The possible statuses of a testimonial.
      */
     public enum Status {
