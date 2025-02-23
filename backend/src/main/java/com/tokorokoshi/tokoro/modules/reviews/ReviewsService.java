@@ -19,17 +19,17 @@ import java.util.Objects;
 @Service
 public class ReviewsService {
 
-    private final MongoTemplate mongoTemplate;
+    private final MongoTemplate repository;
     private final ReviewMapper reviewMapper;
     private final Auth0UserDataService auth0UserDataService;
 
     @Autowired
     public ReviewsService(
-            MongoTemplate mongoTemplate,
+            MongoTemplate repository,
             ReviewMapper reviewMapper,
             Auth0UserDataService auth0UserDataService
     ) {
-        this.mongoTemplate = mongoTemplate;
+        this.repository = repository;
         this.reviewMapper = reviewMapper;
         this.auth0UserDataService = auth0UserDataService;
     }
@@ -45,7 +45,7 @@ public class ReviewsService {
 
         Review review = reviewMapper.toReviewSchema(createUpdateReviewDto);
         review = review.withUserId(userId);
-        Review savedReview = mongoTemplate.save(review);
+        Review savedReview = repository.save(review);
 
         return reviewMapper.toReviewDto(savedReview);
     }
@@ -57,7 +57,7 @@ public class ReviewsService {
      * @return the review
      */
     public ReviewDto getReviewById(String id) {
-        Review review = mongoTemplate.findById(id, Review.class);
+        Review review = repository.findById(id, Review.class);
         if (review == null) return null;
 
         return reviewMapper.toReviewDto(review);
@@ -72,10 +72,10 @@ public class ReviewsService {
     public Page<ReviewDto> getAllReviews(Pageable pageable) {
         // Create a query with pagination information
         Query query = Query.query(new Criteria()).with(pageable);
-        List<Review> reviews = mongoTemplate.find(query, Review.class);
+        List<Review> reviews = repository.find(query, Review.class);
 
         // Count the total number of reviews
-        long total = mongoTemplate.count(new Query(), Review.class);
+        long total = repository.count(new Query(), Review.class);
 
         List<ReviewDto> content = reviews.stream()
                 .map(reviewMapper::toReviewDto)
@@ -92,7 +92,7 @@ public class ReviewsService {
     public void deleteReview(String id) {
         String userId = auth0UserDataService.getAuthenticatedUserId();
 
-        Review review = mongoTemplate.findById(id, Review.class);
+        Review review = repository.findById(id, Review.class);
         if (review == null) {
             throw new IllegalArgumentException("Review not found for id: " + id);
         }
@@ -102,7 +102,7 @@ public class ReviewsService {
             throw new IllegalArgumentException("User is not authorized to delete this review");
         }
 
-        mongoTemplate.remove(review);
+        repository.remove(review);
     }
 
     /**
@@ -116,10 +116,10 @@ public class ReviewsService {
         // Create a query with pagination information and filter by user ID
         Query query = Query.query(Criteria.where("userId").is(userId)).with(pageable);
 
-        List<Review> reviews = mongoTemplate.find(query, Review.class);
+        List<Review> reviews = repository.find(query, Review.class);
 
         // Count the total number of reviews for the user
-        long total = mongoTemplate.count(Query.query(Criteria.where("userId").is(userId)), Review.class);
+        long total = repository.count(Query.query(Criteria.where("userId").is(userId)), Review.class);
 
         List<ReviewDto> content = reviews.stream()
                 .map(reviewMapper::toReviewDto)
@@ -139,10 +139,10 @@ public class ReviewsService {
         // Create a query with pagination information and filter by place ID
         Query query = Query.query(Criteria.where("placeId").is(placeId)).with(pageable);
 
-        List<Review> reviews = mongoTemplate.find(query, Review.class);
+        List<Review> reviews = repository.find(query, Review.class);
 
         // Count the total number of reviews for the place
-        long total = mongoTemplate.count(Query.query(Criteria.where("placeId").is(placeId)), Review.class);
+        long total = repository.count(Query.query(Criteria.where("placeId").is(placeId)), Review.class);
 
         List<ReviewDto> content = reviews.stream()
                 .map(reviewMapper::toReviewDto)
@@ -163,10 +163,10 @@ public class ReviewsService {
         // Create a query with pagination information and filter by place ID and recommended flag
         Query query = Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(isRecommended)).with(pageable);
 
-        List<Review> reviews = mongoTemplate.find(query, Review.class);
+        List<Review> reviews = repository.find(query, Review.class);
 
         // Count the total number of reviews for the place based on the recommendation status
-        long total = mongoTemplate.count(Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(isRecommended)), Review.class);
+        long total = repository.count(Query.query(Criteria.where("placeId").is(placeId).and("recommended").is(isRecommended)), Review.class);
 
         List<ReviewDto> content = reviews.stream()
                 .map(reviewMapper::toReviewDto)
@@ -185,7 +185,7 @@ public class ReviewsService {
     public ReviewDto updateReview(String id, CreateUpdateReviewDto createUpdateReviewDto) {
         String userId = auth0UserDataService.getAuthenticatedUserId();
 
-        Review existingReview = mongoTemplate.findById(id, Review.class);
+        Review existingReview = repository.findById(id, Review.class);
         if (existingReview == null) {
             throw new IllegalArgumentException("Review not found for id: " + id);
         }
@@ -199,7 +199,7 @@ public class ReviewsService {
                 .withId(existingReview.id())
                 .withUserId(userId)
                 .withCreatedAt(existingReview.createdAt());
-        Review savedReview = mongoTemplate.save(review);
+        Review savedReview = repository.save(review);
 
         return reviewMapper.toReviewDto(savedReview);
     }
