@@ -104,7 +104,8 @@ public class SecurityConfiguration {
                                             "/about/**",
                                             "/features/**",
                                             "/places/**",
-                                            "/testimonials/**"
+                                            "/testimonials/**",
+                                            "/reviews/**"
                                     )
                                     .permitAll()
                                     .requestMatchers(
