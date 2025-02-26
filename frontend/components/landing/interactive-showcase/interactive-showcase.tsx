@@ -12,7 +12,9 @@ interface InteractiveShowcaseProps {
   places: Place[];
 }
 
-export default function InteractiveShowcase({ places }: InteractiveShowcaseProps) {
+export default function InteractiveShowcase({
+  places,
+}: InteractiveShowcaseProps) {
   return (
     <section className={styles.showcase} id="features">
       <div className={styles.titleSection}>
@@ -32,8 +34,8 @@ export default function InteractiveShowcase({ places }: InteractiveShowcaseProps
         snappedCardClassName={styles.isSnapped}
       >
         <CarouselContent>
-          {places.map((place: Place, index: number) => (
-            <PlaceCard key={index} place={place} />
+          {places.map((place) => (
+            <PlaceCard key={place.id} place={place} />
           ))}
         </CarouselContent>
         <CarouselPrevious className={styles.prevButton} />
