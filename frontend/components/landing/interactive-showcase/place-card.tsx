@@ -12,7 +12,7 @@ interface PlaceCardProps {
 export default function PlaceCard({ place }: PlaceCardProps) {
   const pictures = place.pictures.filter(Boolean);
   if (!pictures.length) return null;
-  
+
   return (
     <CarouselItem className={styles.carouselItem}>
       <Card>
@@ -39,7 +39,9 @@ export default function PlaceCard({ place }: PlaceCardProps) {
           <div className={styles.text}>
             <h3 className={styles.placeName}>{place.name}</h3>
             <div className={styles.placeDescription}>
-              <p className={'capitalize'}>{place.categoryId.replace(/_+/, " ")}</p>
+              <p className={'capitalize'}>
+                {place.categoryId.replace(/_+/, ' ')}
+              </p>
               <p>{place.location.address}</p>
               <p>{place.description}</p>
             </div>

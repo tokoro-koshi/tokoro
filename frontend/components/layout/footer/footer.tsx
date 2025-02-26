@@ -1,6 +1,6 @@
 import { siFacebook, siX, siInstagram } from 'simple-icons';
 import { footerButtons } from '@/lib/constants/components/footer';
-import { Button } from '@/components/buttons/button';
+import { Button } from '@/components/buttons';
 import styles from './footer.module.css';
 
 export default function Footer() {

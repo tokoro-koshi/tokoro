@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import ExploreButton from '@/components/buttons/explore/explore-buttons';
+import { ExploreButton } from '@/components/buttons';
 import { Button } from '@/components/ui/button';
 import Place from '@/public/landing/place.png';
 import styles from './hero.module.css';
