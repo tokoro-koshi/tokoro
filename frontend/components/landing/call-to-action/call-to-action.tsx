@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import ExploreButton from '@/components/buttons/explore/explore-buttons';
+import { ExploreButton } from '@/components/buttons';
 import styles from './call-to-action.module.css';
 import Wave from '@/public/landing/wave.svg';
 
