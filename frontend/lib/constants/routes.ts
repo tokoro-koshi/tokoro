@@ -4,9 +4,12 @@
   privacyPolicy: '/privacy',
   termsOfService: '/tos',
   contactUs: '/contact',
-  explore: '/explore',
   blog: '/blog',
+  support: '/support',
+  
   aiSearch: '/search',
+  explore: '/explore',
+  settings: '/settings',
 
   auth: {
     login: '/api/auth/login',

@@ -23,3 +23,12 @@
     @apply inline-block;
   }
 }
+
+.authButtons {
+  @apply flex flex-1 items-center justify-between;
+}
+
+.roundedBtn {
+  @apply rounded-md bg-muted-foreground px-4 py-2 font-semibold text-background hover:bg-muted active:bg-primary;
+}
+
