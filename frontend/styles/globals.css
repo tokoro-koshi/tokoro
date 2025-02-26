@@ -63,7 +63,7 @@
   }
 
   body {
-    @apply bg-background font-base text-foreground antialiased;
+    @apply w-full bg-background font-base text-foreground antialiased;
   }
   
   html {
