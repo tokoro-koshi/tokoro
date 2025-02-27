@@ -65,7 +65,7 @@
   body {
     @apply w-full bg-background font-base text-foreground antialiased;
   }
-  
+
   html {
     @apply scroll-smooth;
   }
