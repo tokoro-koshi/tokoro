@@ -16,7 +16,7 @@ export default function InteractiveShowcase({
   places,
 }: InteractiveShowcaseProps) {
   return (
-    <section className={styles.showcase} id="features">
+    <section className={styles.showcase} id='features'>
       <div className={styles.titleSection}>
         <div className={styles.line}></div>
         <h2 className={styles.title}>Explore Amazing Places</h2>

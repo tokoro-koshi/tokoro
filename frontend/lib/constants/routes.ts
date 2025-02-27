@@ -6,7 +6,7 @@
   contactUs: '/contact',
   blog: '/blog',
   support: '/support',
-  
+
   aiSearch: '/search',
   explore: '/explore',
   settings: '/settings',

@@ -28,12 +28,12 @@
 
 .carouselItem {
   /* Card transition */
-  @apply min-h-full transition-transform duration-200 md:basis-1/3 lg:basis-1/3 text-pretty;
+  @apply min-h-full text-pretty transition-transform duration-200 md:basis-1/3 lg:basis-1/3;
   /* Inactive card */
   @apply lg:-translate-y-[10%] lg:scale-[0.8] lg:opacity-60;
 
   /* Active card */
-  
+
   &.isSnapped {
     @apply lg:basis-1/3 lg:translate-y-0 lg:scale-100 lg:opacity-100;
   }

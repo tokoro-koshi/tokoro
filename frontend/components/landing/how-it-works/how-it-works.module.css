@@ -1,5 +1,5 @@
 .howItWorks {
-  @apply relative bg-muted px-8 py-12 overflow-hidden;
+  @apply relative overflow-hidden bg-muted px-8 py-12;
 }
 .wave {
   @apply pointer-events-none absolute left-0 top-0 w-full -translate-y-[77%];
