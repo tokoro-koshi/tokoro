@@ -12,7 +12,7 @@ import {
 
 export default function HowItWorks() {
   return (
-    <section className={styles.howItWorks} id="about">
+    <section className={styles.howItWorks} id='about'>
       <Image src={Wave2} alt={'Wave'} className={styles.wave} />
       <div className={styles.titleSection}>
         <div className={styles.line}></div>
