@@ -68,7 +68,7 @@ public class UserController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> updateUserAvatar(
+    public ResponseEntity<Void> updateUserAvatar(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -85,7 +85,7 @@ public class UserController {
     ) {
         try {
             userService.updateUserAvatar(id, avatarFile);
-            return ResponseEntity.ok("User avatar updated successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException ex) {
             throw new NotFoundException("User not found");
         }
@@ -148,7 +148,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> updateUserMetadata(
+    public ResponseEntity<Void> updateUserMetadata(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -165,7 +165,7 @@ public class UserController {
     ) {
         try {
             userService.updateUserMetadata(id, metadata);
-            return ResponseEntity.ok("User metadata updated successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User metadata not found");
         }
@@ -180,7 +180,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<Void> deleteUser(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -191,7 +191,7 @@ public class UserController {
     ) {
         try {
             userService.deleteUser(id);
-            return ResponseEntity.ok("User deleted successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserDeleteException e) {
             throw new NotFoundException("User not found");
         }
@@ -234,7 +234,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> updateUserFirstNameAndLastName(
+    public ResponseEntity<Void> updateUserFirstNameAndLastName(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -253,7 +253,7 @@ public class UserController {
             String firstName = names.get("firstName");
             String lastName = names.get("lastName");
             userService.updateUserFirstNameAndLastName(id, firstName, lastName);
-            return ResponseEntity.ok("User name updated successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User not found");
         }
@@ -268,7 +268,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> updateUserNickname(
+    public ResponseEntity<Void> updateUserNickname(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -286,7 +286,7 @@ public class UserController {
         try {
             String nickname = nicknameMap.get("nickname");
             userService.updateUserNickname(id, nickname);
-            return ResponseEntity.ok("User nickname updated successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User not found");
         }
@@ -301,7 +301,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> blockUser(
+    public ResponseEntity<Void> blockUser(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -312,7 +312,7 @@ public class UserController {
     ) {
         try {
             userService.blockUser(id);
-            return ResponseEntity.ok("User blocked successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User not found");
         }
@@ -327,7 +327,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> unblockUser(
+    public ResponseEntity<Void> unblockUser(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -338,7 +338,7 @@ public class UserController {
     ) {
         try {
             userService.unblockUser(id);
-            return ResponseEntity.ok("User unblocked successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User not found");
         }
@@ -458,7 +458,7 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> assignRolesToUser(
+    public ResponseEntity<Void> assignRolesToUser(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -476,7 +476,7 @@ public class UserController {
     ) {
         try {
             userService.assignRolesToUser(id, roles);
-            return ResponseEntity.ok("Roles assigned successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User not found");
         }
@@ -491,7 +491,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> removeRolesFromUser(
+    public ResponseEntity<Void> removeRolesFromUser(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -509,7 +509,7 @@ public class UserController {
     ) {
         try {
             userService.removeRolesFromUser(id, roles);
-            return ResponseEntity.ok("Roles removed successfully");
+            return ResponseEntity.noContent().build();
         } catch (UserUpdateException e) {
             throw new NotFoundException("User roles not found");
         }
