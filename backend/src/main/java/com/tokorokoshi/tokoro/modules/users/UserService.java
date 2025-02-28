@@ -1,5 +1,7 @@
 package com.tokorokoshi.tokoro.modules.users;
 
+import com.auth0.json.mgmt.permissions.Permission;
+import com.auth0.json.mgmt.roles.Role;
 import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.*;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -184,5 +187,49 @@ public class UserService {
      */
     public void updateUserNickname(String userId, String nickname) {
         auth0ManagementService.updateUserNickname(userId, nickname);
+    }
+
+    /**
+     * Removes roles from a user.
+     *
+     * @param userId the Auth0 user ID of the user.
+     * @param roleIds the list of role IDs to remove from the user.
+     * @throws UserUpdateException if there is an error during the update process.
+     */
+    public void removeRolesFromUser(String userId, List<String> roleIds) {
+        auth0ManagementService.removeRolesFromUser(userId, roleIds);
+    }
+
+    /**
+     * Assigns roles to a user.
+     *
+     * @param userId the Auth0 user ID of the user.
+     * @param roleIds the list of role IDs to assign to the user.
+     * @throws UserUpdateException if there is an error during the update process.
+     */
+    public void assignRolesToUser(String userId, List<String> roleIds) {
+        auth0ManagementService.assignRolesToUser(userId, roleIds);
+    }
+
+    /**
+     * Fetches the roles assigned to a user.
+     *
+     * @param userId the Auth0 user ID of the user.
+     * @return the list of roles assigned to the user.
+     * @throws UserFetchException if there is an error during the fetching process.
+     */
+    public List<Role> getUserRoles(String userId) {
+        return auth0ManagementService.getUserRoles(userId);
+    }
+
+    /**
+     * Fetches the permissions assigned to a user.
+     *
+     * @param userId the Auth0 user ID of the user.
+     * @return the list of permissions assigned to the user.
+     * @throws UserFetchException if there is an error during the fetching process.
+     */
+    public List<Permission> getUserPermissions(String userId) {
+        return auth0ManagementService.getUserPermissions(userId);
     }
 }
