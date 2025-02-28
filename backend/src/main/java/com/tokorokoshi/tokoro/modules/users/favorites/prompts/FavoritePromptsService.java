@@ -1,10 +1,10 @@
-package com.tokorokoshi.tokoro.modules.user.favorites.prompts;
+package com.tokorokoshi.tokoro.modules.users.favorites.prompts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
-import com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto.CreateUpdateFavoritePromptDto;
-import com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto.FavoritePromptDto;
+import com.tokorokoshi.tokoro.modules.users.favorites.prompts.dto.CreateUpdateFavoritePromptDto;
+import com.tokorokoshi.tokoro.modules.users.favorites.prompts.dto.FavoritePromptDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

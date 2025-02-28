@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.user;
+package com.tokorokoshi.tokoro.modules.users;
 
 import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;

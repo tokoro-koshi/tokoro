@@ -1,7 +1,7 @@
-package com.tokorokoshi.tokoro.modules.user.preferences;
+package com.tokorokoshi.tokoro.modules.users.preferences;
 
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
-import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
+import com.tokorokoshi.tokoro.modules.users.preferences.dto.PreferencesDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

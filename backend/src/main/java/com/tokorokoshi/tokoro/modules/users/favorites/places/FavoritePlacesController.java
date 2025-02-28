@@ -1,8 +1,8 @@
-package com.tokorokoshi.tokoro.modules.user.favorites.places;
+package com.tokorokoshi.tokoro.modules.users.favorites.places;
 
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
-import com.tokorokoshi.tokoro.modules.user.favorites.places.dto.FavoritePlaceDto;
+import com.tokorokoshi.tokoro.modules.users.favorites.places.dto.FavoritePlaceDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

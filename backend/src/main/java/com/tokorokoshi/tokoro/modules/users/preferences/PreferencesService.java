@@ -1,9 +1,9 @@
-package com.tokorokoshi.tokoro.modules.user.preferences;
+package com.tokorokoshi.tokoro.modules.users.preferences;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
-import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
+import com.tokorokoshi.tokoro.modules.users.preferences.dto.PreferencesDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

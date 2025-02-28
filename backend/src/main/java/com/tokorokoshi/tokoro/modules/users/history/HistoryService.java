@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.user.history;
+package com.tokorokoshi.tokoro.modules.users.history;
 
 import com.auth0.json.mgmt.users.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,7 @@ import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.PlacesService;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
-import com.tokorokoshi.tokoro.modules.user.history.dto.HistoryEntryDto;
+import com.tokorokoshi.tokoro.modules.users.history.dto.HistoryEntryDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
