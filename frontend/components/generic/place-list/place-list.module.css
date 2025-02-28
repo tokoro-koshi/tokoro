@@ -1,0 +1,3 @@
+.placesList {
+  @apply grid auto-rows-min gap-x-6 gap-y-8;
+}
