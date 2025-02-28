@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 import { AllFontsVariables } from '@/fonts';

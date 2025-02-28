@@ -20,14 +20,21 @@ import {
 import { ChevronRight, CreditCard, LogOut, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { baseRoutes, authRoutes } from '@/lib/constants/components/header';
+import { cn } from '@/lib/utils';
 
-export default function Header() {
-  const router = useRouter();
-  const { user, isLoading } = useUser();
-  const currentRoutes = user ? authRoutes : baseRoutes;
+interface HeaderProps {
+  isTransparent?: boolean;
+}
+
+export default function Header({ isTransparent = false }: HeaderProps) {
+    const router = useRouter();
+    const { user, isLoading } = useUser();
+    const currentRoutes = user ? authRoutes : baseRoutes;
 
   return (
-    <header className={styles.header}>
+    <header className={cn(styles.header, {
+      '!bg-opacity-100': !isTransparent,
+    })}>
       <Link href={routes.home} className={styles.logo}>
         <Image src={Logo} alt={'Logo'} className={styles.logoImage} />
         <h1 className={styles.name}>Tokoro</h1>
