@@ -21,3 +21,23 @@
     @apply min-w-48 rounded-md bg-foreground px-4 py-2 font-semibold text-background;
   }
 }
+
+.sections {
+  @apply space-y-4 md:space-y-8;
+
+  & .sectionsList {
+    @apply flex max-md:flex-col items-center justify-center gap-x-36 gap-y-4 text-xl;
+  }
+
+  & .button {
+    @apply text-primary-foreground hover:underline underline-offset-2 capitalize;
+  }
+
+  & .button.active {
+    @apply text-white underline;
+  }
+
+  & .sectionContent {
+    @apply px-4 lg:px-32;
+  }
+}
