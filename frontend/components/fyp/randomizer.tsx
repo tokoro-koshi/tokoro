@@ -3,10 +3,10 @@
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { PlaceClient } from '@/lib/requests/place.client';
-import Cubes from '@/public/icons/cubes.png';
-import styles from './fyp.module.css';
 import { Button } from '@/components/buttons';
 import PlaceList from '@/components/generic/place-list/place-list';
+import Cubes from '@/public/icons/cubes.png';
+import styles from './fyp.module.css';
 
 export default function Randomizer() {
   const {

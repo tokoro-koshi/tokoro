@@ -15,7 +15,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
   if (!pictures.length) pictures.push(routes.placeholder);
 
   return (
-    <Link href={routes.place + '/' + place.id}>
+    <Link href={routes.place + '/' + place.id} target={'_blank'}>
       <Card>
         <CardContent className={styles.cardContent}>
           <div className={styles.rating}>

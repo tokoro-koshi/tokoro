@@ -2,8 +2,9 @@ import { Place } from '@/lib/types/place';
 import PlaceCard from '@/components/generic/place-card/place-card';
 import styles from './place-list.module.css';
 import { cn } from '@/lib/utils';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
-type PlaceListArgs = {
+type PlaceListProps = {
   places: Place[];
   columns?: {
     base?: number | 'auto';
@@ -20,11 +21,16 @@ export default function PlaceList({
   places,
   noPlacesMessage,
   columns = { base: 1, lg: 3 },
-}: PlaceListArgs) {
+}: PlaceListProps) {
   if (places.length === 0) {
     return (
-      <div className='text-center text-gray-500'>
-        {noPlacesMessage ?? 'No places found'}
+      <div className={styles.notFound}>
+        <Card className={styles.card}>
+          <CardHeader className={styles.cardHeader}>🤷</CardHeader>
+          <CardContent>
+            {noPlacesMessage ?? 'Places not found'}
+          </CardContent>
+        </Card>
       </div>
     );
   }
