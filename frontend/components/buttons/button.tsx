@@ -2,14 +2,14 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import { Button as ShadcnButton } from '@/components/ui/button';
 
-type ButtonArgs = {
+type ButtonProps = {
   children: ReactNode;
   action: string | (() => void);
   className?: string;
   disabled?: boolean | null;
 };
 
-export function Button({ children, action, className, disabled }: ButtonArgs) {
+export function Button({ children, action, className, disabled }: ButtonProps) {
   if (
     typeof action === 'string' &&
     (action.startsWith('http') ||
