@@ -105,3 +105,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.svg-background{
+    background-image: url("../public/background.svg");
+  background-repeat: repeat;
+  background-size: 100% auto;
+}
