@@ -40,13 +40,9 @@ public class Auth0ManagementService {
      *
      * @param userId the Auth0 user ID to fetch.
      * @return the {@link User} object representing the Auth0 user.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws UserFetchException if there is an error during the fetching process.
      */
     public User getUser(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             return managementAPI.users().get(userId, null).execute().getBody();
         } catch (Auth0Exception e) {
@@ -60,13 +56,9 @@ public class Auth0ManagementService {
      *
      * @param query the query string used for searching users (e.g., filter by email, name, etc.).
      * @return a list of {@link User} objects matching the search query.
-     * @throws IllegalArgumentException if the query is null or empty.
      * @throws UserSearchException if there is an error during the search process.
      */
     public List<User> searchUsers(String query) {
-        if (query == null || query.isBlank()) {
-            throw new IllegalArgumentException("Query must not be null or empty");
-        }
         try {
             UsersPage usersPage = managementAPI.users().list(new UserFilter().withQuery(query)).execute().getBody();
             return usersPage.getItems();
@@ -81,16 +73,9 @@ public class Auth0ManagementService {
      *
      * @param userId   the Auth0 user ID of the user whose metadata will be updated.
      * @param metadata a map containing the metadata to be updated.
-     * @throws IllegalArgumentException if the userId is null or empty or if metadata is null.
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserMetadata(String userId, Map<String, Object> metadata) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
-        if (metadata == null) {
-            throw new IllegalArgumentException("Metadata must not be null");
-        }
         try {
             User updateRequest = new User();
             updateRequest.setUserMetadata(metadata);
@@ -105,13 +90,9 @@ public class Auth0ManagementService {
      * Deletes a user from Auth0 by their user ID.
      *
      * @param userId the Auth0 user ID of the user to be deleted.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws UserDeleteException if there is an error during the deletion process.
      */
     public void deleteUser(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             managementAPI.users().delete(userId).execute();
         } catch (Auth0Exception e) {
@@ -126,19 +107,9 @@ public class Auth0ManagementService {
      * @param userId    the Auth0 user ID of the user whose name will be updated.
      * @param firstName the new first name for the user.
      * @param lastName  the new last name for the user.
-     * @throws IllegalArgumentException if the userId, firstName, or lastName is null or empty.
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserFirstNameAndLastName(String userId, String firstName, String lastName) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
-        if (firstName == null || firstName.isBlank()) {
-            throw new IllegalArgumentException("First name must not be null or empty");
-        }
-        if (lastName == null || lastName.isBlank()) {
-            throw new IllegalArgumentException("Last name must not be null or empty");
-        }
         try {
             User updateRequest = new User();
             updateRequest.setGivenName(firstName);
@@ -155,16 +126,9 @@ public class Auth0ManagementService {
      *
      * @param userId    the Auth0 user ID of the user whose avatar will be updated.
      * @param avatarUrl the new avatar URL for the user.
-     * @throws IllegalArgumentException if the userId or avatarUrl is null or empty.
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserAvatar(String userId, String avatarUrl) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
-        if (avatarUrl == null || avatarUrl.isBlank()) {
-            throw new IllegalArgumentException("Avatar URL must not be null or empty");
-        }
         try {
             User updateRequest = new User();
             updateRequest.setPicture(avatarUrl);
@@ -180,13 +144,9 @@ public class Auth0ManagementService {
      *
      * @param userId the Auth0 user ID of the user whose avatar URL will be fetched.
      * @return the avatar URL for the user, or null if the user has no avatar URL set.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws UserFetchException if there is an error during the fetch process.
      */
     public String getUserAvatar(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             User user = managementAPI.users().get(userId, null).execute().getBody();
             return user.getPicture();
@@ -201,16 +161,9 @@ public class Auth0ManagementService {
      *
      * @param userId  the Auth0 user ID of the user to whom roles will be assigned.
      * @param roleIds the list of role IDs to assign to the user.
-     * @throws IllegalArgumentException if the userId is null or empty or if roleIds is null or empty.
      * @throws RoleAssignmentException if there is an error during the assignment process.
      */
     public void assignRolesToUser(String userId, List<String> roleIds) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
-        if (roleIds == null || roleIds.isEmpty()) {
-            throw new IllegalArgumentException("Role IDs must not be null or empty");
-        }
         try {
             managementAPI.users().addRoles(userId, roleIds).execute();
         } catch (Auth0Exception e) {
@@ -224,16 +177,9 @@ public class Auth0ManagementService {
      *
      * @param userId  the Auth0 user ID of the user from whom roles will be removed.
      * @param roleIds the list of role IDs to remove from the user.
-     * @throws IllegalArgumentException if the userId is null or empty or if roleIds is null or empty.
      * @throws RoleRemovalException if there is an error during the removal process.
      */
     public void removeRolesFromUser(String userId, List<String> roleIds) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
-        if (roleIds == null || roleIds.isEmpty()) {
-            throw new IllegalArgumentException("Role IDs must not be null or empty");
-        }
         try {
             managementAPI.users().removeRoles(userId, roleIds).execute();
         } catch (Auth0Exception e) {
@@ -247,13 +193,9 @@ public class Auth0ManagementService {
      *
      * @param userId the Auth0 user ID of the user whose roles will be fetched.
      * @return a list of {@link Role} objects representing the roles assigned to the user.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws RoleFetchException if there is an error during the fetching process.
      */
     public List<String> getUserRoles(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             RolesPage rolesPage = managementAPI.users().listRoles(userId, new RolesFilter()).execute().getBody();
             return rolesPage.getItems().stream().map(Role::getName).toList();
@@ -301,13 +243,9 @@ public class Auth0ManagementService {
      * Blocks a user.
      *
      * @param userId the Auth0 user ID of the user to be blocked.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws UserUpdateException if there is an error during the blocking process.
      */
     public void blockUser(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             User updateRequest = new User();
             updateRequest.setBlocked(true);
@@ -322,13 +260,9 @@ public class Auth0ManagementService {
      * Unblocks a user.
      *
      * @param userId the Auth0 user ID of the user to be unblocked.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws UserUpdateException if there is an error during the unblocking process.
      */
     public void unblockUser(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             User updateRequest = new User();
             updateRequest.setBlocked(false);
@@ -344,13 +278,9 @@ public class Auth0ManagementService {
      *
      * @param userId the Auth0 user ID of the user.
      * @return the nickname of the user.
-     * @throws IllegalArgumentException if the userId is null or empty.
      * @throws UserFetchException if there is an error during the fetching process.
      */
     public String getUserNickname(String userId) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
         try {
             User user = managementAPI.users().get(userId, null).execute().getBody();
             return user.getNickname();
@@ -365,16 +295,9 @@ public class Auth0ManagementService {
      *
      * @param userId   the Auth0 user ID of the user.
      * @param nickname the new nickname for the user.
-     * @throws IllegalArgumentException if the userId or nickname is null or empty.
      * @throws UserUpdateException if there is an error during the update process.
      */
     public void updateUserNickname(String userId, String nickname) {
-        if (userId == null || userId.isBlank()) {
-            throw new IllegalArgumentException("User ID must not be null or empty");
-        }
-        if (nickname == null || nickname.isBlank()) {
-            throw new IllegalArgumentException("Nickname must not be null or empty");
-        }
         try {
             User updateRequest = new User();
             updateRequest.setNickname(nickname);
