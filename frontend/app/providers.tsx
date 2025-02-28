@@ -30,7 +30,7 @@ export default function Providers({ children }: { children: ReactNode }) {
         },
       })
   );
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
