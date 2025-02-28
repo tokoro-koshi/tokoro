@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss';
 import tailwindcss_animate from 'tailwindcss-animate';
 
-const variants = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+const variants = ['sm', 'md', 'lg', 'xl', '2xl'];
 
 const config: Config = {
   darkMode: ['class'],
