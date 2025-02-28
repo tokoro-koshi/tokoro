@@ -35,6 +35,18 @@ public class UserService {
     }
 
     /**
+     * Fetches the user's email address.
+     *
+     * @param userId the Auth0 user ID of the user whose email will be fetched.
+     * @return the email address for the user.
+     * @throws UserFetchException if there is an error during the fetching process.
+     */
+    public String getUserEmail(String userId) {
+        User user = auth0ManagementService.getUser(userId);
+        return user.getEmail();
+    }
+
+    /**
      * Updates the user metadata for a given user.
      *
      * @param userId   the Auth0 user ID of the user whose metadata will be updated.
