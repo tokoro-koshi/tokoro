@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -178,6 +179,7 @@ public class UserController {
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteUser(
             @Parameter(
                     description = "The user ID",
@@ -298,6 +300,7 @@ public class UserController {
             path = "/{id}/block",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> blockUser(
             @Parameter(
                     description = "The user ID",
@@ -323,6 +326,7 @@ public class UserController {
             path = "/{id}/unblock",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> unblockUser(
             @Parameter(
                     description = "The user ID",
@@ -348,6 +352,7 @@ public class UserController {
             path = "/{id}/is-blocked",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Boolean> isUserBlocked(
             @Parameter(
                     description = "The user ID",
@@ -373,6 +378,7 @@ public class UserController {
             path = "/{id}/permissions",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Permission>> getUserPermissions(
             @Parameter(
                     description = "The user ID",
@@ -398,6 +404,7 @@ public class UserController {
             path = "/{id}/roles",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Role>> getUserRoles(
             @Parameter(
                     description = "The user ID",
@@ -423,6 +430,7 @@ public class UserController {
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUserDetails(
             @Parameter(
                     description = "The user ID",
@@ -449,6 +457,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> assignRolesToUser(
             @Parameter(
                     description = "The user ID",
