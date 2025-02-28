@@ -30,7 +30,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
             <p className={styles.value}>{place.rating}</p>
           </div>
           <Image
-            src={pictures[0]}
+            src={place.pictures[0]}
             alt={place.name}
             width={350}
             height={192}
