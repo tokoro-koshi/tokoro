@@ -18,6 +18,8 @@
     me: '/api/auth/me',
   },
 
+  placeholder: '/placeholder.svg',
+
   api: {},
 };
 

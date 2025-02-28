@@ -13,14 +13,13 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const places = await PlaceClient.getRandomPlaces(20);
   return (
-    <main className='flex-grow bg-primary'>
-      <Header />
+    <>
       <Hero />
       <Features />
       <InteractiveShowcase places={places} />
       <HowItWorks />
       <Testimonials />
       <CallToAction />
-    </main>
+    </>
   );
 }
