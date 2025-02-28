@@ -2,12 +2,14 @@ package com.tokorokoshi.tokoro.modules.users.history;
 
 import com.auth0.json.mgmt.users.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
-import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.PlacesService;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
+import com.tokorokoshi.tokoro.modules.users.UserService;
 import com.tokorokoshi.tokoro.modules.users.history.dto.HistoryEntryDto;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -28,19 +30,21 @@ public class HistoryService {
     private static final Logger log = LoggerFactory.getLogger(HistoryService.class);
 
     private static final String HISTORY_KEY = "history";
+    private final Auth0ManagementService auth0ManagementService;
 
     @Value("${max_history_entries}")
     private int MAX_HISTORY_ENTRIES;
 
-    private final Auth0UserDataService auth0UserDataService;
+    private final UserService userService;
     private final PlacesService placesService;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public HistoryService(Auth0UserDataService auth0UserDataService, PlacesService placesService, ObjectMapper objectMapper) {
-        this.auth0UserDataService = auth0UserDataService;
+    public HistoryService(UserService userService, PlacesService placesService, ObjectMapper objectMapper, Auth0ManagementService auth0ManagementService) {
+        this.userService = userService;
         this.placesService = placesService;
         this.objectMapper = objectMapper;
+        this.auth0ManagementService = auth0ManagementService;
     }
 
     /**
@@ -53,8 +57,8 @@ public class HistoryService {
     public void addHistoryEntry(@Valid HistoryEntryDto historyEntryDto) {
         validateEstablishmentId(historyEntryDto.establishmentId());
 
-        User user = auth0UserDataService.getAuthenticatedUserDetails();
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        User user = auth0ManagementService.getUser(SecurityUtils.getAuthenticatedUserId());
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         if (historyEntries.size() >= MAX_HISTORY_ENTRIES) {
@@ -63,7 +67,7 @@ public class HistoryService {
         }
 
         historyEntries.add(historyEntryDto);
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(HISTORY_KEY, historyEntries));
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), Map.of(HISTORY_KEY, historyEntries));
     }
 
     /**
@@ -72,7 +76,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void rollbackHistoryEntry() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         if (historyEntries.isEmpty()) {
@@ -80,7 +84,7 @@ public class HistoryService {
         }
 
         historyEntries.removeLast();
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(HISTORY_KEY, historyEntries));
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), Map.of(HISTORY_KEY, historyEntries));
     }
 
     /**
@@ -90,7 +94,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void rollbackHistoryEntryByAction(@NotNull String action) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
 
@@ -104,7 +108,7 @@ public class HistoryService {
 
         HistoryEntryDto rolledBackEntry = filteredEntries.getLast();
         historyEntries.remove(rolledBackEntry);
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(HISTORY_KEY, historyEntries));
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), Map.of(HISTORY_KEY, historyEntries));
     }
 
     /**
@@ -115,7 +119,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void rollbackHistoryEntriesByTimestampRange(@NotNull Date startDate, @NotNull Date endDate) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
 
@@ -128,7 +132,7 @@ public class HistoryService {
         }
 
         historyEntries.removeAll(entriesToRemove);
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(HISTORY_KEY, historyEntries));
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), Map.of(HISTORY_KEY, historyEntries));
     }
 
     /**
@@ -138,7 +142,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public List<HistoryEntryDto> getHistoryEntries() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         return getHistoryEntriesFromMetadata(userMetadata);
     }
@@ -150,7 +154,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public List<PlaceDto> getHistoryEntriesAsPlaces() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream()
@@ -166,7 +170,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public List<HistoryEntryDto> getHistoryEntriesByAction(@NotNull String action) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream()
@@ -185,7 +189,7 @@ public class HistoryService {
     public List<HistoryEntryDto> getHistoryEntriesByEstablishmentId(@NotNull String establishmentId) {
         validateEstablishmentId(establishmentId);
 
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream()
@@ -201,7 +205,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public HistoryEntryDto getHistoryEntryByTimestamp(@NotNull Date timestamp) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         Optional<HistoryEntryDto> historyEntry = historyEntries.stream()
@@ -217,14 +221,14 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void clearHistoryEntries() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         if (!userMetadata.containsKey(HISTORY_KEY)) {
             return;
         }
 
         userMetadata.remove(HISTORY_KEY);
-        auth0UserDataService.updateAuthenticatedUserMetadata(userMetadata);
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), userMetadata);
     }
 
     /**
@@ -235,7 +239,7 @@ public class HistoryService {
      * @throws Auth0ManagementException if there is an error fetching the user metadata.
      */
     public boolean isHistoryEntryExists(@NotNull Date timestamp) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<HistoryEntryDto> historyEntries = getHistoryEntriesFromMetadata(userMetadata);
         return historyEntries.stream().anyMatch(he -> he.timestamp().equals(timestamp));
