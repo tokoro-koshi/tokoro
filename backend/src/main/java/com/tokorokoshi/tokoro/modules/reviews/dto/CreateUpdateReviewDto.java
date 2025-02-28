@@ -15,11 +15,19 @@ public record CreateUpdateReviewDto(
                 description = "The ID of the place being reviewed"
         )
         String placeId,
+
+        @Schema(
+                name = "userId",
+                description = "The unique identifier of the user who provided the review"
+        )
+        String userId,
+
         @Schema(
                 name = "comment",
                 description = "The comment of the review"
         )
         String comment,
+
         @Schema(
                 name = "isRecommended",
                 description = "Whether the place is recommended by the user"
