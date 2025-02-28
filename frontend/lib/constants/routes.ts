@@ -7,8 +7,7 @@
   blog: '/blog',
   support: '/support',
   place: '/place',
-
-  aiSearch: '/search',
+  aiSearch: '/prompt',
   explore: '/explore',
   settings: '/settings',
 
