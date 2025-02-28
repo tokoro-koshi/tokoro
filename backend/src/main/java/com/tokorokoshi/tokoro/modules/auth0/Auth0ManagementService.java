@@ -1,9 +1,12 @@
 package com.tokorokoshi.tokoro.modules.auth0;
 
 import com.auth0.client.mgmt.ManagementAPI;
+import com.auth0.client.mgmt.filter.PageFilter;
 import com.auth0.client.mgmt.filter.RolesFilter;
 import com.auth0.client.mgmt.filter.UserFilter;
 import com.auth0.exception.Auth0Exception;
+import com.auth0.json.mgmt.permissions.Permission;
+import com.auth0.json.mgmt.permissions.PermissionsPage;
 import com.auth0.json.mgmt.roles.Role;
 import com.auth0.json.mgmt.roles.RolesPage;
 import com.auth0.json.mgmt.users.User;
@@ -245,6 +248,27 @@ public class Auth0ManagementService {
         } catch (Auth0Exception e) {
             log.error("Error removing roles from user with ID: {}", userId, e);
             throw new RoleRemovalException("Error removing roles from user with ID: " + userId, e);
+        }
+    }
+
+    /**
+     * Fetches the permissions assigned to a user.
+     *
+     * @param userId the Auth0 user ID of the user.
+     * @return the list of permissions assigned to the user.
+     * @throws UserFetchException if there is an error during the fetching process.
+     */
+    public List<Permission> getUserPermissions(String userId) {
+        try {
+            // Fetch permissions assigned to the user
+            PermissionsPage permissionsPage = managementAPI.users()
+                    .listPermissions(userId, new PageFilter())
+                    .execute()
+                    .getBody();
+            return permissionsPage.getItems();
+        } catch (Auth0Exception e) {
+            log.error("Error fetching permissions for user with ID: {}", userId, e);
+            throw new UserFetchException("Error fetching permissions for user with ID: " + userId, e);
         }
     }
 
