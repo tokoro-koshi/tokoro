@@ -8,8 +8,12 @@ import { Place } from '@/lib/types/place';
 import PlaceCard from '@/components/cards/place-card';
 import { PlaceClient } from '@/lib/requests/place.client';
 
-export default function ChatInterface() {
-  
+interface ChatInterfaceProps {
+  children: React.ReactNode;
+}
+
+export default function ChatInterface({ children }: ChatInterfaceProps) {
+
   const [messages, setMessages] = useState<
     Array<{
       id: string
@@ -74,35 +78,34 @@ export default function ChatInterface() {
   return (
     <div className="flex flex-col svg-background min-h-[calc(100vh-59px)]">
       {/* Chat messages area */}
-      <div className="flex-1 p-4 space-y-4">
-        {messages.map((message) => (
-          <div key={message.id} className="w-full">
-            {message.type === "user" ? (
-              <div className="flex justify-center w-full">
-                <div className="bg-background text-primary-foreground p-3 rounded-md max-w-[80%]">{message.content}</div>
+      {messages.length === 0 ? children : <div className="flex-1 p-4 space-y-4">{messages.map((message) => (
+        <div key={message.id} className="w-full">
+          {message.type === "user" ? (
+            <div className="flex justify-center w-full">
+              <div className="bg-background text-primary-foreground p-3 rounded-md max-w-[80%]">{message.content}</div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* AI response cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {message.cards?.map((card) => (
+                  <PlaceCard place={card} key={card.id} />
+                ))}
               </div>
-            ) : (
-              <div className="space-y-4">
-                {/* AI response cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {message.cards?.map((card) => (
-                    <PlaceCard place={card} key={card.id} />
-                  ))}
+
+              {/* Generate more button */}
+              {message.cards && (
+                <div className="flex justify-center">
+                  <Button className="bg-foreground text-background rounded-md py-2 px-8" onClick={handleGenerateMore} disabled={isLoading}>
+                    Generate more
+                  </Button>
                 </div>
+              )}
+            </div>
+          )}
+        </div>
 
-                {/* Generate more button */}
-                {message.cards && (
-                  <div className="flex justify-center">
-                    <Button className="bg-foreground text-background rounded-md py-2 px-8" onClick={handleGenerateMore} disabled={isLoading}>
-                      Generate more
-                    </Button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
-
+      ))}
         {/* Loading indicator */}
         {isLoading && (
           <div className="flex justify-center">
@@ -112,7 +115,9 @@ export default function ChatInterface() {
             </div>
           </div>
         )}
-      </div>
+      </div>}
+
+
 
       {/* Input area */}
       <div className="p-3 sticky bottom-0">
