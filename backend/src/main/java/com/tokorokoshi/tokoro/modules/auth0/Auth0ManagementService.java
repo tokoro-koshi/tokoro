@@ -44,7 +44,10 @@ public class Auth0ManagementService {
      */
     public User getUser(String userId) {
         try {
-            return managementAPI.users().get(userId, null).execute().getBody();
+            return managementAPI.users()
+                    .get(userId, new UserFilter())
+                    .execute()
+                    .getBody();
         } catch (Auth0Exception e) {
             log.error("Error fetching user with ID: {}", userId, e);
             throw new UserFetchException("Error fetching user with ID: " + userId, e);
@@ -60,7 +63,10 @@ public class Auth0ManagementService {
      */
     public List<User> searchUsers(String query) {
         try {
-            UsersPage usersPage = managementAPI.users().list(new UserFilter().withQuery(query)).execute().getBody();
+            UsersPage usersPage = managementAPI.users()
+                    .list(new UserFilter().withQuery(query))
+                    .execute()
+                    .getBody();
             return usersPage.getItems();
         } catch (Auth0Exception e) {
             log.error("Error searching users with query: {}", query, e);
@@ -79,7 +85,9 @@ public class Auth0ManagementService {
         try {
             User updateRequest = new User();
             updateRequest.setUserMetadata(metadata);
-            managementAPI.users().update(userId, updateRequest).execute();
+            managementAPI.users()
+                    .update(userId, updateRequest)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error updating user metadata for ID: {}", userId, e);
             throw new UserUpdateException("Error updating user metadata for ID: " + userId, e);
@@ -94,7 +102,9 @@ public class Auth0ManagementService {
      */
     public void deleteUser(String userId) {
         try {
-            managementAPI.users().delete(userId).execute();
+            managementAPI.users()
+                    .delete(userId)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error deleting user with ID: {}", userId, e);
             throw new UserDeleteException("Error deleting user with ID: " + userId, e);
@@ -114,7 +124,9 @@ public class Auth0ManagementService {
             User updateRequest = new User();
             updateRequest.setGivenName(firstName);
             updateRequest.setFamilyName(lastName);
-            managementAPI.users().update(userId, updateRequest).execute();
+            managementAPI.users()
+                    .update(userId, updateRequest)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error updating user name for ID: {}", userId, e);
             throw new UserUpdateException("Error updating user name for ID: " + userId, e);
@@ -132,7 +144,9 @@ public class Auth0ManagementService {
         try {
             User updateRequest = new User();
             updateRequest.setPicture(avatarUrl);
-            managementAPI.users().update(userId, updateRequest).execute();
+            managementAPI.users()
+                    .update(userId, updateRequest)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error updating user avatar for ID: {}", userId, e);
             throw new UserUpdateException("Error updating user avatar for ID: " + userId, e);
@@ -148,11 +162,53 @@ public class Auth0ManagementService {
      */
     public String getUserAvatar(String userId) {
         try {
-            User user = managementAPI.users().get(userId, null).execute().getBody();
+            User user = managementAPI.users()
+                    .get(userId, new UserFilter())
+                    .execute()
+                    .getBody();
             return user.getPicture();
         } catch (Auth0Exception e) {
             log.error("Error fetching user avatar for ID: {}", userId, e);
             throw new UserFetchException("Error fetching user avatar for ID: " + userId, e);
+        }
+    }
+
+    /**
+     * Fetches all roles available in the Auth0 tenant.
+     *
+     * @return a list of {@link Role} objects representing all roles in the tenant.
+     * @throws RoleFetchException if there is an error during the fetching process.
+     */
+    public List<Role> getAllRoles() {
+        try {
+            RolesPage rolesPage = managementAPI.roles()
+                    .list(new RolesFilter())
+                    .execute()
+                    .getBody();
+            return rolesPage.getItems();
+        } catch (Auth0Exception e) {
+            log.error("Error fetching all roles", e);
+            throw new RoleFetchException("Error fetching all roles", e);
+        }
+    }
+
+    /**
+     * Fetches roles assigned to a user.
+     *
+     * @param userId the Auth0 user ID of the user whose roles will be fetched.
+     * @return a list of {@link Role} objects representing the roles assigned to the user.
+     * @throws RoleFetchException if there is an error during the fetching process.
+     */
+    public List<Role> getUserRoles(String userId) {
+        try {
+            RolesPage rolesPage = managementAPI.users()
+                    .listRoles(userId, new RolesFilter())
+                    .execute()
+                    .getBody();
+            return rolesPage.getItems();
+        } catch (Auth0Exception e) {
+            log.error("Error fetching roles for user with ID: {}", userId, e);
+            throw new RoleFetchException("Error fetching roles for user with ID: " + userId, e);
         }
     }
 
@@ -165,7 +221,9 @@ public class Auth0ManagementService {
      */
     public void assignRolesToUser(String userId, List<String> roleIds) {
         try {
-            managementAPI.users().addRoles(userId, roleIds).execute();
+            managementAPI.users()
+                    .addRoles(userId, roleIds)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error assigning roles to user with ID: {}", userId, e);
             throw new RoleAssignmentException("Error assigning roles to user with ID: " + userId, e);
@@ -181,43 +239,12 @@ public class Auth0ManagementService {
      */
     public void removeRolesFromUser(String userId, List<String> roleIds) {
         try {
-            managementAPI.users().removeRoles(userId, roleIds).execute();
+            managementAPI.users()
+                    .removeRoles(userId, roleIds)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error removing roles from user with ID: {}", userId, e);
             throw new RoleRemovalException("Error removing roles from user with ID: " + userId, e);
-        }
-    }
-
-    /**
-     * Fetches roles assigned to a user.
-     *
-     * @param userId the Auth0 user ID of the user whose roles will be fetched.
-     * @return a list of {@link Role} objects representing the roles assigned to the user.
-     * @throws RoleFetchException if there is an error during the fetching process.
-     */
-    public List<String> getUserRoles(String userId) {
-        try {
-            RolesPage rolesPage = managementAPI.users().listRoles(userId, new RolesFilter()).execute().getBody();
-            return rolesPage.getItems().stream().map(Role::getName).toList();
-        } catch (Auth0Exception e) {
-            log.error("Error fetching roles for user with ID: {}", userId, e);
-            throw new RoleFetchException("Error fetching roles for user with ID: " + userId, e);
-        }
-    }
-
-    /**
-     * Fetches all roles available in the Auth0 tenant.
-     *
-     * @return a list of {@link Role} objects representing all roles in the tenant.
-     * @throws RoleFetchException if there is an error during the fetching process.
-     */
-    public List<String> getAllRoles() {
-        try {
-            RolesPage rolesPage = managementAPI.roles().list(new RolesFilter()).execute().getBody();
-            return rolesPage.getItems().stream().map(Role::getName).toList();
-        } catch (Auth0Exception e) {
-            log.error("Error fetching all roles", e);
-            throw new RoleFetchException("Error fetching all roles", e);
         }
     }
 
@@ -226,12 +253,14 @@ public class Auth0ManagementService {
      *
      * @param userId the Auth0 user ID of the user to check if they are blocked.
      * @return true if the user is blocked, false otherwise.
-     * @throws UserNotAuthenticatedException if the user is not authenticated or the token is invalid.
-     * @throws Auth0ManagementException if there is an error fetching the user from Auth0.
+     * @throws Auth0ManagementException      if there is an error fetching the user from Auth0.
      */
     public Boolean isUserBlocked(String userId) {
         try {
-            User user = managementAPI.users().get(userId, new UserFilter()).execute().getBody();
+            User user = managementAPI.users()
+                    .get(userId, new UserFilter())
+                    .execute()
+                    .getBody();
             return user.isBlocked();
         } catch (Auth0Exception e) {
             log.error("Error fetching user with ID {}", userId, e);
@@ -249,7 +278,9 @@ public class Auth0ManagementService {
         try {
             User updateRequest = new User();
             updateRequest.setBlocked(true);
-            managementAPI.users().update(userId, updateRequest).execute();
+            managementAPI.users()
+                    .update(userId, updateRequest)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error blocking user with ID: {}", userId, e);
             throw new UserUpdateException("Error blocking user with ID: " + userId, e);
@@ -266,7 +297,9 @@ public class Auth0ManagementService {
         try {
             User updateRequest = new User();
             updateRequest.setBlocked(false);
-            managementAPI.users().update(userId, updateRequest).execute();
+            managementAPI.users()
+                    .update(userId, updateRequest)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error unblocking user with ID: {}", userId, e);
             throw new UserUpdateException("Error unblocking user with ID: " + userId, e);
@@ -282,7 +315,10 @@ public class Auth0ManagementService {
      */
     public String getUserNickname(String userId) {
         try {
-            User user = managementAPI.users().get(userId, null).execute().getBody();
+            User user = managementAPI.users()
+                    .get(userId, new UserFilter())
+                    .execute()
+                    .getBody();
             return user.getNickname();
         } catch (Auth0Exception e) {
             log.error("Error fetching nickname for user with ID: {}", userId, e);
@@ -301,7 +337,9 @@ public class Auth0ManagementService {
         try {
             User updateRequest = new User();
             updateRequest.setNickname(nickname);
-            managementAPI.users().update(userId, updateRequest).execute();
+            managementAPI.users()
+                    .update(userId, updateRequest)
+                    .execute();
         } catch (Auth0Exception e) {
             log.error("Error updating nickname for user with ID: {}", userId, e);
             throw new UserUpdateException("Error updating nickname for user with ID: " + userId, e);
