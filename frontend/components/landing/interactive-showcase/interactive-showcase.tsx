@@ -1,11 +1,12 @@
+import { Place } from '@/lib/types/place';
 import {
   Carousel,
   CarouselContent,
+  CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { Place } from '@/lib/types/place';
-import PlaceCard from '@/components/landing/interactive-showcase/place-card';
+import PlaceCard from '@/components/generic/place-card/place-card';
 import styles from './interactive-showcase.module.css';
 
 interface InteractiveShowcaseProps {
@@ -35,7 +36,9 @@ export default function InteractiveShowcase({
       >
         <CarouselContent>
           {places.map((place) => (
-            <PlaceCard key={place.id} place={place} />
+            <CarouselItem key={place.id} className={styles.carouselItem}>
+              <PlaceCard place={place} />
+            </CarouselItem>
           ))}
         </CarouselContent>
         <CarouselPrevious className={styles.prevButton} />

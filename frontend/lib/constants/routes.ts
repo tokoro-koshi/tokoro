@@ -6,6 +6,7 @@
   contactUs: '/contact',
   blog: '/blog',
   support: '/support',
+  place: '/place',
 
   aiSearch: '/search',
   explore: '/explore',
