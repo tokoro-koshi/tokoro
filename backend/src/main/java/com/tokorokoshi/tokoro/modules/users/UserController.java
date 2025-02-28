@@ -1,5 +1,7 @@
 package com.tokorokoshi.tokoro.modules.users;
 
+import com.auth0.json.mgmt.permissions.Permission;
+import com.auth0.json.mgmt.roles.Role;
 import com.auth0.json.mgmt.users.User;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserDeleteException;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -359,6 +362,147 @@ public class UserController {
             return ResponseEntity.ok(isBlocked);
         } catch (UserFetchException e) {
             throw new NotFoundException("User not found");
+        }
+    }
+
+    @Operation(
+            summary = "Get user permissions",
+            description = "Returns the list of permissions for the user"
+    )
+    @GetMapping(
+            path = "/{id}/permissions",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<Permission>> getUserPermissions(
+            @Parameter(
+                    description = "The user ID",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id
+    ) {
+        try {
+            List<Permission> permissions = userService.getUserPermissions(id);
+            return ResponseEntity.ok(permissions);
+        } catch (UserFetchException e) {
+            throw new NotFoundException("User permissions not found");
+        }
+    }
+
+    @Operation(
+            summary = "Get user roles",
+            description = "Returns the list of roles for the user"
+    )
+    @GetMapping(
+            path = "/{id}/roles",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<Role>> getUserRoles(
+            @Parameter(
+                    description = "The user ID",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id
+    ) {
+        try {
+            List<Role> roles = userService.getUserRoles(id);
+            return ResponseEntity.ok(roles);
+        } catch (UserFetchException e) {
+            throw new NotFoundException("User roles not found");
+        }
+    }
+
+    @Operation(
+            summary = "Get user details",
+            description = "Returns the details of the user"
+    )
+    @GetMapping(
+            path = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> getUserDetails(
+            @Parameter(
+                    description = "The user ID",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id
+    ) {
+        try {
+            User userDetails = userService.getUser(id);
+            return ResponseEntity.ok(userDetails);
+        } catch (UserFetchException e) {
+            throw new NotFoundException("User not found");
+        }
+    }
+
+    @Operation(
+            summary = "Assign roles to user",
+            description = "Assigns the specified roles to the user"
+    )
+    @PostMapping(
+            path = "/{id}/roles",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<String> assignRolesToUser(
+            @Parameter(
+                    description = "The user ID",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id,
+            @Parameter(
+                    description = "The list of roles to assign",
+                    required = true,
+                    example = "[\"admin\", \"user\"]"
+            )
+            @RequestBody
+            List<String> roles
+    ) {
+        try {
+            userService.assignRolesToUser(id, roles);
+            return ResponseEntity.ok("Roles assigned successfully");
+        } catch (UserUpdateException e) {
+            throw new NotFoundException("User not found");
+        }
+    }
+
+    @Operation(
+            summary = "Remove roles from user",
+            description = "Removes the specified roles from the user"
+    )
+    @DeleteMapping(
+            path = "/{id}/roles",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<String> removeRolesFromUser(
+            @Parameter(
+                    description = "The user ID",
+                    required = true,
+                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
+            )
+            @PathVariable
+            String id,
+            @Parameter(
+                    description = "The list of roles to remove",
+                    required = true,
+                    example = "[\"admin\", \"user\"]"
+            )
+            @RequestBody
+            List<String> roles
+    ) {
+        try {
+            userService.removeRolesFromUser(id, roles);
+            return ResponseEntity.ok("Roles removed successfully");
+        } catch (UserUpdateException e) {
+            throw new NotFoundException("User roles not found");
         }
     }
 }
