@@ -168,6 +168,18 @@ public class UserService {
     }
 
     /**
+     * Fetches the user's metadata.
+     *
+     * @param userId the Auth0 user ID of the user.
+     * @return a map containing the user's metadata.
+     * @throws UserFetchException if there is an error during the fetching process.
+     */
+    public Map<String, Object> getUserMetadata(String userId) {
+        User user = auth0ManagementService.getUser(userId);
+        return user.getUserMetadata();
+    }
+
+    /**
      * Retrieves the nickname of the user by their user ID.
      *
      * @param userId the Auth0 user ID of the user.
