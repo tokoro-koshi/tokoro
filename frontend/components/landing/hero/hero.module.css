@@ -1,6 +1,6 @@
 .hero {
   @apply grid auto-rows-min md:grid-cols-3 xl:grid-cols-2;
-  @apply relative z-10 gap-5 overflow-hidden bg-secondary px-10 pb-16 pt-32;
+  @apply relative z-10 gap-5 overflow-hidden bg-secondary px-10 pb-16;
 
   & .title {
     @apply order-none mb-3 text-4xl font-extrabold text-foreground xl:mb-8 xl:text-6xl;

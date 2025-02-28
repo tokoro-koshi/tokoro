@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/carousel';
 import styles from './testimonials.module.css';
 import { testimonials } from '@/lib/constants/landing/testimonials';
+import routes from '@/lib/constants/routes';
 
 export default function Testimonials() {
   return (
@@ -20,7 +21,7 @@ export default function Testimonials() {
               <Card>
                 <CardContent className={styles.cardContent}>
                   <Image
-                    src={testimonial.avatar || '/placeholder.svg'}
+                    src={testimonial.avatar ?? routes.placeholder}
                     alt={testimonial.name}
                     width={50}
                     height={50}
