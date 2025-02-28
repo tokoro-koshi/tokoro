@@ -7,7 +7,6 @@ type PlaceListArgs = {
   places: Place[];
   columns?: {
     base?: number | 'auto';
-    xs?: number | 'auto';
     sm?: number | 'auto';
     md?: number | 'auto';
     lg?: number | 'auto';
@@ -34,7 +33,6 @@ export default function PlaceList({
     <ul
       className={cn(styles.placesList, {
         [`grid-cols-${columns?.base}`]: columns?.base,
-        [`xs:grid-cols-${columns?.lg}`]: columns?.xs,
         [`sm:grid-cols-${columns?.sm}`]: columns?.sm,
         [`md:grid-cols-${columns?.md}`]: columns?.md,
         [`lg:grid-cols-${columns?.lg}`]: columns?.lg,
