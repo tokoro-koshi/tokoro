@@ -1,3 +1,15 @@
 .placesList {
-  @apply grid auto-rows-min gap-x-6 gap-y-8 lg:gap-x-12;
+  @apply grid auto-rows-min gap-x-6 gap-y-8 lg:gap-x-12 text-pretty;
+}
+
+.notFound {
+  @apply flex justify-center text-pretty;
+
+  & .card {
+    @apply max-w-prose font-bold;
+  }
+
+  & .cardHeader {
+    @apply text-8xl;
+  }
 }
