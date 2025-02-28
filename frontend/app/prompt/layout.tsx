@@ -2,6 +2,7 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Header from '@/components/layout/header/header';
 import React from 'react';
+import ChatInterface from '@/components/prompt/chat/chat';
 
 export default async function Prompt({ children }: { children: React.ReactNode }) {
 
@@ -10,8 +11,9 @@ export default async function Prompt({ children }: { children: React.ReactNode }
       <Header />
       <SidebarProvider className="pt-[59px]">
         <AppSidebar />
-        <main className='flex-grow bg-primary'>
-          {children}
+        <main className='flex-1'>
+          {/*{children}*/}
+          <ChatInterface />
         </main>
       </SidebarProvider>
     </>
