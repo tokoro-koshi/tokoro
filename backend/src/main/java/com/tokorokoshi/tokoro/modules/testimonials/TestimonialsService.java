@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.modules.testimonials;
 
 import com.tokorokoshi.tokoro.database.Testimonial;
-import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.CreateUpdateTestimonialDto;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.TestimonialDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,17 +22,14 @@ public class TestimonialsService {
 
     private final MongoTemplate repository;
     private final TestimonialMapper testimonialMapper;
-    private final Auth0UserDataService auth0UserDataService;
 
     @Autowired
     public TestimonialsService(
             MongoTemplate repository,
-            TestimonialMapper testimonialMapper,
-            Auth0UserDataService auth0UserDataService
+            TestimonialMapper testimonialMapper
     ) {
         this.repository = repository;
         this.testimonialMapper = testimonialMapper;
-        this.auth0UserDataService = auth0UserDataService;
     }
 
     /**
@@ -44,10 +39,7 @@ public class TestimonialsService {
      * @return the saved testimonial
      */
     public TestimonialDto saveTestimonial(CreateUpdateTestimonialDto createUpdateTestimonialDto) {
-        String userId = auth0UserDataService.getAuthenticatedUserId();
-
         Testimonial testimonial = testimonialMapper.toTestimonialSchema(createUpdateTestimonialDto);
-        testimonial = testimonial.withUserId(userId);
         Testimonial savedTestimonial = repository.save(testimonial);
 
         return testimonialMapper.toTestimonialDto(savedTestimonial);
@@ -93,16 +85,9 @@ public class TestimonialsService {
      * @param id testimonial ID
      */
     public void deleteTestimonial(String id) {
-        String userId = auth0UserDataService.getAuthenticatedUserId();
-
         Testimonial testimonial = repository.findById(id, Testimonial.class);
         if (testimonial == null) {
             throw new IllegalArgumentException("Testimonial not found for id: " + id);
-        }
-
-        // Check if the user is authorized to delete the testimonial
-        if (!Objects.equals(testimonial.userId(), userId)) {
-            throw new IllegalArgumentException("User is not authorized to delete this testimonial");
         }
 
         repository.remove(testimonial);
@@ -139,21 +124,13 @@ public class TestimonialsService {
      * @return the updated testimonial
      */
     public TestimonialDto updateTestimonial(String id, CreateUpdateTestimonialDto createUpdateTestimonialDto) {
-        String userId = auth0UserDataService.getAuthenticatedUserId();
-
         Testimonial existingTestimonial = repository.findById(id, Testimonial.class);
         if (existingTestimonial == null) {
             throw new IllegalArgumentException("Testimonial not found for id: " + id);
         }
 
-        // Check if the user is authorized to update the testimonial
-        if (!Objects.equals(existingTestimonial.userId(), userId)) {
-            throw new IllegalArgumentException("User is not authorized to update this testimonial");
-        }
-
         Testimonial testimonial = testimonialMapper.toTestimonialSchema(createUpdateTestimonialDto)
                 .withId(existingTestimonial.id())
-                .withUserId(userId)
                 .withCreatedAt(existingTestimonial.createdAt());
 
         // Set the new status to PENDING

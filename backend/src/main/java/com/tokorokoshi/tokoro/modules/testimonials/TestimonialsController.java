@@ -232,7 +232,6 @@ public class TestimonialsController {
             value = "/{id}/status",
             consumes = APPLICATION_JSON_VALUE
     )
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> changeTestimonialStatus(
             @Parameter(
                     description = "The ID of the testimonial to update",

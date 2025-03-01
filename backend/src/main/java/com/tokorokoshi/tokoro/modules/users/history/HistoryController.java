@@ -1,9 +1,9 @@
-package com.tokorokoshi.tokoro.modules.user.history;
+package com.tokorokoshi.tokoro.modules.users.history;
 
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
-import com.tokorokoshi.tokoro.modules.user.history.dto.HistoryEntryDto;
+import com.tokorokoshi.tokoro.modules.users.history.dto.HistoryEntryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

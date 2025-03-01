@@ -21,6 +21,9 @@ public class Auth0Properties {
     @NotBlank(message = "Auth0 client secret is required")
     private String clientSecret;
 
+    @NotBlank(message = "Auth0 role claim is required")
+    private String roleClaim;
+
     /**
      * Returns the Management API audience URL.
      *
@@ -85,11 +88,20 @@ public class Auth0Properties {
     }
 
     /**
-     * Returns the role claim URL.
+     * Returns the Auth0 role claim.
      *
-     * @return the role claim URL.
+     * @return the Auth0 role claim.
      */
     public String getRoleClaim() {
-        return "https://" + domain + "/roles";
+        return roleClaim;
+    }
+
+    /**
+     * Sets the Auth0 role claim.
+     *
+     * @param roleClaim the Auth0 role claim to set.
+     */
+    public void setRoleClaim(String roleClaim) {
+        this.roleClaim = roleClaim;
     }
 }

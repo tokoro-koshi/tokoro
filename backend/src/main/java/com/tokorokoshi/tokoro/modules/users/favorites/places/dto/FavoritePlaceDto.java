@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.user.favorites.places.dto;
+package com.tokorokoshi.tokoro.modules.users.favorites.places.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;

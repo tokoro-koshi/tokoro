@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto;
+package com.tokorokoshi.tokoro.modules.users.favorites.prompts.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -7,15 +7,23 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * Data Transfer Object (DTO) for creating or updating a favorite prompt.
+ * Data Transfer Object (DTO) representing a favorite prompt.
  * This class is used to transfer data between layers of the application,
  * specifically for favorite prompts associated with a user.
  */
 @Schema(
-        name = "CreateUpdateFavoritePromptDto",
-        description = "Data Transfer Object (DTO) for creating or updating a favorite prompt"
+        name = "FavoritePromptDto",
+        description = "Data Transfer Object (DTO) representing a favorite prompt"
 )
-public record CreateUpdateFavoritePromptDto(
+public record FavoritePromptDto(
+        @Schema(
+                name = "promptId",
+                description = "The ID of the favorite prompt"
+        )
+        @NotNull(message = "Prompt ID must not be null")
+        @NotBlank(message = "Prompt ID must not be blank")
+        String promptId,
+
         @Schema(
                 name = "content",
                 description = "The content of the favorite prompt"
@@ -29,4 +37,5 @@ public record CreateUpdateFavoritePromptDto(
                 description = "The date the favorite prompt was added"
         )
         Date addedAt
-) {}
+) {
+}

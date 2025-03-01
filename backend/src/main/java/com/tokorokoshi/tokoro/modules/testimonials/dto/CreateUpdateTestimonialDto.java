@@ -11,6 +11,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 )
 public record CreateUpdateTestimonialDto(
         @Schema(
+                name = "userId",
+                description = "The unique identifier of the user who provided the testimonial"
+        )
+        String userId,
+
+        @Schema(
                 name = "rating",
                 description = "The rating given in the testimonial (between 1 and 5)",
                 minimum = "1",

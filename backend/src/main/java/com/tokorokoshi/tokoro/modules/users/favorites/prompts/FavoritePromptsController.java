@@ -1,16 +1,14 @@
-package com.tokorokoshi.tokoro.modules.user.favorites.prompts;
+package com.tokorokoshi.tokoro.modules.users.favorites.prompts;
 
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
-import com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto.CreateUpdateFavoritePromptDto;
-import com.tokorokoshi.tokoro.modules.user.favorites.prompts.dto.FavoritePromptDto;
+import com.tokorokoshi.tokoro.modules.users.favorites.prompts.dto.CreateUpdateFavoritePromptDto;
+import com.tokorokoshi.tokoro.modules.users.favorites.prompts.dto.FavoritePromptDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
