@@ -1,12 +1,14 @@
-package com.tokorokoshi.tokoro.modules.user.favorites.places;
+package com.tokorokoshi.tokoro.modules.users.favorites.places;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
+import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
 import com.tokorokoshi.tokoro.modules.exceptions.establishments.InvalidEstablishmentException;
 import com.tokorokoshi.tokoro.modules.places.PlacesService;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
-import com.tokorokoshi.tokoro.modules.user.favorites.places.dto.FavoritePlaceDto;
+import com.tokorokoshi.tokoro.modules.users.UserService;
+import com.tokorokoshi.tokoro.modules.users.favorites.places.dto.FavoritePlaceDto;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,19 +31,21 @@ public class FavoritePlacesService {
 
     private static final String FAVORITE_PLACES_KEY = "favorite_places";
 
-    private final Auth0UserDataService auth0UserDataService;
     private final PlacesService placesService;
     private final ObjectMapper objectMapper;
+    private final UserService userService;
+    private final Auth0ManagementService auth0ManagementService;
 
     @Autowired
     public FavoritePlacesService(
-            Auth0UserDataService auth0UserDataService,
             PlacesService placesService,
-            ObjectMapper objectMapper
-    ) {
-        this.auth0UserDataService = auth0UserDataService;
+            ObjectMapper objectMapper,
+            UserService userService,
+            Auth0ManagementService auth0ManagementService) {
         this.placesService = placesService;
         this.objectMapper = objectMapper;
+        this.userService = userService;
+        this.auth0ManagementService = auth0ManagementService;
     }
 
     /**
@@ -64,7 +68,7 @@ public class FavoritePlacesService {
         }
 
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
@@ -75,10 +79,13 @@ public class FavoritePlacesService {
         }
 
         favoritePlaces.add(favoritePlaceDto);
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
-                FAVORITE_PLACES_KEY,
-                favoritePlaces
-        ));
+        auth0ManagementService.updateUserMetadata(
+                SecurityUtils.getAuthenticatedUserId(),
+                Map.of(
+                        FAVORITE_PLACES_KEY,
+                        favoritePlaces
+                )
+        );
     }
 
     /**
@@ -96,27 +103,30 @@ public class FavoritePlacesService {
         validateEstablishmentId(favoritePlaceDto.establishmentId());
 
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
         if (favoritePlaces.stream()
-                          .noneMatch(fp -> fp.establishmentId()
-                                             .equals(establishmentId))) {
+                .noneMatch(fp -> fp.establishmentId()
+                        .equals(establishmentId))) {
             return;
         }
 
         favoritePlaces = favoritePlaces.stream()
-                                       .map(fp -> fp.establishmentId()
-                                                    .equals(establishmentId)
-                                                  ? favoritePlaceDto
-                                                  : fp)
-                                       .toList();
+                .map(fp -> fp.establishmentId()
+                        .equals(establishmentId)
+                        ? favoritePlaceDto
+                        : fp)
+                .toList();
 
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
-                FAVORITE_PLACES_KEY,
-                favoritePlaces
-        ));
+        auth0ManagementService.updateUserMetadata(
+                SecurityUtils.getAuthenticatedUserId(),
+                Map.of(
+                        FAVORITE_PLACES_KEY,
+                        favoritePlaces
+                )
+        );
     }
 
     /**
@@ -130,25 +140,28 @@ public class FavoritePlacesService {
         validateEstablishmentId(establishmentId);
 
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
         if (favoritePlaces.stream()
-                          .noneMatch(fp -> fp.establishmentId()
-                                             .equals(establishmentId))) {
+                .noneMatch(fp -> fp.establishmentId()
+                        .equals(establishmentId))) {
             return;
         }
 
         favoritePlaces = favoritePlaces.stream()
-                                       .filter(fp -> !fp.establishmentId()
-                                                        .equals(establishmentId))
-                                       .toList();
+                .filter(fp -> !fp.establishmentId()
+                        .equals(establishmentId))
+                .toList();
 
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
-                FAVORITE_PLACES_KEY,
-                favoritePlaces
-        ));
+        auth0ManagementService.updateUserMetadata(
+                SecurityUtils.getAuthenticatedUserId(),
+                Map.of(
+                        FAVORITE_PLACES_KEY,
+                        favoritePlaces
+                )
+        );
     }
 
     /**
@@ -159,15 +172,15 @@ public class FavoritePlacesService {
      */
     public List<PlaceDto> getFavoritePlaces() {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
 
         return favoritePlaces.stream()
-                             .map(fp -> placesService.getPlaceById(fp.establishmentId()))
-                             .filter(Objects::nonNull)
-                             .toList();
+                .map(fp -> placesService.getPlaceById(fp.establishmentId()))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     /**
@@ -182,14 +195,14 @@ public class FavoritePlacesService {
         validateEstablishmentId(establishmentId);
 
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
         Optional<FavoritePlaceDto> favoritePlace = favoritePlaces.stream()
-                                                                 .filter(fp -> fp.establishmentId()
-                                                                                 .equals(establishmentId))
-                                                                 .findFirst();
+                .filter(fp -> fp.establishmentId()
+                        .equals(establishmentId))
+                .findFirst();
 
         return favoritePlace.map(favoritePlaceDto -> placesService.getPlaceById(
                 favoritePlaceDto.establishmentId())).orElse(null);
@@ -201,10 +214,13 @@ public class FavoritePlacesService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void clearFavoritePlaces() {
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
-                FAVORITE_PLACES_KEY,
-                new ArrayList<>()
-        ));
+        auth0ManagementService.updateUserMetadata(
+                SecurityUtils.getAuthenticatedUserId(),
+                Map.of(
+                        FAVORITE_PLACES_KEY,
+                        new ArrayList<>()
+                )
+        );
     }
 
     /**
@@ -219,14 +235,14 @@ public class FavoritePlacesService {
         validateEstablishmentId(establishmentId);
 
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
 
         return favoritePlaces.stream()
-                             .anyMatch(fp -> fp.establishmentId()
-                                               .equals(establishmentId));
+                .anyMatch(fp -> fp.establishmentId()
+                        .equals(establishmentId));
     }
 
     /**
@@ -237,16 +253,16 @@ public class FavoritePlacesService {
      */
     public List<PlaceDto> getFavoritePlacesSortedByDate() {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
 
         return favoritePlaces.stream()
-                             .sorted(Comparator.comparing(FavoritePlaceDto::addedAt))
-                             .map(fp -> placesService.getPlaceById(fp.establishmentId()))
-                             .filter(Objects::nonNull)
-                             .toList();
+                .sorted(Comparator.comparing(FavoritePlaceDto::addedAt))
+                .map(fp -> placesService.getPlaceById(fp.establishmentId()))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     /**
@@ -257,17 +273,17 @@ public class FavoritePlacesService {
      */
     public List<PlaceDto> getFavoritePlacesSortedByDateDescending() {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
 
         return favoritePlaces.stream()
-                             .sorted(Comparator.comparing(FavoritePlaceDto::addedAt)
-                                               .reversed())
-                             .map(fp -> placesService.getPlaceById(fp.establishmentId()))
-                             .filter(Objects::nonNull)
-                             .toList();
+                .sorted(Comparator.comparing(FavoritePlaceDto::addedAt)
+                        .reversed())
+                .map(fp -> placesService.getPlaceById(fp.establishmentId()))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     /**
@@ -278,18 +294,18 @@ public class FavoritePlacesService {
      */
     public List<PlaceDto> getFavoritePlacesSortedByRating() {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
 
         return favoritePlaces.stream()
-                             .filter(fp -> fp.rating() != null)
-                             .sorted(Comparator.comparing(FavoritePlaceDto::rating)
-                                               .reversed())
-                             .map(fp -> placesService.getPlaceById(fp.establishmentId()))
-                             .filter(Objects::nonNull)
-                             .toList();
+                .filter(fp -> fp.rating() != null)
+                .sorted(Comparator.comparing(FavoritePlaceDto::rating)
+                        .reversed())
+                .map(fp -> placesService.getPlaceById(fp.establishmentId()))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     /**
@@ -303,18 +319,18 @@ public class FavoritePlacesService {
             @NotNull @NotBlank String name
     ) {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
 
         return favoritePlaces.stream()
-                             .map(fp -> placesService.getPlaceById(fp.establishmentId()))
-                             .filter(Objects::nonNull)
-                             .filter(place -> place.name()
-                                                   .toLowerCase()
-                                                   .contains(name.toLowerCase()))
-                             .toList();
+                .map(fp -> placesService.getPlaceById(fp.establishmentId()))
+                .filter(Objects::nonNull)
+                .filter(place -> place.name()
+                        .toLowerCase()
+                        .contains(name.toLowerCase()))
+                .toList();
     }
 
     /**
@@ -325,7 +341,7 @@ public class FavoritePlacesService {
      */
     public int countFavoritePlaces() {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
@@ -340,7 +356,7 @@ public class FavoritePlacesService {
      */
     public void rollbackLastFavoritePlace() {
         Map<String, Object> userMetadata =
-                auth0UserDataService.getAuthenticatedUserMetadata();
+                userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         List<FavoritePlaceDto> favoritePlaces =
                 getFavoritePlacesFromMetadata(userMetadata);
@@ -349,10 +365,13 @@ public class FavoritePlacesService {
         }
 
         favoritePlaces.removeLast();
-        auth0UserDataService.updateAuthenticatedUserMetadata(Map.of(
-                FAVORITE_PLACES_KEY,
-                favoritePlaces
-        ));
+        auth0ManagementService.updateUserMetadata(
+                SecurityUtils.getAuthenticatedUserId(),
+                Map.of(
+                        FAVORITE_PLACES_KEY,
+                        favoritePlaces
+                )
+        );
     }
 
     /**
@@ -386,11 +405,11 @@ public class FavoritePlacesService {
                     (List<Map<String, Object>>) userMetadata.get(
                             FAVORITE_PLACES_KEY);
             favoritePlaces = favoritePlacesMap.stream()
-                                              .map(map -> objectMapper.convertValue(
-                                                      map,
-                                                      FavoritePlaceDto.class
-                                              ))
-                                              .toList();
+                    .map(map -> objectMapper.convertValue(
+                            map,
+                            FavoritePlaceDto.class
+                    ))
+                    .toList();
         }
         return favoritePlaces;
     }

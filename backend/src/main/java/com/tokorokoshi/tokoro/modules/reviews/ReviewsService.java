@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.modules.reviews;
 
 import com.tokorokoshi.tokoro.database.Review;
-import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
 import com.tokorokoshi.tokoro.modules.reviews.dto.CreateUpdateReviewDto;
 import com.tokorokoshi.tokoro.modules.reviews.dto.ReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +13,20 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ReviewsService {
 
     private final MongoTemplate repository;
     private final ReviewMapper reviewMapper;
-    private final Auth0UserDataService auth0UserDataService;
 
     @Autowired
     public ReviewsService(
             MongoTemplate repository,
-            ReviewMapper reviewMapper,
-            Auth0UserDataService auth0UserDataService
+            ReviewMapper reviewMapper
     ) {
         this.repository = repository;
         this.reviewMapper = reviewMapper;
-        this.auth0UserDataService = auth0UserDataService;
     }
 
     /**
@@ -41,10 +36,7 @@ public class ReviewsService {
      * @return the saved review
      */
     public ReviewDto saveReview(CreateUpdateReviewDto createUpdateReviewDto) {
-        String userId = auth0UserDataService.getAuthenticatedUserId();
-
         Review review = reviewMapper.toReviewSchema(createUpdateReviewDto);
-        review = review.withUserId(userId);
         Review savedReview = repository.save(review);
 
         return reviewMapper.toReviewDto(savedReview);
@@ -90,16 +82,9 @@ public class ReviewsService {
      * @param id review ID
      */
     public void deleteReview(String id) {
-        String userId = auth0UserDataService.getAuthenticatedUserId();
-
         Review review = repository.findById(id, Review.class);
         if (review == null) {
             throw new IllegalArgumentException("Review not found for id: " + id);
-        }
-
-        // Check if the user is authorized to delete the review
-        if (!Objects.equals(review.userId(), userId)) {
-            throw new IllegalArgumentException("User is not authorized to delete this review");
         }
 
         repository.remove(review);
@@ -183,21 +168,13 @@ public class ReviewsService {
      * @return the updated review
      */
     public ReviewDto updateReview(String id, CreateUpdateReviewDto createUpdateReviewDto) {
-        String userId = auth0UserDataService.getAuthenticatedUserId();
-
         Review existingReview = repository.findById(id, Review.class);
         if (existingReview == null) {
             throw new IllegalArgumentException("Review not found for id: " + id);
         }
 
-        // Check if the user is authorized to update the review
-        if (!Objects.equals(existingReview.userId(), userId)) {
-            throw new IllegalArgumentException("User is not authorized to update this review");
-        }
-
         Review review = reviewMapper.toReviewSchema(createUpdateReviewDto)
                 .withId(existingReview.id())
-                .withUserId(userId)
                 .withCreatedAt(existingReview.createdAt());
         Review savedReview = repository.save(review);
 

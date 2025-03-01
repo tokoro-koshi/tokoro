@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.modules.user.preferences.dto;
+package com.tokorokoshi.tokoro.modules.users.preferences.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

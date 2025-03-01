@@ -1,9 +1,11 @@
-package com.tokorokoshi.tokoro.modules.user.preferences;
+package com.tokorokoshi.tokoro.modules.users.preferences;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tokorokoshi.tokoro.modules.auth0.Auth0UserDataService;
+import com.tokorokoshi.tokoro.modules.auth0.Auth0ManagementService;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.Auth0ManagementException;
-import com.tokorokoshi.tokoro.modules.user.preferences.dto.PreferencesDto;
+import com.tokorokoshi.tokoro.modules.users.UserService;
+import com.tokorokoshi.tokoro.modules.users.preferences.dto.PreferencesDto;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -23,13 +25,15 @@ public class PreferencesService {
 
     private static final String PREFERENCES_KEY = "preferences";
 
-    private final Auth0UserDataService auth0UserDataService;
+    private final UserService userService;
     private final ObjectMapper objectMapper;
+    private final Auth0ManagementService auth0ManagementService;
 
     @Autowired
-    public PreferencesService(Auth0UserDataService auth0UserDataService, ObjectMapper objectMapper) {
-        this.auth0UserDataService = auth0UserDataService;
+    public PreferencesService(UserService userService, ObjectMapper objectMapper, Auth0ManagementService auth0ManagementService) {
+        this.userService = userService;
         this.objectMapper = objectMapper;
+        this.auth0ManagementService = auth0ManagementService;
     }
 
     /**
@@ -39,10 +43,10 @@ public class PreferencesService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void setPreferences(@Valid PreferencesDto preferencesDto) {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         userMetadata.put(PREFERENCES_KEY, objectMapper.convertValue(preferencesDto, Map.class));
-        auth0UserDataService.updateAuthenticatedUserMetadata(userMetadata);
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), userMetadata);
     }
 
     /**
@@ -53,7 +57,7 @@ public class PreferencesService {
      */
     @SuppressWarnings("unchecked")
     public PreferencesDto getPreferences() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         if (userMetadata.containsKey(PREFERENCES_KEY)) {
             Map<String, Object> preferencesMap = (Map<String, Object>) userMetadata.get(PREFERENCES_KEY);
@@ -160,13 +164,13 @@ public class PreferencesService {
      * @throws Auth0ManagementException if there is an error updating the user metadata.
      */
     public void clearPreferences() {
-        Map<String, Object> userMetadata = auth0UserDataService.getAuthenticatedUserMetadata();
+        Map<String, Object> userMetadata = userService.getUserMetadata(SecurityUtils.getAuthenticatedUserId());
 
         if (!userMetadata.containsKey(PREFERENCES_KEY)) {
             return;
         }
 
         userMetadata.remove(PREFERENCES_KEY);
-        auth0UserDataService.updateAuthenticatedUserMetadata(userMetadata);
+        auth0ManagementService.updateUserMetadata(SecurityUtils.getAuthenticatedUserId(), userMetadata);
     }
 }

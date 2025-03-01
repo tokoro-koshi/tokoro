@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.configuration;
 
+import com.tokorokoshi.tokoro.modules.auth0.Auth0Properties;
 import com.tokorokoshi.tokoro.security.AudienceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,15 +33,13 @@ public class SecurityConfiguration {
     private final String[] activeProfiles;
 
     private final CorsConfigurationSource corsConfigurationSource;
+    private final Auth0Properties auth0Properties;
 
     @Value("${AUTH0_ISSUER_BASE_URL}")
     private String issuer;
 
     @Value("${AUTH0_AUDIENCE}")
     private String audience;
-
-    @Value("${role_claims}")
-    private String ROLE_CLAIMS;
 
     /**
      * Creates a new instance of the SecurityConfiguration class.
@@ -51,9 +50,11 @@ public class SecurityConfiguration {
     @Autowired
     public SecurityConfiguration(
             Environment env,
+            Auth0Properties auth0Properties,
             CorsConfigurationSource corsConfigurationSource
     ) {
         this.activeProfiles = env.getActiveProfiles();
+        this.auth0Properties = auth0Properties;
         this.corsConfigurationSource = corsConfigurationSource;
     }
 
@@ -115,6 +116,45 @@ public class SecurityConfiguration {
                                             "/swagger-resources/**"
                                     )
                                     .permitAll()
+                                    .requestMatchers(HttpMethod.POST,
+                                            "/privacy/**",
+                                            "/about/**",
+                                            "/features/**",
+                                            "/places/**"
+                                    )
+                                    .hasRole("ADMIN")
+                                    .requestMatchers(HttpMethod.PUT,
+                                            "/privacy/**",
+                                            "/about/**",
+                                            "/features/**",
+                                            "/places/**"
+                                    )
+                                    .hasRole("ADMIN")
+                                    .requestMatchers(HttpMethod.PATCH,
+                                            "/privacy/**",
+                                            "/about/**",
+                                            "/features/**",
+                                            "/places/**"
+                                    )
+                                    .hasRole("ADMIN")
+                                    .requestMatchers(HttpMethod.DELETE,
+                                            "/privacy/**",
+                                            "/about/**",
+                                            "/features/**",
+                                            "/places/**",
+                                            "/users/**"
+                                    )
+                                    .hasRole("ADMIN")
+                                    .requestMatchers(HttpMethod.POST, "/blogs/**")
+                                    .hasAnyRole("ADMIN", "MODERATOR")
+                                    .requestMatchers(HttpMethod.PUT, "/blogs/**")
+                                    .hasAnyRole("ADMIN", "MODERATOR")
+                                    .requestMatchers(HttpMethod.PATCH, "/blogs/**")
+                                    .hasAnyRole("ADMIN", "MODERATOR")
+                                    .requestMatchers(HttpMethod.DELETE, "/blogs/**")
+                                    .hasAnyRole("ADMIN", "MODERATOR")
+                                    .requestMatchers(HttpMethod.POST, "/places/search/**")
+                                    .authenticated()
                                     .requestMatchers("/**")
                                     .authenticated()
                                     .anyRequest()
@@ -147,7 +187,7 @@ public class SecurityConfiguration {
     private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
         Map<String, Object> claims = jwt.getClaims();
 
-        List<String> roles = (List<String>) claims.getOrDefault(ROLE_CLAIMS, List.of());
+        List<String> roles = (List<String>) claims.getOrDefault(auth0Properties.getRoleClaim(), List.of());
 
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
