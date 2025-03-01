@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from '@/components/buttons/button';
+import { Button } from '@/components/buttons';
 import routes from '@/lib/constants/routes';
 import styles from './explore-buttons.module.css';
 import { useUser } from '@/lib/stores/user';
 
-export default function ExploreButton() {
+export function ExploreButton() {
   const user = useUser((state) => state.user);
   return (
     <Button

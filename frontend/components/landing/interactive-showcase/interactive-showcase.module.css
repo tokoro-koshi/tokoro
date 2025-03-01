@@ -24,65 +24,16 @@
   & .nextButton {
     @apply -right-20;
   }
-}
 
-.carouselItem {
-  /* Card transition */
-  @apply min-h-full transition-transform duration-200 md:basis-1/3 lg:basis-1/3 text-pretty;
-  /* Inactive card */
-  @apply lg:-translate-y-[10%] lg:scale-[0.8] lg:opacity-60;
+  & .carouselItem {
+    /* Card transition */
+    @apply min-h-full text-pretty transition-transform duration-200 md:basis-1/3 lg:basis-1/3;
+    /* Inactive card */
+    @apply lg:-translate-y-[10%] lg:scale-[0.8] lg:opacity-60;
+  }
 
   /* Active card */
-  
-  &.isSnapped {
+  & .carouselItem.isSnapped {
     @apply lg:basis-1/3 lg:translate-y-0 lg:scale-100 lg:opacity-100;
   }
-}
-
-.cardContent {
-  @apply relative flex flex-col px-0;
-
-  & .placeName {
-    @apply text-2xl;
-  }
-
-  & .placeDescription {
-    @apply text-base;
-  }
-
-  & .ratingContainer {
-    @apply top-[40%];
-  }
-}
-
-.ratingContainer {
-  @apply absolute top-[42%] z-10 flex items-center gap-1;
-}
-
-.ratingBackground {
-  @apply flex h-7 w-12 rounded-br-xl rounded-tr-xl bg-background;
-}
-
-.star {
-  @apply absolute left-1 z-20;
-}
-
-.rating {
-  @apply absolute left-5 mb-1 text-center text-muted-foreground;
-}
-
-.image {
-  @apply h-48 w-full rounded-tl-[43px] rounded-tr-[43px] object-cover;
-}
-
-.text {
-  @apply px-4 py-2 text-left;
-}
-
-.placeName {
-  @apply mb-1.5 text-lg font-semibold text-muted-foreground;
-}
-
-.placeDescription {
-  @apply mb-1.5 text-xs font-light text-primary;
 }

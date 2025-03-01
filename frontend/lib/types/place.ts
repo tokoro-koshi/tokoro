@@ -22,6 +22,6 @@ export interface Coordinate {
 }
 
 export interface Tag {
-  lang:string;
-  name:string
+  lang: string;
+  name: string;
 }

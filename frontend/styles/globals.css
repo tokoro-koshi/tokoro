@@ -62,11 +62,16 @@
     @apply border-border;
   }
 
-  body {
-    @apply w-full bg-background font-base text-foreground antialiased;
-  }
-  
   html {
     @apply scroll-smooth;
+  }
+
+  body {
+    @apply w-full font-base text-foreground antialiased;
+  }
+
+  .wavy-background {
+    background: url('/background.png') repeat-y hsl(var(--background), 100%);
+    background-size: cover;
   }
 }

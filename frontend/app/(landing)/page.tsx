@@ -1,4 +1,3 @@
-import Header from '@/components/layout/header/header';
 import Hero from '@/components/landing/hero/hero';
 import Features from '@/components/landing/features/features';
 import InteractiveShowcase from '@/components/landing/interactive-showcase/interactive-showcase';
@@ -12,16 +11,14 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const places = await PlaceClient.getRandomPlaces(20);
-
   return (
-    <main className='flex-grow bg-primary'>
-      <Header />
+    <>
       <Hero />
       <Features />
       <InteractiveShowcase places={places} />
       <HowItWorks />
       <Testimonials />
       <CallToAction />
-    </main>
+    </>
   );
 }

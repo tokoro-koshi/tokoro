@@ -2,13 +2,14 @@ import { ReactNode } from 'react';
 import Link from 'next/link';
 import { Button as ShadcnButton } from '@/components/ui/button';
 
-type ButtonArgs = {
+type ButtonProps = {
   children: ReactNode;
   action: string | (() => void);
   className?: string;
+  disabled?: boolean | null;
 };
 
-export function Button({ children, action, className }: ButtonArgs) {
+export function Button({ children, action, className, disabled }: ButtonProps) {
   if (
     typeof action === 'string' &&
     (action.startsWith('http') ||
@@ -16,18 +17,22 @@ export function Button({ children, action, className }: ButtonArgs) {
       action.startsWith('/api'))
   ) {
     return (
-      <a href={action} className={className}>
+      <a href={action} className={className} aria-disabled={disabled ?? false}>
         {children}
       </a>
     );
   }
 
   return typeof action === 'string' ? (
-    <Link href={action} className={className}>
+    <Link href={action} className={className} aria-disabled={disabled ?? false}>
       {children}
     </Link>
   ) : (
-    <ShadcnButton onClick={action} className={className}>
+    <ShadcnButton
+      onClick={action}
+      className={className}
+      disabled={disabled ?? false}
+    >
       {children}
     </ShadcnButton>
   );

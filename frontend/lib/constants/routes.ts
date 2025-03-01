@@ -6,7 +6,8 @@
   contactUs: '/contact',
   blog: '/blog',
   support: '/support',
-  
+  place: '/place',
+
   aiSearch: '/search',
   explore: '/explore',
   settings: '/settings',
@@ -17,6 +18,8 @@
     register: '/api/auth/signup',
     me: '/api/auth/me',
   },
+
+  placeholder: '/placeholder.svg',
 
   api: {},
 };

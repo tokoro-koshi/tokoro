@@ -1,12 +1,20 @@
 import type { Config } from 'tailwindcss';
 import tailwindcss_animate from 'tailwindcss-animate';
 
+const variants = ['sm', 'md', 'lg', 'xl', '2xl'];
+
 const config: Config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  safelist: [
+    {
+      pattern: /^grid-cols-(\d+|auto)$/,
+      variants,
+    },
   ],
   theme: {
     extend: {
