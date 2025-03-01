@@ -1,0 +1,27 @@
+.sidebar{
+    @apply overflow-y-auto !h-[calc(100vh-59px)] sticky top-[59px] bottom-0 w-[364px];
+}
+
+.header{
+    @apply bg-sidebar-foreground bg-opacity-100 transition-colors hover:bg-opacity-80 rounded-sm mx-3 my-2
+           font-bold text-sidebar text-lg sticky top-0 z-10 mb-3;
+
+}
+
+.content{
+    @apply ml-3 text-sidebar-foreground font-semibold text-sm max-h-[calc(100vh-59px-80px)];
+}
+
+.menuItem{
+    @apply bg-sidebar-foreground bg-opacity-25 rounded-sm p-2 truncate transition-colors hover:bg-opacity-90
+           hover:text-sidebar min-w-0;
+}
+
+.group{
+    @apply gap-2;
+}
+
+.scrollArea{
+    @apply pr-3.5 flex ;
+}
+
