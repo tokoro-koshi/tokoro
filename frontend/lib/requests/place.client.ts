@@ -16,8 +16,8 @@ export class PlaceClient {
     await apiClient.delete(`/places/${id}`);
   }
 
-  static async searchPlaces(tags: string[]): Promise<Place[]> {
-    const response = await apiClient.post<Place[]>(`/places/search`, { tags });
+  static async searchPlaces(prompt: string): Promise<Place[]> {
+    const response = await apiClient.post<Place[]>(`/places/search`, { prompt });
     return response.data;
   }
 

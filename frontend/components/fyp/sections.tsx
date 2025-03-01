@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { Place } from '@/lib/types/place';
 import { cn } from '@/lib/utils';
-import PlaceList from '@/components/generic/place-list/place-list';
+import PlaceList from '@/components/cards/place-list/place-list';
 import styles from './fyp.module.css';
 
 const sections = ['nearby', 'recommended', 'saved'] as const;

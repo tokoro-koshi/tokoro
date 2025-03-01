@@ -1,0 +1,55 @@
+﻿.container {
+    @apply flex flex-col min-h-screen;
+}
+
+.messageContainer {
+    @apply flex-1 p-4 space-y-4;
+}
+
+.userMessage {
+    @apply flex justify-center w-full;
+}
+
+.userMessageContent {
+    @apply bg-background text-primary-foreground p-3 rounded-md max-w-[80%];
+}
+
+.aiMessage {
+    @apply space-y-4;
+}
+
+.aiMessageCards {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+}
+
+.generateMoreButton {
+    @apply bg-foreground text-background rounded-md py-2 px-8;
+}
+
+.loadingIndicator {
+    @apply flex justify-center;
+}
+
+.loadingText {
+    @apply flex items-center space-x-2;
+}
+
+.inputArea {
+    @apply p-3 sticky bottom-0;
+}
+
+.inputContainer {
+    @apply relative max-w-4xl mx-auto;
+}
+
+.inputIcon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500;
+}
+
+.inputField {
+    @apply bg-white placeholder:text-zinc-400 pl-10 pr-12 py-4 rounded-md;
+}
+
+.sendButton {
+    @apply absolute right-2 top-1/2 -translate-y-1/2;
+}

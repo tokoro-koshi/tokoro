@@ -9,7 +9,7 @@ export default async function Prompt({ children }: { children: React.ReactNode }
   return (
     <>
       <Header />
-      <SidebarProvider className="pt-[59px]">
+      <SidebarProvider>
         <AppSidebar />
         <main className='flex-1'>
           <ChatInterface>

@@ -5,8 +5,9 @@ import { Search, Send, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Place } from '@/lib/types/place';
-import PlaceCard from '@/components/cards/place-card';
+import PlaceCard from '@/components/cards/place-card/place-card';
 import { PlaceClient } from '@/lib/requests/place.client';
+import styles from './chat.module.css';
 
 interface ChatInterfaceProps {
   children: React.ReactNode;
@@ -76,18 +77,17 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
   };
 
   return (
-    <div className="flex flex-col svg-background min-h-[calc(100vh-59px)]">
-      {/* Chat messages area */}
-      {messages.length === 0 ? children : <div className="flex-1 p-4 space-y-4">{messages.map((message) => (
+    <div className={styles.container}>
+      {messages.length === 0 ? children : <div className={styles.messageContainer}>{messages.map((message) => (
         <div key={message.id} className="w-full">
           {message.type === "user" ? (
-            <div className="flex justify-center w-full">
-              <div className="bg-background text-primary-foreground p-3 rounded-md max-w-[80%]">{message.content}</div>
+            <div className={styles.userMessage}>
+              <div className={styles.userMessageContent}>{message.content}</div>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className={styles.aiMessage}>
               {/* AI response cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className={styles.aiMessageCards}>
                 {message.cards?.map((card) => (
                   <PlaceCard place={card} key={card.id} />
                 ))}
@@ -96,7 +96,7 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
               {/* Generate more button */}
               {message.cards && (
                 <div className="flex justify-center">
-                  <Button className="bg-foreground text-background rounded-md py-2 px-8" onClick={handleGenerateMore} disabled={isLoading}>
+                  <Button className={styles.generateMoreButton} onClick={handleGenerateMore} disabled={isLoading}>
                     Generate more
                   </Button>
                 </div>
@@ -108,8 +108,8 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
       ))}
         {/* Loading indicator */}
         {isLoading && (
-          <div className="flex justify-center">
-            <div className="flex items-center space-x-2">
+          <div className={styles.loadingIndicator}>
+            <div className={styles.loadingText}>
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               <span className="text-muted-foreground">Generating results...</span>
             </div>
@@ -120,16 +120,16 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
 
 
       {/* Input area */}
-      <div className="p-3 sticky bottom-0">
-        <div className="relative max-w-4xl mx-auto">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+      <div className={styles.inputArea}>
+        <div className={styles.inputContainer}>
+          <div className={styles.inputIcon}>
             <Search className="h-5 w-5" />
           </div>
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type command or search..."
-            className="bg-white placeholder:text-zinc-400 pl-10 pr-12 py-4 rounded-md"
+            className={styles.inputField}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !isLoading) {
                 handleSendMessage()
@@ -138,7 +138,7 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
           />
           <Button
             size="icon"
-            className="absolute right-2 top-1/2 -translate-y-1/2"
+            className={styles.sendButton}
             onClick={handleSendMessage}
             disabled={isLoading || !input.trim()}
           >
@@ -149,4 +149,3 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
     </div>
   )
 }
-
