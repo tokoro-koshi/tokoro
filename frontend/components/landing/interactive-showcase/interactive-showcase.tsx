@@ -6,7 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import PlaceCard from '@/components/generic/place-card/place-card';
+import PlaceCard from '@/components/cards/place-card/place-card';
 import styles from './interactive-showcase.module.css';
 
 interface InteractiveShowcaseProps {
