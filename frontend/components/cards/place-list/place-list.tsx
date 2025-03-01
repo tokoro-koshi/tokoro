@@ -1,5 +1,5 @@
 import { Place } from '@/lib/types/place';
-import PlaceCard from '@/components/generic/place-card/place-card';
+import PlaceCard from '@/components/cards/place-card/place-card';
 import styles from './place-list.module.css';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
