@@ -1,0 +1,19 @@
+﻿.container {
+  @apply flex flex-1 flex-col items-center justify-center;
+}
+
+.heading {
+  @apply text-center text-5xl font-extrabold;
+}
+
+.heading span {
+  @apply text-background;
+}
+
+.paragraph {
+  @apply text-center text-xl font-medium;
+}
+
+.messageContainer {
+  @apply w-full;
+}

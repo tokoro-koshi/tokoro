@@ -10,15 +10,15 @@ const sections = ['nearby', 'recommended', 'saved'] as const;
 
 type SectionsProps = {
   places: Place[];
-  activeSection: typeof sections[number];
+  activeSection: (typeof sections)[number];
 };
 
 export default function Sections({ places, activeSection }: SectionsProps) {
   const router = useRouter();
   return (
     <div className={styles.sections}>
-      <ul className={styles.sectionsList}>{
-        sections.map((section) => (
+      <ul className={styles.sectionsList}>
+        {sections.map((section) => (
           <li key={section}>
             <button
               onClick={() => router.push(`?section=${section}`)}
@@ -30,11 +30,11 @@ export default function Sections({ places, activeSection }: SectionsProps) {
               {section}
             </button>
           </li>
-        ))
-      }</ul>
+        ))}
+      </ul>
       <div className={styles.sectionContent}>
         <PlaceList places={places} />
       </div>
     </div>
-  )
+  );
 }

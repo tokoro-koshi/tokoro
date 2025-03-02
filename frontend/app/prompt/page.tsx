@@ -1,8 +1,12 @@
-﻿export default async function NewPrompt() {
+﻿import styles from './prompt.module.css';
 
-  return <div className="flex-1 flex justify-center flex-col">
-    <h1 className="text-5xl font-extrabold text-center"><span className="text-background">Describe</span> where you want to go,</h1>
-    <p className="text-xl font-medium text-center">And our AI Search will help you!</p>
-  </div>
-    
+export default async function NewPrompt() {
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.heading}>
+        <span>Describe</span> where you want to go,
+      </h1>
+      <p className={styles.paragraph}>And our AI Search will help you!</p>
+    </div>
+  );
 }
