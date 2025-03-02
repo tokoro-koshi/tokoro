@@ -1,5 +1,5 @@
 .placesList {
-  @apply grid auto-rows-min gap-x-6 gap-y-8 lg:gap-x-12 text-pretty;
+  @apply grid auto-rows-min gap-x-6 gap-y-8 text-pretty lg:gap-x-12;
 }
 
 .notFound {

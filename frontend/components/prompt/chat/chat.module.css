@@ -1,55 +1,55 @@
 ﻿.container {
-    @apply flex flex-col min-h-screen;
+  @apply flex min-h-screen flex-col;
 }
 
 .messageContainer {
-    @apply flex-1 p-4 space-y-4;
+  @apply flex-1 space-y-4 p-4;
 }
 
 .userMessage {
-    @apply flex justify-center w-full;
+  @apply flex w-full justify-center;
 }
 
 .userMessageContent {
-    @apply bg-background text-primary-foreground p-3 rounded-md max-w-[80%];
+  @apply max-w-[80%] rounded-md bg-background p-3 text-primary-foreground;
 }
 
 .aiMessage {
-    @apply space-y-4;
+  @apply space-y-4;
 }
 
 .aiMessageCards {
-    @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+  @apply grid grid-cols-1 gap-4 md:grid-cols-3;
 }
 
 .generateMoreButton {
-    @apply bg-foreground text-background rounded-md py-2 px-8;
+  @apply rounded-md bg-foreground px-8 py-2 text-background;
 }
 
 .loadingIndicator {
-    @apply flex justify-center;
+  @apply flex justify-center;
 }
 
 .loadingText {
-    @apply flex items-center space-x-2;
+  @apply flex items-center space-x-2;
 }
 
 .inputArea {
-    @apply p-3 sticky bottom-0;
+  @apply sticky bottom-0 p-3;
 }
 
 .inputContainer {
-    @apply relative max-w-4xl mx-auto;
+  @apply relative mx-auto max-w-4xl;
 }
 
 .inputIcon {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500;
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500;
 }
 
 .inputField {
-    @apply bg-white placeholder:text-zinc-400 pl-10 pr-12 py-4 rounded-md;
+  @apply rounded-md bg-white py-4 pl-10 pr-12 placeholder:text-zinc-400;
 }
 
 .sendButton {
-    @apply absolute right-2 top-1/2 -translate-y-1/2;
+  @apply absolute right-2 top-1/2 -translate-y-1/2;
 }

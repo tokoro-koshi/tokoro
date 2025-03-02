@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  
   :root {
     --background: 30, 61%, 91%;
     --foreground: 240, 39%, 29%;
@@ -30,7 +29,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    
+
     --sidebar-background: 247, 42%, 42%;
     --sidebar-foreground: 30, 61%, 91%;
     --sidebar-primary: 240 5.9% 10%;
@@ -66,7 +65,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -92,13 +91,11 @@
   .wavy-background {
     /*background: url('/background.png') repeat-y hsl(var(--background), 100%);*/
     /*background-size: 100% auto;*/
-    background-image: url("/background.svg");
+    background-image: url('/background.png');
     background-repeat: repeat;
     background-size: 100% auto;
   }
 }
-
-
 
 @layer base {
   * {
@@ -109,8 +106,8 @@
   }
 }
 
-.svg-background{
-    background-image: url("../public/background.svg");
+.svg-background {
+  background-image: url('../public/background.svg');
   background-repeat: repeat;
   background-size: 100% auto;
 }

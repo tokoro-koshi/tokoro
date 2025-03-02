@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 type PlaceListProps = {
-  places: Place[];
+  places?: Place[] | null;
   columns?: {
     base?: number | 'auto';
     sm?: number | 'auto';
@@ -22,14 +22,12 @@ export default function PlaceList({
   noPlacesMessage,
   columns = { base: 1, lg: 3 },
 }: PlaceListProps) {
-  if (places.length === 0) {
+  if (!places || places.length === 0) {
     return (
       <div className={styles.notFound}>
         <Card className={styles.card}>
           <CardHeader className={styles.cardHeader}>🤷</CardHeader>
-          <CardContent>
-            {noPlacesMessage ?? 'Places not found'}
-          </CardContent>
+          <CardContent>{noPlacesMessage ?? 'Places not found'}</CardContent>
         </Card>
       </div>
     );

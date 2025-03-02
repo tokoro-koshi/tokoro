@@ -27,14 +27,16 @@ interface HeaderProps {
 }
 
 export default function Header({ isTransparent = false }: HeaderProps) {
-    const router = useRouter();
-    const { user, isLoading } = useUser();
-    const currentRoutes = user ? authRoutes : baseRoutes;
+  const router = useRouter();
+  const { user, isLoading } = useUser();
+  const currentRoutes = user ? authRoutes : baseRoutes;
 
   return (
-    <header className={cn(styles.header, {
-      '!bg-opacity-100': !isTransparent,
-    })}>
+    <header
+      className={cn(styles.header, {
+        'bg-opacity-65': isTransparent,
+      })}
+    >
       <Link href={routes.home} className={styles.logo}>
         <Image src={Logo} alt={'Logo'} className={styles.logoImage} />
         <h1 className={styles.name}>Tokoro</h1>
