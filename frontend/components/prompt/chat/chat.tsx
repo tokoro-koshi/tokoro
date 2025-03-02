@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Place } from '@/lib/types/place';
 import styles from './chat.module.css';
 import { useMutation } from '@tanstack/react-query';
-import { PlaceClient } from '@/lib/requests/place.client';
 import PlaceList from '@/components/cards/place-list/place-list';
+import axios from 'axios';
 
 interface ChatInterfaceProps {
   children: React.ReactNode;
@@ -29,8 +29,8 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
   const [lastIndex, setLastIndex] = useState(PAGINATION_STEP);
 
   const { status, mutate } = useMutation({
-    mutationFn: async (input: string) => await PlaceClient.searchPlaces(input),
-    onSuccess: (fetchedPlaces) => {
+    mutationFn: async (input: string) => await axios.post<Place[]>('/api/places/search', { prompt: input }),
+    onSuccess: ({data:fetchedPlaces}) => {
       if (fetchedPlaces) {
         const aiMessage = {
           id: `ai-${Date.now()}`,
