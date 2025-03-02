@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Loader2, Search, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,24 +9,24 @@ import styles from './chat.module.css';
 import { useMutation } from '@tanstack/react-query';
 import PlaceList from '@/components/cards/place-list/place-list';
 import axios from 'axios';
+import { ChatMessage } from '@/lib/types/prompt';
 
 interface ChatInterfaceProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const PAGINATION_STEP = 6;
 
 export default function ChatInterface({ children }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<
-    Array<{
-      id: string;
-      type: 'user' | 'ai';
-      content: string;
-      cards?: Array<Place>;
-    }>
-  >([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [lastIndex, setLastIndex] = useState(PAGINATION_STEP);
+  const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!chatBottomRef.current) return;
+    // chatBottomRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [lastIndex, messages]);
 
   const { status, mutate } = useMutation({
     mutationFn: async (input: string) => await axios.post<Place[]>('/api/places/search', { prompt: input }),
@@ -43,7 +43,6 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
     },
     // TODO: Implement onError
   });
-
   const isLoading = status === 'pending';
 
   const handleSendMessage = useCallback(() => {
@@ -65,7 +64,6 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
 
   const handleGenerateMore = async () => {
     if (isLoading) return;
-
     setLastIndex((prev) => prev + PAGINATION_STEP);
   };
 
@@ -95,7 +93,7 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
                   {message.cards &&
                     message.cards.length > lastIndex &&
                     index === messages.length - 1 && (
-                      <div className='flex justify-center'>
+                      <div className='flex justify-center' ref={chatBottomRef}>
                         <Button
                           className={styles.generateMoreButton}
                           onClick={handleGenerateMore}
