@@ -7,13 +7,13 @@ const sections = ['nearby', 'recommended', 'saved'] as const;
 type ForYouProps = {
   searchParams: {
     section: string;
-  }
+  };
 };
 
 export default async function ForYouPage({ searchParams }: ForYouProps) {
-  const activeSection = sections.find((x) =>
-    searchParams['section']?.trim().toLowerCase() === x
-  ) ?? sections[0];
+  const activeSection =
+    sections.find((x) => searchParams['section']?.trim().toLowerCase() === x) ??
+    sections[0];
 
   // TODO: Implement fetching data for each section
   const random = await PlaceClient.getRandomPlaces(15);

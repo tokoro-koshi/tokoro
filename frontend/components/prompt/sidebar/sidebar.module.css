@@ -1,27 +1,23 @@
-.sidebar{
-    @apply overflow-y-auto !h-[calc(100vh-59px)] sticky top-[59px] bottom-0 w-[364px];
+.sidebar {
+  @apply sticky bottom-0 top-[59px] !h-[calc(100vh-59px)] w-[364px] overflow-y-auto;
 }
 
-.header{
-    @apply bg-sidebar-foreground bg-opacity-100 transition-colors hover:bg-opacity-80 rounded-sm mx-3 my-2
-           font-bold text-sidebar text-lg sticky top-0 z-10 mb-3;
-
+.header {
+  @apply sticky top-0 z-10 mx-3 my-2 mb-3 rounded-sm bg-sidebar-foreground bg-opacity-100 text-lg font-bold text-sidebar transition-colors hover:bg-opacity-80;
 }
 
-.content{
-    @apply ml-3 text-sidebar-foreground font-semibold text-sm max-h-[calc(100vh-59px-80px)];
+.content {
+  @apply ml-3 max-h-[calc(100vh-59px-80px)] text-sm font-semibold text-sidebar-foreground;
 }
 
-.menuItem{
-    @apply bg-sidebar-foreground bg-opacity-25 rounded-sm p-2 truncate transition-colors hover:bg-opacity-90
-           hover:text-sidebar min-w-0;
+.menuItem {
+  @apply min-w-0 truncate rounded-sm bg-sidebar-foreground bg-opacity-25 p-2 transition-colors hover:bg-opacity-90 hover:text-sidebar;
 }
 
-.group{
-    @apply gap-2;
+.group {
+  @apply gap-2;
 }
 
-.scrollArea{
-    @apply pr-3.5 flex ;
+.scrollArea {
+  @apply flex pr-3.5;
 }
-

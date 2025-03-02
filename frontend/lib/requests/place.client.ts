@@ -17,7 +17,9 @@ export class PlaceClient {
   }
 
   static async searchPlaces(prompt: string): Promise<Place[]> {
-    const response = await apiClient.post<Place[]>(`/places/search`, { prompt });
+    const response = await apiClient.post<Place[]>(`/places/search`, {
+      prompt,
+    });
     return response.data;
   }
 
