@@ -89,25 +89,15 @@
   }
 
   .wavy-background {
-    /*background: url('/background.png') repeat-y hsl(var(--background), 100%);*/
-    /*background-size: 100% auto;*/
-    background-image: url('/background.png');
+    background-image: url('/background.avif');
     background-repeat: repeat;
     background-size: 100% auto;
   }
-}
 
-@layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.svg-background {
-  background-image: url('../public/background.svg');
-  background-repeat: repeat;
-  background-size: 100% auto;
 }
