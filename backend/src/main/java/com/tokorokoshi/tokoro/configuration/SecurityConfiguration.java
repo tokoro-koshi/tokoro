@@ -75,8 +75,7 @@ public class SecurityConfiguration {
      * @throws Exception if there is an error configuring the security settings
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         if (isDevelopment()) {
             http.cors(cors -> cors.configurationSource(corsConfigurationSource))
                     .authorizeHttpRequests(
@@ -106,16 +105,15 @@ public class SecurityConfiguration {
                                             "/features/**",
                                             "/places/**",
                                             "/testimonials/**",
-                                            "/reviews/**"
-                                    )
-                                    .permitAll()
-                                    .requestMatchers(
+                                            "/reviews/**",
                                             "/swagger-ui/**",
                                             "/swagger-ui.html",
                                             "/v3/api-docs/**",
                                             "/swagger-resources/**"
                                     )
                                     .permitAll()
+                                    .requestMatchers(HttpMethod.POST, "/places/search")
+                                    .authenticated()
                                     .requestMatchers(HttpMethod.POST,
                                             "/privacy/**",
                                             "/about/**",
@@ -153,8 +151,6 @@ public class SecurityConfiguration {
                                     .hasAnyRole("ADMIN", "MODERATOR")
                                     .requestMatchers(HttpMethod.DELETE, "/blogs/**")
                                     .hasAnyRole("ADMIN", "MODERATOR")
-                                    .requestMatchers(HttpMethod.POST, "/places/search/**")
-                                    .authenticated()
                                     .requestMatchers("/**")
                                     .authenticated()
                                     .anyRequest()
