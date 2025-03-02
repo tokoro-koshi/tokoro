@@ -5,7 +5,6 @@ import { Loader2, Search, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Place } from '@/lib/types/place';
-import PlaceCard from '@/components/cards/place-card/place-card';
 import styles from './chat.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { PlaceClient } from '@/lib/requests/place.client';
@@ -42,9 +41,7 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
         setMessages((prev) => [...prev, aiMessage]);
       }
     },
-    // onError: () => {
-    //
-    //   },
+    // TODO: Implement onError
   });
 
   const isLoading = status === 'pending';
