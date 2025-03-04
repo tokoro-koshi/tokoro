@@ -141,30 +141,6 @@ public class ChatHistoryService {
     }
 
     /**
-     * Adds new places IDs to an existing conversation in a chat history.
-     *
-     * @param chatHistoryId  chat history ID
-     * @param conversationId conversation ID
-     * @param placesIds      list of places IDs to add
-     * @return the updated conversation
-     */
-    public ConversationDto addPlacesIdsToConversation(String chatHistoryId, String conversationId, List<String> placesIds) {
-        ChatHistory chatHistory = findChatHistoryById(chatHistoryId);
-
-        // Retrieve the conversation and ensure it belongs to the specified chat history
-        Conversation existingConversation = repository.findById(conversationId, Conversation.class);
-        if (existingConversation == null || !chatHistory.conversationIds().contains(conversationId)) {
-            throw new IllegalArgumentException("Conversation not found for id: " + conversationId);
-        }
-
-        // Update the conversation with the new list of place IDs and save it
-        Conversation conversation = existingConversation.withPlacesIds(placesIds);
-        Conversation savedConversation = repository.save(conversation);
-
-        return conversationMapper.toConversationDto(savedConversation);
-    }
-
-    /**
      * Updates an existing conversation in a chat history.
      *
      * @param chatHistoryId               chat history ID
