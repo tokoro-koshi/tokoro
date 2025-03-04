@@ -5,13 +5,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 /**
- * A DTO for creating or updating a conversation
+ * A DTO for a conversation
  */
 @Schema(
-        name = "CreateUpdateConversationDto",
-        description = "A DTO for creating or updating a conversation"
+        name = "ConversationDto",
+        description = "A DTO for a conversation"
 )
-public record CreateUpdateConversationDto(
+public record ConversationDto(
+        @Schema(
+                name = "id",
+                description = "The ID of the conversation"
+        )
+        String id,
+
         @Schema(
                 name = "prompt",
                 description = "The prompt of the conversation"
