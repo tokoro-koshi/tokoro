@@ -1,10 +1,10 @@
 ﻿import Image from 'next/image';
 import { Place } from '@/lib/types/place';
 import { Card, CardContent } from '@/components/ui/card';
-import Star from '@/public/icons/star.svg';
 import styles from './place-card.module.css';
 import routes from '@/lib/constants/routes';
 import Link from 'next/link';
+import Rating from '@/components/cards/items/rating/rating';
 
 interface PlaceCardProps {
   place: Place;
@@ -18,17 +18,8 @@ export default function PlaceCard({ place }: PlaceCardProps) {
     <Link href={routes.place + '/' + place.id} target={'_blank'}>
       <Card>
         <CardContent className={styles.cardContent}>
-          <div className={styles.rating}>
-            <div className={styles.background}></div>
-            <Image
-              src={Star}
-              alt={'Rating'}
-              width={12}
-              height={11}
-              className={styles.star}
-            />
-            <p className={styles.value}>{place.rating}</p>
-          </div>
+          <div className="relative">
+            {place.rating !== 0 && <Rating rating={place.rating} className="bottom-2" />}
           <Image
             src={pictures[0]}
             alt={place.name}
@@ -37,6 +28,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
             className={styles.image}
             quality={50}
           />
+          </div>
           <div className={styles.text}>
             <h3 className={styles.name}>{place.name}</h3>
             <p className={styles.category}>

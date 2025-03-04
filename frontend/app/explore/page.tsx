@@ -36,7 +36,7 @@ export default async function ForYouPage({ searchParams }: ForYouProps) {
   }
 
   return (
-    <section className={'flex flex-col gap-6 pb-14'}>
+    <section className={'flex flex-col gap-6 pb-14 pt-16'}>
       <Randomizer />
       <div className={'mx-9 h-2 flex-grow rounded-full bg-white'} />
       <Sections activeSection={activeSection} places={places} />

@@ -24,7 +24,7 @@ export default async function RootLayout({
     <html lang='en'>
       <body className={cn(AllFontsVariables)}>
         <Provider>
-          <main className={'wavy-background min-h-svh pt-[59px]'}>
+          <main className='wavy-background min-h-svh'>
             <Header />
             {children}
           </main>
