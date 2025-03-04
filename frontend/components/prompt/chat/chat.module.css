@@ -1,5 +1,5 @@
 ﻿.container {
-  @apply flex min-h-screen flex-col;
+  @apply flex min-h-screen flex-col pt-16;
 }
 
 .messageContainer {

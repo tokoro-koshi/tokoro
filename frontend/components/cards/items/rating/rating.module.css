@@ -1,0 +1,15 @@
+﻿.rating {
+    @apply absolute z-20 flex items-center gap-1;
+
+    & .background {
+        @apply flex h-7 w-12 rounded-br-xl rounded-tr-xl bg-background;
+    }
+
+    & .star {
+        @apply absolute left-1 z-20;
+    }
+
+    & .value {
+        @apply absolute left-5 mb-1 text-center text-muted-foreground;
+    }
+}

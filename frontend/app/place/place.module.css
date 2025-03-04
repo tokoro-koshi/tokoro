@@ -1,0 +1,47 @@
+﻿.container{
+    @apply mx-auto;
+}
+
+.header {
+    @apply relative rounded-b-[2.5rem] md:rounded-b-[4rem] bg-background md:px-8 mb-4;
+}
+
+.rating {
+    @apply left-0 md:left-8 top-24;
+}
+
+.title {
+    @apply absolute bottom-20 md:bottom-11 left-2 md:left-16 text-5xl text-background font-extrabold z-30 pr-10;
+}
+
+.imageContainer {
+    @apply relative w-full h-[25rem];
+}
+
+.image {
+    @apply md:rounded-b-[2.5rem] w-full h-full object-cover;
+}
+
+.shadow {
+    @apply rounded-b-[2.5rem] absolute w-full h-full top-0 left-0 z-10 shadow-[inset_0px_-20px_100px_0px_rgba(0,_0,_0,_1)];
+}
+
+.info {
+    @apply px-8 h-16 md:h-8 flex flex-col md:flex-row justify-center md:justify-between md:text-base/7;
+}
+
+.tags {
+    @apply ml-2 flex justify-center md:justify-start flex-wrap md:flex-row mb-8 gap-2;
+}
+
+.tag {
+    @apply rounded-lg text-background bg-foreground bg-opacity-30 p-1 capitalize;
+}
+
+.description {
+    @apply text-background ml-2 mb-16;
+}
+
+.carousel {
+    @apply pb-32;
+}
