@@ -26,8 +26,8 @@ public record ChatHistory(
         @NotNull(message = "User ID cannot be null")
         String userId,
 
-        @NotNull(message = "Conversation IDs cannot be null")
-        List<String> conversationIds,
+        @NotNull(message = "Messages IDs cannot be null")
+        List<String> messagesIds,
 
         @CreatedDate
         LocalDateTime createdAt
@@ -43,39 +43,23 @@ public record ChatHistory(
                 id,
                 title,
                 userId,
-                conversationIds,
+                messagesIds,
                 createdAt
         );
     }
 
     /**
-     * Creates a new chat history associated with specified user ID.
+     * Creates a new chat history with the specified messages IDs.
      *
-     * @param userId The user ID associated with the chat history
-     * @return A new chat history with the specified user ID
+     * @param messagesIds The list of messages IDs for this chat history
+     * @return A new chat history with the specified messages IDs
      */
-    public ChatHistory withUserId(String userId) {
+    public ChatHistory withMessagesIds(List<String> messagesIds) {
         return new ChatHistory(
                 id,
                 title,
                 userId,
-                conversationIds,
-                createdAt
-        );
-    }
-
-    /**
-     * Creates a new chat history with the specified conversation IDs.
-     *
-     * @param conversationIds The list of conversation IDs for this chat history
-     * @return A new chat history with the specified conversation IDs
-     */
-    public ChatHistory withConversations(List<String> conversationIds) {
-        return new ChatHistory(
-                id,
-                title,
-                userId,
-                conversationIds,
+                messagesIds,
                 createdAt
         );
     }
@@ -91,7 +75,7 @@ public record ChatHistory(
                 id,
                 title,
                 userId,
-                conversationIds,
+                messagesIds,
                 createdAt
         );
     }
