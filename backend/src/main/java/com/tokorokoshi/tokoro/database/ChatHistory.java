@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +27,9 @@ public record ChatHistory(
         @NotNull(message = "User ID cannot be null")
         String userId,
 
-        @NotNull(message = "Messages IDs cannot be null")
-        List<String> messagesIds,
+        @Field
+        @NotNull(message = "Messages cannot be null")
+        List<Message> messages,
 
         @CreatedDate
         LocalDateTime createdAt
@@ -43,23 +45,23 @@ public record ChatHistory(
                 id,
                 title,
                 userId,
-                messagesIds,
+                messages,
                 createdAt
         );
     }
 
     /**
-     * Creates a new chat history with the specified messages IDs.
+     * Creates a new chat history with the specified messages.
      *
-     * @param messagesIds The list of messages IDs for this chat history
-     * @return A new chat history with the specified messages IDs
+     * @param messages The list of messages for this chat history
+     * @return A new chat history with the specified messages
      */
-    public ChatHistory withMessagesIds(List<String> messagesIds) {
+    public ChatHistory withMessages(List<Message> messages) {
         return new ChatHistory(
                 id,
                 title,
                 userId,
-                messagesIds,
+                messages,
                 createdAt
         );
     }
@@ -75,7 +77,7 @@ public record ChatHistory(
                 id,
                 title,
                 userId,
-                messagesIds,
+                messages,
                 createdAt
         );
     }

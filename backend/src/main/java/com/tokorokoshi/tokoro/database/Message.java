@@ -1,7 +1,6 @@
 package com.tokorokoshi.tokoro.database;
 
 import jakarta.validation.constraints.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -9,10 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 public record Message(
-        @Id
-        @NotNull(message = "ID cannot be null")
-        String id,
-        
         @NotNull(message = "Sender cannot be null")
         Sender sender,
 
@@ -20,19 +15,6 @@ public record Message(
         @NotEmpty(message = "Content cannot be empty")
         String[] content
 ) {
-    /**
-     * Creates a new message in chat history with the specified ID.
-     *
-     * @param id The ID of the message
-     * @return A new message in chat history with the specified ID
-     */
-    public Message withId(String id) {
-        return new Message(
-                id,
-                sender,
-                content
-        );
-    }
     /**
      * Enum representing the sender of the message.
      */
