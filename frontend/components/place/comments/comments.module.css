@@ -1,0 +1,55 @@
+﻿.container {
+    @apply w-full max-w-3xl mx-auto;
+}
+
+.commentInputSection {
+    @apply flex items-start px-2 gap-2 mb-4 md:p-0 md:gap-4 md:mb-8;
+}
+
+.avatar {
+    @apply w-10 h-10;
+}
+
+.textarea {
+    @apply flex-1 min-h-[40px] resize-none pr-12 border-white;
+}
+
+.button {
+    @apply rounded-md bg-foreground text-background p-2;
+}
+
+.commentsList {
+    @apply px-2 md:px-0 pb-8 space-y-2 md:space-y-6;
+}
+
+.loadingIndicator {
+    @apply py-4 text-center text-sm text-muted-foreground;
+}
+
+.commentItem {
+    @apply flex gap-4 rounded-xl bg-background p-4;
+}
+
+.commentItemAvatar {
+    @apply w-10 h-10;
+}
+
+.commentItemContent {
+    @apply flex-1;
+}
+
+.commentItemHeader {
+    @apply flex items-center gap-2 mb-1 font-medium;
+}
+
+.commentItemText {
+    @apply text-sm mb-2;
+}
+
+.commentItemFooter {
+    @apply flex items-center text-xs text-muted-foreground;
+}
+
+.calendarIcon {
+    @apply h-4 w-4 mr-1;
+}
