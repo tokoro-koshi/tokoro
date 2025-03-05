@@ -1,11 +1,11 @@
 package com.tokorokoshi.tokoro.modules.chats;
 
 import com.tokorokoshi.tokoro.database.ChatHistory;
-import com.tokorokoshi.tokoro.database.Conversation;
+import com.tokorokoshi.tokoro.database.Message;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
-import com.tokorokoshi.tokoro.modules.chats.dto.ConversationDto;
 import com.tokorokoshi.tokoro.modules.chats.dto.CreateUpdateChatHistoryDto;
-import com.tokorokoshi.tokoro.modules.chats.dto.CreateUpdateConversationDto;
+import com.tokorokoshi.tokoro.modules.chats.dto.CreateUpdateMessageDto;
+import com.tokorokoshi.tokoro.modules.chats.dto.MessageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,35 +16,35 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatHistoryService {
 
     private final MongoTemplate repository;
-    private final ConversationMapper conversationMapper;
     private final ChatHistoryMapper chatHistoryMapper;
+    private final MessageMapper messageMapper;
 
     @Autowired
     public ChatHistoryService(
             MongoTemplate repository,
-            ConversationMapper conversationMapper,
-            ChatHistoryMapper chatHistoryMapper
+            ChatHistoryMapper chatHistoryMapper,
+            MessageMapper messageMapper
     ) {
         this.repository = repository;
-        this.conversationMapper = conversationMapper;
         this.chatHistoryMapper = chatHistoryMapper;
+        this.messageMapper = messageMapper;
     }
 
     /**
      * Saves a new chat history.
      *
-     * @param userId                     user ID associated with chat history
      * @param createUpdateChatHistoryDto chat history data
      * @return the saved chat history
      */
-    public ChatHistoryDto saveChatHistory(String userId, CreateUpdateChatHistoryDto createUpdateChatHistoryDto) {
+    public ChatHistoryDto saveChatHistory(CreateUpdateChatHistoryDto createUpdateChatHistoryDto) {
         ChatHistory chatHistory = chatHistoryMapper.toChatHistoryScheme(createUpdateChatHistoryDto);
-        ChatHistory savedChatHistory = repository.save(chatHistory.withUserId(userId));
+        ChatHistory savedChatHistory = repository.save(chatHistory);
 
         return chatHistoryMapper.toChatHistoryDto(savedChatHistory);
     }
@@ -91,7 +91,7 @@ public class ChatHistoryService {
 
         List<ChatHistoryDto> content = chatHistories.stream()
                 .map(chatHistoryMapper::toChatHistoryDto)
-                .toList();
+                .collect(Collectors.toList());
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -108,8 +108,7 @@ public class ChatHistoryService {
 
         ChatHistory chatHistory = chatHistoryMapper.toChatHistoryScheme(createUpdateChatHistoryDto)
                 .withId(existingChatHistory.id())
-                .withUserId(existingChatHistory.userId())
-                .withConversations(existingChatHistory.conversationIds())
+                .withMessagesIds(existingChatHistory.messagesIds())
                 .withCreatedAt(existingChatHistory.createdAt());
         ChatHistory savedChatHistory = repository.save(chatHistory);
 
@@ -117,95 +116,95 @@ public class ChatHistoryService {
     }
 
     /**
-     * Adds a new conversation to an existing chat history.
+     * Adds a new message to an existing chat history.
      *
      * @param chatHistoryId               chat history ID
-     * @param createUpdateConversationDto conversation data to add
+     * @param createUpdateMessageDto message data to add
      * @return the updated chat history
      */
-    public ChatHistoryDto addConversationToChatHistory(String chatHistoryId, CreateUpdateConversationDto createUpdateConversationDto) {
+    public ChatHistoryDto addMessageToChatHistory(String chatHistoryId, CreateUpdateMessageDto createUpdateMessageDto) {
         ChatHistory existingChatHistory = findChatHistoryById(chatHistoryId);
 
-        // Convert DTO to Conversation entity and save it
-        Conversation conversation = conversationMapper.toConversationScheme(createUpdateConversationDto);
-        Conversation savedConversation = repository.save(conversation);
+        // Convert DTO to Message entity and save it
+        Message message = messageMapper.toMessageScheme(createUpdateMessageDto);
+        Message savedMessage = repository.save(message);
 
-        // Add the new conversation ID to the existing list of conversation IDs
-        List<String> updatedConversationIds = existingChatHistory.conversationIds();
-        updatedConversationIds.add(savedConversation.id());
+        // Add the new message ID to the existing list of message IDs
+        List<String> updatedMessageIds = existingChatHistory.messagesIds();
+        updatedMessageIds.add(savedMessage.id());
 
-        // Update and save the chat history with the new conversation
-        ChatHistory savedChatHistory = repository.save(existingChatHistory.withConversations(updatedConversationIds));
+        // Update and save the chat history with the new message
+        ChatHistory savedChatHistory = repository.save(existingChatHistory.withMessagesIds(updatedMessageIds));
 
         return chatHistoryMapper.toChatHistoryDto(savedChatHistory);
     }
 
     /**
-     * Updates an existing conversation in a chat history.
+     * Updates an existing message in a chat history.
      *
      * @param chatHistoryId               chat history ID
-     * @param conversationId              conversation ID
-     * @param createUpdateConversationDto conversation data to update
-     * @return the updated conversation
+     * @param messageId                   message ID
+     * @param createUpdateMessageDto message data to update
+     * @return the updated message
      */
-    public ConversationDto updateConversationInChatHistory(String chatHistoryId, String conversationId, CreateUpdateConversationDto createUpdateConversationDto) {
+    public MessageDto updateMessageInChatHistory(String chatHistoryId, String messageId, CreateUpdateMessageDto createUpdateMessageDto) {
         ChatHistory chatHistory = findChatHistoryById(chatHistoryId);
 
-        // Retrieve the conversation and ensure it belongs to the specified chat history
-        Conversation existingConversation = repository.findById(conversationId, Conversation.class);
-        if (existingConversation == null || !chatHistory.conversationIds().contains(conversationId)) {
-            throw new IllegalArgumentException("Conversation not found for id: " + conversationId);
+        // Retrieve the message and ensure it belongs to the specified chat history
+        Message existingMessage = repository.findById(messageId, Message.class);
+        if (existingMessage == null || !chatHistory.messagesIds().contains(messageId)) {
+            throw new IllegalArgumentException("Message not found for id: " + messageId);
         }
 
-        Conversation conversation = conversationMapper.toConversationScheme(createUpdateConversationDto)
-                .withId(existingConversation.id());
-        Conversation savedConversation = repository.save(conversation);
+        Message message = messageMapper.toMessageScheme(createUpdateMessageDto)
+                .withId(existingMessage.id());
+        Message savedMessage = repository.save(message);
 
-        return conversationMapper.toConversationDto(savedConversation);
+        return messageMapper.toMessageDto(savedMessage);
     }
 
     /**
-     * Deletes a conversation from a chat history.
+     * Deletes a message from a chat history.
      *
      * @param chatHistoryId  chat history ID
-     * @param conversationId conversation ID
+     * @param messageId message ID
      */
-    public void deleteConversationFromChatHistory(String chatHistoryId, String conversationId) {
+    public void deleteMessageFromChatHistory(String chatHistoryId, String messageId) {
         ChatHistory chatHistory = findChatHistoryById(chatHistoryId);
 
-        // Retrieve the conversation and ensure it belongs to the specified chat history
-        Conversation existingConversation = repository.findById(conversationId, Conversation.class);
-        if (existingConversation == null || !chatHistory.conversationIds().contains(conversationId)) {
-            throw new IllegalArgumentException("Conversation not found for id: " + conversationId);
+        // Retrieve the message and ensure it belongs to the specified chat history
+        Message existingMessage = repository.findById(messageId, Message.class);
+        if (existingMessage == null || !chatHistory.messagesIds().contains(messageId)) {
+            throw new IllegalArgumentException("Message not found for id: " + messageId);
         }
 
-        chatHistory.conversationIds().remove(conversationId);
+        chatHistory.messagesIds().remove(messageId);
         repository.save(chatHistory);
 
-        repository.remove(existingConversation);
+        repository.remove(existingMessage);
     }
 
     /**
-     * Retrieves paginated conversations for a specific chat history.
+     * Retrieves paginated messages for a specific chat history.
      *
      * @param chatHistoryId chat history ID
      * @param pageable      pagination information (page, size)
-     * @return paginated list of conversations
+     * @return paginated list of messages
      */
-    public Page<ConversationDto> getConversationsForChatHistory(String chatHistoryId, Pageable pageable) {
+    public Page<MessageDto> getMessagesForChatHistory(String chatHistoryId, Pageable pageable) {
         ChatHistory chatHistory = findChatHistoryById(chatHistoryId);
 
-        // Create a query to fetch conversations linked to the chat history with pagination
-        Query query = Query.query(Criteria.where("id").in(chatHistory.conversationIds())).with(pageable);
-        List<Conversation> conversations = repository.find(query, Conversation.class);
+        // Create a query to fetch messages linked to the chat history with pagination
+        Query query = Query.query(Criteria.where("id").in(chatHistory.messagesIds())).with(pageable);
+        List<Message> messages = repository.find(query, Message.class);
 
-        // Count the total number of conversations associated with the chat history
-        long total = repository.count(Query.query(Criteria.where("id").in(chatHistory.conversationIds())), Conversation.class);
+        // Count the total number of messages associated with the chat history
+        long total = repository.count(Query.query(Criteria.where("id").in(chatHistory.messagesIds())), Message.class);
 
-        // Convert conversations to DTOs
-        List<ConversationDto> content = conversations.stream()
-                .map(conversationMapper::toConversationDto)
-                .toList();
+        // Convert messages to DTOs
+        List<MessageDto> content = messages.stream()
+                .map(messageMapper::toMessageDto)
+                .collect(Collectors.toList());
 
         return new PageImpl<>(content, pageable, total);
     }

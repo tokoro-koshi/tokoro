@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * A DTO for a chat history
+ * A DTO for representing chat history data.
  */
 @Schema(
         name = "ChatHistoryDto",
-        description = "A DTO for a chat history"
+        description = "A DTO for representing chat history data"
 )
 public record ChatHistoryDto(
         @Schema(
@@ -21,25 +21,26 @@ public record ChatHistoryDto(
 
         @Schema(
                 name = "title",
-                description = "The title of the chat history"
+                description = "The title of the chat history",
+                maxLength = 255
         )
         String title,
 
         @Schema(
                 name = "userId",
-                description = "The user ID associated with this chat history"
+                description = "The user ID associated with the chat history"
         )
         String userId,
 
         @Schema(
-                name = "conversationsIds",
-                description = "The list of conversations IDs for this chat history"
+                name = "messagesIds",
+                description = "The list of messages IDs in the chat history"
         )
-        List<String> conversationsIds,
+        List<String> messagesIds,
 
         @Schema(
                 name = "createdAt",
-                description = "The creation timestamp for this chat history"
+                description = "The creation timestamp of the chat history"
         )
         LocalDateTime createdAt
 ) {

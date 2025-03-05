@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ChatHistoryMapper {
-    @Mapping(target = "conversationIds", expression = "java(new java.util.ArrayList<>())")
+    @Mapping(target = "messagesIds", expression = "java(new java.util.ArrayList<>())")
     ChatHistory toChatHistoryScheme(CreateUpdateChatHistoryDto createUpdateChatHistoryDto);
 
     ChatHistoryDto toChatHistoryDto(ChatHistory chatHistory);
