@@ -4,6 +4,8 @@ import Rating from '@/components/cards/items/rating/rating';
 import PlaceCarousel from '@/components/cards/place-carousel/place-carousel';
 import styles from '../place.module.css';
 import { cn } from '@/lib/utils';
+import { Comments } from '@/components/place/comments/comments';
+import { mockComments } from '@/lib/constants/comments/comments';
 
 type PlacePageProps = {
   params: {
@@ -46,6 +48,9 @@ export default async function PlacePage({ params }: PlacePageProps) {
         {place.description}
       </p>
       <PlaceCarousel className={styles.carousel} places={suggestedPlaces} />
+      <Comments
+        initialComments={mockComments}
+      />
     </div>
   );
 }
