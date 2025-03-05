@@ -1,5 +1,6 @@
 package com.tokorokoshi.tokoro.modules.chats.dto;
 
+import com.tokorokoshi.tokoro.database.Message;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -33,10 +34,10 @@ public record ChatHistoryDto(
         String userId,
 
         @Schema(
-                name = "messagesIds",
-                description = "The list of messages IDs in the chat history"
+                name = "messages",
+                description = "The list of messages in the chat history"
         )
-        List<String> messagesIds,
+        List<Message> messages,
 
         @Schema(
                 name = "createdAt",
