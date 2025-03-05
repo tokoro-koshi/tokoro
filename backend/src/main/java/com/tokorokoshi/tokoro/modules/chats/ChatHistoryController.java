@@ -2,7 +2,7 @@ package com.tokorokoshi.tokoro.modules.chats;
 
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
-import com.tokorokoshi.tokoro.modules.chats.dto.MessageDto;
+import com.tokorokoshi.tokoro.modules.chats.dto.CreateUpdateChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,17 +24,14 @@ public class ChatHistoryController {
 
     private final ChatHistoryService chatHistoryService;
     private final PagedResourcesAssembler<ChatHistoryDto> chatHistoryPagedResourcesAssembler;
-    private final PagedResourcesAssembler<MessageDto> messagePagedResourcesAssembler;
     private final Logger logger = Logger.getLogger(ChatHistoryController.class.getName());
 
     public ChatHistoryController(
             ChatHistoryService chatHistoryService,
-            PagedResourcesAssembler<ChatHistoryDto> chatHistoryPagedResourcesAssembler,
-            PagedResourcesAssembler<MessageDto> messagePagedResourcesAssembler
+            PagedResourcesAssembler<ChatHistoryDto> chatHistoryPagedResourcesAssembler
     ) {
         this.chatHistoryService = chatHistoryService;
         this.chatHistoryPagedResourcesAssembler = chatHistoryPagedResourcesAssembler;
-        this.messagePagedResourcesAssembler = messagePagedResourcesAssembler;
     }
 
     @Operation(
@@ -112,79 +109,5 @@ public class ChatHistoryController {
             this.logger.severe(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    @Operation(
-            summary = "Delete a message from a chat history",
-            description = "Deletes the message with the specified ID from the chat history with the given ID"
-    )
-    @DeleteMapping(
-            value = "/{id}/messages/{messageId}"
-    )
-    public ResponseEntity<ChatHistoryDto> deleteMessageFromChatHistory(
-            @Parameter(
-                    description = "The ID of the chat history",
-                    required = true,
-                    example = "60f1b3b3b3b3b3b3b3b3b3b3"
-            )
-            @PathVariable
-            String id,
-            @Parameter(
-                    description = "The ID of the message to delete",
-                    required = true,
-                    example = "60f1b3b3b3b3b3b3b3b3b3b4"
-            )
-            @PathVariable
-            String messageId
-    ) {
-        try {
-            ChatHistoryDto chatHistory = this.chatHistoryService.getChatHistoryById(id);
-            if (chatHistory == null) {
-                throw new NotFoundException("Chat history not found");
-            }
-            chatHistoryService.deleteMessageFromChatHistory(id, messageId);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            throw new NotFoundException("Message not found");
-        } catch (Exception e) {
-            this.logger.severe(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @Operation(
-            summary = "Get messages for a specific chat history",
-            description = "Returns a paginated list of messages for a specific chat history"
-    )
-    @GetMapping(
-            value = "/{id}/messages",
-            produces = APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<PaginationDto<MessageDto>> getMessagesForChatHistory(
-            @Parameter(
-                    description = "The ID of the chat history",
-                    required = true,
-                    example = "60f1b3b3b3b3b3b3b3b3b3b3"
-            )
-            @PathVariable
-            String id,
-            @Parameter(description = "The page number to get", example = "0")
-            @RequestParam(defaultValue = "0")
-            int page,
-            @Parameter(
-                    description = "The number of items per page",
-                    example = "20"
-            )
-            @RequestParam(defaultValue = "20")
-            int size
-    ) {
-        ChatHistoryDto chatHistory = this.chatHistoryService.getChatHistoryById(id);
-        if (chatHistory == null) {
-            throw new NotFoundException("Chat history not found");
-        }
-        Pageable pageable = PageRequest.of(page, size);
-        var messages = chatHistoryService.getMessagesForChatHistory(id, pageable);
-        var pagination = PaginationDto.fromEntityModel(messagePagedResourcesAssembler.toModel(messages));
-        return ResponseEntity.ok(pagination);
     }
 }
