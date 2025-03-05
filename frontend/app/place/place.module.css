@@ -23,7 +23,7 @@
 }
 
 .shadow {
-    @apply rounded-b-[2.5rem] absolute w-full h-full top-0 left-0 z-10 shadow-[inset_0px_-20px_100px_0px_rgba(0,_0,_0,_1)];
+    @apply md:rounded-b-[2.5rem] absolute w-full h-full top-0 left-0 z-10 shadow-[inset_0px_-20px_100px_0px_rgba(0,_0,_0,_1)];
 }
 
 .info {
@@ -43,5 +43,5 @@
 }
 
 .carousel {
-    @apply pb-32;
+    @apply pb-16;
 }
