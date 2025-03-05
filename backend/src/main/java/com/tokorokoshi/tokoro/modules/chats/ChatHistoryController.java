@@ -2,7 +2,6 @@ package com.tokorokoshi.tokoro.modules.chats;
 
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
-import com.tokorokoshi.tokoro.modules.chats.dto.CreateUpdateChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
