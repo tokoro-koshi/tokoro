@@ -7,6 +7,7 @@ import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserDeleteException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserFetchException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserUpdateException;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,46 +18,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 @Tag(name = "Users", description = "API for managing users")
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @Operation(
-            summary = "Get user email",
-            description = "Returns the email of the user"
-    )
-    @GetMapping(
-            path = "/{id}/email",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<String> getUserEmail(
-            @Parameter(
-                    description = "The user ID",
-                    required = true,
-                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
-            )
-            @PathVariable
-            String id
-    ) {
-        try {
-            String email = userService.getUserEmail(id);
-            return ResponseEntity.ok(email);
-        } catch (UserFetchException ex) {
-            throw new NotFoundException("User email not found");
-        }
     }
 
     @Operation(
@@ -88,54 +61,6 @@ public class UserController {
             return ResponseEntity.noContent().build();
         } catch (UserUpdateException ex) {
             throw new NotFoundException("User not found");
-        }
-    }
-
-    @Operation(
-            summary = "Get user avatar",
-            description = "Returns the avatar URL of the user")
-    @GetMapping(
-            path = "/{id}/avatar",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<String> getUserAvatar(
-            @Parameter(
-                    description = "The user ID",
-                    required = true,
-                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
-            )
-            @PathVariable
-            String id
-    ) {
-        try {
-            String avatarUrl = userService.getUserAvatar(id);
-            return ResponseEntity.ok(avatarUrl);
-        } catch (UserFetchException e) {
-            throw new NotFoundException("User avatar not found");
-        }
-    }
-
-    @Operation(
-            summary = "Get user nickname",
-            description = "Returns the nickname of the user")
-    @GetMapping(
-            path = "/{id}/nickname",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<String> getUserNickname(
-            @Parameter(
-                    description = "The user ID",
-                    required = true,
-                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
-            )
-            @PathVariable
-            String id
-    ) {
-        try {
-            String userNickname = userService.getUserNickname(id);
-            return ResponseEntity.ok(userNickname);
-        } catch (UserFetchException e) {
-            throw new NotFoundException("User nickname not found");
         }
     }
 
@@ -198,34 +123,6 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Get user name",
-            description = "Returns the first and last name of the user"
-    )
-    @GetMapping(
-            path = "/{id}/name",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Map<String, String>> getUserName(
-            @Parameter(
-                    description = "The user ID",
-                    required = true,
-                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
-            )
-            @PathVariable
-            String id
-    ) {
-        try {
-            User user = userService.getUser(id);
-            Map<String, String> userName = new HashMap<>();
-            userName.put("firstName", user.getGivenName());
-            userName.put("lastName", user.getFamilyName());
-            return ResponseEntity.ok(userName);
-        } catch (UserFetchException e) {
-            throw new NotFoundException("User name not found");
-        }
-    }
-
-    @Operation(
             summary = "Update user name",
             description = "Updates the first and last name of the user"
     )
@@ -234,6 +131,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateUserFirstNameAndLastName(
             @Parameter(
                     description = "The user ID",
@@ -423,6 +321,23 @@ public class UserController {
     }
 
     @Operation(
+            summary = "Get user details for authenticated user",
+            description = "Returns the details of the current user"
+    )
+    @GetMapping(
+            path = "/me",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> getUserDetails() {
+        try {
+            User userDetails = userService.getUser(SecurityUtils.getAuthenticatedUserId());
+            return ResponseEntity.ok(userDetails);
+        } catch (UserFetchException e) {
+            throw new NotFoundException("User not found");
+        }
+    }
+
+    @Operation(
             summary = "Get user details",
             description = "Returns the details of the user"
     )
@@ -430,7 +345,6 @@ public class UserController {
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUserDetails(
             @Parameter(
                     description = "The user ID",
