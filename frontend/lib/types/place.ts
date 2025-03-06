@@ -25,3 +25,13 @@ export interface Tag {
   lang: string;
   name: string;
 }
+
+export interface MutateFavoritesCollection {
+  name: string;
+  placesIds: string[];
+}
+
+export interface FavoritesCollection extends MutateFavoritesCollection {
+  id: string;
+  createdAt: string; // ISO string
+}
