@@ -21,6 +21,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -218,6 +219,26 @@ public class PlacesService {
                 .map(this::getPlaceWithPicturesUrls)
                 .toList();
         return new PageImpl<>(content, pageable, total);
+    }
+
+    /**
+     * Retrieves places by an array of IDs using an aggregation query.
+     *
+     * @param ids List of place IDs
+     * @return List of places
+     */
+    public List<PlaceDto> getByIdArray(List<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        MatchOperation matchStage = Aggregation.match(Criteria.where("_id").in(ids));
+        Aggregation aggregation = Aggregation.newAggregation(matchStage);
+        AggregationResults<Place> results = repository.aggregate(aggregation, Place.class, Place.class);
+
+        return results.getMappedResults().stream()
+                .map(this::getPlaceWithPicturesUrls)
+                .toList();
     }
 
     /**

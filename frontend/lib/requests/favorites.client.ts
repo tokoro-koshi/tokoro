@@ -28,7 +28,7 @@ export class FavoritesClient {
     size: number = 20
   ): Promise<Pagination<FavoritesCollection>> {
     const response = await apiClient.get<Pagination<FavoritesCollection>>(
-      `/collections?page=${page}&size=${size}`
+      `/collections/${userId}?page=${page}&size=${size}`
     );
     return response.data;
   }
@@ -41,7 +41,7 @@ export class FavoritesClient {
     size: number = 20
   ): Promise<Pagination<FavoritesCollection>> {
     const response = await apiClient.get<Pagination<FavoritesCollection>>(
-      `/users/me/collections?page=${page}&size=${size}`
+      `/collections/me?page=${page}&size=${size}`
     );
     return response.data;
   }

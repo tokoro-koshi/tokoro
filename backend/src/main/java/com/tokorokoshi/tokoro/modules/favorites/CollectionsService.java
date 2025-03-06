@@ -235,6 +235,11 @@ public class CollectionsService {
     @SuppressWarnings("unchecked")
     private List<CollectionDto> getCollectionsFromMetadata(Map<String, Object> userMetadata) {
         List<CollectionDto> collections = new ArrayList<>();
+
+        if (userMetadata == null) {
+            return collections;
+        }
+
         if (userMetadata.containsKey(COLLECTIONS_METADATA_KEY)) {
             List<Map<String, Object>> collectionsMap =
                     (List<Map<String, Object>>) userMetadata.get(

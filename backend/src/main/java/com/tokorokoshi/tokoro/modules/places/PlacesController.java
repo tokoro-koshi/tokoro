@@ -84,7 +84,7 @@ public class PlacesController {
     }
 
     @Operation(
-            summary = "Get all places",
+            summary = "Get places",
             description = "Returns a paginated list of all places"
     )
     @GetMapping(value = {"", "/"}, produces = APPLICATION_JSON_VALUE)
@@ -105,6 +105,19 @@ public class PlacesController {
                 this.pagedResourcesAssembler.toModel(places)
         );
         return ResponseEntity.ok(pagination);
+    }
+
+    @Operation(
+            summary = "Get places by an array of IDs",
+            description = "Returns a list of places that match the given IDs"
+    )
+    @GetMapping(value = "/batch", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PlaceDto>> getPlacesByIdArray(
+            @Parameter(description = "List of place IDs", required = true)
+            @RequestParam List<String> ids
+    ) {
+        var places = this.placesService.getByIdArray(ids);
+        return ResponseEntity.ok(places);
     }
 
     @Operation(
