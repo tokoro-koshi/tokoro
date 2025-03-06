@@ -4,6 +4,7 @@ import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.favorites.dto.CollectionDto;
 import com.tokorokoshi.tokoro.modules.favorites.dto.CreateUpdateCollectionDto;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(name = "User Collections", description = "API for managing user collections")
 @RestController
-@RequestMapping("/users/{userId}/collections")
+@RequestMapping("/collections")
 public class CollectionsController {
 
     private final CollectionsService collectionService;
@@ -50,14 +51,11 @@ public class CollectionsController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<CollectionDto> saveCollection(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(description = "The collection to save", required = true)
             @RequestBody
             CreateUpdateCollectionDto createUpdateCollectionDto
     ) {
+        String userId = SecurityUtils.getAuthenticatedUserId();
         return ResponseEntity.ok(this.collectionService.saveCollection(userId, createUpdateCollectionDto));
     }
 
@@ -65,7 +63,7 @@ public class CollectionsController {
             summary = "Get all collections for a user",
             description = "Returns a paginated list of all collections for a user"
     )
-    @GetMapping(value = {"", "/"}, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = {"/{userId}"}, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PaginationDto<CollectionDto>> getAllCollections(
             @Parameter(description = "The user ID", required = true)
             @PathVariable
@@ -99,15 +97,32 @@ public class CollectionsController {
     }
 
     @Operation(
+            summary = "Get all collections for the current user",
+            description = "Returns a paginated list of all collections for the current user"
+    )
+    @GetMapping(value = {"/me"}, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PaginationDto<CollectionDto>> getAllCollections(
+            @Parameter(description = "The page number to get", example = "0")
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @Parameter(
+                    description = "The number of items per page",
+                    example = "20"
+            )
+            @RequestParam(defaultValue = "20")
+            int size
+    ) {
+        String userId = SecurityUtils.getAuthenticatedUserId();
+        return this.getAllCollections(userId, page, size);
+    }
+
+    @Operation(
             summary = "Get a collection by ID",
             description = "Returns the collection with the given ID for a user"
     )
     @GetMapping(value = "/{collectionId}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CollectionDto> getCollectionById(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(
                     description = "The ID of the collection to get",
                     required = true,
@@ -116,6 +131,7 @@ public class CollectionsController {
             @PathVariable
             UUID collectionId
     ) {
+        String userId = SecurityUtils.getAuthenticatedUserId();
         var collection = this.collectionService.getCollectionById(userId, collectionId);
         if (collection == null) {
             throw new NotFoundException("Collection not found");
@@ -133,10 +149,6 @@ public class CollectionsController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<CollectionDto> updateCollection(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(
                     description = "The ID of the collection to update",
                     required = true,
@@ -149,6 +161,7 @@ public class CollectionsController {
             @RequestBody
             CreateUpdateCollectionDto createUpdateCollectionDto
     ) {
+        String userId = SecurityUtils.getAuthenticatedUserId();
         CollectionDto updatedCollection = this.collectionService.updateCollection(userId, collectionId, createUpdateCollectionDto);
         if (updatedCollection == null) {
             throw new NotFoundException("Collection not found");
@@ -162,10 +175,6 @@ public class CollectionsController {
     )
     @DeleteMapping(value = "/{collectionId}")
     public ResponseEntity<?> deleteCollection(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(
                     description = "The ID of the collection to delete",
                     required = true,
@@ -175,6 +184,7 @@ public class CollectionsController {
             UUID collectionId
     ) {
         try {
+            String userId = SecurityUtils.getAuthenticatedUserId();
             this.collectionService.deleteCollection(userId, collectionId);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
@@ -195,10 +205,6 @@ public class CollectionsController {
             produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<CollectionDto> addFavoritePlace(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(
                     description = "The ID of the collection",
                     required = true,
@@ -211,6 +217,7 @@ public class CollectionsController {
             @RequestBody
             String placeId
     ) {
+        String userId = SecurityUtils.getAuthenticatedUserId();
         return ResponseEntity.ok(this.collectionService.addFavoritePlace(userId, collectionId, placeId));
     }
 
@@ -220,10 +227,6 @@ public class CollectionsController {
     )
     @DeleteMapping(value = "/{collectionId}/places/{placeId}")
     public ResponseEntity<CollectionDto> removeFavoritePlace(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(
                     description = "The ID of the collection",
                     required = true,
@@ -241,6 +244,7 @@ public class CollectionsController {
             String placeId
     ) {
         try {
+            String userId = SecurityUtils.getAuthenticatedUserId();
             this.collectionService.removeFavoritePlace(userId, collectionId, placeId);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
@@ -257,10 +261,6 @@ public class CollectionsController {
     )
     @DeleteMapping(value = "/{collectionId}/places")
     public ResponseEntity<CollectionDto> clearCollection(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(
                     description = "The ID of the collection",
                     required = true,
@@ -270,6 +270,7 @@ public class CollectionsController {
             UUID collectionId
     ) {
         try {
+            String userId = SecurityUtils.getAuthenticatedUserId();
             this.collectionService.clearCollection(userId, collectionId);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
@@ -286,14 +287,11 @@ public class CollectionsController {
     )
     @GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CollectionDto>> searchCollectionsByName(
-            @Parameter(description = "The user ID", required = true)
-            @PathVariable
-            String userId,
-
             @Parameter(description = "The name to search for", required = true)
             @RequestParam
             String name
     ) {
+        String userId = SecurityUtils.getAuthenticatedUserId();
         List<CollectionDto> collections = this.collectionService.searchCollectionsByName(userId, name);
         return ResponseEntity.ok(collections);
     }
