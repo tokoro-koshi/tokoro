@@ -28,6 +28,13 @@ export class PlaceClient {
     return response.data;
   }
 
+  static async getPlacesByIdArray(ids: string[]): Promise<Place[]> {
+    const response = await apiClient.get<Place[]>(`/places/batch`, {
+      params: { ids: ids.join(',') }
+    });
+    return response.data;
+  }
+
   static async savePlace(place: Place): Promise<Place> {
     const response = await apiClient.post<Place>(`/places`, place);
     return response.data;

@@ -1,6 +1,12 @@
 ﻿'use client';
 
-import { ReactNode, useCallback, useLayoutEffect, useRef, useState } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Loader2, Search, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,8 +35,9 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
   }, [lastIndex, messages]);
 
   const { status, mutate } = useMutation({
-    mutationFn: async (input: string) => await axios.post<Place[]>('/api/places/search', { prompt: input }),
-    onSuccess: ({data:fetchedPlaces}) => {
+    mutationFn: async (input: string) =>
+      await axios.post<Place[]>('/api/places/search', { prompt: input }),
+    onSuccess: ({ data: fetchedPlaces }) => {
       if (fetchedPlaces) {
         const aiMessage = {
           id: `ai-${Date.now()}`,
