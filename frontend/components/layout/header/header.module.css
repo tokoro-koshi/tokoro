@@ -24,6 +24,10 @@
   }
 }
 
+.avatar {
+    @apply w-10 h-10 text-background;
+}
+
 .authButtons {
   @apply flex flex-1 items-center justify-between;
 }

@@ -53,7 +53,7 @@ export default function Header({ isTransparent = false }: HeaderProps) {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar>
+                <Avatar className={styles.avatar}>
                   <AvatarImage src={user?.picture ?? ''} />
                   <AvatarFallback>{user?.name?.substring(0, 3)}</AvatarFallback>
                 </Avatar>

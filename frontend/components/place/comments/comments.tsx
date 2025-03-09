@@ -2,141 +2,81 @@
 
 import type React from "react"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, PencilLine, Trash } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { useUser } from '@/lib/stores/user';
 import { PlaceReview } from '@/lib/types/place-review';
 import styles from './comments.module.css';
+import axios from 'axios';
+import {
+  Dialog, DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface CommentSectionProps {
+  placeId: string,
   initialComments?: PlaceReview[]
 }
 
 export function Comments({
+      placeId,
                            initialComments = [],
                          }: CommentSectionProps) {
   
-  // const [comments, setComments] = useState<PlaceReview[]>(initialComments)
-  const comments = initialComments
+  const [comments, setComments] = useState<PlaceReview[]>(initialComments?.sort((a, b) => new Date(b.createdAt||"").getTime() - new Date(a.createdAt||"").getTime()) || [])
   const [newComment, setNewComment] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
   const commentListRef = useRef<HTMLDivElement>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const loadingRef = useRef<HTMLDivElement>(null)
 
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
+  
+  console.log(user);
 
   // Handle submitting a new comment
-  const handleSubmitComment = async () => {
+  const handleSubmitCreate = async () => {
     if (!newComment.trim()) return
 
-    setIsLoading(true)
     try {
-      // const commentData = {
-      //   userId: user?.sub,
-      //   placeId,
-      //   comment: newComment,
-      //   isRecommended: true,
-      // }
+      if (!user?.sub) return;
+      
+      const newCommentData:PlaceReview = {
+        userId: user?.sub,
+        placeId,
+        comment: newComment,
+        isRecommended: false,
+      }
+      
+      await axios.post('/api/reviews/create', newCommentData);
+      
+      const now = new Date().toISOString()
+      newCommentData.createdAt = now;
+      newCommentData.updatedAt = now;
 
-      // if (onAddComment) {
-      //   await onAddComment(commentData)
-      // }
-
-      // Optimistically add the comment to the list
-      // const now = new Date().toISOString()
-      // setComments((prev) => [
-      //   {
-      //     id: `temp-${Date.now()}`,
-      //     ...commentData,
-      //     createdAt: now,
-      //     updatedAt: now,
-      //     userName: currentUser.name,
-      //     userAvatar: currentUser.avatar,
-      //   },
-      //   ...prev,
-      // ])
+      setComments((prev) => [
+        newCommentData,
+        ...prev,
+      ])
 
       setNewComment("")
     } catch (error) {
       console.error("Failed to add comment:", error)
     } finally {
-      setIsLoading(false)
     }
   }
-
-// const handleAddComment = async (commentData: any) => {
-//   // In a real app, this would send data to your API
-//   console.log("Adding comment:", commentData)
-//   return Promise.resolve()
-// }
-//
-//   const handleLoadMoreComments = async (lastCommentId: string) => {
-//     // In a real app, this would fetch more comments from your API
-//     console.log("Loading more comments after:", lastCommentId)
-//     return Promise.resolve([])
-//   }
-
-  // Set up intersection observer for infinite scrolling
-  useEffect(() => {
-    // if (!onLoadMoreComments) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries
-        if (entry.isIntersecting && !isLoadingMore && comments.length >= 3) {
-          loadMoreComments()
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    observerRef.current = observer
-
-    if (loadingRef.current) {
-      observer.observe(loadingRef.current)
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-      }
-    }
-  }, [comments, isLoadingMore,
-    // onLoadMoreComments
-  ])
-
-  // Load more comments when scrolling to bottom
-  const loadMoreComments = async () => {
-    // if (!onLoadMoreComments || comments.length === 0) return
-
-    setIsLoadingMore(true)
-    try {
-      // const lastCommentId = comments[comments.length - 1].id
-      // const moreComments = await onLoadMoreComments(lastCommentId)
-      //
-      // if (moreComments.length > 0) {
-      //   setComments((prev) => [...prev, ...moreComments])
-      // }
-    } catch (error) {
-      console.error("Failed to load more comments:", error)
-    } finally {
-      setIsLoadingMore(false)
-    }
-  }
-
-  // Auto-resize textarea
+  
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value)
     e.target.style.height = "auto"
     e.target.style.height = `${e.target.scrollHeight}px`
   }
-  return (
+  return (!isLoading && 
     <div className={styles.container}>
       {user && <div className={styles.commentInputSection}>
         <Avatar className={styles.avatar}>
@@ -153,38 +93,118 @@ export function Comments({
         <Button
           size="icon"
           className={styles.button}
-          onClick={handleSubmitComment}
-          disabled={isLoading || !newComment.trim()}
+          onClick={handleSubmitCreate}
+          // disabled={isLoading || !newComment.trim()}
         >
           <span>Send</span>
         </Button>
       </div>}
 
       <div className={styles.commentsList} ref={commentListRef}>
-        {comments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} />
-        ))}
+        {!isLoading && comments.length>0 ? comments.map((comment) => (
+          <CommentItem key={comment.id} comment={comment} userId={user?.sub||""} />
+        )): <div className="text-3xl font-bold text-center text-background text-muted-foreground py-14">No comments yet, be the first one to post</div>}
       </div>
     </div>
   );
 }
 
-export default function CommentItem({ comment }: { comment: PlaceReview }) {
+export default function CommentItem({ comment, userId }: { comment: PlaceReview, userId?: string }) {
+  const [editedComment, setEditedComment] = useState<string>(comment.comment);
+  const [commentDisplay, setCommentDisplay] = useState<string>(comment.comment);
+  const [isDeleted, setIsDeleted] = useState(false);
+  
+  const handleSumbitEdit = async () => {
+    if (editedComment === comment.comment || editedComment === "") return;
+    
+    console.log("Editing comment:", comment.id, editedComment);
+    
+    try {
+      await axios.put(`/api/reviews/edit?id=${comment.id}`, {
+        placeId: comment.placeId,
+        userId: comment.userId,
+        comment: editedComment,
+        isRecommended: comment.isRecommended
+      });
+      
+      comment.comment = editedComment;
+      setCommentDisplay(editedComment);
+    } catch (error) {
+      console.error("Failed to edit comment:", error)
+    }
+  }
+
+  const handleSubmitDelete = async () => {
+    await axios.delete(`/api/reviews/delete?id=${comment.id}`);
+    setIsDeleted(true);
+  }
+  if (isDeleted) return null;
+  
   return (
     <div className={styles.commentItem}>
       <Avatar className={styles.commentItemAvatar}>
-        <AvatarImage src={comment.userAvatar} alt={comment.userName || "User"} />
+        <AvatarImage src={comment.userAvatar || comment.userId} alt={comment.userName || "User"} />
         <AvatarFallback>{(comment.userName || "U").substring(0, 2).toUpperCase()}</AvatarFallback>
       </Avatar>
       <div className={styles.commentItemContent}>
         <div className={styles.commentItemHeader}>
           <span>{comment.userName || "Anonymous"}</span>
         </div>
-        <p className={styles.commentItemText}>{comment.comment}</p>
-        <div className={styles.commentItemFooter} title={"Posted on " + format(comment.createdAt, 'dd.MM.yyyy')}>
-          <CalendarDays className={styles.calendarIcon} />
-          {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+        <p className={styles.commentItemText}>{commentDisplay}</p>
+        <div className="flex">
+        <span className={styles.commentItemFooter} title={"Posted on " + format(comment.createdAt||"", 'dd.MM.yyyy')}>
+          <CalendarDays className={styles.icon} />
+          {formatDistanceToNow(new Date(comment.createdAt||""), { addSuffix: true })}
+        </span>
+          {comment.createdAt !== comment.updatedAt &&
+            <>/ <span title={"Edited on " + format(comment.createdAt||"", 'dd.MM.yyyy')} className={styles.commentItemFooter}>
+          <PencilLine className={styles.icon} />
+          { formatDistanceToNow(new Date(comment.updatedAt||""), { addSuffix: true })}
+        </span></>}
         </div>
+        {comment.userId !== userId && comment.id && <div className="absolute right-4 top-4 space-x-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="icon" className={styles.icon}><PencilLine/></Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit Comment</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="items-center gap-4">
+                  <Textarea onChange={(e)=>setEditedComment(e.target.value)} defaultValue={editedComment} placeholder="Your comment" id="name" className="bg-foreground text-background placeholder:text-background placeholder:opacity-50"/>
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="submit">Cancel</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button className={styles.editButton} type="submit" onClick={handleSumbitEdit}>Save changes</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="icon" className={styles.icon}><Trash/></Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Are you sure you want to delete that comment?</DialogTitle>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="submit">Cancel</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button className={styles.deleteButton} type="submit" onClick={handleSubmitDelete}>Delete</Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>}
       </div>
     </div>
   );
