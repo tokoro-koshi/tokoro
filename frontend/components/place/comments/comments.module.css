@@ -7,7 +7,7 @@
 }
 
 .avatar {
-    @apply w-10 h-10;
+    @apply w-10 h-10 text-background;
 }
 
 .textarea {
@@ -27,11 +27,11 @@
 }
 
 .commentItem {
-    @apply flex gap-4 rounded-xl bg-background p-4;
+    @apply flex gap-4 rounded-xl bg-background p-4 relative;
 }
 
 .commentItemAvatar {
-    @apply w-10 h-10;
+    @apply w-10 h-10 text-background;
 }
 
 .commentItemContent {
@@ -43,13 +43,21 @@
 }
 
 .commentItemText {
-    @apply text-sm mb-2;
+    @apply text-sm mb-2 whitespace-pre-wrap;
 }
 
 .commentItemFooter {
     @apply flex items-center text-xs text-muted-foreground;
 }
 
-.calendarIcon {
+.icon {
     @apply h-4 w-4 mr-1;
+}
+
+.editButton{
+    @apply bg-foreground text-background p-2 rounded-md hover:opacity-90 hover:text-background;
+}
+
+.deleteButton{
+    @apply bg-red-700 text-background p-2 rounded-md hover:opacity-90 hover:text-background;
 }
