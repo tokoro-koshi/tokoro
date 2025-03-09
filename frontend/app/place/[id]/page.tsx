@@ -5,7 +5,7 @@ import PlaceCarousel from '@/components/cards/place-carousel/place-carousel';
 import styles from '../place.module.css';
 import { cn } from '@/lib/utils';
 import { Comments } from '@/components/place/comments/comments';
-import { mockComments } from '@/lib/constants/comments/comments';
+import { PlaceReviewClient } from '@/lib/requests/place-review.client';
 
 type PlacePageProps = {
   params: {
@@ -17,8 +17,10 @@ export default async function PlacePage({ params }: PlacePageProps) {
   const place = await PlaceClient.getPlaceById(params.id);
   const suggestedPlaces = await PlaceClient.getRandomPlaces(20);
   const googleMapsUrl = `https://maps.google.com/maps?q=${place.name}&ll=${place.location.coordinate.latitude},${place.location.coordinate.longitude}`;
+  
+  const placeReviews = await PlaceReviewClient.getPlacePlaceReviews(params.id);
 
-  //TODO: Comments section
+  //TODO: User Avatar display on comments section
   //TODO: Save Button Component
   
   return (
@@ -49,7 +51,8 @@ export default async function PlacePage({ params }: PlacePageProps) {
       </p>
       <PlaceCarousel className={styles.carousel} places={suggestedPlaces} />
       <Comments
-        initialComments={mockComments}
+        placeId={params.id}
+        initialComments={placeReviews}
       />
     </div>
   );
