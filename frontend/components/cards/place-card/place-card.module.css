@@ -2,7 +2,7 @@
   @apply relative flex flex-col gap-1.5 px-0 text-muted-foreground;
 
   & .name {
-    @apply pr-8 text-2xl font-semibold capitalize;
+    @apply pr-8 text-2xl font-semibold capitalize text-ellipsis line-clamp-2;
   }
 
   & .category,
@@ -11,7 +11,7 @@
   }
 
   & .location {
-    @apply -mt-1.5 mb-1.5;
+    @apply mb-1.5 leading-none;
   }
 
   & .description {
@@ -19,7 +19,7 @@
   }
 
   & .image {
-    @apply h-48 w-full rounded-tl-[43px] rounded-tr-[43px] object-cover;
+    @apply h-48 w-full object-cover;
   }
 
   & .text {
