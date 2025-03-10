@@ -1,11 +1,11 @@
 ﻿import Image from 'next/image';
-import { Place } from '@/lib/types/place';
-import { Card, CardContent } from '@/components/ui/card';
-import styles from './place-card.module.css';
-import routes from '@/lib/constants/routes';
 import Link from 'next/link';
+import { Place } from '@/lib/types/place';
+import routes from '@/lib/constants/routes';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Rating from '@/components/cards/items/rating/rating';
 import SaveButton from '@/components/cards/items/save/save';
+import styles from './place-card.module.css';
 
 interface PlaceCardProps {
   place: Place;
@@ -18,7 +18,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
   return (
     <Link href={routes.place + '/' + place.id} target={'_blank'}>
       <Card>
-        <CardContent className={styles.cardContent}>
+        <CardHeader className={'pt-0'}>
           <div className='relative'>
             {place.rating !== 0 && (
               <Rating rating={place.rating} className='bottom-2' />
@@ -32,6 +32,8 @@ export default function PlaceCard({ place }: PlaceCardProps) {
               quality={50}
             />
           </div>
+        </CardHeader>
+        <CardContent className={styles.cardContent}>
           <div className={styles.text}>
             <h3 className={styles.name}>{place.name}</h3>
             <SaveButton
