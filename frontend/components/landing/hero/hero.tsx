@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { ExploreButton } from '@/components/buttons';
 import { Button } from '@/components/ui/button';
-import Place from '@/public/landing/place.png';
+import Place from '@/public/landing/place.avif';
 import styles from './hero.module.css';
 
 export default function Hero() {
@@ -28,6 +28,7 @@ export default function Hero() {
           alt={'Places'}
           className={styles.place}
           quality={100}
+          loading={'eager'}
         />
       </div>
     </section>
