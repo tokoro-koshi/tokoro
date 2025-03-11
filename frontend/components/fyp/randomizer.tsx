@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { PlaceClient } from '@/lib/requests/place.client';
 import { Button } from '@/components/buttons';
 import PlaceList from '@/components/cards/place-list/place-list';
-import Cubes from '@/public/icons/cubes.png';
+import Cubes from '@/public/icons/cubes.avif';
 import styles from './fyp.module.css';
 
 export default function Randomizer() {
@@ -31,7 +31,12 @@ export default function Randomizer() {
       {places ? (
         <PlaceList places={places} />
       ) : (
-        <Image src={Cubes} alt={'Cubes'} className={styles.cubes} />
+        <Image
+          src={Cubes}
+          alt={'Cubes'}
+          className={styles.cubes}
+          loading={'eager'}
+        />
       )}
       <Button className={styles.button} action={refetch} disabled={isLoading}>
         {isLoading ? 'Loading...' : places ? 'Roll again' : 'Random'}
