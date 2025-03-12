@@ -6,7 +6,6 @@
   isRecommended: boolean
   createdAt?: string
   updatedAt?: string
-  // Additional fields for display
-  userName?: string
-  userAvatar?: string
+  userName?: string|null
+  userAvatar?: string|null
 }
