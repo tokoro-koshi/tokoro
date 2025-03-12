@@ -35,7 +35,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
             width={350}
             height={192}
             className={styles.image}
-            unoptimized
+            quality={50}
           />
           <div className={styles.text}>
             <h3 className={styles.name}>{place.name}</h3>
