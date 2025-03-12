@@ -6,13 +6,13 @@ export async function getBearerToken(): Promise<string | null> {
     const { accessToken } = await getAccessToken();
     if (!accessToken) return null;
     return `Bearer ${accessToken}`;
-  } catch (e) {
+  } catch (error) {
     if (
-      !(e instanceof AccessTokenError) ||
-      e.code !== 'ERR_MISSING_SESSION' ||
+      !(error instanceof AccessTokenError) ||
+      error.code !== 'ERR_MISSING_SESSION' ||
       env.nodeEnv !== 'development'
     )
-      console.error(e);
+      console.error(error);
     return null;
   }
 }

@@ -136,13 +136,12 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
           </div>
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(event) => setInput(event.target.value)}
             placeholder='Type command or search...'
             className={styles.inputField}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !isLoading) {
-                handleSendMessage();
-              }
+            onKeyDown={(event) => {
+              if (event.key !== 'Enter' || isLoading) return;
+              handleSendMessage();
             }}
           />
           <Button
