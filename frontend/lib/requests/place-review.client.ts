@@ -1,5 +1,6 @@
 ﻿import apiClient from "@/lib/helpers/apiClient";
 import { PlaceReview } from "@/lib/types/place-review";
+import { UserClient } from '@/lib/requests/user.client';
 
 export class PlaceReviewClient {
   static async getPlaceReviewById(id: string): Promise<PlaceReview> {
@@ -32,10 +33,16 @@ export class PlaceReviewClient {
   }
 
   static async getPlacePlaceReviews(placeId: string): Promise<PlaceReview[]> {
-    const response = await apiClient.get<{payload:PlaceReview[]}>(`/reviews/place/${placeId}`);
-    
-    
-    
-    return response.data.payload;
+    const response = await apiClient.get<{ payload: PlaceReview[] }>(`/reviews/place/${placeId}`);
+    const reviews = response.data.payload;
+
+    for (const review of reviews) {
+      const user = await UserClient.getUserDetails(review.userId);
+      if (!user) continue;
+      review.userName = user.name;
+      review.userAvatar = user.picture;
+    }
+
+    return reviews;
   }
 }

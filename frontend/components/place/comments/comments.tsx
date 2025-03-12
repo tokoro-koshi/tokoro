@@ -37,8 +37,6 @@ export function Comments({
 
   const { user, isLoading } = useUser();
   
-  console.log(user);
-
   // Handle submitting a new comment
   const handleSubmitCreate = async () => {
     if (!newComment.trim()) return
@@ -54,6 +52,9 @@ export function Comments({
       }
       
       await axios.post('/api/reviews/create', newCommentData);
+
+      newCommentData.userName = user.name;
+      newCommentData.userAvatar = user.picture;
       
       const now = new Date().toISOString()
       newCommentData.createdAt = now;
@@ -81,7 +82,7 @@ export function Comments({
       {user && <div className={styles.commentInputSection}>
         <Avatar className={styles.avatar}>
           <AvatarImage src={user.picture ?? ''} />
-          <AvatarFallback>{user?.name?.substring(0, 3).toUpperCase()}</AvatarFallback>
+          <AvatarFallback>{user?.name?.substring(0, 3)}</AvatarFallback>
         </Avatar>
         <Textarea
           value={newComment}
@@ -117,8 +118,6 @@ export default function CommentItem({ comment, userId }: { comment: PlaceReview,
   const handleSumbitEdit = async () => {
     if (editedComment === comment.comment || editedComment === "") return;
     
-    console.log("Editing comment:", comment.id, editedComment);
-    
     try {
       await axios.put(`/api/reviews/edit?id=${comment.id}`, {
         placeId: comment.placeId,
@@ -144,7 +143,7 @@ export default function CommentItem({ comment, userId }: { comment: PlaceReview,
     <div className={styles.commentItem}>
       <Avatar className={styles.commentItemAvatar}>
         <AvatarImage src={comment.userAvatar || comment.userId} alt={comment.userName || "User"} />
-        <AvatarFallback>{(comment.userName || "U").substring(0, 2).toUpperCase()}</AvatarFallback>
+        <AvatarFallback>{(comment.userName || "U").substring(0, 3)}</AvatarFallback>
       </Avatar>
       <div className={styles.commentItemContent}>
         <div className={styles.commentItemHeader}>
@@ -162,7 +161,7 @@ export default function CommentItem({ comment, userId }: { comment: PlaceReview,
           { formatDistanceToNow(new Date(comment.updatedAt||""), { addSuffix: true })}
         </span></>}
         </div>
-        {comment.userId !== userId && comment.id && <div className="absolute right-4 top-4 space-x-2">
+        {comment.userId === userId && <div className="absolute right-4 top-4 space-x-2">
           <Dialog>
             <DialogTrigger asChild>
               <Button size="icon" className={styles.icon}><PencilLine/></Button>
