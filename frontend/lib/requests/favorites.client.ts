@@ -1,6 +1,9 @@
 import apiClient from '@/lib/helpers/apiClient';
 import { Pagination } from '@/lib/types/pagination';
-import { FavoritesCollection, MutateFavoritesCollection } from '@/lib/types/place';
+import {
+  FavoritesCollection,
+  MutateFavoritesCollection,
+} from '@/lib/types/place';
 
 /**
  * Client for interacting with the collections API.
@@ -75,9 +78,7 @@ export class FavoritesClient {
   /**
    * Delete a collection by its ID.
    */
-  static async deleteCollection(
-    collectionId: string
-  ): Promise<void> {
+  static async deleteCollection(collectionId: string): Promise<void> {
     await apiClient.delete(`/collections/${collectionId}`);
   }
 
@@ -102,20 +103,14 @@ export class FavoritesClient {
     collectionId: string,
     placeId: string
   ): Promise<void> {
-    await apiClient.delete(
-      `/collections/${collectionId}/places/${placeId}`
-    );
+    await apiClient.delete(`/collections/${collectionId}/places/${placeId}`);
   }
 
   /**
    * Clear all favorite places from a collection.
    */
-  static async clearCollection(
-    collectionId: string
-  ): Promise<void> {
-    await apiClient.delete(
-      `/collections/${collectionId}/places`
-    );
+  static async clearCollection(collectionId: string): Promise<void> {
+    await apiClient.delete(`/collections/${collectionId}/places`);
   }
 
   /**

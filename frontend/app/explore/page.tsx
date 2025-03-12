@@ -24,12 +24,12 @@ export default async function ForYouPage({ searchParams }: ForYouProps) {
       places = await PlaceClient.getRandomPlaces(15);
       break;
     case 'saved':
-      const { payload: collections }
-        = await FavoritesClient.getAllCurrentUserCollections();
+      const { payload: collections } =
+        await FavoritesClient.getAllCurrentUserCollections();
       const placesIds = collections.reduce(
         (acc, collection) => acc.concat(collection.placesIds),
-        [] as string[],
-      )
+        [] as string[]
+      );
 
       places = await PlaceClient.getPlacesByIdArray(placesIds);
       break;

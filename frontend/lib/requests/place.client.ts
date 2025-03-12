@@ -30,7 +30,7 @@ export class PlaceClient {
 
   static async getPlacesByIdArray(ids: string[]): Promise<Place[]> {
     const response = await apiClient.get<Place[]>(`/places/batch`, {
-      params: { ids: ids.join(',') }
+      params: { ids: ids.join(',') },
     });
     return response.data;
   }
