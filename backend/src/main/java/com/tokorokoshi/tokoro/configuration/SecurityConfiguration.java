@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -156,7 +157,12 @@ public class SecurityConfiguration {
                                     .anyRequest()
                                     .denyAll()
                     )
-                    .csrf(AbstractHttpConfigurer::disable);
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .sessionManagement(
+                            configurer -> configurer.sessionCreationPolicy(
+                                    SessionCreationPolicy.STATELESS
+                            )
+                    );
         }
         return http.build();
     }
