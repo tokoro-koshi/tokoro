@@ -23,6 +23,10 @@
   }
 
   & .text {
-    @apply px-4 py-2 text-left;
+    @apply px-4 py-2 text-left relative;
+  }
+
+  & .saveButton {
+    @apply absolute right-2 top-0;
   }
 }
