@@ -36,6 +36,7 @@ export function Comments({
   const commentListRef = useRef<HTMLDivElement>(null)
 
   const { user, isLoading } = useUser();
+  console.log(user);
   
   // Handle submitting a new comment
   const handleSubmitCreate = async () => {

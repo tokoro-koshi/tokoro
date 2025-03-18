@@ -5,6 +5,7 @@ import styles from './place-card.module.css';
 import routes from '@/lib/constants/routes';
 import Link from 'next/link';
 import Rating from '@/components/cards/items/rating/rating';
+import SaveButton from '@/components/cards/items/save/save';
 
 interface PlaceCardProps {
   place: Place;
@@ -31,6 +32,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
           </div>
           <div className={styles.text}>
             <h3 className={styles.name}>{place.name}</h3>
+            <SaveButton className={styles.saveButton} placeId={""} variant={"dark"} />
             <p className={styles.category}>
               {place.categoryId.replace(/_+/, ' ')}
             </p>
