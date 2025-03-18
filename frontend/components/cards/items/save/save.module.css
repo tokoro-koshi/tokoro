@@ -1,0 +1,23 @@
+﻿.button {
+    @apply absolute z-30 opacity-90 hover:opacity-100 hover:scale-110 transition;
+}
+
+.buttonDark {
+    @apply h-8 w-8 text-foreground;
+}
+
+.buttonLight {
+    @apply h-10 w-10 text-background hover:text-background;
+}
+
+.fillLight {
+    @apply fill-background;
+}
+
+.fillLight {
+    @apply fill-background;
+}
+
+.icon {
+    @apply !h-full !w-full;
+}
