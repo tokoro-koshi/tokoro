@@ -11,10 +11,6 @@
     @apply hidden items-center justify-center gap-12 md:flex;
   }
 
-  & .navLink {
-    @apply font-medium text-popover-foreground transition-colors hover:text-primary hover:underline;
-  }
-
   & .authButtons {
     @apply flex items-center justify-end gap-4;
   }
