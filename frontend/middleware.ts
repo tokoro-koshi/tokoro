@@ -4,11 +4,11 @@ import { getSession } from '@auth0/nextjs-auth0/edge';
 import routes from '@/lib/constants/routes';
 
 /*
-  * This middleware is used to protect routes that require authentication.
+ * This middleware is used to protect routes that require authentication.
  */
 export const config = {
-  matcher: ['/(admin|settings|explore|prompt)/:path*']
-}
+  matcher: ['/(admin|settings|explore|prompt)/:path*'],
+};
 
 export async function middleware(request: NextRequest) {
   try {

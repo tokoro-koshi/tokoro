@@ -11,29 +11,34 @@ export async function POST(request: NextRequest) {
   const page = Number(params.get('page') ?? '0'),
     size = Number(params.get('size') ?? '20');
 
-  const { payload: collections } = await FavoritesClient.getAllCurrentUserCollections(page, size);
-  
+  const { payload: collections } =
+    await FavoritesClient.getAllCurrentUserCollections(page, size);
+
   const { placeId } = await request.json();
-  
-  const defaultCollection = collections.filter(collection => collection.name === defaultCollectionName)[0];
+
+  const defaultCollection = collections.find(
+    (collection) => collection.name === defaultCollectionName
+  );
 
   if (!defaultCollection) {
     const placesIds = [placeId];
     await FavoritesClient.saveCollection({
       name: defaultCollectionName,
-      placesIds: placesIds
+      placesIds: placesIds,
     });
     return;
   }
 
-  if (defaultCollection.placesIds && defaultCollection.placesIds.includes(placeId)) {
+  if (
+    defaultCollection.placesIds &&
+    defaultCollection.placesIds.includes(placeId)
+  ) {
     await FavoritesClient.removeFavoritePlace(defaultCollection.id, placeId);
-  }
-  else {
+  } else {
     await FavoritesClient.addFavoritePlace(defaultCollection.id, placeId);
   }
-  
+
   await UserClient.getAuthenticatedUser();
-  
+
   return new NextResponse(null, { status: 204 });
 }

@@ -1,6 +1,12 @@
 ﻿import React from 'react';
 import styles from '@/components/cards/place-carousel/place-carousel.module.css';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import PlaceCard from '@/components/cards/place-card/place-card';
 import { Place } from '@/lib/types/place';
 import { cn } from '@/lib/utils';
@@ -10,7 +16,10 @@ interface PlaceCarouselProps {
   className?: string;
 }
 
-export default function PlaceCarousel({ places, className }: PlaceCarouselProps) {
+export default function PlaceCarousel({
+  places,
+  className,
+}: PlaceCarouselProps) {
   return (
     <Carousel
       autoplay
@@ -34,4 +43,4 @@ export default function PlaceCarousel({ places, className }: PlaceCarouselProps)
       <CarouselNext className={styles.nextButton} />
     </Carousel>
   );
-};
+}

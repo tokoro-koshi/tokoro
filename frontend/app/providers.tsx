@@ -10,7 +10,7 @@ export const useCustomUser = () => {
   const { user, error, isLoading } = useUser();
   const customUser = user as unknown as User;
 
-  return { user:customUser, error, isLoading };
+  return { user: customUser, error, isLoading };
 };
 
 function UserStoreHandler({ children }: { children: ReactNode }) {

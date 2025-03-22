@@ -1,5 +1,5 @@
-﻿import apiClient from "@/lib/helpers/apiClient";
-import { PlaceReview } from "@/lib/types/place-review";
+﻿import apiClient from '@/lib/helpers/apiClient';
+import { PlaceReview } from '@/lib/types/place-review';
 import { UserClient } from '@/lib/requests/user.client';
 import { Pagination } from '@/lib/types/pagination';
 
@@ -9,7 +9,10 @@ export class PlaceReviewClient {
     return response.data;
   }
 
-  static async updatePlaceReview(id: string, review: PlaceReview): Promise<PlaceReview> {
+  static async updatePlaceReview(
+    id: string,
+    review: PlaceReview
+  ): Promise<PlaceReview> {
     const response = await apiClient.put<PlaceReview>(`/reviews/${id}`, review);
     return response.data;
   }
@@ -19,24 +22,30 @@ export class PlaceReviewClient {
   }
 
   static async getAllPlaceReviews(): Promise<PlaceReview[]> {
-    const response = await apiClient.get<{payload:PlaceReview[]}>("/reviews");
+    const response = await apiClient.get<{ payload: PlaceReview[] }>(
+      '/reviews'
+    );
     return response.data.payload;
   }
 
   static async savePlaceReview(review: PlaceReview): Promise<PlaceReview> {
-    const response = await apiClient.post<PlaceReview>("/reviews", review);
+    const response = await apiClient.post<PlaceReview>('/reviews', review);
     return response.data;
   }
 
   static async getUserPlaceReviews(userId: string): Promise<PlaceReview[]> {
-    const response = await apiClient.get<Pagination<PlaceReview>>(`/reviews/user/${userId}`);
+    const response = await apiClient.get<Pagination<PlaceReview>>(
+      `/reviews/user/${userId}`
+    );
     return response.data.payload;
   }
 
   static async getPlaceReviews(placeId: string): Promise<PlaceReview[]> {
-    const response = await apiClient.get<Pagination<PlaceReview>>(`/reviews/place/${placeId}`);
+    const response = await apiClient.get<Pagination<PlaceReview>>(
+      `/reviews/place/${placeId}`
+    );
     const reviews = response.data.payload;
-    
+
     for (const review of reviews) {
       const user = await UserClient.getUserDetails(review.userId);
       if (!user) continue;

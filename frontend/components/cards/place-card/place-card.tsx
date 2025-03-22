@@ -19,20 +19,26 @@ export default function PlaceCard({ place }: PlaceCardProps) {
     <Link href={routes.place + '/' + place.id} target={'_blank'}>
       <Card>
         <CardContent className={styles.cardContent}>
-          <div className="relative">
-            {place.rating !== 0 && <Rating rating={place.rating} className="bottom-2" />}
-          <Image
-            src={pictures[0]}
-            alt={place.name}
-            width={350}
-            height={192}
-            className={styles.image}
-            quality={50}
-          />
+          <div className='relative'>
+            {place.rating !== 0 && (
+              <Rating rating={place.rating} className='bottom-2' />
+            )}
+            <Image
+              src={pictures[0]}
+              alt={place.name}
+              width={350}
+              height={192}
+              className={styles.image}
+              quality={50}
+            />
           </div>
           <div className={styles.text}>
             <h3 className={styles.name}>{place.name}</h3>
-            <SaveButton className={styles.saveButton} placeId={place.id} variant={"dark"} />
+            <SaveButton
+              className={styles.saveButton}
+              placeId={place.id}
+              variant={'dark'}
+            />
             <p className={styles.category}>
               {place.categoryId.replace(/_+/, ' ')}
             </p>
