@@ -1,63 +1,63 @@
 ﻿.container {
-    @apply w-full max-w-3xl mx-auto;
+  @apply mx-auto w-full max-w-3xl;
 }
 
 .commentInputSection {
-    @apply flex items-start px-2 gap-2 mb-4 md:p-0 md:gap-4 md:mb-8;
+  @apply mb-4 flex items-start gap-2 px-2 md:mb-8 md:gap-4 md:p-0;
 }
 
 .avatar {
-    @apply w-10 h-10 text-background;
+  @apply h-10 w-10 text-background;
 }
 
 .textarea {
-    @apply flex-1 min-h-[40px] resize-none pr-12 border-white;
+  @apply min-h-[40px] flex-1 resize-none border-white pr-12;
 }
 
 .button {
-    @apply rounded-md bg-foreground text-background p-2;
+  @apply rounded-md bg-foreground p-2 text-background;
 }
 
 .commentsList {
-    @apply px-2 md:px-0 pb-8 space-y-2 md:space-y-6;
+  @apply space-y-2 px-2 pb-8 md:space-y-6 md:px-0;
 }
 
 .loadingIndicator {
-    @apply py-4 text-center text-sm text-muted-foreground;
+  @apply py-4 text-center text-sm text-muted-foreground;
 }
 
 .commentItem {
-    @apply flex gap-4 rounded-xl bg-background p-4 relative;
+  @apply relative flex gap-4 rounded-xl bg-background p-4;
 }
 
 .commentItemAvatar {
-    @apply w-10 h-10 text-background;
+  @apply h-10 w-10 text-background;
 }
 
 .commentItemContent {
-    @apply flex-1;
+  @apply flex-1;
 }
 
 .commentItemHeader {
-    @apply flex items-center gap-2 mb-1 font-medium;
+  @apply mb-1 flex items-center gap-2 font-medium;
 }
 
 .commentItemText {
-    @apply text-sm mb-2 whitespace-pre-wrap;
+  @apply mb-2 whitespace-pre-wrap text-sm;
 }
 
 .commentItemFooter {
-    @apply flex items-center text-xs text-muted-foreground;
+  @apply flex items-center text-xs text-muted-foreground;
 }
 
 .icon {
-    @apply h-4 w-4 mr-1;
+  @apply mr-1 h-4 w-4;
 }
 
-.editButton{
-    @apply bg-foreground text-background p-2 rounded-md hover:opacity-90 hover:text-background;
+.editButton {
+  @apply rounded-md bg-foreground p-2 text-background hover:text-background hover:opacity-90;
 }
 
-.deleteButton{
-    @apply bg-red-700 text-background p-2 rounded-md hover:opacity-90 hover:text-background;
+.deleteButton {
+  @apply rounded-md bg-red-700 p-2 text-background hover:text-background hover:opacity-90;
 }

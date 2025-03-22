@@ -1,4 +1,9 @@
-﻿import { handleAuth, handleCallback, handleLogin, Session } from '@auth0/nextjs-auth0';
+﻿import {
+  handleAuth,
+  handleCallback,
+  handleLogin,
+  Session,
+} from '@auth0/nextjs-auth0';
 import { NextRequest } from 'next/server';
 import { UserClient } from '@/lib/requests/user.client';
 
@@ -24,7 +29,9 @@ export const GET = handleAuth({
       try {
         if (!session.accessToken) return;
 
-        const userData = await UserClient.getAuthenticatedUserByToken(session.accessToken);
+        const userData = await UserClient.getAuthenticatedUserByToken(
+          session.accessToken
+        );
 
         if (!userData) return;
 
@@ -36,6 +43,6 @@ export const GET = handleAuth({
         console.error('Error fetching user data:', error);
       }
       return session;
-    }
+    },
   }),
 });

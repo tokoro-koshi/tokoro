@@ -4,7 +4,6 @@ import { getSession } from '@auth0/nextjs-auth0/edge';
 import { updateSession } from '@auth0/nextjs-auth0';
 import { snakeToCamel } from '@/lib/helpers/snakeToCamel';
 
-
 export class UserClient {
   static async unblockUser(id: string): Promise<void> {
     await apiClient.post(`/users/${id}/unblock`);
@@ -39,17 +38,19 @@ export class UserClient {
     await apiClient.patch(`/users/${id}/name`, { name });
   }
 
-  static async updateUserMetadata(id: string, metadata: Record<string, object>): Promise<void> {
+  static async updateUserMetadata(
+    id: string,
+    metadata: Record<string, object>
+  ): Promise<void> {
     await apiClient.patch(`/users/${id}/metadata`, metadata);
   }
 
-  static async getUserDetails(id: string): Promise<User|null> {
+  static async getUserDetails(id: string): Promise<User | null> {
     try {
       const encodedId = encodeURIComponent(id);
       const response = await apiClient.get<User>(`/users/${encodedId}`);
       return response.data;
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
       return null;
     }
@@ -65,11 +66,13 @@ export class UserClient {
   }
 
   static async isUserBlocked(id: string): Promise<boolean> {
-    const response = await apiClient.get<{ blocked: boolean }>(`/users/${id}/is-blocked`);
+    const response = await apiClient.get<{ blocked: boolean }>(
+      `/users/${id}/is-blocked`
+    );
     return response.data.blocked;
   }
 
-  static async getAuthenticatedUser(): Promise<User|null> {
+  static async getAuthenticatedUser(): Promise<User | null> {
     try {
       const session = await getSession();
 
@@ -84,14 +87,20 @@ export class UserClient {
     } catch (error) {
       console.error(error);
       return null;
-    } 
+    }
   }
 
-  static async getAuthenticatedUserByToken(accessToken: string): Promise<User | null> {
+  static async getAuthenticatedUserByToken(
+    accessToken: string
+  ): Promise<User | null> {
     try {
-      return snakeToCamel((await apiClient.get<User>('/users/me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })).data);
+      return snakeToCamel(
+        (
+          await apiClient.get<User>('/users/me', {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          })
+        ).data
+      );
     } catch (error) {
       console.error('Failed to fetch user data:', error);
       return null;

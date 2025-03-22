@@ -23,4 +23,4 @@ export default function Rating({ rating, className }: RatingProps) {
       <p className={styles.value}>{rating}</p>
     </div>
   );
-};
+}
