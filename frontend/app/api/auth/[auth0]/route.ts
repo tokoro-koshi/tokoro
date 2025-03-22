@@ -22,16 +22,16 @@ export const GET = handleAuth({
   callback: handleCallback({
     async afterCallback(_req: NextRequest, session: Session) {
       try {
-        if (session.accessToken) {
-          const userData = await UserClient.getAuthenticatedUserByToken(session.accessToken);
+        if (!session.accessToken) return;
 
-          if (userData) {
-            session.user = {
-              ...session.user,
-              ...userData,
-            };
-          }
-        }
+        const userData = await UserClient.getAuthenticatedUserByToken(session.accessToken);
+
+        if (!userData) return;
+
+        session.user = {
+          ...session.user,
+          ...userData,
+        };
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -39,22 +39,3 @@ export const GET = handleAuth({
     }
   }),
 });
-
-// export const me = async () => {
-//   const session = await getSession();
-//
-//   const userData = await UserClient.getAuthenticatedUser();
-//
-//   if (!session) {
-//     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
-//   }
-//
-//   if (userData) {
-//     session.user = {
-//       ...session.user,
-//       ...userData,
-//     };
-//   }
-//
-//   return NextResponse.json({ user: session.user as User });
-// };

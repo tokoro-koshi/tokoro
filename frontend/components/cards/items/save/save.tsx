@@ -19,27 +19,7 @@ export default function SaveButton({ placeId, className, variant }: SaveButtonPr
   const {user} = useUser();
   const [isChecked, setIsChecked] = useState<boolean|null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  // const { mutate } = useMutation({
-  //   mutationFn: async () => {
-  //     if (!user || isChecked !== null) return;
-  //     const { data } = await axios.post<Record<"isFavorite",boolean>>('/api/places/is-favorite', {placeId})
-  //     return data;
-  //   },
-  //   onSuccess: (res) => {
-  //     setIsChecked(res?.isFavorite ?? false);
-  //     setIsLoading(false);
-  //   },
-  //   mutationKey: ['isFavorite', placeId, user?.userId, isChecked],
-  // });
-
-
-  // useEffect(() => {
-  //   if (!isUserLoading && user) {
-  //     mutate();
-  //   }
-  // }, [isUserLoading, user, isChecked, mutate]);
-
+  
   useEffect(() => {
     if(user && isChecked === null) {
       const isFavorite = user.userMetadata?.collections.some((collection) => collection.placesIds.includes(placeId)) ?? false;
@@ -47,30 +27,32 @@ export default function SaveButton({ placeId, className, variant }: SaveButtonPr
     }
   }, [placeId, user, isChecked]);
 
-  if (isChecked === null) {
-    return null;
-  }
-
   const handleSave = async () => {
     if (isLoading) return;
     setIsLoading(true);
     setIsChecked(!isChecked);
     await axios.post('/api/places/toggle-favorite', {placeId});
-    // await axios.post('/api/auth/me', {placeId});
     setIsLoading(false);
   }
 
+  if (isChecked === null) {
+    return null;
+  }
+  
+  if (isLoading) {
+    return <div className={cn(styles.button, className, variant === 'dark' ? styles.buttonDark : styles.buttonLight)}>
+      <ClipLoader color={variant === 'dark' ? 'var(--foreground)' : 'var(--background)'}
+                  className={cn(styles.icon, isChecked && (variant === 'dark' ? styles.fillDark : styles.fillLight))} />
+    </div>;
+  }
+
   return (
-    !isLoading ?
-      <Button
-        disabled={isLoading}
-        className={cn(styles.button, className, variant === 'dark' ? styles.buttonDark : styles.buttonLight)}
-        onClick={handleSave}
-      >
-        <Bookmark className={cn(styles.icon, isChecked && (variant === 'dark' ? styles.fillDark : styles.fillLight))} />
-      </Button>:
-      <div className={cn(styles.button, className, variant === 'dark' ? styles.buttonDark : styles.buttonLight)}>
-        <ClipLoader color={variant === 'dark' ? 'var(--foreground)' : 'var(--background)'} className={cn(styles.icon, isChecked && (variant === 'dark' ? styles.fillDark : styles.fillLight))}/>
-      </div>
+    <Button
+      disabled={isLoading}
+      className={cn(styles.button, className, variant === 'dark' ? styles.buttonDark : styles.buttonLight)}
+      onClick={handleSave}
+    >
+      <Bookmark className={cn(styles.icon, isChecked && (variant === 'dark' ? styles.fillDark : styles.fillLight))} />
+      </Button>
   );
 }
