@@ -2,6 +2,7 @@ package com.tokorokoshi.tokoro.modules.favorites;
 
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
+import com.tokorokoshi.tokoro.modules.favorites.dto.AddFavoriteDto;
 import com.tokorokoshi.tokoro.modules.favorites.dto.CollectionDto;
 import com.tokorokoshi.tokoro.modules.favorites.dto.CreateUpdateCollectionDto;
 import com.tokorokoshi.tokoro.security.SecurityUtils;
@@ -214,11 +215,11 @@ public class CollectionsController {
             UUID collectionId,
 
             @Parameter(description = "The place ID to add", required = true)
-            @RequestBody
-            String placeId
+            @RequestBody()
+            AddFavoriteDto addFavoriteDto
     ) {
         String userId = SecurityUtils.getAuthenticatedUserId();
-        return ResponseEntity.ok(this.collectionService.addFavoritePlace(userId, collectionId, placeId));
+        return ResponseEntity.ok(this.collectionService.addFavoritePlace(userId, collectionId, addFavoriteDto.placeId()));
     }
 
     @Operation(
