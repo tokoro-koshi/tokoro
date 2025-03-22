@@ -15,17 +15,17 @@ export async function POST(request: NextRequest) {
   
   const { placeId } = await request.json();
   
-  if (collections.filter(collection => collection.name === defaultCollectionName).length === 0) {
+  const defaultCollection = collections.filter(collection => collection.name === defaultCollectionName)[0];
+
+  if (!defaultCollection) {
     const placesIds = [placeId];
     await FavoritesClient.saveCollection({
       name: defaultCollectionName,
       placesIds: placesIds
     });
     return;
-  } 
-  
-  const defaultCollection = collections.filter(collection => collection.name === defaultCollectionName)[0];
-  
+  }
+
   if (defaultCollection.placesIds && defaultCollection.placesIds.includes(placeId)) {
     await FavoritesClient.removeFavoritePlace(defaultCollection.id, placeId);
   }
