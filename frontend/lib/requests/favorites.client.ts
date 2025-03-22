@@ -91,7 +91,7 @@ export class FavoritesClient {
   ): Promise<FavoritesCollection> {
     const response = await apiClient.post<FavoritesCollection>(
       `/collections/${collectionId}/places`,
-      placeId,
+      { placeId },
     );
     return response.data;
   }

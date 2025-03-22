@@ -5,7 +5,8 @@ import { Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import styles from './save.module.css';
 import axios from 'axios';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { useUser } from '@/lib/stores/user';
+import { ClipLoader } from 'react-spinners';
 
 interface SaveButtonProps {
   placeId: string;
@@ -15,38 +16,61 @@ interface SaveButtonProps {
 }
 
 export default function SaveButton({ placeId, className, variant }: SaveButtonProps) {
-  const {user, isLoading:isUserLoading} = useUser();
+  const {user} = useUser();
   const [isChecked, setIsChecked] = useState<boolean|null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (!user || isChecked !== null) return;
-    axios.post('/api/places/is-favorite', {placeId}).then((res) => {
-      console.log("Is saved",res.data);
-      setIsChecked(res.data.isFavorite);
-    });
-    return;
-  }, [user]);
+  // const { mutate } = useMutation({
+  //   mutationFn: async () => {
+  //     if (!user || isChecked !== null) return;
+  //     const { data } = await axios.post<Record<"isFavorite",boolean>>('/api/places/is-favorite', {placeId})
+  //     return data;
+  //   },
+  //   onSuccess: (res) => {
+  //     setIsChecked(res?.isFavorite ?? false);
+  //     setIsLoading(false);
+  //   },
+  //   mutationKey: ['isFavorite', placeId, user?.userId, isChecked],
+  // });
 
-  if (!isUserLoading && !user) {
+
+  // useEffect(() => {
+  //   if (!isUserLoading && user) {
+  //     mutate();
+  //   }
+  // }, [isUserLoading, user, isChecked, mutate]);
+
+  useEffect(() => {
+    if(user && isChecked === null) {
+      const isFavorite = user.userMetadata?.collections.some((collection) => collection.placesIds.includes(placeId)) ?? false;
+      setIsChecked(isFavorite);
+    }
+  }, [placeId, user, isChecked]);
+
+  if (isChecked === null) {
     return null;
   }
-  
+
   const handleSave = async () => {
     if (isLoading) return;
     setIsLoading(true);
     setIsChecked(!isChecked);
-    await axios.post('/api/places/add-favorite', {placeId});
+    await axios.post('/api/places/toggle-favorite', {placeId});
+    // await axios.post('/api/auth/me', {placeId});
     setIsLoading(false);
   }
 
   return (
-    <Button
-      disabled={isLoading}
-      className={cn(styles.button, className, isLoading && "opacity-30", variant === "dark" ? styles.buttonDark : styles.buttonLight)}
-      onClick={handleSave}
-    >
-      <Bookmark className={cn(styles.icon, isChecked && (variant === "dark" ? styles.fillDark : styles.fillLight))} />
-    </Button>
+    !isLoading ?
+      <Button
+        disabled={isLoading}
+        className={cn(styles.button, className, variant === 'dark' ? styles.buttonDark : styles.buttonLight)}
+        onClick={handleSave}
+      >
+        <Bookmark className={cn(styles.icon, isChecked && (variant === 'dark' ? styles.fillDark : styles.fillLight))} />
+      </Button>:
+      <div className={cn(styles.button, className, variant === 'dark' ? styles.buttonDark : styles.buttonLight)}>
+        <ClipLoader color={variant === 'dark' ? 'var(--foreground)' : 'var(--background)'} className={cn(styles.icon, isChecked && (variant === 'dark' ? styles.fillDark : styles.fillLight))}/>
+      </div>
   );
 }

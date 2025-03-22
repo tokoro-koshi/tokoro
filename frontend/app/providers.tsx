@@ -4,14 +4,22 @@ import { ReactNode, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserProvider, useUser } from '@auth0/nextjs-auth0/client';
 import { useUser as useUserStore } from '@/lib/stores/user';
+import { User } from '@/lib/types/user';
+
+export const useCustomUser = () => {
+  const { user, error, isLoading } = useUser();
+  const customUser = user as unknown as User;
+
+  return { user:customUser, error, isLoading };
+};
 
 function UserStoreHandler({ children }: { children: ReactNode }) {
-  const { user, isLoading } = useUser();
+  const { user, isLoading } = useCustomUser();
   const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
     if (!isLoading) {
-      setUser(user ?? null);
+      setUser(user ? (user as User) : null);
     }
   }, [isLoading, user, setUser]);
 
