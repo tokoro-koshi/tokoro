@@ -2,7 +2,7 @@
   @apply relative flex flex-col gap-1.5 px-0 text-muted-foreground;
 
   & .name {
-    @apply text-2xl font-semibold capitalize;
+    @apply text-2xl font-semibold capitalize pr-4;
   }
 
   & .category,
@@ -27,6 +27,6 @@
   }
 
   & .saveButton {
-    @apply absolute right-2 top-0;
+    @apply absolute right-1 top-0;
   }
 }

@@ -28,13 +28,12 @@ export interface Tag {
 
 export interface MutateFavoritesCollection {
   name: string;
-  placeIds?: string[]; // Typo in the API?
+  placesIds: string[];
 }
 
 export interface FavoritesCollection extends MutateFavoritesCollection {
   id: string;
-  placesIds: string[];
-  createdAt: string; // ISO string
+  createdAt: string;
 }
 
 export const defaultCollectionName = "Saved";

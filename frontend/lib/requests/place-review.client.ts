@@ -1,6 +1,7 @@
 ﻿import apiClient from "@/lib/helpers/apiClient";
 import { PlaceReview } from "@/lib/types/place-review";
 import { UserClient } from '@/lib/requests/user.client';
+import { Pagination } from '@/lib/types/pagination';
 
 export class PlaceReviewClient {
   static async getPlaceReviewById(id: string): Promise<PlaceReview> {
@@ -28,14 +29,14 @@ export class PlaceReviewClient {
   }
 
   static async getUserPlaceReviews(userId: string): Promise<PlaceReview[]> {
-    const response = await apiClient.get<{payload:PlaceReview[]}>(`/reviews/user/${userId}`);
+    const response = await apiClient.get<Pagination<PlaceReview>>(`/reviews/user/${userId}`);
     return response.data.payload;
   }
 
-  static async getPlacePlaceReviews(placeId: string): Promise<PlaceReview[]> {
-    const response = await apiClient.get<{ payload: PlaceReview[] }>(`/reviews/place/${placeId}`);
+  static async getPlaceReviews(placeId: string): Promise<PlaceReview[]> {
+    const response = await apiClient.get<Pagination<PlaceReview>>(`/reviews/place/${placeId}`);
     const reviews = response.data.payload;
-
+    
     for (const review of reviews) {
       const user = await UserClient.getUserDetails(review.userId);
       if (!user) continue;

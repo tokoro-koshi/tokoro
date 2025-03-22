@@ -32,7 +32,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
           </div>
           <div className={styles.text}>
             <h3 className={styles.name}>{place.name}</h3>
-            <SaveButton className={styles.saveButton} placeId={""} variant={"dark"} />
+            <SaveButton className={styles.saveButton} placeId={place.id} variant={"dark"} />
             <p className={styles.category}>
               {place.categoryId.replace(/_+/, ' ')}
             </p>

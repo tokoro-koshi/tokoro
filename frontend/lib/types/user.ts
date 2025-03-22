@@ -1,4 +1,6 @@
-﻿export interface User {
+﻿import { FavoritesCollection } from '@/lib/types/place';
+
+export interface User {
   email: string;
   emailVerified: boolean;
   userId: string;
@@ -31,7 +33,9 @@
   phoneVerified?: boolean;
   verifyPhoneNumber?: boolean;
   appMetadata?: Record<string, object>;
-  userMetadata?: Record<string, object>;
+  userMetadata?: {
+    collections: FavoritesCollection[];
+  } & Record<string, object>;
   multifactor?: string[];
   lastPasswordReset?: string; // ISO date-time string
   blocked?: boolean;
