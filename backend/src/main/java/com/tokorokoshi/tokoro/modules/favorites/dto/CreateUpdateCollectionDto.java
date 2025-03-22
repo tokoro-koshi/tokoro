@@ -19,9 +19,9 @@ public record CreateUpdateCollectionDto(
         String name,
 
         @Schema(
-                name = "placeIds",
+                name = "placesIds",
                 description = "The list of place IDs in the collection"
         )
-        List<String> placeIds
+        List<String> placesIds
 ) {
 }

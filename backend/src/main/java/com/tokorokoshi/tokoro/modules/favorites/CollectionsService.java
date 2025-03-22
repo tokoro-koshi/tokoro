@@ -40,7 +40,7 @@ public class CollectionsService {
         CollectionDto newCollection = new CollectionDto(
                 collectionId,
                 createUpdateCollectionDto.name(),
-                createUpdateCollectionDto.placeIds(),
+                createUpdateCollectionDto.placesIds(),
                 LocalDateTime.now()
         );
         collections.add(newCollection);
@@ -91,7 +91,7 @@ public class CollectionsService {
             CollectionDto existingCollection = optionalCollection.get();
             CollectionDto updatedCollection = existingCollection
                     .withName(createUpdateCollectionDto.name())
-                    .withPlacesIds(createUpdateCollectionDto.placeIds())
+                    .withPlacesIds(createUpdateCollectionDto.placesIds())
                     .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
@@ -148,10 +148,10 @@ public class CollectionsService {
 
         if (optionalCollection.isPresent()) {
             CollectionDto existingCollection = optionalCollection.get();
-            List<String> placeIds = new ArrayList<>(existingCollection.placesIds());
-            placeIds.add(placeId);
+            List<String> placesIds = new ArrayList<>(existingCollection.placesIds());
+            placesIds.add(placeId);
             CollectionDto updatedCollection = existingCollection
-                    .withPlacesIds(placeIds)
+                    .withPlacesIds(placesIds)
                     .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
@@ -176,10 +176,10 @@ public class CollectionsService {
 
         if (optionalCollection.isPresent()) {
             CollectionDto existingCollection = optionalCollection.get();
-            List<String> placeIds = new ArrayList<>(existingCollection.placesIds());
-            placeIds.remove(placeId);
+            List<String> placesIds = new ArrayList<>(existingCollection.placesIds());
+            placesIds.remove(placeId);
             CollectionDto updatedCollection = existingCollection
-                    .withPlacesIds(placeIds)
+                    .withPlacesIds(placesIds)
                     .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
