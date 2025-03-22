@@ -1,5 +1,5 @@
 ﻿.button {
-    @apply absolute z-30 opacity-90 hover:opacity-100 hover:scale-110 transition;
+    @apply absolute z-30 opacity-90 hover:opacity-100 hover:scale-110 transition cursor-pointer;
 }
 
 .buttonDark {
@@ -14,8 +14,8 @@
     @apply fill-background;
 }
 
-.fillLight {
-    @apply fill-background;
+.fillDark {
+    @apply fill-foreground;
 }
 
 .icon {

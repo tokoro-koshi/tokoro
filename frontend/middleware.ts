@@ -26,7 +26,6 @@ export async function middleware(request: NextRequest) {
 
     // Check roles
     if (pathname.startsWith('/admin') && !roles.includes('ADMIN')) {
-      console.log('admin');
       return NextResponse.redirect(new URL('/404', request.url));
     }
 

@@ -1,5 +1,8 @@
 ﻿import apiClient from '@/lib/helpers/apiClient';
 import { User } from '@/lib/types/user';
+import { getSession } from '@auth0/nextjs-auth0/edge';
+import { updateSession } from '@auth0/nextjs-auth0';
+import { snakeToCamel } from '@/lib/helpers/snakeToCamel';
 
 
 export class UserClient {
@@ -40,17 +43,15 @@ export class UserClient {
     await apiClient.patch(`/users/${id}/metadata`, metadata);
   }
 
-  static async getUserDetails(id: string): Promise<User|undefined> {
+  static async getUserDetails(id: string): Promise<User|null> {
     try {
-      console.log('id', id);
       const encodedId = encodeURIComponent(id);
       const response = await apiClient.get<User>(`/users/${encodedId}`);
-      console.log('response', response.data);
       return response.data;
     }
-    catch {
-      // console.error(error);
-      return undefined;
+    catch (error) {
+      console.error(error);
+      return null;
     }
   }
 
@@ -68,8 +69,32 @@ export class UserClient {
     return response.data.blocked;
   }
 
-  static async getAuthenticatedUser(): Promise<User> {
-    const response = await apiClient.get<User>('/users/me');
-    return response.data;
+  static async getAuthenticatedUser(): Promise<User|null> {
+    try {
+      const session = await getSession();
+
+      const data = snakeToCamel((await apiClient.get<User>('/users/me')).data);
+
+      if (session) {
+        session.user = data;
+        await updateSession(session);
+      }
+
+      return data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    } 
+  }
+
+  static async getAuthenticatedUserByToken(accessToken: string): Promise<User | null> {
+    try {
+      return snakeToCamel((await apiClient.get<User>('/users/me', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })).data);
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      return null;
+    }
   }
 }

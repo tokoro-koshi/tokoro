@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 import { Comments } from '@/components/place/comments/comments';
 import { PlaceReviewClient } from '@/lib/requests/place-review.client';
 import SaveButton from '@/components/cards/items/save/save';
-import { getBearerToken } from '@/lib/helpers/auth0';
 
 type PlacePageProps = {
   params: {
@@ -21,12 +20,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
   const googleMapsLink = `https://maps.google.com/maps?q=${place.name}&ll=${place.location.coordinate.latitude},${place.location.coordinate.longitude}`;
   const googleMapsIframe = `https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${place.name}&center=${place.location.coordinate.latitude},${place.location.coordinate.longitude}`;
   
-  const placeReviews = await PlaceReviewClient.getPlacePlaceReviews(params.id);
-  
-  console.log(await getBearerToken());
-
-  //TODO: User Avatar display on comments section
-  //TODO: Save Button Component
+  const placeReviews = await PlaceReviewClient.getPlaceReviews(params.id);
   
   return (
     <div className={cn("container", styles.container)}>

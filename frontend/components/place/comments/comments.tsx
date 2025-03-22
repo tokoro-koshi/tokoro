@@ -36,17 +36,16 @@ export function Comments({
   const commentListRef = useRef<HTMLDivElement>(null)
 
   const { user, isLoading } = useUser();
-  console.log(user);
   
   // Handle submitting a new comment
   const handleSubmitCreate = async () => {
     if (!newComment.trim()) return
 
     try {
-      if (!user?.sub) return;
+      if (!user?.userId) return;
       
       const newCommentData:PlaceReview = {
-        userId: user?.sub,
+        userId: user?.userId,
         placeId,
         comment: newComment,
         isRecommended: false,
@@ -104,7 +103,7 @@ export function Comments({
 
       <div className={styles.commentsList} ref={commentListRef}>
         {!isLoading && comments.length>0 ? comments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} userId={user?.sub||""} />
+          <CommentItem key={comment.id} comment={comment} userId={user?.userId||""} />
         )): <div className="text-3xl font-bold text-center text-background text-muted-foreground py-14">No comments yet, be the first one to post</div>}
       </div>
     </div>
