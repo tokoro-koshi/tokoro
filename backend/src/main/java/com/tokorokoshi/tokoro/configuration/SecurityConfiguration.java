@@ -110,7 +110,8 @@ public class SecurityConfiguration {
                                             "/swagger-ui/**",
                                             "/swagger-ui.html",
                                             "/v3/api-docs/**",
-                                            "/swagger-resources/**"
+                                            "/swagger-resources/**",
+                                            "/users/**"
                                     )
                                     .permitAll()
                                     .requestMatchers(HttpMethod.POST, "/places/search")
