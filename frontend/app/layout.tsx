@@ -4,8 +4,9 @@ import { cn } from '@/lib/utils';
 import { AllFontsVariables } from '@/fonts';
 import Provider from '@/app/providers';
 import Footer from '@/components/layout/footer/footer';
-import '@/styles/globals.css';
 import Header from '@/components/layout/header/header';
+import { Toaster } from 'react-hot-toast';
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'Tokoro',
@@ -30,6 +31,7 @@ export default async function RootLayout({
           </main>
           <Footer />
         </Provider>
+        <Toaster position='top-right' />
       </body>
     </html>
   );
