@@ -1,5 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { UserProfile } from '@auth0/nextjs-auth0/client';
+import { User } from '@/lib/types/user';
 import { ChevronRight, CreditCard, LogOut, Settings } from 'lucide-react';
 import routes from '@/lib/constants/routes';
 import {
@@ -11,22 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserAvatar from '@/components/user/avatar';
 
-export default function UserButton({ user }: { user: UserProfile }) {
+export default function UserButton({ user }: { user: User | UserProfile }) {
   const router = useRouter();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Avatar>
-          <AvatarImage src={user.picture ?? ''} />
-          <AvatarFallback className={'text-white'}>
-            {user.name
-              ?.split(' ')
-              .map((x) => x.charAt(0))
-              .join('')}
-          </AvatarFallback>
-        </Avatar>
+      <DropdownMenuTrigger>
+        <UserAvatar user={user} />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className='mr-2.5 w-56'>
