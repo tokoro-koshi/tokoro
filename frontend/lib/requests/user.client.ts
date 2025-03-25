@@ -1,17 +1,10 @@
 ﻿import apiClient from '@/lib/helpers/apiClient';
 import { User } from '@/lib/types/user';
-import { getSession } from '@auth0/nextjs-auth0/edge';
-import { updateSession } from '@auth0/nextjs-auth0';
-import { snakeToCamel } from '@/lib/helpers/snakeToCamel';
+import { Pagination } from '@/lib/types/pagination';
 
 export class UserClient {
   static async unblockUser(id: string): Promise<void> {
     await apiClient.post(`/users/${id}/unblock`);
-  }
-
-  static async getUserRoles(id: string): Promise<string[]> {
-    const response = await apiClient.get<string[]>(`/users/${id}/roles`);
-    return response.data;
   }
 
   static async assignRolesToUser(id: string, roles: string[]): Promise<void> {
@@ -74,15 +67,7 @@ export class UserClient {
 
   static async getAuthenticatedUser(): Promise<User | null> {
     try {
-      const session = await getSession();
-
-      const data = snakeToCamel((await apiClient.get<User>('/users/me')).data);
-
-      if (session) {
-        session.user = data;
-        await updateSession(session);
-      }
-
+      const { data } = await apiClient.get<User>('/users/me');
       return data;
     } catch (error) {
       console.error(error);
@@ -90,17 +75,24 @@ export class UserClient {
     }
   }
 
+  static async getUsers(
+    page: number = 0,
+    size: number = 20
+  ): Promise<Pagination<User>> {
+    const response = await apiClient.get<Pagination<User>>('/users', {
+      params: { page, size },
+    });
+    return response.data;
+  }
+
   static async getAuthenticatedUserByToken(
     accessToken: string
   ): Promise<User | null> {
     try {
-      return snakeToCamel(
-        (
-          await apiClient.get<User>('/users/me', {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          })
-        ).data
-      );
+      const { data } = await apiClient.get<User>('/users/me', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      return data;
     } catch (error) {
       console.error('Failed to fetch user data:', error);
       return null;
