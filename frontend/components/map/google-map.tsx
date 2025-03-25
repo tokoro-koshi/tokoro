@@ -43,7 +43,8 @@ const GoogleMapComponent = ({ places, center, zoom, doesShowDetails, showsAll }:
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   if (!apiKey) {
-    return <div className={styles.apiKeyError}>Google Maps API key is not provided</div>;
+    console.error("Google Maps API key is not provided");
+    return <div className={styles.apiKeyError}>Unexpected error happened</div>;
   }
 
   return (

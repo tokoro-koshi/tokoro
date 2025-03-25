@@ -1,4 +1,4 @@
-﻿import GoogleMapComponent from '@/components/map/GoogleMap';
+﻿import GoogleMapComponent from '@/components/map/google-map';
 import { PlaceClient } from '@/lib/requests/place.client';
 import styles from './map.module.css';
 
