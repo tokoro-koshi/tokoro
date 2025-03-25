@@ -71,10 +71,14 @@ export default async function PlacePage({ params }: PlacePageProps) {
       <div className={styles.middle}>
         <p className={styles.description}>{place.description}</p>
         <Link href={`/map/${place.id}`} className={styles.map}>
-        <GoogleMapComponent 
-          places={[place]} 
-          center={{ lat: place.location.coordinate.latitude, lng: place.location.coordinate.longitude }}
-          zoom={16}/>
+          <GoogleMapComponent
+            places={[place]}
+            center={{
+              lat: place.location.coordinate.latitude,
+              lng: place.location.coordinate.longitude,
+            }}
+            zoom={16}
+          />
         </Link>
       </div>
       <PlaceCarousel className={styles.carousel} places={suggestedPlaces} />

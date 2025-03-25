@@ -24,7 +24,10 @@ export class PlaceClient {
     return response.data;
   }
 
-  static async getAllPlaces(page: number=0, size: number=20): Promise<Place[]> {
+  static async getAllPlaces(
+    page: number = 0,
+    size: number = 20
+  ): Promise<Place[]> {
     const response = await apiClient.get<Pagination<Place>>(`/places`, {
       params: { page, size },
     });
