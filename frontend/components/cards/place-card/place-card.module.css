@@ -2,7 +2,7 @@
   @apply relative flex flex-col gap-1.5 px-0 text-muted-foreground;
 
   & .name {
-    @apply pr-8 text-2xl font-semibold capitalize text-ellipsis line-clamp-2;
+    @apply line-clamp-2 text-ellipsis pr-8 text-2xl font-semibold capitalize;
   }
 
   & .category,
