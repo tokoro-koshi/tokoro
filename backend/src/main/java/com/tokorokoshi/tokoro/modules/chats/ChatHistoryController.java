@@ -23,7 +23,7 @@ public class ChatHistoryController {
 
     private final ChatHistoryService chatHistoryService;
     private final PagedResourcesAssembler<ChatHistoryDto> chatHistoryPagedResourcesAssembler;
-    private final Logger logger = Logger.getLogger(ChatHistoryController.class.getName());
+    private final Logger logger;
 
     public ChatHistoryController(
             ChatHistoryService chatHistoryService,
@@ -31,6 +31,7 @@ public class ChatHistoryController {
     ) {
         this.chatHistoryService = chatHistoryService;
         this.chatHistoryPagedResourcesAssembler = chatHistoryPagedResourcesAssembler;
+        this.logger = Logger.getLogger(ChatHistoryController.class.getName());
     }
 
     @Operation(

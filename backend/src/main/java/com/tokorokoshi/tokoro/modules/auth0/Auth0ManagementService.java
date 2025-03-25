@@ -14,6 +14,7 @@ import com.auth0.json.mgmt.users.UsersPage;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +55,27 @@ public class Auth0ManagementService {
         } catch (Auth0Exception e) {
             log.error("Error fetching user with ID: {}", userId, e);
             throw new UserFetchException("Error fetching user with ID: " + userId, e);
+        }
+    }
+
+   /**
+     * Fetches all users
+     *
+     * @throws UserFetchException if there is an error during the fetching process.
+     */
+    public List<User> getUsers(Pageable pageable) {
+        try {
+            UserFilter filter = new UserFilter().withPage(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize()
+            );
+            return managementAPI.users()
+                    .list(filter)
+                    .execute()
+                    .getBody().getItems();
+        } catch (Auth0Exception e) {
+            log.error("Error fetching users", e);
+            throw new UserFetchException("Error fetching users", e);
         }
     }
 
@@ -202,13 +224,13 @@ public class Auth0ManagementService {
      * @return a list of {@link Role} objects representing the roles assigned to the user.
      * @throws RoleFetchException if there is an error during the fetching process.
      */
-    public List<Role> getUserRoles(String userId) {
+    public List<String> getUserRoles(String userId) {
         try {
             RolesPage rolesPage = managementAPI.users()
                     .listRoles(userId, new RolesFilter())
                     .execute()
                     .getBody();
-            return rolesPage.getItems();
+            return rolesPage.getItems().stream().map(Role::getName).toList();
         } catch (Auth0Exception e) {
             log.error("Error fetching roles for user with ID: {}", userId, e);
             throw new RoleFetchException("Error fetching roles for user with ID: " + userId, e);
@@ -219,11 +241,15 @@ public class Auth0ManagementService {
      * Assigns roles to a user.
      *
      * @param userId  the Auth0 user ID of the user to whom roles will be assigned.
-     * @param roleIds the list of role IDs to assign to the user.
+     * @param roleNames the list of role IDs to assign to the user.
      * @throws RoleAssignmentException if there is an error during the assignment process.
      */
-    public void assignRolesToUser(String userId, List<String> roleIds) {
+    public void assignRolesToUser(String userId, List<String> roleNames) {
         try {
+            List<String> roleIds = getAllRoles().stream()
+                    .filter(role -> roleNames.contains(role.getName()))
+                    .map(Role::getId)
+                    .toList();
             managementAPI.users()
                     .addRoles(userId, roleIds)
                     .execute();
@@ -258,14 +284,17 @@ public class Auth0ManagementService {
      * @return the list of permissions assigned to the user.
      * @throws UserFetchException if there is an error during the fetching process.
      */
-    public List<Permission> getUserPermissions(String userId) {
+    public List<String> getUserPermissions(String userId) {
         try {
             // Fetch permissions assigned to the user
             PermissionsPage permissionsPage = managementAPI.users()
                     .listPermissions(userId, new PageFilter())
                     .execute()
                     .getBody();
-            return permissionsPage.getItems();
+            return permissionsPage.getItems()
+                    .stream()
+                    .map(Permission::getName)
+                    .toList();
         } catch (Auth0Exception e) {
             log.error("Error fetching permissions for user with ID: {}", userId, e);
             throw new UserFetchException("Error fetching permissions for user with ID: " + userId, e);

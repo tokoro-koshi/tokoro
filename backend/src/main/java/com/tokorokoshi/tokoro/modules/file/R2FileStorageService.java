@@ -30,7 +30,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class R2FileStorageService implements FileStorageService {
     private static final Logger logger = LoggerFactory.getLogger(
-            R2FileStorageService.class);
+            R2FileStorageService.class
+    );
 
     private final S3Client s3Client;
     private final S3Presigner presigner;

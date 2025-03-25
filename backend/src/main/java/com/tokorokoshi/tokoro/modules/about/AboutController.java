@@ -19,7 +19,6 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @RequestMapping("/about")
 @Tag(name = "About", description = "API for managing About information")
 public class AboutController {
-
     private final AboutService aboutService;
     private final Logger logger;
 

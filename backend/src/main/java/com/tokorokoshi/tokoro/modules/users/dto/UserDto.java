@@ -1,7 +1,5 @@
 package com.tokorokoshi.tokoro.modules.users.dto;
 
-import com.auth0.json.mgmt.permissions.Permission;
-import com.auth0.json.mgmt.roles.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 
@@ -34,12 +32,6 @@ public record UserDto(
                 description = "The phone number of the user"
         )
         String phoneNumber,
-
-        @Schema(
-                name = "userId",
-                description = "The unique identifier of the user"
-        )
-        String userId,
 
         @Schema(
                 name = "picture",
@@ -111,13 +103,13 @@ public record UserDto(
                 name = "roles",
                 description = "The roles assigned to the user"
         )
-        @Nullable List<Role> roles,
+        @Nullable List<String> roles,
 
         @Schema(
                 name = "permissions",
                 description = "The permissions assigned to the user"
         )
-        @Nullable List<Permission> permissions
+        @Nullable List<String> permissions
 ) {
     public UserDto {
         if (roles == null) {
@@ -134,12 +126,11 @@ public record UserDto(
      * @param roles the roles to add to the user.
      * @return a new {@link UserDto} object with the added roles.
      */
-    public UserDto withRoles(List<Role> roles) {
+    public UserDto withRoles(List<String> roles) {
         return new UserDto(
                 username,
                 email,
                 phoneNumber,
-                userId,
                 picture,
                 name,
                 nickname,
@@ -162,12 +153,11 @@ public record UserDto(
      * @param permissions the permissions to add to the user.
      * @return a new {@link UserDto} object with the added permissions.
      */
-    public UserDto withPermissions(List<Permission> permissions) {
+    public UserDto withPermissions(List<String> permissions) {
         return new UserDto(
                 username,
                 email,
                 phoneNumber,
-                userId,
                 picture,
                 name,
                 nickname,
