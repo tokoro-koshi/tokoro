@@ -1,17 +1,19 @@
 package com.tokorokoshi.tokoro.modules.users;
 
-import com.auth0.json.mgmt.permissions.Permission;
-import com.auth0.json.mgmt.roles.Role;
-import com.auth0.json.mgmt.users.User;
+import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserDeleteException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserFetchException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserUpdateException;
+import com.tokorokoshi.tokoro.modules.users.dto.UserDto;
 import com.tokorokoshi.tokoro.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,16 +22,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Tag(name = "Users", description = "API for managing users")
 @RestController
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final Logger logger;
+    private final PagedResourcesAssembler<UserDto> pagedResourcesAssembler;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(
+            UserService userService,
+            PagedResourcesAssembler<UserDto> pagedResourcesAssembler
+    ) {
         this.userService = userService;
+        this.logger = Logger.getLogger(UserController.class.getName());
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @Operation(
@@ -269,58 +279,6 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Get user permissions",
-            description = "Returns the list of permissions for the user"
-    )
-    @GetMapping(
-            path = "/{id}/permissions",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Permission>> getUserPermissions(
-            @Parameter(
-                    description = "The user ID",
-                    required = true,
-                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
-            )
-            @PathVariable
-            String id
-    ) {
-        try {
-            List<Permission> permissions = userService.getUserPermissions(id);
-            return ResponseEntity.ok(permissions);
-        } catch (UserFetchException e) {
-            throw new NotFoundException("User permissions not found");
-        }
-    }
-
-    @Operation(
-            summary = "Get user roles",
-            description = "Returns the list of roles for the user"
-    )
-    @GetMapping(
-            path = "/{id}/roles",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Role>> getUserRoles(
-            @Parameter(
-                    description = "The user ID",
-                    required = true,
-                    example = "auth0|60f1b3b3b3b3b3b3b3b3b3b"
-            )
-            @PathVariable
-            String id
-    ) {
-        try {
-            List<Role> roles = userService.getUserRoles(id);
-            return ResponseEntity.ok(roles);
-        } catch (UserFetchException e) {
-            throw new NotFoundException("User roles not found");
-        }
-    }
-
-    @Operation(
             summary = "Get user details for authenticated user",
             description = "Returns the details of the current user"
     )
@@ -328,9 +286,9 @@ public class UserController {
             path = "/me",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<User> getUserDetails() {
+    public ResponseEntity<UserDto> getUserDetails() {
         try {
-            User userDetails = userService.getUser(SecurityUtils.getAuthenticatedUserId());
+            UserDto userDetails = userService.getUser(SecurityUtils.getAuthenticatedUserId());
             return ResponseEntity.ok(userDetails);
         } catch (UserFetchException e) {
             throw new NotFoundException("User not found");
@@ -345,7 +303,7 @@ public class UserController {
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<User> getUserDetails(
+    public ResponseEntity<UserDto> getUserDetails(
             @Parameter(
                     description = "The user ID",
                     required = true,
@@ -355,10 +313,42 @@ public class UserController {
             String id
     ) {
         try {
-            User userDetails = userService.getUser(id);
+            UserDto userDetails = userService.getUser(id);
             return ResponseEntity.ok(userDetails);
         } catch (UserFetchException e) {
             throw new NotFoundException("User not found");
+        }
+    }
+
+    @Operation(
+            summary = "Paginate users details",
+            description = "Returns the details of the users"
+    )
+    @GetMapping(
+            path = {"", "/"},
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<PaginationDto<UserDto>> getUsersDetails(
+            @Parameter(description = "The page number to get", example = "0")
+            @RequestParam(defaultValue = "0")
+            int page,
+            @Parameter(
+                    description = "The number of items per page",
+                    example = "20"
+            )
+            @RequestParam(defaultValue = "20")
+            int size
+    ) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            var users = this.userService.getUsers(pageable);
+            var pagination = PaginationDto.fromEntityModel(
+                    this.pagedResourcesAssembler.toModel(users)
+            );
+            return ResponseEntity.ok(pagination);
+        } catch (UserFetchException e) {
+            logger.severe(String.format("User fetch exception: %s", e.getMessage()));
+            return ResponseEntity.internalServerError().build();
         }
     }
 
