@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Comments } from '@/components/place/comments/comments';
 import { PlaceReviewClient } from '@/lib/requests/place-review.client';
 import SaveButton from '@/components/cards/items/save/save';
-import GoogleMapComponent from '@/components/map/GoogleMap';
+import GoogleMapComponent from '@/components/map/google-map';
 import Link from 'next/link';
 
 type PlacePageProps = {
