@@ -18,15 +18,19 @@
     @apply text-xs text-primary;
   }
 
-  & .image {
-    @apply h-48 w-full object-cover;
-  }
-
   & .text {
     @apply relative px-4 py-2 text-left;
   }
 
   & .saveButton {
     @apply absolute right-1 top-0;
+  }
+}
+
+.cardHeader {
+    @apply pt-0 relative;
+
+  & .image {
+    @apply h-48 w-full object-cover;
   }
 }

@@ -18,8 +18,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
   return (
     <Link href={routes.place + '/' + place.id} target={'_blank'}>
       <Card>
-        <CardHeader className={'pt-0'}>
-          <div className='relative'>
+        <CardHeader className={styles.cardHeader}>
             {place.rating !== 0 && (
               <Rating rating={place.rating} className='bottom-2' />
             )}
@@ -31,7 +30,6 @@ export default function PlaceCard({ place }: PlaceCardProps) {
               className={styles.image}
               quality={50}
             />
-          </div>
         </CardHeader>
         <CardContent className={styles.cardContent}>
           <div className={styles.text}>
