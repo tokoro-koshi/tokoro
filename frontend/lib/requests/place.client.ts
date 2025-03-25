@@ -1,5 +1,6 @@
 ﻿import apiClient from '@/lib/helpers/apiClient';
 import { Place } from '@/lib/types/place';
+import { Pagination } from '@/lib/types/pagination';
 
 export class PlaceClient {
   static async getPlaceById(id: string): Promise<Place> {
@@ -23,9 +24,12 @@ export class PlaceClient {
     return response.data;
   }
 
-  static async getAllPlaces(): Promise<Place[]> {
-    const response = await apiClient.get<Place[]>(`/places`);
-    return response.data;
+  static async getAllPlaces(page: number=0, size: number=20): Promise<Place[]> {
+    const response = await apiClient.get<Pagination<Place>>(`/places`, {
+      params: { page, size },
+    });
+    console.log(response.data.links);
+    return response.data.payload;
   }
 
   static async getPlacesByIdArray(ids: string[]): Promise<Place[]> {
