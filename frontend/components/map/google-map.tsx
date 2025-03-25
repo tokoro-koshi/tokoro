@@ -47,7 +47,10 @@ const GoogleMapComponent = ({
     return places.map((place) => (
       <Marker
         key={place.id}
-        position={{ lat: place.location.coordinate.latitude, lng: place.location.coordinate.longitude }}
+        position={{
+          lat: place.location.coordinate.latitude,
+          lng: place.location.coordinate.longitude,
+        }}
         onClick={() => handleMarkerClick(place)}
         icon='https://maps.google.com/mapfiles/ms/icons/red-dot.png'
       />
