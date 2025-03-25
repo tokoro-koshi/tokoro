@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { notFound } from 'next/navigation';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { decodeJwt } from 'jose';
 import { getSession, updateSession } from '@auth0/nextjs-auth0/edge';
 import routes from '@/lib/constants/routes';
 
@@ -22,8 +22,8 @@ export async function middleware(request: NextRequest) {
     }
 
     // Obtain roles
-    const decoded = jwt.decode(session.accessToken) as JwtPayload;
-    const roles = decoded['claims/roles'] as string[];
+    const jwtPayload = decodeJwt(session.accessToken);
+    const roles = jwtPayload['claims/roles'] as string[];
     await updateSession(request, response, { ...session, roles });
 
     // Check roles for admin routes (/admin/**, /api/admin/**)

@@ -1,4 +1,5 @@
 ﻿'use client';
+
 import { useState, useMemo, useCallback } from 'react';
 import {
   GoogleMap as GoogleMap,
@@ -46,15 +47,12 @@ const GoogleMapComponent = ({
     return places.map((place) => (
       <Marker
         key={place.id}
-        position={{
-          lat: place.location.coordinate.latitude,
-          lng: place.location.coordinate.longitude,
-        }}
-        onClick={() => handleMarkerClick({ ...place })}
+        position={{ lat: place.location.coordinate.latitude, lng: place.location.coordinate.longitude }}
+        onClick={() => handleMarkerClick(place)}
         icon='https://maps.google.com/mapfiles/ms/icons/red-dot.png'
       />
     ));
-  }, [places]);
+  }, [handleMarkerClick, places]);
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
