@@ -1,0 +1,7 @@
+﻿.pageContainer {
+    @apply w-full h-svh pt-16 pb-2 md:py-24 lg:px-20;
+}
+
+.mapWrapper {
+    @apply h-full w-full rounded-[48px] bg-foreground sm:p-3.5 relative;
+}

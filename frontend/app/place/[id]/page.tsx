@@ -70,13 +70,6 @@ export default async function PlacePage({ params }: PlacePageProps) {
       </ul>
       <div className={styles.middle}>
         <p className={styles.description}>{place.description}</p>
-        {/*<iframe*/}
-        {/*  className={styles.map}*/}
-        {/*  loading='lazy'*/}
-        {/*  allowFullScreen*/}
-        {/*  referrerPolicy='no-referrer-when-downgrade'*/}
-        {/*  src={googleMapsIframe}*/}
-        {/*></iframe>*/}
         <Link href={`/map/${place.id}`} className={styles.map}>
         <GoogleMapComponent 
           places={[place]} 
