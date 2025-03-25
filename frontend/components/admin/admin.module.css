@@ -1,0 +1,99 @@
+.container {
+  @apply flex min-h-screen flex-col bg-background;
+}
+
+.main {
+  @apply flex-1 overflow-auto p-6;
+}
+
+.header {
+  @apply flex h-16 items-center justify-between border-b bg-background px-6;
+}
+
+.logoContainer {
+  @apply flex items-center gap-2 font-semibold;
+}
+
+.logoText {
+  @apply hidden md:inline-block;
+}
+
+.headerActions {
+  @apply flex items-center gap-4;
+}
+
+.sidebar {
+  @apply hidden h-[calc(100vh-4rem)] w-64 border-r bg-muted/40 md:block;
+}
+
+.nav {
+  @apply space-y-2 p-4;
+}
+
+.navLink {
+  @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all;
+}
+
+.navLinkActive {
+  @apply bg-primary text-primary-foreground;
+}
+
+.navLinkInactive {
+  @apply text-muted-foreground hover:bg-muted hover:text-foreground;
+}
+
+.pageTitle {
+  @apply mb-6 text-3xl font-bold tracking-tight;
+}
+
+.actionBar {
+  @apply flex flex-col justify-between gap-4 sm:flex-row;
+}
+
+.searchContainer {
+  @apply relative w-full sm:w-64;
+}
+
+.searchIcon {
+  @apply absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground;
+}
+
+.searchInput {
+  @apply w-full pl-8;
+}
+
+.tableContainer {
+  @apply rounded-md border;
+}
+
+.cardGrid {
+  @apply grid gap-4 md:grid-cols-2 lg:grid-cols-4;
+}
+
+.statCard {
+  @apply flex flex-row items-center justify-between space-y-0 pb-2;
+}
+
+.statValue {
+  @apply text-2xl font-bold;
+}
+
+.statChange {
+  @apply text-xs text-muted-foreground;
+}
+
+.tabsContainer {
+  @apply space-y-4;
+}
+
+.chartContainer {
+  @apply grid gap-4 md:grid-cols-2 lg:grid-cols-7;
+}
+
+.chartCard {
+  @apply col-span-4;
+}
+
+.usersCard {
+  @apply col-span-3;
+}
