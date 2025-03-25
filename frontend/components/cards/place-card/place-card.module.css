@@ -2,7 +2,7 @@
   @apply relative flex flex-col gap-1.5 px-0 text-muted-foreground;
 
   & .name {
-    @apply pr-4 text-2xl font-semibold capitalize;
+    @apply pr-8 text-2xl font-semibold capitalize;
   }
 
   & .category,
