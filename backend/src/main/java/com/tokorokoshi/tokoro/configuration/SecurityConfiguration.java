@@ -98,6 +98,8 @@ public class SecurityConfiguration {
                                     .permitAll()
                                     .requestMatchers("/actuator/**")
                                     .permitAll()
+                                    .requestMatchers(HttpMethod.GET, "/users")
+                                    .hasAnyRole("ADMIN", "MODERATOR")
                                     .requestMatchers(
                                             HttpMethod.GET,
                                             "/blogs/**",
