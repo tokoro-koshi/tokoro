@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { Comments } from '@/components/place/comments/comments';
 import { PlaceReviewClient } from '@/lib/requests/place-review.client';
 import SaveButton from '@/components/cards/items/save/save';
+import GoogleMapComponent from '@/components/map/GoogleMap';
+import Link from 'next/link';
 
 type PlacePageProps = {
   params: {
@@ -18,7 +20,6 @@ export default async function PlacePage({ params }: PlacePageProps) {
   const place = await PlaceClient.getPlaceById(params.id);
   const suggestedPlaces = await PlaceClient.getRandomPlaces(20);
   const googleMapsLink = `https://maps.google.com/maps?q=${place.name}&ll=${place.location.coordinate.latitude},${place.location.coordinate.longitude}`;
-  const googleMapsIframe = `https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${place.name}&center=${place.location.coordinate.latitude},${place.location.coordinate.longitude}`;
 
   const placeReviews = await PlaceReviewClient.getPlaceReviews(params.id);
 
@@ -69,13 +70,19 @@ export default async function PlacePage({ params }: PlacePageProps) {
       </ul>
       <div className={styles.middle}>
         <p className={styles.description}>{place.description}</p>
-        <iframe
-          className={styles.map}
-          loading='lazy'
-          allowFullScreen
-          referrerPolicy='no-referrer-when-downgrade'
-          src={googleMapsIframe}
-        ></iframe>
+        {/*<iframe*/}
+        {/*  className={styles.map}*/}
+        {/*  loading='lazy'*/}
+        {/*  allowFullScreen*/}
+        {/*  referrerPolicy='no-referrer-when-downgrade'*/}
+        {/*  src={googleMapsIframe}*/}
+        {/*></iframe>*/}
+        <Link href={`/map/${place.id}`} className={styles.map}>
+        <GoogleMapComponent 
+          places={[place]} 
+          center={{ lat: place.location.coordinate.latitude, lng: place.location.coordinate.longitude }}
+          zoom={16}/>
+        </Link>
       </div>
       <PlaceCarousel className={styles.carousel} places={suggestedPlaces} />
       <Comments placeId={params.id} initialComments={placeReviews} />
