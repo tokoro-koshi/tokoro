@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { notFound } from 'next/navigation';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { getSession } from '@auth0/nextjs-auth0/edge';
+import { getSession, updateSession } from '@auth0/nextjs-auth0/edge';
 import routes from '@/lib/constants/routes';
 
 /*
  * This middleware is used to protect routes that require authentication.
  */
 export const config = {
-  matcher: ['/(admin|settings|explore|prompt)/:path*'],
+  matcher: ['/(admin|settings|explore|prompt|api/admin)/:path*'],
 };
 
 export async function middleware(request: NextRequest) {
@@ -23,10 +24,11 @@ export async function middleware(request: NextRequest) {
     // Obtain roles
     const decoded = jwt.decode(session.accessToken) as JwtPayload;
     const roles = decoded['claims/roles'] as string[];
+    await updateSession(request, response, { ...session, roles });
 
-    // Check roles
-    if (pathname.startsWith('/admin') && !roles.includes('ADMIN')) {
-      return NextResponse.redirect(new URL('/404', request.url));
+    // Check roles for admin routes (/admin/**, /api/admin/**)
+    if (/^\/(api\/)?admin/.test(pathname) && !roles.includes('ADMIN')) {
+      notFound();
     }
 
     return NextResponse.next();
