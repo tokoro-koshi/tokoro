@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     // Fetch users from the API
     const usersResponse: Pagination<User> = await UserClient.getUsers(
       page,
-      size,
+      size
     );
 
     // Return the paginated response

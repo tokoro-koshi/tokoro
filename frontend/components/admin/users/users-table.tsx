@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { UserClient } from '@/lib/requests/user.client';
-import { UserProfile as User } from '@auth0/nextjs-auth0/client';
+import { User } from '@/lib/types/user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -122,26 +122,26 @@ export default function UsersTable({ initialUsers }: { initialUsers: User[] }) {
   });
 
   const handleBlockUser = (user: User) => {
-    if (!user?.sub) return;
-    blockUserMutation.mutate(user.sub);
+    if (!user?.userId) return;
+    blockUserMutation.mutate(user.userId);
   };
 
   const handleUnblockUser = (user: User) => {
-    if (!user?.sub) return;
-    unblockUserMutation.mutate(user.sub);
+    if (!user?.userId) return;
+    unblockUserMutation.mutate(user.userId);
   };
 
   const handleDeleteUser = () => {
-    if (!selectedUser?.sub) return;
-    deleteUserMutation.mutate(selectedUser.sub);
+    if (!selectedUser?.userId) return;
+    deleteUserMutation.mutate(selectedUser.userId);
   };
 
   const handleManageRoles = (user: User) => {
-    router.push(`/admin/users/${user.id}/roles`);
+    router.push(`/admin/users/${user.userId}/roles`);
   };
 
   const handleViewDetails = (user: User) => {
-    router.push(`/admin/users/${user.id}`);
+    router.push(`/admin/users/${user.userId}`);
   };
 
   return (
@@ -176,7 +176,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: User[] }) {
           </TableHeader>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.sub}>
+              <TableRow key={user.userId}>
                 <TableCell>
                   <div className='flex items-center gap-3'>
                     <UserAvatar user={user} />

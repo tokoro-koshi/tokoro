@@ -1,5 +1,4 @@
 import { useRouter } from 'next/navigation';
-import { UserProfile } from '@auth0/nextjs-auth0/client';
 import { User } from '@/lib/types/user';
 import { ChevronRight, CreditCard, LogOut, Settings } from 'lucide-react';
 import routes from '@/lib/constants/routes';
@@ -14,7 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import UserAvatar from '@/components/user/avatar';
 
-export default function UserButton({ user }: { user: User | UserProfile }) {
+export default function UserButton({ user }: { user: User }) {
   const router = useRouter();
   return (
     <DropdownMenu>

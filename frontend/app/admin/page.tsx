@@ -7,10 +7,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { User } from '@/lib/types/user';
 import { UserClient } from '@/lib/requests/user.client';
 import { FavoritesClient } from '@/lib/requests/favorites.client';
 import { PlaceClient } from '@/lib/requests/place.client';
-import { UserProfile as User } from '@auth0/nextjs-auth0/client';
 import UserStatsCard from '@/components/admin/dashboard/user-stats-card';
 import CollectionsStatsCard from '@/components/admin/dashboard/collections-stats-card';
 import RecentUsersTable from '@/components/admin/dashboard/recent-users-table';
