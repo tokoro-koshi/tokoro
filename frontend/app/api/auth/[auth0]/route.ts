@@ -32,12 +32,12 @@ export const GET = handleAuth({
         const userData = await UserClient.getAuthenticatedUserByToken(
           session.accessToken
         );
-
         if (!userData) return;
 
         session.user = {
-          ...session.user,
           ...userData,
+          sid: session.user.sid,
+          userId: session.user.sub,
         };
       } catch (error) {
         console.error('Error fetching user data:', error);
