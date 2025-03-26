@@ -31,7 +31,6 @@ export class PlaceClient {
     const response = await apiClient.get<Pagination<Place>>(`/places`, {
       params: { page, size },
     });
-    console.log(response.data.links);
     return response.data.payload;
   }
 
