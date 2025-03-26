@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { User } from '@/lib/types/user';
-import { ChevronRight, CreditCard, LogOut, Settings } from 'lucide-react';
+import { ChevronRight, ClipboardList, CreditCard, LogOut, Settings } from 'lucide-react';
 import routes from '@/lib/constants/routes';
 import {
   DropdownMenu,
@@ -28,6 +28,11 @@ export default function UserButton({ user }: { user: User }) {
           <DropdownMenuItem onClick={() => router.push(routes.settings)}>
             <Settings /> Settings
           </DropdownMenuItem>
+          {user.roles?.includes('ADMIN') && (
+            <DropdownMenuItem onClick={() => router.push(routes.admin)}>
+              <ClipboardList /> Admin
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             onClick={() => router.push(routes.support)}
             className='flex justify-between'

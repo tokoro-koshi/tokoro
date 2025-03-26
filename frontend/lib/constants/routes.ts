@@ -10,6 +10,7 @@
   aiSearch: '/prompt',
   explore: '/explore',
   settings: '/settings',
+  admin: '/admin',
 
   auth: {
     login: '/api/auth/login',
