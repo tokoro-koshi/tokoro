@@ -34,6 +34,7 @@ export interface MutateFavoritesCollection {
 export interface FavoritesCollection extends MutateFavoritesCollection {
   id: string;
   createdAt: string;
+  userId: string;
 }
 
 export const defaultCollectionName = 'Saved';

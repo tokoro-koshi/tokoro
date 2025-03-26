@@ -5,6 +5,9 @@ import CollectionsTable from '@/components/admin/collections/collections-table';
 import CollectionsTableSkeleton from '@/components/admin/collections/collections-table-skeleton';
 import styles from '@/components/admin/admin.module.css';
 
+// Disable caching because of fetching that uses cookies
+export const dynamic = 'force-dynamic';
+
 // Server-side data fetching using API client
 async function fetchCollections() {
   try {
@@ -18,10 +21,10 @@ async function fetchCollections() {
       collections.map(async (collection) => {
         const user = await UserClient.getAuthenticatedUser();
         return {
-          ...collection,
+          isPublic: false, // Assuming collections are private by default
           userName: user?.name || 'Unknown User',
           placesCount: collection.placesIds.length,
-          isPublic: false, // Assuming collections are private by default
+          ...collection,
         };
       })
     );

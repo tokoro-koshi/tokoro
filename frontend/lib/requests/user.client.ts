@@ -98,4 +98,19 @@ export class UserClient {
       return null;
     }
   }
+
+  static async createUser(
+    userData: Partial<User>
+  ): Promise<User> {
+    const response = await apiClient.post<User>('/users', userData);
+    return response.data;
+  }
+
+  static async updateUser(
+    id: string,
+    userData: Partial<User>
+  ): Promise<User> {
+    const response = await apiClient.patch<User>(`/users/${id}`, userData);
+    return response.data;
+  }
 }
