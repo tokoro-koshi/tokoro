@@ -36,12 +36,12 @@ public class CollectionsService {
      */
     public CollectionDto saveCollection(String userId, CreateUpdateCollectionDto createUpdateCollectionDto) {
         List<CollectionDto> collections = getCollectionsForUser(userId);
-        UUID collectionId = UUID.randomUUID();
-        CollectionDto newCollection = new CollectionDto(
-                collectionId,
+        var newCollection = new CollectionDto(
+                UUID.randomUUID(),
                 createUpdateCollectionDto.name(),
                 createUpdateCollectionDto.placesIds(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                null
         );
         collections.add(newCollection);
         updateCollectionsForUser(userId, collections);
@@ -92,7 +92,8 @@ public class CollectionsService {
             CollectionDto updatedCollection = existingCollection
                     .withName(createUpdateCollectionDto.name())
                     .withPlacesIds(createUpdateCollectionDto.placesIds())
-                    .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
+                    .withCreatedAt(existingCollection.createdAt()) // Keep the original creation time
+                    .withUserId(userId);
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
             return updatedCollection;
@@ -152,7 +153,8 @@ public class CollectionsService {
             placesIds.add(placeId);
             CollectionDto updatedCollection = existingCollection
                     .withPlacesIds(placesIds)
-                    .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
+                    .withCreatedAt(existingCollection.createdAt()) // Keep the original creation time
+                    .withUserId(userId);
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
             return updatedCollection;
@@ -180,7 +182,8 @@ public class CollectionsService {
             placesIds.remove(placeId);
             CollectionDto updatedCollection = existingCollection
                     .withPlacesIds(placesIds)
-                    .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
+                    .withCreatedAt(existingCollection.createdAt()) // Keep the original creation time
+                    .withUserId(userId);
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
         } else {
@@ -204,7 +207,8 @@ public class CollectionsService {
             CollectionDto existingCollection = optionalCollection.get();
             CollectionDto updatedCollection = existingCollection
                     .withPlacesIds(new ArrayList<>())
-                    .withCreatedAt(existingCollection.createdAt()); // Keep the original creation time
+                    .withCreatedAt(existingCollection.createdAt()) // Keep the original creation time
+                    .withUserId(userId);
             collections.set(collections.indexOf(existingCollection), updatedCollection);
             updateCollectionsForUser(userId, collections);
         } else {

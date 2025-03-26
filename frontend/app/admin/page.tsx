@@ -18,6 +18,9 @@ import ActivityChart from '@/components/admin/dashboard/activity-chart';
 import DashboardSkeleton from '@/components/admin/dashboard/dashboard-skeleton';
 import styles from '@/components/admin/admin.module.css';
 
+// Disable caching because of fetching that uses cookies
+export const dynamic = 'force-dynamic';
+
 // Server-side data fetching functions using API clients
 async function fetchRecentUsers(): Promise<User[]> {
   try {
