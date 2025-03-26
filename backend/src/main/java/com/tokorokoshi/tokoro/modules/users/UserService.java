@@ -47,7 +47,8 @@ public class UserService {
         return userMapper
                 .toDto(auth0ManagementService.getUser(userId))
                 .withRoles(auth0ManagementService.getUserRoles(userId))
-                .withPermissions(auth0ManagementService.getUserPermissions(userId));
+//                .withPermissions(auth0ManagementService.getUserPermissions(userId));
+                .withPermissions(List.of());
     }
 
     /**
@@ -59,7 +60,8 @@ public class UserService {
         List<UserDto> users = auth0ManagementService.getUsers(pageable).stream()
                 .map(user -> userMapper.toDto(user)
                         .withRoles(auth0ManagementService.getUserRoles(user.getId()))
-                        .withPermissions(auth0ManagementService.getUserPermissions(user.getId()))
+//                        .withPermissions(auth0ManagementService.getUserPermissions(user.getId()))
+                        .withPermissions(List.of())
                 )
                 .toList();
         return new PageImpl<>(users, pageable, users.size());
