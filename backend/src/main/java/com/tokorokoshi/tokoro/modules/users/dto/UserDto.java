@@ -22,6 +22,12 @@ public record UserDto(
         String username,
 
         @Schema(
+                name="userId",
+                description="The user ID of the user"
+        )
+        String userId,
+
+        @Schema(
                 name = "email",
                 description = "The email address of the user"
         )
@@ -129,6 +135,7 @@ public record UserDto(
     public UserDto withRoles(List<String> roles) {
         return new UserDto(
                 username,
+                userId,
                 email,
                 phoneNumber,
                 picture,
@@ -156,6 +163,7 @@ public record UserDto(
     public UserDto withPermissions(List<String> permissions) {
         return new UserDto(
                 username,
+                userId,
                 email,
                 phoneNumber,
                 picture,

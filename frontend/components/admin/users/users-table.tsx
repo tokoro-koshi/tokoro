@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { UserClient } from '@/lib/requests/user.client';
+import { humanRelativeTime } from '@/lib/helpers/date';
 import { User } from '@/lib/types/user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -176,7 +177,7 @@ export default function UsersTable({ initialUsers }: { initialUsers: User[] }) {
           </TableHeader>
           <TableBody>
             {users.map((user) => (
-              <TableRow key={user.userId}>
+              <TableRow key={user.userId ?? user.email ?? user.phoneNumber}>
                 <TableCell>
                   <div className='flex items-center gap-3'>
                     <UserAvatar user={user} />
@@ -190,22 +191,20 @@ export default function UsersTable({ initialUsers }: { initialUsers: User[] }) {
                 </TableCell>
                 <TableCell>
                   <Badge variant={user.blocked ? 'destructive' : 'default'}>
-                    {user.blocked ? 'blocked' : 'active'}
+                    {user.blocked ? 'Blocked' : 'Active'}
                   </Badge>
                 </TableCell>
                 <TableCell>
                   <div className='flex gap-1'>
-                    {
-                      /*user.roles?.map((role) => (
-                      <Badge key={role} variant="outline">
-                        {role}
+                    {user.roles?.map((role) => (
+                        <Badge className={'capitalize'} key={role} variant="outline">
+                        {role.toLowerCase()}
                       </Badge>
-                    )) ||*/ <Badge variant='outline'>user</Badge>
-                    }
+                    )) ?? <Badge variant='outline'>User</Badge>}
                   </div>
                 </TableCell>
                 <TableCell>
-                  {/*{user.createdAt ? humanRelativeTime(user.createdAt) : "Unknown"}*/}
+                  {user.createdAt ? humanRelativeTime(user.createdAt) : "Unknown"}
                 </TableCell>
                 <TableCell className='text-right'>
                   <DropdownMenu>
