@@ -2,6 +2,7 @@
 import { PlaceClient } from '@/lib/requests/place.client';
 import styles from './map.module.css';
 
+// Disable caching because of fetching that uses cookies
 export const dynamic = 'force-dynamic';
 
 export default async function MapPage() {

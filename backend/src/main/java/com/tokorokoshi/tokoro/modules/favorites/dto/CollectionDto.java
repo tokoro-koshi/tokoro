@@ -1,6 +1,7 @@
 package com.tokorokoshi.tokoro.modules.favorites.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,7 +37,13 @@ public record CollectionDto(
                 name = "createdAt",
                 description = "The date and time the collection was created"
         )
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+
+        @Schema(
+                name = "userId",
+                description = "The user ID of the collection"
+        )
+        @Nullable String userId
 ) {
     /**
      * Creates a new collection with the given ID.
@@ -49,7 +56,8 @@ public record CollectionDto(
                 id,
                 name,
                 placesIds,
-                createdAt
+                createdAt,
+                userId
         );
     }
 
@@ -64,7 +72,8 @@ public record CollectionDto(
                 id,
                 name,
                 placesIds,
-                createdAt
+                createdAt,
+                userId
         );
     }
 
@@ -79,7 +88,8 @@ public record CollectionDto(
                 id,
                 name,
                 placesIds,
-                createdAt
+                createdAt,
+                userId
         );
     }
 
@@ -94,7 +104,24 @@ public record CollectionDto(
                 id,
                 name,
                 placesIds,
-                createdAt
+                createdAt,
+                userId
+        );
+    }
+
+    /**
+     * Creates a new collection with the given user ID.
+     *
+     * @param userId The user ID of the collection
+     * @return A new collection with the given user ID
+     */
+    public CollectionDto withUserId(String userId) {
+        return new CollectionDto(
+                id,
+                name,
+                placesIds,
+                createdAt,
+                userId
         );
     }
 }
