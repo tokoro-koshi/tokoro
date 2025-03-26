@@ -36,13 +36,14 @@ jobs:
         with:
           path: |
             ~/.npm
-            ${{ github.workspace }}/.next/cache
+            ./frontend/.next/cache
             ./frontend/node_modules
           # Cache key based on frontend-specific package.json and lockfile.
-          key: frontend-deps-${{ runner.os }}-${{ hashFiles('frontend/package-lock.json') }}
+          key: frontend-build-${{ runner.os }}-${{ hashFiles('./frontend/package-lock.json') }}
           # Allow partial cache restoration based on dependencies only.
           restore-keys: |
-            frontend-deps-${{ runner.os }}-
+            frontend-build-${{ runner.os }}-
+            frontend-build-
 
       - name: Install dependencies for frontend
         id: install_dependencies
@@ -58,10 +59,12 @@ jobs:
 
       - name: Cache build artifacts
         id: cache_artifacts
-        uses: actions/cache@v4
+        uses: actions/cache/save@v4
         if: steps.restore_cache_frontend.outputs.cache-hit != 'true'
         with:
           path: |
-            ${{ github.workspace }}/.next/cache
+            ~/.npm
+            ./frontend/.next/cache
+            ./frontend/node_modules
           # Cache key based on the built files to allow efficient rebuilds.
-          key: frontend-build-${{ runner.os }}-${{ hashFiles('frontend/next.config.js', 'frontend/.next/cache') }}
+          key: frontend-build-${{ runner.os }}-${{ hashFiles('./frontend/package-lock.json') }}
