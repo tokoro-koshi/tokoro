@@ -31,6 +31,6 @@
     @apply pt-0 relative;
 
   & .image {
-    @apply h-48 w-full object-cover;
+    @apply h-48 w-full object-cover rounded-t-[43px];
   }
 }
