@@ -20,7 +20,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
       <Card>
         <CardHeader className={styles.cardHeader}>
             {place.rating !== 0 && (
-              <Rating rating={place.rating} className='bottom-2' />
+              <Rating rating={place.rating} className='bottom-5' />
             )}
             <Image
               src={pictures[0]}
