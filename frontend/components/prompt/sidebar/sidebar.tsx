@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import styles from './sidebar.module.css';
 import { chats } from '@/lib/constants/prompt/chats';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {SquarePen} from "lucide-react";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -22,7 +23,10 @@ export function AppSidebar() {
         }}
         className={styles.header}
       >
-        New Chat
+        <div className={styles.newChat}>
+          <span>New Chat</span>
+          <SquarePen />
+        </div>
       </SidebarHeader>
       <SidebarContent className={styles.content}>
         <ScrollArea className={styles.scrollArea}>
