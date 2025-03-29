@@ -52,19 +52,19 @@
 }
 
 .placeName {
-    @apply font-medium text-2xl pt-1 capitalize text-ellipsis line-clamp-1;
+    @apply font-medium text-2xl pt-1 capitalize text-ellipsis line-clamp-1 max-w-52;
 }
 
 .placeLocation {
-    @apply font-light text-xs text-left;
+    @apply font-light text-xs text-left max-w-32 text-ellipsis line-clamp-2;
 }
 
 .image{
-    @apply rounded-3xl;
+    @apply rounded-3xl !h-[91px] !w-[91px];
 }
 
 .saveButton {
-    @apply absolute right-3 bottom-0;
+    @apply absolute right-1 bottom-0;
 }
 
 .blogPosts {
