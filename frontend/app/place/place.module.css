@@ -1,5 +1,5 @@
 ﻿.container {
-  @apply mx-auto;
+  @apply mx-auto overflow-hidden;
 }
 
 .header {
