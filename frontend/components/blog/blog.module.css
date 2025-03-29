@@ -1,9 +1,9 @@
 .blog {
-    @apply pt-24 px-8  grid auto-rows-min gap-7 md:grid-cols-3 min-h-screen;
+    @apply pt-24 px-8  grid auto-rows-min gap-7 md:grid-cols-3 min-h-screen pb-10;
 }
 
 .placeSection {
-    @apply pt-6 max-w-96 col-span-1;
+    @apply pt-4 max-w-96 col-span-1;
 }
 
 .inputArea {
@@ -35,7 +35,7 @@
 }
 
 .places{
-    @apply flex flex-col rounded-[43px] bg-foreground bg-opacity-50 h-[545px] mt-2 p-5 text-background gap-3;
+    @apply flex flex-col rounded-[43px] bg-foreground bg-opacity-50 h-[545px] mt-2 p-5 !text-background gap-3;
 
 }
 
@@ -66,6 +66,17 @@
 .saveButton {
     @apply absolute right-3 bottom-0;
 }
+
+.blogPosts {
+    @apply col-span-2 space-y-8;
+}
+
+.blogCard {
+    @apply py-3 px-8 bg-background rounded-[43px] mb-8 overflow-visible mr-8;
+}
+
+
+
 
 
 

@@ -5,6 +5,8 @@ import {Button} from "@/components/ui/button";
 import {places} from "@/lib/constants/blog/places";
 import Image from "next/image";
 import SaveButton from "@/components/cards/items/save/save";
+import {BlogCard} from "@/components/cards/blog-card/blog-card";
+import {blogPosts} from "@/lib/constants/blog/posts";
 
 export default function Blog() {
     return (
@@ -64,9 +66,21 @@ export default function Blog() {
                         ))}
                     </div>
                 </div>
-
             </div>
-            {/*<div className="col-span-2 w-[970px] h-28 bg-black"></div>*/}
+
+            <div className={styles.blogPosts}>
+                {blogPosts.map((post, index) => (
+                    <BlogCard
+                        key={post.id}
+                        imageUrl={post.imageUrl}
+                        title={post.title}
+                        description={post.description}
+                        date={post.date}
+                        imagePosition={index % 2 === 0 ? 'left' : 'right'}
+                        className={styles.blogCard}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

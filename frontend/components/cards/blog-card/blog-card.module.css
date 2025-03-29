@@ -1,0 +1,15 @@
+.content {
+    @apply flex flex-col mt-3.5;
+}
+
+.title {
+    @apply text-2xl font-medium;
+}
+
+.date {
+    @apply flex items-center space-y-2 text-base font-light text-primary mb-2;
+}
+
+.description {
+    @apply text-primary leading-relaxed text-ellipsis line-clamp-4;
+}
