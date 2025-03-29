@@ -1,0 +1,72 @@
+.blog {
+    @apply pt-24 px-8  grid auto-rows-min gap-7 md:grid-cols-3 min-h-screen;
+}
+
+.placeSection {
+    @apply pt-6 max-w-96 col-span-1;
+}
+
+.inputArea {
+    @apply bottom-0 ;
+}
+
+.inputContainer {
+    @apply relative w-96 ;
+}
+
+.inputIcon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500;
+}
+
+.inputField {
+    @apply rounded-md bg-white py-4 pl-10 pr-12 placeholder:text-zinc-400;
+}
+
+.sendButton {
+    @apply absolute right-2 top-1/2 -translate-y-1/2;
+}
+
+.topPlaces{
+    @apply pt-12;
+}
+
+.header{
+    @apply text-center font-medium text-2xl text-background;
+}
+
+.places{
+    @apply flex flex-col rounded-[43px] bg-foreground bg-opacity-50 h-[545px] mt-2 p-5 text-background gap-3;
+
+}
+
+.placeItem {
+    @apply relative flex gap-3;
+}
+
+.placeNumber {
+    @apply flex text-2xl font-medium items-center align-middle;
+}
+
+.placeDetails {
+    @apply flex-1;
+}
+
+.placeName {
+    @apply font-medium text-2xl pt-1 capitalize text-ellipsis line-clamp-1;
+}
+
+.placeLocation {
+    @apply font-light text-xs text-left;
+}
+
+.image{
+    @apply rounded-3xl;
+}
+
+.saveButton {
+    @apply absolute right-3 bottom-0;
+}
+
+
+
+
