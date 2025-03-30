@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { FavoritesClient } from '@/lib/requests/favorites.client';
 import { defaultCollectionName } from '@/lib/types/place';
-import { UserClient } from '@/lib/requests/user.client';
 
 /**
  * Get all collections for the current user.
@@ -21,12 +20,11 @@ export async function POST(request: NextRequest) {
   );
 
   if (!defaultCollection) {
-    const placesIds = [placeId];
-    await FavoritesClient.saveCollection({
+    const newCollection = await FavoritesClient.saveCollection({
       name: defaultCollectionName,
-      placesIds: placesIds,
+      placesIds: [placeId],
     });
-    return;
+    return NextResponse.json(newCollection, { status: 201 });
   }
 
   if (
@@ -34,11 +32,12 @@ export async function POST(request: NextRequest) {
     defaultCollection.placesIds.includes(placeId)
   ) {
     await FavoritesClient.removeFavoritePlace(defaultCollection.id, placeId);
+    return new NextResponse(null, { status: 204 });
   } else {
-    await FavoritesClient.addFavoritePlace(defaultCollection.id, placeId);
+    const payload = await FavoritesClient.addFavoritePlace(
+      defaultCollection.id,
+      placeId
+    );
+    return NextResponse.json(payload, { status: 200 });
   }
-
-  await UserClient.getAuthenticatedUser();
-
-  return new NextResponse(null, { status: 204 });
 }
