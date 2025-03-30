@@ -112,6 +112,7 @@ const GoogleMapComponent = ({
             href={`https://maps.google.com/maps?q=${selectedPlace.name}&ll=${selectedPlace.location.coordinate.latitude},${selectedPlace.location.coordinate.longitude}`}
           >
             <Image
+              className={'-mt-0.5 mr-12'}
               src={GoogleMaps}
               alt={'Google Maps'}
               width={40}

@@ -6,13 +6,13 @@
   }
 
   & .cardContainer {
-    @apply relative z-10 mx-auto 2xl:mt-4;
+    @apply relative z-10 mx-auto 2xl:mt-4 min-w-0;
     @apply flex flex-col items-stretch justify-between gap-8 lg:flex-row lg:gap-x-12 lg:gap-y-0;
   }
 
   & .card {
     @apply flex h-auto flex-col items-center text-balance text-center lg:pt-10;
-    @apply relative z-20;
+    @apply relative z-20 min-w-0;
   }
 
   & .card .content {

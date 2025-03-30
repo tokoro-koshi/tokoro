@@ -2,11 +2,11 @@
   @apply m-12 md:m-16 flex flex-col items-center;
 
   & .prevButton {
-    @apply -left-12 md:-left-20;
+    @apply max-lg:hidden lg:-left-12;
   }
 
   & .nextButton {
-    @apply -right-12 md:-right-20;
+    @apply max-lg:hidden -right-12 lg:-right-12;
   }
 
   & .carouselItem {

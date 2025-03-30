@@ -1,5 +1,5 @@
 ﻿.pageContainer {
-  @apply h-svh w-full pb-2 pt-16 md:py-24 lg:px-20;
+  @apply h-svh w-full pb-8 pt-28 md:pb-28 md:px-20;
 }
 
 .mapWrapper {
