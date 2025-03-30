@@ -1,6 +1,15 @@
 import { useRouter } from 'next/navigation';
 import { User } from '@/lib/types/user';
-import { ChevronRight, ClipboardList, CreditCard, LogOut, Settings } from 'lucide-react';
+import {
+  ChevronRight,
+  ClipboardList,
+  CreditCard,
+  LogOut,
+  Newspaper,
+  Search,
+  Settings,
+  Telescope,
+} from 'lucide-react';
 import routes from '@/lib/constants/routes';
 import {
   DropdownMenu,
@@ -40,6 +49,24 @@ export default function UserButton({ user }: { user: User }) {
             <CreditCard />
             <span>Support</span>
             <ChevronRight className='ml-auto' />
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className={'md:hidden'}
+            onClick={() => router.push(routes.explore)}
+          >
+            <Telescope /> Explore
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className={'md:hidden'}
+            onClick={() => router.push(routes.blog)}
+          >
+            <Newspaper /> Blog
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className={'md:hidden'}
+            onClick={() => router.push(routes.aiSearch)}
+          >
+            <Search /> AI Search
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
