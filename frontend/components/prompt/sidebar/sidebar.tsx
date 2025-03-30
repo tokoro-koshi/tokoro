@@ -1,4 +1,5 @@
 ﻿'use client';
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import styles from './sidebar.module.css';
 import { chats } from '@/lib/constants/prompt/chats';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {SquarePen} from "lucide-react";
+import { SquarePen } from 'lucide-react';
 
 export function AppSidebar() {
   const router = useRouter();

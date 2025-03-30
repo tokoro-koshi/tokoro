@@ -20,7 +20,7 @@
 }
 
 .inputField {
-    @apply rounded-md bg-white pl-10 pr-12 placeholder:text-zinc-400 w-full text-sm md:py-4 md:text-base;
+    @apply rounded-md bg-white !pl-10 !pr-12 placeholder:text-zinc-400 w-full text-sm md:py-4 md:text-base;
 }
 
 .sendButton {

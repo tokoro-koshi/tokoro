@@ -1,5 +1,5 @@
 .cardContent {
-  @apply relative flex flex-col gap-1.5 px-0 text-muted-foreground;
+  @apply relative flex flex-col gap-1.5 !px-0 text-muted-foreground;
 
   & .name {
     @apply line-clamp-2 text-ellipsis pr-8 text-2xl font-semibold capitalize;
@@ -19,16 +19,16 @@
   }
 
   & .text {
-    @apply relative px-4 py-2 text-left;
+    @apply relative pl-6 pr-4 pb-2 text-left;
   }
 
   & .saveButton {
-    @apply absolute right-1 top-0;
+    @apply absolute right-4 top-0;
   }
 }
 
 .cardHeader {
-    @apply pt-0 relative;
+    @apply !pt-0 relative;
 
   & .image {
     @apply h-48 w-full object-cover rounded-t-[43px];
