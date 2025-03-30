@@ -25,23 +25,23 @@ export const BlogCard = ({
         <article
             className={`flex flex-col ${
                 imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
-            } gap-6 md:gap-8 ${className}`}
+            } gap-4 md:gap-8 ${className}`}
             {...props}
             onClick={onClick}
             role="button"
             tabIndex={0}
         >
-            <div className={`flex-shrink-0 ${
+            <div className={`flex-shrink-0 mx-auto md:mx-0 ${
                 imagePosition === 'left'
                     ? 'md:-ml-16'
                     : 'md:-mr-16'
-            } md:-mb-8`}>
+            } md:-mb-8  w-full md:w-auto`}>
                 <Image
                     src={imageUrl}
                     alt={title}
                     width={219}
                     height={219}
-                    className="rounded-[43px] cursor-pointer"
+                    className="rounded-[43px] w-full h-[219px] md:w-[219px] cursor-pointer object-cover"
                 />
             </div>
 
