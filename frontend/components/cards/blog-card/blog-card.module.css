@@ -3,13 +3,13 @@
 }
 
 .title {
-    @apply text-2xl font-medium;
+    @apply text-xl md:text-2xl font-medium text-ellipsis line-clamp-2 md:line-clamp-3;
 }
 
 .date {
-    @apply flex items-center space-y-2 text-base font-light text-primary mb-2;
+    @apply flex items-center space-y-2 text-sm md:text-base font-light text-primary mb-2;
 }
 
 .description {
-    @apply text-primary leading-relaxed text-ellipsis line-clamp-4;
+    @apply text-primary mb-2 leading-relaxed text-ellipsis line-clamp-3 md:line-clamp-4;
 }

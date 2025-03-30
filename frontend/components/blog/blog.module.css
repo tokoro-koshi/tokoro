@@ -1,17 +1,18 @@
 .blog {
-    @apply pt-24 px-8  grid auto-rows-min gap-7 md:grid-cols-3 min-h-screen pb-10;
+    @apply pt-16 md:pt-24 px-6 md:px-8 grid grid-cols-1 auto-rows-min md:gap-7 md:grid-cols-3 min-h-screen pb-10;
 }
 
+
 .placeSection {
-    @apply pt-4 max-w-96 col-span-1;
+    @apply pt-4 pb-3 max-w-[840px] md:max-w-96 col-span-1 w-full ;
 }
 
 .inputArea {
-    @apply bottom-0 ;
+    @apply bottom-0 w-full flex justify-center;
 }
 
 .inputContainer {
-    @apply relative w-96 ;
+    @apply relative w-full max-w-[600px] md:w-96;
 }
 
 .inputIcon {
@@ -19,7 +20,7 @@
 }
 
 .inputField {
-    @apply rounded-md bg-white py-4 pl-10 pr-12 placeholder:text-zinc-400;
+    @apply rounded-md bg-white pl-10 pr-12 placeholder:text-zinc-400 w-full text-sm md:py-4 md:text-base;
 }
 
 .sendButton {
@@ -27,20 +28,20 @@
 }
 
 .topPlaces{
-    @apply pt-12;
+    @apply pt-8 md:pt-12;
 }
 
 .header{
-    @apply text-center font-medium text-2xl text-background;
+    @apply text-center font-medium text-xl md:text-2xl text-background;
 }
 
 .places{
-    @apply flex flex-col rounded-[43px] bg-foreground bg-opacity-50 h-[545px] mt-2 p-5 !text-background gap-3;
+    @apply flex flex-col rounded-[43px] bg-foreground bg-opacity-50 mt-2 p-5 !text-background gap-3 h-auto md:h-[545px];
 
 }
 
 .placeItem {
-    @apply relative flex gap-3;
+    @apply relative flex gap-3 p-2 md:p-0;
 }
 
 .placeNumber {
@@ -52,7 +53,7 @@
 }
 
 .placeName {
-    @apply font-medium text-2xl pt-1 capitalize text-ellipsis line-clamp-1 max-w-52;
+    @apply font-medium pt-1 capitalize text-ellipsis line-clamp-1 max-w-52 text-lg md:text-2xl;
 }
 
 .placeLocation {
@@ -60,7 +61,7 @@
 }
 
 .image{
-    @apply rounded-3xl !h-[91px] !w-[91px];
+    @apply rounded-xl h-16 w-16 md:rounded-3xl md:!h-[91px] md:!w-[91px] ;
 }
 
 .saveButton {
@@ -68,11 +69,11 @@
 }
 
 .blogPosts {
-    @apply col-span-2 space-y-8;
+    @apply col-span-2 space-y-4 md:space-y-8 md:mr-8;
 }
 
 .blogCard {
-    @apply py-3 px-8 bg-background rounded-[43px] mb-8 overflow-visible mr-8;
+    @apply py-2 px-4 bg-background rounded-[43px] mb-8 overflow-visible mx-0 md:py-3 md:px-8  w-full;
 }
 
 
