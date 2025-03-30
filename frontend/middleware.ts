@@ -8,7 +8,7 @@ import routes from '@/lib/constants/routes';
  * This middleware is used to protect routes that require authentication.
  */
 export const config = {
-  matcher: ['/(admin|settings|explore|prompt|api/admin)/:path*'],
+  matcher: ['/(admin|settings|explore|prompt|api/admin|blog)/:path*'],
 };
 
 export async function middleware(request: NextRequest) {
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     await updateSession(request, response, { ...session, roles });
 
     // Check roles for admin routes (/admin/**, /api/admin/**)
-    if (/^\/(api\/)?admin/.test(pathname) && !roles.includes('ADMIN')) {
+    if (/^\/(api\/)?(admin|blog)/.test(pathname) && !roles.includes('ADMIN')) {
       notFound();
     }
 
