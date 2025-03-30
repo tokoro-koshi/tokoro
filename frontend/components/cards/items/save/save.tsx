@@ -34,7 +34,9 @@ export default function SaveButton({
     }
   }, [placeId, user, isChecked]);
 
-  const handleSave = async () => {
+  const handleSave = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (isLoading) return;
     setIsLoading(true);
     setIsChecked((prev) => !prev);
