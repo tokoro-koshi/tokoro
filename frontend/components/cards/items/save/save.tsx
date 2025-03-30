@@ -44,7 +44,7 @@ export default function SaveButton({
     setIsLoading(false);
   };
 
-  if (isChecked === null) {
+  if (!isChecked) {
     return null;
   }
 

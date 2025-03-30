@@ -3,7 +3,7 @@
 }
 
 .carousel {
-  @apply mx-8 mb-32 mt-4 flex flex-col items-center justify-between px-4;
+  @apply sm:mx-8 mb-32 mt-4 flex flex-col items-center justify-between px-4;
 
   & .carouselItem {
     @apply md:basis-1/2 lg:basis-1/3;
