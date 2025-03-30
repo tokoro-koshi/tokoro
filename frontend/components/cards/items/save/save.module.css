@@ -3,11 +3,11 @@
 }
 
 .buttonDark {
-  @apply h-8 w-8 text-foreground;
+  @apply h-8 w-8 !text-foreground;
 }
 
 .buttonLight {
-  @apply h-10 w-10 text-background hover:text-background;
+  @apply h-10 w-10 !text-background hover:!text-background;
 }
 
 .fillLight {
