@@ -11,7 +11,7 @@
   }
 
   & .location {
-    @apply mb-1.5 leading-none;
+    @apply mb-1.5 leading-none text-ellipsis line-clamp-2;
   }
 
   & .description {
