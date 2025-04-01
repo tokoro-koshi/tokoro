@@ -1,6 +1,7 @@
 package com.tokorokoshi.tokoro.modules.chats;
 
 import com.tokorokoshi.tokoro.database.ChatHistory;
+import com.tokorokoshi.tokoro.database.Message;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.chats.dto.CreateUpdateChatHistoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,9 +110,48 @@ public class ChatHistoryService {
 
         ChatHistory chatHistory = chatHistoryMapper.toChatHistoryScheme(createUpdateChatHistoryDto)
                 .withId(existingChatHistory.id())
+                .withTitle(existingChatHistory.title())
                 .withCreatedAt(existingChatHistory.createdAt());
         ChatHistory savedChatHistory = repository.save(chatHistory);
 
         return chatHistoryMapper.toChatHistoryDto(savedChatHistory);
+    }
+
+    /**
+     * Adds messages to chat history, creating a new one if conversationId is null/blank
+     *
+     * @param conversationId optional conversation ID
+     * @param userId user ID
+     * @param title chat title/prompt
+     * @param messages messages to add
+     * @return the created or updated chat history
+     */
+    public ChatHistoryDto addToChatHistory(String conversationId, String userId, String title, List<Message> messages) {
+        ChatHistoryDto chatHistoryDto;
+
+        if (conversationId == null || conversationId.isBlank()) {
+            CreateUpdateChatHistoryDto newChatDto = new CreateUpdateChatHistoryDto(
+                    title,
+                    userId,
+                    new ArrayList<>(messages)
+            );
+            chatHistoryDto = saveChatHistory(newChatDto);
+        } else {
+            ChatHistoryDto existingChat = getChatHistoryById(conversationId);
+            if (existingChat == null) {
+                throw new IllegalArgumentException("Chat history not found for id: " + conversationId);
+            }
+
+            List<Message> updatedMessages = new ArrayList<>(existingChat.messages());
+            updatedMessages.addAll(messages);
+
+            CreateUpdateChatHistoryDto updateChatDto = new CreateUpdateChatHistoryDto(
+                    userId,
+                    updatedMessages
+            );
+            chatHistoryDto = updateChatHistory(conversationId, updateChatDto);
+        }
+
+        return chatHistoryDto;
     }
 }

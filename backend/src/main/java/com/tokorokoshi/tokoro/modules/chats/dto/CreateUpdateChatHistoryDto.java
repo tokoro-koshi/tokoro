@@ -27,9 +27,12 @@ public record CreateUpdateChatHistoryDto(
         String userId,
 
         @Schema(
-             name = "messages",
-             description = "The list of messages for the chat history"
+                name = "messages",
+                description = "The list of messages for the chat history"
         )
         List<Message> messages
 ) {
+    public CreateUpdateChatHistoryDto(String userId, List<Message> messages) {
+        this(null, userId, messages);
+    }
 }
