@@ -9,8 +9,8 @@ export default async function PlaceMapPage({
 }) {
   const place = await PlaceClient.getPlaceById(params.id);
   const center = {
-    lat: place.location.coordinate.coordinates[1],
-    lng: place.location.coordinate.coordinates[0],
+    lat: place.location.coordinate.latitude,
+    lng: place.location.coordinate.longitude,
   };
 
   return (

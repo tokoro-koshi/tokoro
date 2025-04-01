@@ -17,9 +17,8 @@ export interface Location {
 }
 
 export interface Coordinate {
-  type: 'Point';
-  // [longitude, latitude]
-  coordinates: [number, number];
+  latitude: number;
+  longitude: number;
 }
 
 export interface Tag {
