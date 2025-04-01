@@ -1,9 +1,9 @@
 package com.tokorokoshi.tokoro.modules.places;
 
-
 import com.tokorokoshi.tokoro.database.HashTag;
 import com.tokorokoshi.tokoro.database.Place;
 import com.tokorokoshi.tokoro.modules.file.FileStorageService;
+import com.tokorokoshi.tokoro.modules.places.dto.CoordinateDto;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
@@ -16,15 +16,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
@@ -276,6 +274,47 @@ public class PlacesService {
         return results.getMappedResults().stream()
                 .map(this::getPlaceWithPicturesUrls)
                 .toList();
+    }
+
+    /**
+     * Retrieves places near a given coordinate within a specified radius with pagination.
+     *
+     * @param coordinateDto The coordinate to search around
+     * @param radius        The radius in kilometers (default to 10 if not provided)
+     * @param pageable      Pagination information (page, size, sort)
+     * @return Paginated list of nearby places sorted by distance
+     */
+    public Page<PlaceDto> getNearbyPlaces(CoordinateDto coordinateDto, Double radius, Pageable pageable) {
+        // Set default radius if not provided
+        double searchRadius = radius != null ? radius : 10.0;
+
+        // Convert kilometers to meters (MongoDB uses meters in geo-queries)
+        double searchRadiusMeters = searchRadius * 1000;
+
+        GeoJsonPoint center = new GeoJsonPoint(coordinateDto.longitude(), coordinateDto.latitude());
+
+        // Create query with geospatial criteria and pagination
+        Criteria locationCriteria = Criteria
+                .where("location.coordinate")
+                .nearSphere(center)
+                .maxDistance(searchRadiusMeters);
+
+        Query query = Query
+                .query(locationCriteria)
+                .with(pageable);
+
+        // Execute the query and get results
+        List<Place> places = repository.find(query, Place.class);
+
+        // Get total count within radius
+        long total = repository.count(Query.query(locationCriteria), Place.class);
+
+        // Map to PlaceDto with picture URLs
+        List<PlaceDto> content = places.stream()
+                .map(this::getPlaceWithPicturesUrls)
+                .toList();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     /**

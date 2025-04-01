@@ -1,14 +1,19 @@
 package com.tokorokoshi.tokoro.modules.places;
 
+import com.tokorokoshi.tokoro.database.Message;
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.dto.Response;
+import com.tokorokoshi.tokoro.modules.chats.ChatHistoryService;
+import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
+import com.tokorokoshi.tokoro.modules.places.dto.CoordinateDto;
 import com.tokorokoshi.tokoro.modules.places.dto.CreateUpdatePlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.PlaceDto;
 import com.tokorokoshi.tokoro.modules.places.dto.SearchDto;
 import com.tokorokoshi.tokoro.modules.tags.TagsService;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagDto;
 import com.tokorokoshi.tokoro.modules.tags.dto.TagsDto;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,18 +36,21 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 public class PlacesController {
     private final PlacesService placesService;
     private final TagsService tagsService;
+    private final ChatHistoryService chatHistoryService;
     private final Logger logger;
     private final PagedResourcesAssembler<PlaceDto> pagedResourcesAssembler;
 
     public PlacesController(
             PlacesService placesService,
             PagedResourcesAssembler<PlaceDto> pagedResourcesAssembler,
-            TagsService tagsService
+            TagsService tagsService,
+            ChatHistoryService chatHistoryService
     ) {
         this.placesService = placesService;
         this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.logger = Logger.getLogger(PlacesController.class.getName());
         this.tagsService = tagsService;
+        this.chatHistoryService = chatHistoryService;
     }
 
     @Operation(
@@ -138,13 +146,20 @@ public class PlacesController {
 
     @Operation(
             summary = "Search places by generated tags",
-            description = "Returns a list of places based on the search query"
+            description = "Returns a chat history"
     )
     @PostMapping(
             value = "/search",
             produces = APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<PlaceDto>> search(
+    public ResponseEntity<ChatHistoryDto> search(
+            @Parameter(
+                    description = "Optional conversation identifier for an ongoing chat. If provided, the chat history is updated; " +
+                            "if omitted, a new chat history is created.",
+                    example = "60f1b3b3b3b3b3b3b3b3b3"
+            )
+            @RequestParam(required = false)
+            String conversationId,
             @Parameter(
                     description = "The search query",
                     required = true,
@@ -160,7 +175,77 @@ public class PlacesController {
         }
 
         List<TagDto> tags = List.of(tagsResponse.getContent().tags());
-        return ResponseEntity.ok(placesService.getPlacesByTags(tags));
+        List<PlaceDto> places = placesService.getPlacesByTags(tags);
+
+        // Create messages for the user prompt and AI response.
+        Message userMessage = new Message(
+                Message.Sender.USER,
+                new String[]{body.prompt()}
+        );
+        Message aiMessage = new Message(
+                Message.Sender.AI,
+                places.stream()
+                        .map(PlaceDto::id)
+                        .toArray(String[]::new)
+        );
+
+        String authenticatedUserId = SecurityUtils.getAuthenticatedUserId();
+        ChatHistoryDto chatHistoryDto = chatHistoryService.addToChatHistory(
+                conversationId,
+                authenticatedUserId,
+                body.prompt(),
+                List.of(userMessage, aiMessage)
+        );
+
+        return ResponseEntity.ok(chatHistoryDto);
+    }
+
+    @Operation(
+            summary = "Get nearby places",
+            description = "Returns a paginated list of places near the specified coordinates within a given radius"
+    )
+    @GetMapping(value = "/nearby", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PaginationDto<PlaceDto>> getNearbyPlaces(
+            @Parameter(
+                    description = "Latitude of the center point",
+                    required = true,
+                    example = "40.7128"
+            )
+            @RequestParam
+            double latitude,
+            @Parameter(
+                    description = "Longitude of the center point",
+                    required = true,
+                    example = "-74.0060"
+            )
+            @RequestParam
+            double longitude,
+            @Parameter(
+                    description = "Radius in kilometers to search within (default: 10)",
+                    example = "10"
+            )
+            @RequestParam(required = false)
+            Double radius,
+            @Parameter(
+                    description = "The page number to get",
+                    example = "0"
+            )
+            @RequestParam(defaultValue = "0")
+            int page,
+            @Parameter(
+                    description = "The number of items per page",
+                    example = "20"
+            )
+            @RequestParam(defaultValue = "20")
+            int size
+    ) {
+        CoordinateDto coordinateDto = new CoordinateDto(latitude, longitude);
+        Pageable pageable = PageRequest.of(page, size);
+        var nearbyPlaces = placesService.getNearbyPlaces(coordinateDto, radius, pageable);
+        var pagination = PaginationDto.fromEntityModel(
+                pagedResourcesAssembler.toModel(nearbyPlaces)
+        );
+        return ResponseEntity.ok(pagination);
     }
 
     @Operation(
