@@ -5,6 +5,7 @@ export const baseRoutes = [
   { path: routes.home + '#features', label: 'Features' },
   { path: routes.home + '#about', label: 'About' },
 ];
+
 export const authRoutes = [
   { path: routes.home, label: 'Home' },
   { path: routes.explore, label: 'Explore' },

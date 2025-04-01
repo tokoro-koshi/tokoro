@@ -10,5 +10,6 @@ import org.mapstruct.*;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_DEFAULT
 )
 public interface UserMapper {
+    @Mapping(source = "id", target = "userId")
     UserDto toDto(User user);
 }

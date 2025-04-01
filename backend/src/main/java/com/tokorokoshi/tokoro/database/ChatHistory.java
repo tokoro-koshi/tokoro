@@ -81,4 +81,20 @@ public record ChatHistory(
                 createdAt
         );
     }
+
+    /**
+     * Creates a new chat history with the specified chat title.
+     *
+     * @param title The title for this chat history
+     * @return A new chat history with the specified chat title
+     */
+    public ChatHistory withTitle(String title) {
+        return new ChatHistory(
+                id,
+                title,
+                userId,
+                messages,
+                createdAt
+        );
+    }
 }

@@ -64,7 +64,7 @@ public class CollectionsController {
             summary = "Get all collections for a user",
             description = "Returns a paginated list of all collections for a user"
     )
-    @GetMapping(value = {"/{userId}"}, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = {"/users/{userId}"}, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PaginationDto<CollectionDto>> getAllCollections(
             @Parameter(description = "The user ID", required = true)
             @PathVariable
