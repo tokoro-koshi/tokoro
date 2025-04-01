@@ -48,8 +48,8 @@ const GoogleMapComponent = ({
       <Marker
         key={place.id}
         position={{
-          lat: place.location.coordinate.latitude,
-          lng: place.location.coordinate.longitude,
+          lat: place.location.coordinate.coordinates[1],
+          lng: place.location.coordinate.coordinates[0],
         }}
         onClick={() => handleMarkerClick(place)}
         icon='https://maps.google.com/mapfiles/ms/icons/red-dot.png'
@@ -109,7 +109,7 @@ const GoogleMapComponent = ({
           <a
             className={styles.googleMapsLink}
             target='_blank'
-            href={`https://maps.google.com/maps?q=${selectedPlace.name}&ll=${selectedPlace.location.coordinate.latitude},${selectedPlace.location.coordinate.longitude}`}
+            href={`https://maps.google.com/maps?q=${selectedPlace.name}&ll=${selectedPlace.location.coordinate.coordinates[1]},${selectedPlace.location.coordinate.coordinates[0]}`}
           >
             <Image
               src={GoogleMaps}

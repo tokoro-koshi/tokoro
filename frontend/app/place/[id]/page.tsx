@@ -19,7 +19,7 @@ type PlacePageProps = {
 export default async function PlacePage({ params }: PlacePageProps) {
   const place = await PlaceClient.getPlaceById(params.id);
   const suggestedPlaces = await PlaceClient.getRandomPlaces(20);
-  const googleMapsLink = `https://maps.google.com/maps?q=${place.name}&ll=${place.location.coordinate.latitude},${place.location.coordinate.longitude}`;
+  const googleMapsLink = `https://maps.google.com/maps?q=${place.name}&ll=${place.location.coordinate.coordinates[1]},${place.location.coordinate.coordinates[0]}`;
 
   const placeReviews = await PlaceReviewClient.getPlaceReviews(params.id);
 
@@ -74,8 +74,8 @@ export default async function PlacePage({ params }: PlacePageProps) {
           <GoogleMapComponent
             places={[place]}
             center={{
-              lat: place.location.coordinate.latitude,
-              lng: place.location.coordinate.longitude,
+              lat: place.location.coordinate.coordinates[1],
+              lng: place.location.coordinate.coordinates[0],
             }}
             zoom={16}
           />
