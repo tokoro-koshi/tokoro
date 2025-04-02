@@ -10,12 +10,11 @@ import {
 import { Loader2, Search, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Place } from '@/lib/types/place';
 import styles from './chat.module.css';
 import { useMutation } from '@tanstack/react-query';
 import PlaceList from '@/components/cards/place-list/place-list';
-import axios from 'axios';
-import { ChatMessage } from '@/lib/types/prompt';
+import axios from 'axios';  
+import {Chat, UserChatMessage} from '@/lib/types/prompt';
 
 interface ChatInterfaceProps {
   children: ReactNode;
@@ -24,7 +23,13 @@ interface ChatInterfaceProps {
 const PAGINATION_STEP = 6;
 
 export default function ChatInterface({ children }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [chat, setChat] = useState<Chat>({
+    id: "",
+    title: "",
+    userId: "",
+    messages: [],
+    createdAt: ""
+  });
   const [input, setInput] = useState('');
   const [lastIndex, setLastIndex] = useState(PAGINATION_STEP);
   const chatBottomRef = useRef<HTMLDivElement>(null);
@@ -32,24 +37,19 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
   useLayoutEffect(() => {
     if (!chatBottomRef.current) return;
     // chatBottomRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [lastIndex, messages]);
+  }, [lastIndex, chat]);
 
   const { status, mutate } = useMutation({
-    mutationFn: async (input: string) =>
-      await axios.post<Place[]>('/api/places/search', { prompt: input }),
-    onSuccess: ({ data: fetchedPlaces }) => {
-      if (fetchedPlaces) {
-        const aiMessage = {
-          id: `ai-${Date.now()}`,
-          type: 'ai' as const,
-          content: '',
-          cards: fetchedPlaces,
-        };
-        setMessages((prev) => [...prev, aiMessage]);
+    mutationFn: async (input: string) => {
+      const chat = await axios.post<Back>('/api/places/search', {prompt: input, chatId: chat ? chat.id : ""});
+      await ax
+    }
+    onSuccess: ({ data: fetchedChat }) => {
+        setChat(fetchedChat);
       }
-    },
+    }
     // TODO: Implement onError
-  });
+  );
   const isLoading = status === 'pending';
 
   const handleSendMessage = useCallback(() => {
@@ -57,12 +57,11 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
 
     // Add user message
     const userMessage = {
-      id: `user-${Date.now()}`,
-      type: 'user' as const,
-      content: input,
-    };
+      sender: 'USER' as const,
+      content: [input],
+    } as UserChatMessage;
 
-    setMessages((prev) => [...prev, userMessage]);
+    setChat((prev)=>({...prev, messages:[...prev.messages, userMessage]}));
     setInput('');
     setLastIndex(PAGINATION_STEP);
 
@@ -76,30 +75,31 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
 
   return (
     <div className={styles.container}>
-      {messages.length === 0 ? (
+      {chat.messages.length === 0 ? (
         children
       ) : (
         <div className={styles.messageContainer}>
-          {messages.map((message, index) => (
-            <div key={message.id} className='w-full'>
-              {message.type === 'user' ? (
+          {chat.messages.map((message, index) => (
+            <div key={index} className='w-full'>
+              {message.sender === 'USER' ? (
                 <div className={styles.userMessage}>
                   <div className={styles.userMessageContent}>
-                    {message.content}
+                    {typeof message.content[0] === "string" && message.content[0]}
                   </div>
                 </div>
               ) : (
                 <div className={styles.aiMessage}>
                   {/* AI response cards */}
-                  <PlaceList
-                    places={message.cards?.slice(0, lastIndex)}
-                    noPlacesMessage='No places found'
-                  />
+                  {typeof message.content[0] !== "string" && <PlaceList
+                      places={message.content?.slice(0, lastIndex)}
+                      noPlacesMessage='No places found'
+                  />}
+                  
 
                   {/* Generate more button */}
-                  {message.cards &&
-                    message.cards.length > lastIndex &&
-                    index === messages.length - 1 && (
+                  {message.content &&
+                    message.content.length > lastIndex &&
+                    index === chat.messages.length - 1 && (
                       <div className='flex justify-center' ref={chatBottomRef}>
                         <Button
                           className={styles.generateMoreButton}
