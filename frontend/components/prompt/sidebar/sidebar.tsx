@@ -14,7 +14,7 @@ import { SquarePen } from 'lucide-react';
 import { useUser } from '@/lib/stores/user';
 import { ChatHistoryClient } from '@/lib/requests/chat-history.client';
 import { useQuery } from '@tanstack/react-query';
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -23,16 +23,14 @@ export function AppSidebar() {
     const { data: chats } = useQuery({
         queryKey: ['ai-chat', user?.userId],
         queryFn: async () => {
-            'use server';
-            
             if (!user?.userId) return null;
             try {
                 return await ChatHistoryClient.getUserChatHistories(user?.userId);
             } catch (error) {
                 console.error(error);
-                if ('message' in error) {
-                    toast.error('Error fetching chat history:', error.message);
-                }
+                // if ('message' in error) {
+                //     toast.error('Error fetching chat history:', error.message);
+                // }
 
                 return null;
             }
