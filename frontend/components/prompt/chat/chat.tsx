@@ -14,7 +14,7 @@ import styles from './chat.module.css';
 import { useMutation } from '@tanstack/react-query';
 import PlaceList from '@/components/cards/place-list/place-list';
 import axios from 'axios';  
-import {Chat, UserChatMessage} from '@/lib/types/prompt';
+import { BackChat, Chat, UserChatMessage } from '@/lib/types/prompt';
 
 interface ChatInterfaceProps {
   children: ReactNode;
@@ -41,10 +41,10 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
 
   const { status, mutate } = useMutation({
     mutationFn: async (input: string) => {
-      const chat = await axios.post<Back>('/api/places/search', {prompt: input, chatId: chat ? chat.id : ""});
-      await ax
-    }
-    onSuccess: ({ data: fetchedChat }) => {
+      const backChat = (await axios.post<BackChat>('/api/places/search', {prompt: input, chatId: chat ? chat.id : ""})).data;
+      return (await axios.post<Chat>('/api/places/batch-chat', {chat: backChat})).data;
+    },
+    onSuccess: (fetchedChat) => {
         setChat(fetchedChat);
       }
     }
@@ -84,13 +84,13 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
               {message.sender === 'USER' ? (
                 <div className={styles.userMessage}>
                   <div className={styles.userMessageContent}>
-                    {typeof message.content[0] === "string" && message.content[0]}
+                    {message.content[0]}
                   </div>
                 </div>
               ) : (
                 <div className={styles.aiMessage}>
                   {/* AI response cards */}
-                  {typeof message.content[0] !== "string" && <PlaceList
+                  {<PlaceList
                       places={message.content?.slice(0, lastIndex)}
                       noPlacesMessage='No places found'
                   />}
