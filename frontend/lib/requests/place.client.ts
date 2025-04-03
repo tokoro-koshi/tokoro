@@ -19,16 +19,15 @@ export class PlaceClient {
   }
 
   static async searchPlaces(prompt: string, chatId: string = ""): Promise<BackChat> {
-      const response = await apiClient.post<BackChat>(`/places/search?conversationId=${chatId}`, {
+      const response = await apiClient.post<BackChat>(`/places/search${chatId.length>0 ?`?conversationId=${chatId}`:''}`, {
         prompt,
       });
       return response.data;
     }
 
   static async getPlacesByIds(ids: string[]): Promise<Place[]> {
-    const response = await apiClient.get<Place[]>(`/places/batch`, {
-      params: { ids },
-    });
+    const queryParams = ids.map((id) => `ids=${id}`).join('&');
+    const response = await apiClient.get<Place[]>(`/places/batch?${queryParams}`);
     return response.data;
   }
 
