@@ -5,8 +5,9 @@ import { Place } from '@/lib/types/place';
 import { cn } from '@/lib/utils';
 import PlaceList from '@/components/cards/place-list/place-list';
 import styles from './fyp.module.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BeatLoader, ClipLoader } from 'react-spinners';
 
 const sections = ['nearby', 'recommended', 'saved'] as const;
 
@@ -64,9 +65,18 @@ export default function Sections({ places: serverPlaces, activeSection }: Sectio
           </li>
         ))}
       </ul>
-      <div className={styles.sectionContent}>
-        <PlaceList places={places} />
-      </div>
+      {activeSection === 'nearby' && places.length === 0 
+        ?
+        <div className={styles.searchingLabel}>
+          <span>Searching for nearby places</span>
+          <BeatLoader
+            color={'white'}
+          />
+        </div> 
+        :
+        <div className={styles.sectionContent}>
+          <PlaceList places={places} />
+        </div>}
     </div>
   );
 }
