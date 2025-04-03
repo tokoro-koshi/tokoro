@@ -11,4 +11,5 @@ export const authRoutes = [
   { path: routes.explore, label: 'Explore' },
   { path: routes.blog, label: 'Blog' },
   { path: routes.aiSearch, label: 'AI Search' },
+  { path: routes.map, label: 'Map' },
 ];
