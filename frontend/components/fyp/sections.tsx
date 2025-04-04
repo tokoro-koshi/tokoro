@@ -7,7 +7,9 @@ import PlaceList from '@/components/cards/place-list/place-list';
 import styles from './fyp.module.css';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BeatLoader, ClipLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
+import { getUser } from '@/lib/helpers/client-fetch-user';
+import { useUser } from '@/lib/stores/user';
 
 const sections = ['nearby', 'recommended', 'saved'] as const;
 
@@ -17,7 +19,18 @@ type SectionsProps = {
 };
 
 export default function Sections({ places: serverPlaces, activeSection }: SectionsProps) {
+  const {user, setUser} = useUser();
   const [places, setPlaces] = useState<Place[]>(serverPlaces);
+  const [hasFetchedSaved, setHasFetchedSaved] = useState(false);
+
+  useEffect(() => {
+    if (hasFetchedSaved) return;
+    const fetchUser = async () => {
+      await getUser(user, setUser);
+      setHasFetchedSaved(true);
+    };
+    fetchUser();
+  }, [hasFetchedSaved, user, setUser]);
 
   useEffect(() => {
     const fetchPlaces = async (latitude: number, longitude: number) => {
