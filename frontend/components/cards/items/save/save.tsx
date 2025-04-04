@@ -7,10 +7,10 @@ import styles from './save.module.css';
 import axios from 'axios';
 import { useUser } from '@/lib/stores/user';
 import { ClipLoader } from 'react-spinners';
+import { getUser } from '@/lib/helpers/client-fetch-user';
 
 interface SaveButtonProps {
   placeId: string;
-  userId?: string;
   className?: string;
   variant: 'dark' | 'light';
 }
@@ -20,12 +20,13 @@ export default function SaveButton({
   className,
   variant,
 }: SaveButtonProps) {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const [isChecked, setIsChecked] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (user && isChecked === null) {
+    if (user) {
+      console.log('User:', user.userMetadata);
       const isFavorite =
         user.userMetadata?.collections.some((collection) =>
           collection.placesIds.includes(placeId)
@@ -41,6 +42,8 @@ export default function SaveButton({
     setIsLoading(true);
     setIsChecked((prev) => !prev);
     await axios.post('/api/places/toggle-favorite', { placeId });
+    await getUser(user, setUser);
+    console.log('User:', user?.userMetadata);
     setIsLoading(false);
   };
 
