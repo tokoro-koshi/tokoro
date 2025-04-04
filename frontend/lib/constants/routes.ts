@@ -11,6 +11,7 @@
   explore: '/explore',
   settings: '/settings',
   admin: '/admin',
+  map: '/map',
 
   auth: {
     login: '/api/auth/login',

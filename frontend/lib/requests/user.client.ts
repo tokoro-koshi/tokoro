@@ -66,6 +66,7 @@ export class UserClient {
   }
 
   static async getAuthenticatedUser(): Promise<User | null> {
+    
     try {
       const { data } = await apiClient.get<User>('/users/me');
       return data;

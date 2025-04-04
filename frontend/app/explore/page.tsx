@@ -19,7 +19,9 @@ export default async function ForYouPage({ searchParams }: ForYouProps) {
 
   let places: Place[];
   switch (activeSection) {
-    case 'nearby': // TODO
+    case 'nearby': 
+      places = [];
+      break;
     case 'recommended':
       places = await PlaceClient.getRandomPlaces(15);
       break;

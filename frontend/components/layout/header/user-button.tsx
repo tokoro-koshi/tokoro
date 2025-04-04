@@ -1,13 +1,13 @@
 import { useRouter } from 'next/navigation';
 import { User } from '@/lib/types/user';
 import {
-  ChevronRight,
+  // ChevronRight,
+  // CreditCard,
+  // Settings,
   ClipboardList,
-  CreditCard,
-  LogOut,
+  LogOut, MapPinned,
   Newspaper,
   Search,
-  Settings,
   Telescope,
 } from 'lucide-react';
 import routes from '@/lib/constants/routes';
@@ -34,22 +34,22 @@ export default function UserButton({ user }: { user: User }) {
         <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push(routes.settings)}>
-            <Settings /> Settings
-          </DropdownMenuItem>
           {user.roles?.includes('ADMIN') && (
             <DropdownMenuItem onClick={() => router.push(routes.admin)}>
               <ClipboardList /> Admin
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem
-            onClick={() => router.push(routes.support)}
-            className='flex justify-between'
-          >
-            <CreditCard />
-            <span>Support</span>
-            <ChevronRight className='ml-auto' />
-          </DropdownMenuItem>
+          {/*<DropdownMenuItem onClick={() => router.push(routes.settings)}>*/}
+          {/*  <Settings /> Settings*/}
+          {/*</DropdownMenuItem>*/}
+          {/*<DropdownMenuItem*/}
+          {/*  onClick={() => router.push(routes.support)}*/}
+          {/*  className='flex justify-between'*/}
+          {/*>*/}
+          {/*  <CreditCard />*/}
+          {/*  <span>Support</span>*/}
+          {/*  <ChevronRight className='ml-auto' />*/}
+          {/*</DropdownMenuItem>*/}
           <DropdownMenuItem
             className={'md:hidden'}
             onClick={() => router.push(routes.explore)}
@@ -67,6 +67,12 @@ export default function UserButton({ user }: { user: User }) {
             onClick={() => router.push(routes.aiSearch)}
           >
             <Search /> AI Search
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className={'md:hidden'}
+            onClick={() => router.push(routes.map)}
+          >
+            <MapPinned /> Map
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
