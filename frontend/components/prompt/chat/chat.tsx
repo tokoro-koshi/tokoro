@@ -3,6 +3,7 @@
 import {
   ReactNode,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -13,40 +14,63 @@ import { Input } from '@/components/ui/input';
 import styles from './chat.module.css';
 import { useMutation } from '@tanstack/react-query';
 import PlaceList from '@/components/cards/place-list/place-list';
-import axios from 'axios';  
+import axios from 'axios';
 import { BackChat, Chat, UserChatMessage } from '@/lib/types/prompt';
+import { usePromptStore } from '@/lib/stores/prompt';
 
 interface ChatInterfaceProps {
   children: ReactNode;
+  activeChat?: Chat | null;
 }
 
 const PAGINATION_STEP = 6;
 
-export default function ChatInterface({ children }: ChatInterfaceProps) {
-  const [chat, setChat] = useState<Chat>({
-    id: "",
-    title: "",
-    userId: "",
-    messages: [],
-    createdAt: ""
-  });
+export default function ChatInterface({
+  children,
+  activeChat,
+}: ChatInterfaceProps) {
+  const addChat = usePromptStore((state) => state.addChat);
+
+  const [chat, setChat] = useState<Chat>(
+    activeChat || {
+      id: '',
+      title: '',
+      userId: '',
+      messages: [],
+      createdAt: '',
+    }
+  );
   const [input, setInput] = useState('');
   const [lastIndex, setLastIndex] = useState(PAGINATION_STEP);
   const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeChat) {
+      setChat(activeChat);
+    }
+  }, [activeChat]);
 
   useLayoutEffect(() => {
     if (!chatBottomRef.current) return;
     // chatBottomRef.current.scrollIntoView({ behavior: "smooth" });
   }, [lastIndex, chat]);
 
-  const { status, mutate } = useMutation({
-    mutationFn: async (input: string) => {
-      const backChat = (await axios.post<BackChat>('/api/places/search', {prompt: input, chatId: chat ? chat.id : ""})).data;
-      return (await axios.post<Chat>('/api/places/batch-chat', {chat: backChat})).data;
-    },
-    onSuccess: (fetchedChat) => {
+  const { status, mutate } = useMutation(
+    {
+      mutationFn: async (input: string) => {
+        const backChat = (
+          await axios.post<BackChat>('/api/places/search', {
+            prompt: input,
+            chatId: chat ? chat.id : '',
+          })
+        ).data;
+        return (
+          await axios.post<Chat>('/api/places/batch-chat', { chat: backChat })
+        ).data;
+      },
+      onSuccess: (fetchedChat) => {
         setChat(fetchedChat);
-      }
+      },
     }
     // TODO: Implement onError
   );
@@ -61,12 +85,13 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
       content: [input],
     } as UserChatMessage;
 
-    setChat((prev)=>({...prev, messages:[...prev.messages, userMessage]}));
+    setChat((prev) => ({ ...prev, messages: [...prev.messages, userMessage] }));
+    addChat(input);
     setInput('');
     setLastIndex(PAGINATION_STEP);
 
     mutate(input);
-  }, [input, mutate]);
+  }, [input, mutate, addChat]);
 
   const handleGenerateMore = async () => {
     if (isLoading) return;
@@ -90,11 +115,12 @@ export default function ChatInterface({ children }: ChatInterfaceProps) {
               ) : (
                 <div className={styles.aiMessage}>
                   {/* AI response cards */}
-                  {<PlaceList
+                  {
+                    <PlaceList
                       places={message.content?.slice(0, lastIndex)}
                       noPlacesMessage='No places found'
-                  />}
-                  
+                    />
+                  }
 
                   {/* Generate more button */}
                   {message.content &&

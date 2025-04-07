@@ -1,23 +1,17 @@
-﻿import { AppSidebar } from '@/components/prompt/sidebar/sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import Header from '@/components/layout/header/header';
-import React from 'react';
-import ChatInterface from '@/components/prompt/chat/chat';
+﻿import Header from '@/components/layout/header/header';
+import { ReactNode } from 'react';
+import { ChatHistoryClient } from '@/lib/requests/chat-history.client';
+import ChatWindow from '@/components/prompt/chat/chat-window';
 
-export default async function Prompt({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function Prompt({ children }: { children: ReactNode }) {
+  const chats = await ChatHistoryClient.getAuthenticatedUserChatHistories(
+    0,
+    100
+  );
   return (
     <>
       <Header />
-      <SidebarProvider>
-        <AppSidebar />
-        <main className='flex-1'>
-          <ChatInterface>{children}</ChatInterface>
-        </main>
-      </SidebarProvider>
+      <ChatWindow chats={chats}>{children}</ChatWindow>
     </>
   );
 }

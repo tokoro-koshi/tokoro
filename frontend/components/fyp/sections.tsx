@@ -18,8 +18,11 @@ type SectionsProps = {
   activeSection: (typeof sections)[number];
 };
 
-export default function Sections({ places: serverPlaces, activeSection }: SectionsProps) {
-  const {user, setUser} = useUser();
+export default function Sections({
+  places: serverPlaces,
+  activeSection,
+}: SectionsProps) {
+  const { user, setUser } = useUser();
   const [places, setPlaces] = useState<Place[]>(serverPlaces);
   const [hasFetchedSaved, setHasFetchedSaved] = useState(false);
 
@@ -35,7 +38,10 @@ export default function Sections({ places: serverPlaces, activeSection }: Sectio
   useEffect(() => {
     const fetchPlaces = async (latitude: number, longitude: number) => {
       try {
-        const response = await axios.post(`/api/places/nearby`, { latitude, longitude });
+        const response = await axios.post(`/api/places/nearby`, {
+          latitude,
+          longitude,
+        });
         console.log(response.data);
         setPlaces(response.data);
       } catch (error) {
@@ -44,22 +50,22 @@ export default function Sections({ places: serverPlaces, activeSection }: Sectio
     };
 
     setPlaces(serverPlaces);
-    
+
     if (activeSection !== 'nearby') return;
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = {
             latitude: position.coords.latitude,
-            longitude: position.coords.longitude
+            longitude: position.coords.longitude,
           };
           fetchPlaces(latitude, longitude);
         },
-        (error) => console.error(error),
+        (error) => console.error(error)
       );
     }
   }, [activeSection, serverPlaces]);
-  
+
   const router = useRouter();
   return (
     <div className={styles.sections}>
@@ -78,18 +84,16 @@ export default function Sections({ places: serverPlaces, activeSection }: Sectio
           </li>
         ))}
       </ul>
-      {activeSection === 'nearby' && places.length === 0 
-        ?
+      {activeSection === 'nearby' && places.length === 0 ? (
         <div className={styles.searchingLabel}>
           <span>Searching for nearby places</span>
-          <BeatLoader
-            color={'white'}
-          />
-        </div> 
-        :
+          <BeatLoader color={'white'} />
+        </div>
+      ) : (
         <div className={styles.sectionContent}>
           <PlaceList places={places} />
-        </div>}
+        </div>
+      )}
     </div>
   );
 }

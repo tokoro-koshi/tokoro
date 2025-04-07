@@ -1,7 +1,7 @@
 ﻿import apiClient from '@/lib/helpers/apiClient';
 import { Place } from '@/lib/types/place';
 import { Pagination } from '@/lib/types/pagination';
-import {BackChat} from "@/lib/types/prompt";
+import { BackChat } from '@/lib/types/prompt';
 
 export class PlaceClient {
   static async getPlaceById(id: string): Promise<Place> {
@@ -18,20 +18,34 @@ export class PlaceClient {
     await apiClient.delete(`/places/${id}`);
   }
 
-  static async searchPlaces(prompt: string, chatId: string = ""): Promise<BackChat> {
-      const response = await apiClient.post<BackChat>(`/places/search${chatId.length>0 ?`?conversationId=${chatId}`:''}`, {
+  static async searchPlaces(
+    prompt: string,
+    chatId: string = ''
+  ): Promise<BackChat> {
+    const response = await apiClient.post<BackChat>(
+      `/places/search${chatId.length > 0 ? `?conversationId=${chatId}` : ''}`,
+      {
         prompt,
-      });
-      return response.data;
-    }
-
-  static async getPlacesByIds(ids: string[]): Promise<Place[]> {
-    const queryParams = ids.map((id) => `ids=${id}`).join('&');
-    const response = await apiClient.get<Place[]>(`/places/batch?${queryParams}`);
+      }
+    );
     return response.data;
   }
 
-  static async getNearbyPlaces(latitude: number, longitude: number, radius: number = 10, page: number = 0, size: number = 20): Promise<Place[]> {
+  static async getPlacesByIds(ids: string[]): Promise<Place[]> {
+    const queryParams = ids.map((id) => `ids=${id}`).join('&');
+    const response = await apiClient.get<Place[]>(
+      `/places/batch?${queryParams}`
+    );
+    return response.data;
+  }
+
+  static async getNearbyPlaces(
+    latitude: number,
+    longitude: number,
+    radius: number = 10,
+    page: number = 0,
+    size: number = 20
+  ): Promise<Place[]> {
     const response = await apiClient.get<Pagination<Place>>(`/places/nearby`, {
       params: { latitude, longitude, radius, page, size },
     });

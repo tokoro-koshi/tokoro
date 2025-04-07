@@ -197,14 +197,20 @@ export default function UsersTable({ initialUsers }: { initialUsers: User[] }) {
                 <TableCell>
                   <div className='flex gap-1'>
                     {user.roles?.map((role) => (
-                        <Badge className={'capitalize'} key={role} variant="outline">
+                      <Badge
+                        className={'capitalize'}
+                        key={role}
+                        variant='outline'
+                      >
                         {role.toLowerCase()}
                       </Badge>
                     )) ?? <Badge variant='outline'>User</Badge>}
                   </div>
                 </TableCell>
                 <TableCell>
-                  {user.createdAt ? humanRelativeTime(user.createdAt) : "Unknown"}
+                  {user.createdAt
+                    ? humanRelativeTime(user.createdAt)
+                    : 'Unknown'}
                 </TableCell>
                 <TableCell className='text-right'>
                   <DropdownMenu>

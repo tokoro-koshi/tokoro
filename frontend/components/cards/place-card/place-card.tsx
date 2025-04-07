@@ -19,17 +19,17 @@ export default function PlaceCard({ place }: PlaceCardProps) {
     <Link href={routes.place + '/' + place.id} target={'_blank'}>
       <Card>
         <CardHeader className={styles.cardHeader}>
-            {place.rating !== 0 && (
-              <Rating rating={place.rating} className='bottom-5' />
-            )}
-            <Image
-              src={pictures[0]}
-              alt={place.name}
-              width={350}
-              height={192}
-              className={styles.image}
-              quality={50}
-            />
+          {place.rating !== 0 && (
+            <Rating rating={place.rating} className='bottom-5' />
+          )}
+          <Image
+            src={pictures[0]}
+            alt={place.name}
+            width={350}
+            height={192}
+            className={styles.image}
+            quality={50}
+          />
         </CardHeader>
         <CardContent className={styles.cardContent}>
           <div className={styles.text}>

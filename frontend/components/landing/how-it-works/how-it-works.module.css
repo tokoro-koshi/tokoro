@@ -26,7 +26,7 @@
 }
 
 .stepCard:not(:last-child)::after {
-  @apply max-md:hidden absolute right-[-5rem] top-2/4;
+  @apply absolute right-[-5rem] top-2/4 max-md:hidden;
   @apply h-10 w-10 -translate-y-1/2 text-4xl text-background;
   @apply bg-contain bg-no-repeat content-[''];
   background-image: url('/icons/arrow.svg');
