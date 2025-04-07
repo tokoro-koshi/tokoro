@@ -11,7 +11,7 @@ export const usePromptStore = create<PromptState>((set) => ({
   chats: [],
   addChat: (prompt: string) =>
     set((state) => ({
-      chats: [...state.chats, { title: prompt } as BackChat],
+      chats: [{ title: prompt } as BackChat, ...state.chats],
     })),
   updateChats: (chats: BackChat[]) => set({ chats }),
   // deleteChat: (id: string) => set((state) => ({
