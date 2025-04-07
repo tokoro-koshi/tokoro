@@ -8,7 +8,7 @@
   }
 
   & .nav {
-    @apply hidden items-center justify-center gap-12 md:flex text-nowrap;
+    @apply hidden items-center justify-center gap-12 text-nowrap md:flex;
   }
 
   & .authButtons {

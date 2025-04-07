@@ -3,11 +3,23 @@
 }
 
 .header {
-  @apply sticky top-0 z-10 mx-3 my-3 mb-3 rounded-sm bg-sidebar-foreground bg-opacity-100 text-lg font-bold text-sidebar transition-colors hover:bg-opacity-80;
+  @apply sticky top-0 z-10 mx-1 bg-opacity-100 transition-colors hover:bg-opacity-80;
+}
+
+.action {
+  @apply w-full;
+}
+
+.trigger {
+  @apply w-full justify-normal rounded-sm bg-sidebar-foreground px-2 text-lg font-bold text-sidebar;
 }
 
 .newChat {
-  @apply flex items-center justify-between mx-2 my-1;
+  @apply my-1 flex w-full items-center gap-3 rounded-sm bg-sidebar-foreground px-2 py-2 text-lg font-bold text-sidebar;
+}
+
+.new {
+  @apply text-lg font-bold text-sidebar;
 }
 
 .content {

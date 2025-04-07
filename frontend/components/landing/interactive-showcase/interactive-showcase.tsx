@@ -16,7 +16,7 @@ export default function InteractiveShowcase({
         <h2 className={styles.title}>Explore Amazing Places</h2>
         <div className={styles.line}></div>
       </div>
-      <PlaceCarousel places={places} className="!mx-0" />
+      <PlaceCarousel places={places} className='!mx-0' />
     </section>
   );
 }

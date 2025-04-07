@@ -6,7 +6,7 @@
   }
 
   & .cardContainer {
-    @apply relative z-10 mx-auto 2xl:mt-4 min-w-0;
+    @apply relative z-10 mx-auto min-w-0 2xl:mt-4;
     @apply flex flex-col items-stretch justify-between gap-8 lg:flex-row lg:gap-x-12 lg:gap-y-0;
   }
 

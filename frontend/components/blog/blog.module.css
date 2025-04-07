@@ -1,84 +1,75 @@
 .blog {
-    @apply pt-16 md:pt-24 px-6 md:px-8 grid grid-cols-1 auto-rows-min md:gap-7 md:grid-cols-3 min-h-screen pb-10;
+  @apply grid min-h-screen auto-rows-min grid-cols-1 px-6 pb-10 pt-16 md:grid-cols-3 md:gap-7 md:px-8 md:pt-24;
 }
 
-
 .placeSection {
-    @apply pt-4 pb-3 max-w-[840px] md:max-w-96 col-span-1 w-full ;
+  @apply col-span-1 w-full max-w-[840px] pb-3 pt-4 md:max-w-96;
 }
 
 .inputArea {
-    @apply bottom-0 w-full flex justify-center;
+  @apply bottom-0 flex w-full justify-center;
 }
 
 .inputContainer {
-    @apply relative w-full max-w-[600px] md:w-96;
+  @apply relative w-full max-w-[600px] md:w-96;
 }
 
 .inputIcon {
-    @apply absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500;
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500;
 }
 
 .inputField {
-    @apply rounded-md bg-white !pl-10 !pr-12 placeholder:text-zinc-400 w-full text-sm md:py-4 md:text-base;
+  @apply w-full rounded-md bg-white !pl-10 !pr-12 text-sm placeholder:text-zinc-400 md:py-4 md:text-base;
 }
 
 .sendButton {
-    @apply absolute right-2 top-1/2 -translate-y-1/2;
+  @apply absolute right-2 top-1/2 -translate-y-1/2;
 }
 
-.topPlaces{
-    @apply pt-8 md:pt-12;
+.topPlaces {
+  @apply pt-8 md:pt-12;
 }
 
-.header{
-    @apply text-center font-medium text-xl md:text-2xl text-background;
+.header {
+  @apply text-center text-xl font-medium text-background md:text-2xl;
 }
 
-.places{
-    @apply flex flex-col rounded-[43px] bg-foreground bg-opacity-50 mt-2 p-5 !text-background gap-3 h-auto md:h-[545px];
-
+.places {
+  @apply mt-2 flex h-auto flex-col gap-3 rounded-[43px] bg-foreground bg-opacity-50 p-5 !text-background md:h-[545px];
 }
 
 .placeItem {
-    @apply relative flex gap-3 p-2 md:p-0;
+  @apply relative flex gap-3 p-2 md:p-0;
 }
 
 .placeNumber {
-    @apply flex text-2xl font-medium items-center align-middle;
+  @apply flex items-center align-middle text-2xl font-medium;
 }
 
 .placeDetails {
-    @apply flex-1;
+  @apply flex-1;
 }
 
 .placeName {
-    @apply font-medium pt-1 capitalize text-ellipsis line-clamp-1 max-w-52 text-lg md:text-2xl;
+  @apply line-clamp-1 max-w-52 text-ellipsis pt-1 text-lg font-medium capitalize md:text-2xl;
 }
 
 .placeLocation {
-    @apply font-light text-xs text-left max-w-32 text-ellipsis line-clamp-2;
+  @apply line-clamp-2 max-w-32 text-ellipsis text-left text-xs font-light;
 }
 
-.image{
-    @apply rounded-xl h-16 w-16 md:rounded-3xl md:!h-[91px] md:!w-[91px] ;
+.image {
+  @apply h-16 w-16 rounded-xl md:!h-[91px] md:!w-[91px] md:rounded-3xl;
 }
 
 .saveButton {
-    @apply absolute right-1 bottom-0;
+  @apply absolute bottom-0 right-1;
 }
 
 .blogPosts {
-    @apply col-span-2 space-y-4 md:space-y-8 md:mr-8;
+  @apply col-span-2 space-y-4 md:mr-8 md:space-y-8;
 }
 
 .blogCard {
-    @apply py-2 px-4 bg-background rounded-[43px] mb-8 overflow-visible mx-0 md:py-3 md:px-8  w-full;
+  @apply mx-0 mb-8 w-full overflow-visible rounded-[43px] bg-background px-4 py-2 md:px-8 md:py-3;
 }
-
-
-
-
-
-
-

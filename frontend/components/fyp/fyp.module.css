@@ -40,8 +40,8 @@
   & .sectionContent {
     @apply px-4 lg:px-32;
   }
-  
-  & .searchingLabel{
-    @apply text-2xl font-semibold flex justify-center items-center text-background space-x-2 py-8;
+
+  & .searchingLabel {
+    @apply flex items-center justify-center space-x-2 py-8 text-2xl font-semibold text-background;
   }
 }

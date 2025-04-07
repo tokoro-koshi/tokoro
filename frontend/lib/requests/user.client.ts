@@ -66,7 +66,6 @@ export class UserClient {
   }
 
   static async getAuthenticatedUser(): Promise<User | null> {
-    
     try {
       const { data } = await apiClient.get<User>('/users/me');
       return data;
@@ -100,17 +99,12 @@ export class UserClient {
     }
   }
 
-  static async createUser(
-    userData: Partial<User>
-  ): Promise<User> {
+  static async createUser(userData: Partial<User>): Promise<User> {
     const response = await apiClient.post<User>('/users', userData);
     return response.data;
   }
 
-  static async updateUser(
-    id: string,
-    userData: Partial<User>
-  ): Promise<User> {
+  static async updateUser(id: string, userData: Partial<User>): Promise<User> {
     const response = await apiClient.patch<User>(`/users/${id}`, userData);
     return response.data;
   }
