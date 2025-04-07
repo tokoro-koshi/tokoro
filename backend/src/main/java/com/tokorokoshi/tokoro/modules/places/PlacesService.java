@@ -165,7 +165,7 @@ public class PlacesService {
         }
 
         // Map DTO to Place schema (for update)
-        var placeSchema = placeMapper.toPlaceSchema(place);
+        var placeSchema = placeMapper.toPlaceSchema(place).withId(id);
 
         // Process new picture files if provided
         List<String> pictureKeys = fileStorageService
