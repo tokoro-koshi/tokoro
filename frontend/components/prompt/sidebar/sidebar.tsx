@@ -15,6 +15,7 @@ import { usePromptStore } from '@/lib/stores/prompt';
 import { cn } from '@/lib/utils';
 import { useSidebar } from '@/components/ui/sidebar';
 import styles from './sidebar.module.css';
+import routes from "@/lib/constants/routes";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -28,23 +29,29 @@ export function AppSidebar() {
     >
       <SidebarHeader className={styles.header}>
         <div className={styles.action}>
-          <SidebarTrigger
-            className={cn(styles.trigger, state === 'collapsed' && 'h-6 w-6')}
-          />
+          <div className={styles.toggle}>
+            <SidebarTrigger
+                className={cn(styles.trigger, state === 'collapsed' && 'h-6 w-6')}
+            />
+            <span className={cn(state !== 'collapsed' ? 'block' : 'hidden', styles.hide)}>
+              Hide
+            </span>
+          </div>
+
 
           <button
             className={cn(
               styles.newChat,
               state === 'collapsed' && 'justify-center'
             )}
-            onClick={() => router.push('/prompt')}
+            onClick={() => router.push(routes.aiSearch)}
           >
-            <span className={state !== 'collapsed' ? 'block' : 'hidden'}>
-              New Chat
-            </span>
             <SquarePen
               className={state !== 'collapsed' ? 'h-6 w-6' : 'h-6 w-6'}
             />
+            <span className={state !== 'collapsed' ? 'block' : 'hidden'}>
+              New Chat
+            </span>
           </button>
         </div>
       </SidebarHeader>
