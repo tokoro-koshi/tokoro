@@ -31,6 +31,25 @@ public record Place(
         double rating
 ) {
     /**
+     * Creates a new place with the given ID.
+     *
+     * @param id The ID of the place
+     * @return A new place with the given ID
+     */
+    public Place withId(String id) {
+        return new Place(
+            id,
+            name,
+            description,
+            location,
+            categoryId,
+            tags,
+            pictures,
+            rating
+        );
+    }
+
+    /**
      * Creates a new place with the given pictures.
      *
      * @param pictures The list of pictures of the place
