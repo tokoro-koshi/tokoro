@@ -3,6 +3,7 @@ package com.tokorokoshi.tokoro.modules.chats;
 import com.tokorokoshi.tokoro.dto.PaginationDto;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
+import com.tokorokoshi.tokoro.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,6 +76,31 @@ public class ChatHistoryController {
             int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
+        var chatHistories = this.chatHistoryService.getAllUserChatHistories(userId, pageable);
+        var pagination = PaginationDto.fromEntityModel(
+                this.chatHistoryPagedResourcesAssembler.toModel(chatHistories)
+        );
+        return ResponseEntity.ok(pagination);
+    }
+
+    @Operation(
+            summary = "Get all chat histories for the current user",
+            description = "Returns a paginated list of all chat histories for a user"
+    )
+    @GetMapping(value = "/users/me", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PaginationDto<ChatHistoryDto>> getAllChatHistoriesByCurrentUser(
+            @Parameter(description = "The page number to get", example = "0")
+            @RequestParam(defaultValue = "0")
+            int page,
+            @Parameter(
+                    description = "The number of items per page",
+                    example = "20"
+            )
+            @RequestParam(defaultValue = "20")
+            int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        String userId = SecurityUtils.getAuthenticatedUserId();
         var chatHistories = this.chatHistoryService.getAllUserChatHistories(userId, pageable);
         var pagination = PaginationDto.fromEntityModel(
                 this.chatHistoryPagedResourcesAssembler.toModel(chatHistories)
