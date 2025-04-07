@@ -61,7 +61,7 @@ export default function ChatInterface({
         const backChat = (
           await axios.post<BackChat>('/api/places/search', {
             prompt: input,
-            chatId: chat ? chat.id : '',
+            chatId: chat ? chat.id : undefined,
           })
         ).data;
         return (
