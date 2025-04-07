@@ -35,7 +35,7 @@
 }
 
 .inputArea {
-  @apply sticky bottom-0 p-3 z-50;
+  @apply sticky bottom-0 z-50 p-3;
 }
 
 .inputContainer {

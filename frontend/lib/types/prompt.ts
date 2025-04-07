@@ -1,4 +1,4 @@
-import {Place} from "@/lib/types/place";
+import { Place } from '@/lib/types/place';
 
 export interface UserChatMessage {
   sender: 'USER';

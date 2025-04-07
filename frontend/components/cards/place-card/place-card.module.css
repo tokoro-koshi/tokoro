@@ -11,7 +11,7 @@
   }
 
   & .location {
-    @apply mb-1.5 leading-none text-ellipsis line-clamp-2;
+    @apply mb-1.5 line-clamp-2 text-ellipsis leading-none;
   }
 
   & .description {
@@ -19,7 +19,7 @@
   }
 
   & .text {
-    @apply relative pl-6 pr-4 pb-2 text-left;
+    @apply relative pb-2 pl-6 pr-4 text-left;
   }
 
   & .saveButton {
@@ -28,9 +28,9 @@
 }
 
 .cardHeader {
-    @apply !pt-0 relative;
+  @apply relative !pt-0;
 
   & .image {
-    @apply h-48 w-full object-cover rounded-t-[43px];
+    @apply h-48 w-full rounded-t-[43px] object-cover;
   }
 }
