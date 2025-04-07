@@ -10,15 +10,19 @@
   @apply w-full;
 }
 
+.toggle{
+  @apply flex w-full items-center gap-3 rounded-sm bg-sidebar-foreground py-2 px-2;
+}
+
 .trigger {
-  @apply w-full justify-normal rounded-sm bg-sidebar-foreground px-2 text-lg font-bold text-sidebar;
+  @apply rounded-sm bg-sidebar-foreground px-2 text-lg font-bold text-sidebar;
 }
 
 .newChat {
   @apply my-1 flex w-full items-center gap-3 rounded-sm bg-sidebar-foreground px-2 py-2 text-lg font-bold text-sidebar;
 }
 
-.new {
+.new, .hide {
   @apply text-lg font-bold text-sidebar;
 }
 
