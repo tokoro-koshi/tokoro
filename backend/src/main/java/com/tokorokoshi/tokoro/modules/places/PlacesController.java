@@ -169,7 +169,7 @@ public class PlacesController {
             SearchDto body
     ) throws BadRequestException {
         Response<TagsDto> tagsResponse =
-                tagsService.generateTags(body.prompt());
+                tagsService.generateTags(body.prompt(), 0);
         if (tagsResponse.isRefusal()) {
             throw new BadRequestException(tagsResponse.getRefusal());
         }
