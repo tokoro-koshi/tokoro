@@ -26,7 +26,6 @@ export default function SaveButton({
 
   useEffect(() => {
     if (user) {
-      console.log('User:', user.userMetadata);
       const isFavorite =
         user.userMetadata?.collections.some((collection) =>
           collection.placesIds.includes(placeId)
@@ -43,7 +42,6 @@ export default function SaveButton({
     setIsChecked((prev) => !prev);
     await axios.post('/api/places/toggle-favorite', { placeId });
     await getUser(user, setUser);
-    console.log('User:', user?.userMetadata);
     setIsLoading(false);
   };
 

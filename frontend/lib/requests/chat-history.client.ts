@@ -1,8 +1,4 @@
-import {
-  BackChat,
-  Chat,
-  FrontChatMessage,
-} from '@/lib/types/prompt';
+import { BackChat, Chat, FrontChatMessage } from '@/lib/types/prompt';
 import apiClient from '@/lib/helpers/apiClient';
 import { Pagination } from '@/lib/types/pagination';
 import { PlaceClient } from '@/lib/requests/place.client';

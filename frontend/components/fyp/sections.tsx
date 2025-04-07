@@ -42,7 +42,6 @@ export default function Sections({
           latitude,
           longitude,
         });
-        console.log(response.data);
         setPlaces(response.data);
       } catch (error) {
         console.error(error);
