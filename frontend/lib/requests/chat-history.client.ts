@@ -1,12 +1,34 @@
-import { BackChat } from '@/lib/types/prompt';
+import {
+  BackChat,
+  Chat,
+  FrontChatMessage,
+} from '@/lib/types/prompt';
 import apiClient from '@/lib/helpers/apiClient';
 import { Pagination } from '@/lib/types/pagination';
+import { PlaceClient } from '@/lib/requests/place.client';
 
 export class ChatHistoryClient {
-  static async getChatHistoryById(id: string): Promise<BackChat | null> {
+  static async getChatHistoryById(id: string): Promise<Chat | null> {
     try {
-      const response = await apiClient.get<BackChat>(`/chat-histories/${id}`);
-      return response.data;
+      const { data } = await apiClient.get<BackChat>(`/chat-histories/${id}`);
+      const frontendMessages: FrontChatMessage[] = await Promise.all(
+        data.messages.map(async (message): Promise<FrontChatMessage> => {
+          if (message.sender === 'USER') {
+            return message; // Directly return user messages
+          }
+          try {
+            const places = await PlaceClient.getPlacesByIds(message.content);
+            return { sender: 'AI', content: places };
+          } catch (error) {
+            console.error(error);
+            return { sender: 'AI', content: [] };
+          }
+        })
+      );
+      return {
+        ...data,
+        messages: frontendMessages,
+      };
     } catch (error) {
       console.error(error);
       return null;
