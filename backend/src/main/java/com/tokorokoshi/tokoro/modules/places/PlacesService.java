@@ -146,10 +146,8 @@ public class PlacesService {
             String id,
             CreateUpdatePlaceDto place
     ) {
-        PlaceDto existingPlaceDto = getPlaceById(id);
-        if (existingPlaceDto == null) {
-            return null;
-        }
+        Place existingPlace = repository.findById(id, Place.class);
+        if (place == null) return null;
 
         // Validate pictures
         if (isFilesInvalid(place.pictures())) {
@@ -158,8 +156,8 @@ public class PlacesService {
 
         // For update, we assume replacing pictures with new ones.
         // Remove existing pictures from storage if there are any new pictures.
-        if (existingPlaceDto.pictures() != null && place.pictures() != null) {
-            for (String key : existingPlaceDto.pictures()) {
+        if (!existingPlace.pictures().isEmpty() && place.pictures() != null) {
+            for (String key : existingPlace.pictures()) {
                 fileStorageService.deleteFile(key);
             }
         }
@@ -168,13 +166,10 @@ public class PlacesService {
         var placeSchema = placeMapper.toPlaceSchema(place).withId(id);
 
         // Process new picture files if provided
-        List<String> pictureKeys = fileStorageService
-                .uploadFiles(
-                        place.pictures() != null
-                                ? List.of(place.pictures())
-                                : List.of(),
-                        "places"
-                )
+        List<String> pictureKeys = place.pictures() == null
+            ? existingPlace.pictures()
+            : fileStorageService
+                .uploadFiles(List.of(place.pictures()), "places")
                 .join();
 
         // For update, we assume replacing pictures with new ones.
