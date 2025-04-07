@@ -10,10 +10,6 @@ export const getUser = async (
     console.error('Failed to fetch user data');
     return;
   }
-  console.log('Fetched user in method:', {
-    ...user,
-    userMetadata: fetchedUser.data.userMetadata,
-  });
   setUser({
     ...user,
     userMetadata: fetchedUser.data.userMetadata,

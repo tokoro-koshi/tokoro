@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PlaceClient } from '@/lib/requests/place.client';
-import {
-  BackChat,
-  Chat,
-  FrontChatMessage,
-} from '@/lib/types/prompt';
+import { BackChat, Chat, FrontChatMessage } from '@/lib/types/prompt';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const body = await request.json();
