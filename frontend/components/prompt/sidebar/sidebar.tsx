@@ -8,15 +8,24 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SquarePen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { SquarePen,  Ellipsis, Trash } from 'lucide-react';
 import { usePromptStore } from '@/lib/stores/prompt';
 import { useSidebarStore } from '@/lib/stores/sidebar';
 import { cn } from '@/lib/utils';
 import styles from './sidebar.module.css';
 import routes from '@/lib/constants/routes';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import axios from "axios";
+import {useMutation} from "@tanstack/react-query";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -41,6 +50,31 @@ export function AppSidebar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open, toggleSidebar]);
 
+  const { mutate: deleteChatMutation } = useMutation({
+    mutationFn: async (chatId: string) => {
+      await axios.delete(`/api/chat-history/${chatId}`);
+      return chatId;
+    },
+    onSuccess: (deletedChatId) => {
+      usePromptStore.getState().deleteChat(deletedChatId);
+      if (typeof window === "undefined") return;
+      const currentPath = window.location.pathname;
+
+      if (currentPath.startsWith("/prompt/")) {
+        const currentChatId = currentPath.split("/").pop();
+
+        if (currentChatId === deletedChatId) {
+          router.push(routes.aiSearch);
+        }
+      }
+    },
+  });
+
+  const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    deleteChatMutation(chatId);
+  };
+
   return (
     // Backdrop overlay for mobile
     <>
@@ -55,7 +89,6 @@ export function AppSidebar() {
         className={cn(
           styles.sidebar,
           state === 'collapsed' && '!w-[4rem]',
-          // Mobile specific styles
           'max-md:!absolute max-md:bottom-0 max-md:top-0 max-md:z-40',
           open ? 'max-md:left-0' : 'max-md:-left-[364px]',
           'max-md:transition-all max-md:duration-300 max-md:ease-in-out'
@@ -107,15 +140,46 @@ export function AppSidebar() {
           <SidebarContent className={styles.content}>
             <ScrollArea className={styles.scrollArea}>
               <SidebarGroup className={styles.group}>
-                {chats.map((chat, index) => (
+                {chats.length === 0 ? (
+                <div className="flex justify-center py-52 text-center text-3xl font-bold text-sidebar-foreground">
+                  No chats yet...
+                </div>
+                ) : (chats.map((chat, index) => (
                   <SidebarMenuItem
                     key={index}
-                    onClick={() => router.push(`/prompt/${chat.id}`)}
+                    onClick={() => {
+                      router.push(`/prompt/${chat.id}`);
+                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                        toggleSidebar();
+                      }
+                    }}
                     className={styles.menuItem}
-                  >
+                    >
                     {chat.title}
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className={styles.ellipsis}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                          <Ellipsis className="h-5 w-5 stroke-[3]" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                            onClick={(e) => handleDeleteChat(chat.id, e)}
+                            className="text-sidebar bg-background font-medium hover:bg-white"
+                        >
+                          <Trash className="mr-2 h-5 w-5" />
+                            Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </SidebarMenuItem>
-                ))}
+                )))}
               </SidebarGroup>
             </ScrollArea>
           </SidebarContent>

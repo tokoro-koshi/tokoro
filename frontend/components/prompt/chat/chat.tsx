@@ -86,12 +86,12 @@ export default function ChatInterface({
     } as UserChatMessage;
 
     setChat((prev) => ({ ...prev, messages: [...prev.messages, userMessage] }));
-    addChat(input);
+    addChat(input, chat.id);
     setInput('');
     setLastIndex(PAGINATION_STEP);
 
     mutate(input);
-  }, [input, mutate, addChat]);
+  }, [input, mutate, addChat, chat.id]);
 
   const handleGenerateMore = async () => {
     if (isLoading) return;
