@@ -15,7 +15,7 @@
   }
 
   & .description {
-    @apply text-xs text-primary;
+    @apply text-xs text-primary text-ellipsis line-clamp-2;
   }
 
   & .text {
