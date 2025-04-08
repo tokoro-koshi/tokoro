@@ -52,7 +52,6 @@ export default function ChatInterface({
 
   useLayoutEffect(() => {
     if (!chatBottomRef.current) return;
-    // chatBottomRef.current.scrollIntoView({ behavior: "smooth" });
   }, [lastIndex, chat]);
 
   const { status, mutate } = useMutation(

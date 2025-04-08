@@ -14,17 +14,18 @@ export const usePromptStore = create<PromptState>((set) => ({
     set((state) => {
       if (chatId) {
         return {
-          chats: state.chats.map(chat =>
-              chat.id === chatId ? {...chat, title: prompt} : chat
-          )
+          chats: state.chats.map((chat) =>
+            chat.id === chatId ? { ...chat, title: prompt } : chat
+          ),
         };
       }
       return {
-        chats: [{title: prompt} as BackChat, ...state.chats],
+        chats: [{ title: prompt } as BackChat, ...state.chats],
       };
     }),
   updateChats: (chats: BackChat[]) => set({ chats }),
-  deleteChat: (id: string) => set((state) => ({
-      chats: state.chats.filter((chat) => chat.id !== id)
-  })),
+  deleteChat: (id: string) =>
+    set((state) => ({
+      chats: state.chats.filter((chat) => chat.id !== id),
+    })),
 }));

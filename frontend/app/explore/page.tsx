@@ -19,7 +19,7 @@ export default async function ForYouPage({ searchParams }: ForYouProps) {
 
   let places: Place[];
   switch (activeSection) {
-    case 'nearby':
+    case 'nearby': //TODO
       places = [];
       break;
     case 'recommended':
