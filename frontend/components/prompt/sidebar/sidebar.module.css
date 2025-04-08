@@ -32,8 +32,10 @@
 }
 
 .menuItem {
-  @apply min-w-0 truncate rounded-sm bg-sidebar-foreground bg-opacity-25 p-2 transition-colors hover:bg-opacity-90 hover:text-sidebar;
+  @apply min-w-0 truncate rounded-sm bg-sidebar-foreground bg-opacity-25 p-2 transition-colors hover:bg-opacity-90 hover:text-sidebar
+  flex justify-between;
 }
+
 
 .group {
   @apply gap-2;
