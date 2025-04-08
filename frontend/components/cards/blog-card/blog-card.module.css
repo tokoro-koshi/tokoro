@@ -1,9 +1,17 @@
+.article {
+  @apply flex flex-col gap-4 md:gap-8;
+}
+
 .content {
   @apply mt-3.5 flex flex-col;
 }
 
 .title {
   @apply line-clamp-2 text-ellipsis text-xl font-medium md:line-clamp-3 md:text-2xl;
+}
+
+.image {
+  @apply h-[219px] w-full cursor-pointer rounded-[43px] object-cover md:w-[219px];
 }
 
 .date {
