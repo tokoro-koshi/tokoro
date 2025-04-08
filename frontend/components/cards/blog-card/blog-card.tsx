@@ -1,5 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import styles from './blog-card.module.css';
+import { cn } from '@/lib/utils';
 
 interface BlogCardProps {
   imageUrl: StaticImageData | string;
@@ -32,16 +33,17 @@ export const BlogCard = ({
       tabIndex={0}
     >
       <div
-        className={`mx-auto flex-shrink-0 md:mx-0 ${
+        className={cn(
+          'mx-auto w-full flex-shrink-0 md:mx-0 md:-mb-8 md:w-auto',
           imagePosition === 'left' ? 'md:-ml-16' : 'md:-mr-16'
-        } w-full md:-mb-8 md:w-auto`}
+        )}
       >
         <Image
           src={imageUrl}
           alt={title}
           width={219}
           height={219}
-          className='h-[219px] w-full cursor-pointer rounded-[43px] object-cover md:w-[219px]'
+          className={styles.image}
         />
       </div>
 

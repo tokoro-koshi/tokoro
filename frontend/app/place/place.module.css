@@ -47,7 +47,7 @@
 }
 
 .description {
-  @apply order-1 md:order-none w-full rounded-3xl bg-background p-4 md:min-h-80;
+  @apply order-1 w-full rounded-3xl bg-background p-4 md:order-none md:min-h-80;
 }
 
 .map {

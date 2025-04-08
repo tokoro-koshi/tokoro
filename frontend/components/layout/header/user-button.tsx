@@ -1,9 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { User } from '@/lib/types/user';
 import {
-  // ChevronRight,
-  // CreditCard,
-  // Settings,
   ClipboardList,
   LogOut,
   MapPinned,
@@ -40,17 +37,6 @@ export default function UserButton({ user }: { user: User }) {
               <ClipboardList /> Admin
             </DropdownMenuItem>
           )}
-          {/*<DropdownMenuItem onClick={() => router.push(routes.settings)}>*/}
-          {/*  <Settings /> Settings*/}
-          {/*</DropdownMenuItem>*/}
-          {/*<DropdownMenuItem*/}
-          {/*  onClick={() => router.push(routes.support)}*/}
-          {/*  className='flex justify-between'*/}
-          {/*>*/}
-          {/*  <CreditCard />*/}
-          {/*  <span>Support</span>*/}
-          {/*  <ChevronRight className='ml-auto' />*/}
-          {/*</DropdownMenuItem>*/}
           <DropdownMenuItem
             className={'md:hidden'}
             onClick={() => router.push(routes.explore)}
