@@ -47,7 +47,7 @@
 }
 
 .description {
-  @apply w-full rounded-3xl bg-background p-4 md:min-h-80;
+  @apply w-full rounded-3xl bg-background p-4 max-h-60 md:min-h-80 overflow-scroll text-ellipsis md:line-clamp-[11];
 }
 
 .map {
