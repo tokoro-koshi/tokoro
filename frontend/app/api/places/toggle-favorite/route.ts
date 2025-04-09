@@ -33,10 +33,10 @@ export async function POST(request: NextRequest) {
   ) {
     await FavoritesClient.removeFavoritePlace(defaultCollection.id, placeId);
     const collection = await FavoritesClient.getAllCurrentUserCollections();
-    return NextResponse.json(collection);
+    return NextResponse.json(collection.payload);
   } else {
     await FavoritesClient.addFavoritePlace(defaultCollection.id, placeId);
     const collection = await FavoritesClient.getAllCurrentUserCollections();
-    return NextResponse.json(collection);
+    return NextResponse.json(collection.payload);
   }
 }

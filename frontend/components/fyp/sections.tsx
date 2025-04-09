@@ -21,20 +21,19 @@ export default function Sections({ activeSection }: SectionsProps) {
   const router = useRouter();
 
   // Obtain the user's favorite places IDs from metadata of a current user
-  const favoritesIds = useUser(
-    (state) =>
-      state.user?.userMetadata?.collections
-        .flat()
-        ?.map((item) => item.placesIds)
-        ?.flat() ?? []
-  );
+  const user = useUser((state) => state.user);
+  const favoritesIds = user?.userMetadata?.collections
+    .flat()
+    ?.map((item) => item.placesIds)
+    ?.flat() 
+    ?? [];
 
   // Get the user's geolocation
   const position = useGeolocation();
 
   // Fetch the relevant places based on the active section
   const { data: places } = useQuery({
-    queryKey: ['savedPlaces', activeSection, ...favoritesIds],
+    queryKey: ['savedPlaces', activeSection, position, ...favoritesIds],
     queryFn: async () => {
       if (activeSection === 'saved') {
         const ids = favoritesIds.join(',');

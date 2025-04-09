@@ -27,8 +27,14 @@ export default function useGeolocation(): Geolocation {
 
     // Request the user's current position
     navigator.geolocation.getCurrentPosition(
-      ({ coords }) =>
-        setPosition({ lat: coords.latitude, lng: coords.longitude }),
+      ({ coords }) => {
+        const newPos = { lat: coords.latitude, lng: coords.longitude };
+        setPosition(
+          (prev) => prev.lat === newPos.lat && prev.lng === newPos.lng 
+            ? prev 
+            : newPos
+        );
+      },
       console.error
     );
   }, []);
