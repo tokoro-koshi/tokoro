@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { DateTime } from 'luxon';
 import { useMutation } from '@tanstack/react-query';
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 
 interface CommentSectionProps {
   placeId: string;
@@ -70,10 +70,10 @@ export function Comments({
       setNewComment('');
     },
     onError: (error) => {
-      toast.error('Failed to add comment')
+      toast.error('Failed to add comment');
       console.error('Failed to add comment:', error);
     },
-  })
+  });
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -100,7 +100,9 @@ export function Comments({
               size='icon'
               className={styles.button}
               onClick={() => addComment(newComment)}
-              disabled={isUserLoading || isSubmittingComment || !newComment.trim()}
+              disabled={
+                isUserLoading || isSubmittingComment || !newComment.trim()
+              }
             >
               <span>Send</span>
             </Button>

@@ -5,67 +5,54 @@ import { Place } from '@/lib/types/place';
 import { cn } from '@/lib/utils';
 import PlaceList from '@/components/cards/place-list/place-list';
 import styles from './fyp.module.css';
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BeatLoader } from 'react-spinners';
-import { getUser } from '@/lib/helpers/client-fetch-user';
 import { useUser } from '@/lib/stores/user';
+import { useQuery } from '@tanstack/react-query';
+import useGeolocation from '@/hooks/geolocation';
 
 const sections = ['nearby', 'recommended', 'saved'] as const;
 
 type SectionsProps = {
-  places: Place[];
   activeSection: (typeof sections)[number];
 };
 
-export default function Sections({
-  places: serverPlaces,
-  activeSection,
-}: SectionsProps) {
-  const { user, setUser } = useUser();
-  const [places, setPlaces] = useState<Place[]>(serverPlaces);
-  const [hasFetchedSaved, setHasFetchedSaved] = useState(false);
-
-  useEffect(() => {
-    if (hasFetchedSaved) return;
-    const fetchUser = async () => {
-      await getUser(user, setUser);
-      setHasFetchedSaved(true);
-    };
-    fetchUser();
-  }, [hasFetchedSaved, user, setUser]);
-
-  useEffect(() => {
-    const fetchPlaces = async (latitude: number, longitude: number) => {
-      try {
-        const response = await axios.post(`/api/places/nearby`, {
-          latitude,
-          longitude,
-        });
-        setPlaces(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    setPlaces(serverPlaces);
-
-    if (activeSection !== 'nearby') return;
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          fetchPlaces(latitude, longitude);
-        },
-        (error) => console.error(error)
-      );
-    }
-  }, [activeSection, serverPlaces]);
-
+export default function Sections({ activeSection }: SectionsProps) {
   const router = useRouter();
+
+  // Obtain the user's favorite places IDs from metadata of a current user
+  const favoritesIds = useUser(
+    (state) =>
+      state.user?.userMetadata?.collections
+        .flat()
+        ?.map((item) => item.placesIds)
+        ?.flat() ?? []
+  );
+
+  // Get the user's geolocation
+  const position = useGeolocation();
+
+  // Fetch the relevant places based on the active section
+  const { data: places } = useQuery({
+    queryKey: ['savedPlaces', activeSection, ...favoritesIds],
+    queryFn: async () => {
+      if (activeSection === 'saved') {
+        const ids = favoritesIds.join(',');
+        const { data } = await axios.get<Place[]>(`/api/places/batch/${ids}`);
+        return data;
+      } else if (activeSection === 'nearby') {
+        const { data } = await axios.get<Place[]>(`/api/places/nearby`, {
+          params: position,
+        });
+        return data;
+      } else {
+        // TODO: recommended
+        const { data } = await axios.get<Place[]>(`/api/places/random`);
+        return data;
+      }
+    },
+  });
+
   return (
     <div className={styles.sections}>
       <ul className={styles.sectionsList}>
@@ -83,7 +70,7 @@ export default function Sections({
           </li>
         ))}
       </ul>
-      {activeSection === 'nearby' && places.length === 0 ? (
+      {activeSection === 'nearby' && !places ? (
         <div className={styles.searchingLabel}>
           <span>Searching for nearby places</span>
           <BeatLoader color={'white'} />

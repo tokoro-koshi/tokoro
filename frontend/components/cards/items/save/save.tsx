@@ -1,5 +1,6 @@
 ﻿'use client';
-import React, { useEffect, useState } from 'react';
+
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -7,7 +8,8 @@ import styles from './save.module.css';
 import axios from 'axios';
 import { useUser } from '@/lib/stores/user';
 import { ClipLoader } from 'react-spinners';
-import { getUser } from '@/lib/helpers/client-fetch-user';
+import { useMutation } from '@tanstack/react-query';
+import { FavoritesCollection } from '@/lib/types/place';
 
 interface SaveButtonProps {
   placeId: string;
@@ -21,29 +23,33 @@ export default function SaveButton({
   variant,
 }: SaveButtonProps) {
   const { user, setUser } = useUser();
-  const [isChecked, setIsChecked] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      const isFavorite =
-        user.userMetadata?.collections.some((collection) =>
-          collection.placesIds.includes(placeId)
-        ) ?? false;
-      setIsChecked(isFavorite);
-    }
-  }, [placeId, user, isChecked]);
+  const isChecked = useMemo(() => {
+    if (!user || !user.userMetadata) return false;
+    return user.userMetadata.collections.some((collection) =>
+      collection.placesIds.includes(placeId)
+    );
+  }, [placeId, user]);
 
-  const handleSave = async (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (isLoading) return;
-    setIsLoading(true);
-    setIsChecked((prev) => !prev);
-    await axios.post('/api/places/toggle-favorite', { placeId });
-    await getUser(user, setUser);
-    setIsLoading(false);
-  };
+  const { mutate: handleSave, isPending: isLoading } = useMutation({
+    mutationKey: ['savePlace'],
+    mutationFn: async () => {
+      const { data } = await axios.post<FavoritesCollection[]>(
+        '/api/places/toggle-favorite',
+        { placeId }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      setUser({
+        ...user!,
+        userMetadata: {
+          ...(user?.userMetadata ?? {}),
+          collections: data,
+        },
+      });
+    },
+  });
 
   if (isChecked === null) {
     return null;
@@ -78,7 +84,7 @@ export default function SaveButton({
         className,
         variant === 'dark' ? styles.buttonDark : styles.buttonLight
       )}
-      onClick={handleSave}
+      onClick={() => handleSave()}
     >
       <Bookmark
         className={cn(
