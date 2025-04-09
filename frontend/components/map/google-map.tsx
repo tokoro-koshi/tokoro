@@ -2,9 +2,9 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import {
-  GoogleMap as GoogleMap,
-  LoadScript,
+  GoogleMap,
   Marker,
+  useJsApiLoader,
 } from '@react-google-maps/api';
 import { Place } from '@/lib/types/place';
 import PlaceCard from '@/components/cards/place-card/place-card';
@@ -58,14 +58,25 @@ const GoogleMapComponent = ({
   }, [handleMarkerClick, places]);
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: apiKey || '',
+  });
 
   if (!apiKey) {
     console.error('Google Maps API key is not provided');
     return <div className={styles.apiKeyError}>Unexpected error happened</div>;
   }
 
+  if (loadError) {
+    return <div className={styles.apiKeyError}>Failed to load Google Maps</div>;
+  }
+
+  if (!isLoaded) {
+    return <div className={styles.apiKeyError}>Loading Google Maps…</div>;
+  }
+
   return (
-    <LoadScript googleMapsApiKey={apiKey}>
+    <>
       <GoogleMap
         mapContainerStyle={{
           width: '100%',
@@ -136,7 +147,7 @@ const GoogleMapComponent = ({
           Show all
         </button>
       )}
-    </LoadScript>
+    </>
   );
 };
 
