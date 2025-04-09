@@ -3,7 +3,7 @@ import routes from '@/lib/constants/routes';
 export const baseRoutes = [
   { path: routes.home, label: 'Home' },
   { path: routes.home + '#features', label: 'Features' },
-  { path: routes.home + '#about', label: 'About' },
+  { path: routes.about, label: 'About' },
 ];
 
 export const authRoutes = [
