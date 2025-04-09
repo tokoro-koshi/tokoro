@@ -1,0 +1,95 @@
+.titleSection {
+  @apply flex items-center justify-between gap-5 px-9 pt-32;
+}
+
+.line {
+  @apply h-2 flex-1 justify-center rounded-xl bg-background;
+}
+
+.title {
+  @apply text-center text-5xl font-extrabold leading-6 text-background;
+}
+
+.missionSection {
+  @apply ml-16 mt-11 max-w-[979px] rounded-[43px] bg-background px-8 py-10;
+}
+
+.missionTitle {
+  @apply text-4xl font-extrabold leading-5 text-popover-foreground;
+}
+
+.missionText {
+  @apply mt-5 text-left text-2xl font-medium leading-6 text-popover-foreground;
+}
+
+.storySection {
+  @apply -mt-6 ml-auto mr-16 flex max-h-[471px] max-w-[979px] rounded-[43px] bg-foreground bg-opacity-50 px-8;
+}
+
+.storyTitle {
+  @apply mb-1 text-4xl font-extrabold leading-5 text-background;
+}
+
+.storyText {
+  @apply mt-5 text-left text-2xl font-medium leading-6 text-background;
+}
+
+.storyImage {
+  @apply -mb-6 mt-6 rounded-[43px];
+}
+
+.valuesTitle {
+  @apply pb-8 pt-14 text-center text-4xl font-extrabold leading-5 text-background;
+}
+
+.valuesSection {
+  @apply flex flex-col items-center justify-between gap-9 space-y-7 px-20 md:flex-row md:space-x-9 md:space-y-0;
+}
+
+.valueCard {
+  @apply rounded-[47px] bg-background bg-opacity-30;
+}
+
+.cardTitle {
+  @apply pb-5 text-3xl font-bold leading-6 text-background;
+}
+
+.cardDescription {
+  @apply text-2xl font-medium leading-6 text-background;
+}
+
+.teamSection {
+  @apply mx-20 mt-10 rounded-[43px] bg-background px-14 pb-8 pt-9;
+}
+
+.teamTitle {
+  @apply text-center text-4xl font-extrabold leading-5 text-popover-foreground;
+}
+
+.teamGrid {
+  @apply grid grid-cols-1 gap-10 pt-7 md:grid-cols-5 lg:grid-cols-5;
+}
+
+.avatar {
+  @apply h-44 w-44 rounded-[43px] object-cover;
+}
+
+.memberName {
+  @apply pt-3 text-center text-2xl font-medium leading-6 text-popover-foreground;
+}
+
+.memberRole {
+  @apply pt-1 text-center text-base font-light leading-4 text-secondary-foreground;
+}
+
+.bottomSection {
+  @apply justify-items-center bg-custom-gradient pb-14 pt-5;
+}
+
+.bottomText {
+  @apply pb-8 pt-12 text-[40px] font-extrabold leading-5 text-background;
+}
+
+.contactButton {
+  @apply rounded-[6px] bg-primary px-14 py-2 text-sm font-semibold leading-6 text-background hover:bg-background hover:text-popover-foreground;
+}
