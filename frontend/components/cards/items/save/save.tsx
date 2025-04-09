@@ -25,10 +25,9 @@ export default function SaveButton({
   const { user, setUser } = useUser();
 
   const isChecked = useMemo(() => {
-    if (!user || !user.userMetadata) return false;
-    return user.userMetadata.collections.some((collection) =>
+    return user?.userMetadata?.collections?.some((collection) =>
       collection.placesIds.includes(placeId)
-    );
+    ) ?? false;
   }, [placeId, user]);
 
   const { mutate: handleSave, isPending: isLoading } = useMutation({
@@ -84,7 +83,11 @@ export default function SaveButton({
         className,
         variant === 'dark' ? styles.buttonDark : styles.buttonLight
       )}
-      onClick={() => handleSave()}
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        handleSave();
+      }}
     >
       <Bookmark
         className={cn(
