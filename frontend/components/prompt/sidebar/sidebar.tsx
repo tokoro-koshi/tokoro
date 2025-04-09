@@ -35,7 +35,7 @@ export function AppSidebar() {
   const open = useSidebarStore((state) => state.open);
   const toggleSidebar = useSidebarStore((state) => state.toggleSidebar);
   const state = useSidebarStore((state) =>
-    state.open ? 'expanded' : 'collapsed'
+    state.open ? 'expanded' : 'collapsed',
   );
 
   useEffect(() => {
@@ -63,6 +63,7 @@ export function AppSidebar() {
       if (!pathname.startsWith('/prompt/')) {
         return;
       }
+
       const currentChatId = pathname.split('/').pop();
       if (currentChatId === deletedChatId) {
         router.push(routes.aiSearch);
@@ -80,8 +81,8 @@ export function AppSidebar() {
     <>
       {open && (
         <div
-          className='fixed inset-0 z-30 bg-black/30 transition-opacity duration-300 md:hidden'
-          aria-hidden='true'
+          className="fixed inset-0 z-30 bg-black/30 transition-opacity duration-300 md:hidden"
+          aria-hidden="true"
         />
       )}
 
@@ -91,7 +92,7 @@ export function AppSidebar() {
           state === 'collapsed' && '!w-[4rem]',
           'max-md:!absolute max-md:bottom-0 max-md:top-0 max-md:z-40',
           open ? 'max-md:left-0' : 'max-md:-left-[364px]',
-          'max-md:transition-all max-md:duration-300 max-md:ease-in-out'
+          'max-md:transition-all max-md:duration-300 max-md:ease-in-out',
         )}
         data-state={state}
       >
@@ -100,19 +101,19 @@ export function AppSidebar() {
             <div
               className={cn(
                 styles.toggle,
-                state === 'collapsed' ? 'max-md:fixed' : 'w-full'
+                state === 'collapsed' ? 'max-md:fixed' : 'w-full',
               )}
             >
               <SidebarTrigger
                 className={cn(
                   styles.trigger,
-                  state === 'collapsed' && 'h-6 w-6'
+                  state === 'collapsed' && 'h-6 w-6',
                 )}
               />
               <span
                 className={cn(
                   state !== 'collapsed' ? 'block' : 'hidden',
-                  styles.hide
+                  styles.hide,
                 )}
               >
                 Hide
@@ -122,9 +123,16 @@ export function AppSidebar() {
             <button
               className={cn(
                 styles.newChat,
-                state === 'collapsed' && 'justify-center'
+                state === 'collapsed' && 'justify-center',
               )}
-              onClick={() => router.push(routes.aiSearch)}
+              onClick={() => {
+                if (pathname == routes.aiSearch) {
+                  window.location.reload();
+                } else {
+                  router.push(routes.aiSearch);
+                }
+              }}
+
             >
               <SquarePen
                 className={state !== 'collapsed' ? 'h-6 w-6' : 'h-6 w-6'}
@@ -141,7 +149,7 @@ export function AppSidebar() {
             <ScrollArea className={styles.scrollArea}>
               <SidebarGroup className={styles.group}>
                 {chats.length === 0 ? (
-                  <div className='flex justify-center py-52 text-center text-3xl font-bold text-sidebar-foreground'>
+                  <div className="flex justify-center py-52 text-center text-3xl font-bold text-sidebar-foreground">
                     No chats yet...
                   </div>
                 ) : (
@@ -164,22 +172,22 @@ export function AppSidebar() {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
-                            variant='ghost'
-                            size='sm'
+                            variant="ghost"
+                            size="sm"
                             className={styles.ellipsis}
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <Ellipsis className='h-5 w-5 stroke-[3]' />
+                            <Ellipsis className="h-5 w-5 stroke-[3]" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align='end'>
+                        <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             onClick={(event) =>
                               handleDeleteChat(chat.id, event)
                             }
-                            className='bg-background font-medium text-sidebar hover:bg-white'
+                            className="bg-background font-medium text-sidebar hover:bg-white"
                           >
-                            <Trash className='mr-2 h-5 w-5' />
+                            <Trash className="mr-2 h-5 w-5" />
                             Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
