@@ -1,11 +1,7 @@
 ﻿'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import {
-  GoogleMap,
-  Marker,
-  useJsApiLoader,
-} from '@react-google-maps/api';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { Place } from '@/lib/types/place';
 import PlaceCard from '@/components/cards/place-card/place-card';
 import { X } from 'lucide-react';
