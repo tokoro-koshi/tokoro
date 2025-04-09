@@ -14,6 +14,7 @@ export const GET = handleAuth({
   login: handleLogin({
     authorizationParams: {
       audience: process.env.AUTH0_AUDIENCE,
+      prompt: 'login',
       scope: 'openid profile email',
     },
   }),
