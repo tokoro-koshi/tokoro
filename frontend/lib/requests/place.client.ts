@@ -4,9 +4,13 @@ import { Pagination } from '@/lib/types/pagination';
 import { BackChat } from '@/lib/types/prompt';
 
 export class PlaceClient {
-  static async getPlaceById(id: string): Promise<Place> {
-    const response = await apiClient.get<Place>(`/places/${id}`);
-    return response.data;
+  static async getPlaceById(id: string): Promise<Place | null> {
+    try {
+      const response = await apiClient.get<Place>(`/places/${id}`);
+      return response.data;
+    } catch {
+      return null;
+    }
   }
 
   static async updatePlace(id: string, place: Place): Promise<Place> {
