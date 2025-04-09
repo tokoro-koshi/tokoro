@@ -32,7 +32,7 @@
 }
 
 .menuItem {
-  @apply flex min-w-0 justify-between truncate rounded-sm bg-sidebar-foreground bg-opacity-25 p-2 transition-colors hover:bg-opacity-90 hover:text-sidebar;
+  @apply flex min-w-0 justify-between rounded-sm bg-sidebar-foreground bg-opacity-25 p-2 transition-colors hover:bg-opacity-90 hover:text-sidebar;
 }
 
 .group {
