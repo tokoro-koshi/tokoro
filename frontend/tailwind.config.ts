@@ -79,6 +79,10 @@ const config: Config = {
         base: ['var(--font-raleway)', 'Arial', 'Helvetica', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'monospace'],
       },
+      backgroundImage: {
+        'custom-gradient':
+          'linear-gradient(to bottom, #8181DE00 0%, #0F0F3194 58%, #0F0F31 100%)',
+      },
     },
   },
   plugins: [tailwindcss_animate],
