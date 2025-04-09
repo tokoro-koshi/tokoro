@@ -9,7 +9,7 @@ import { PlaceReviewClient } from '@/lib/requests/place-review.client';
 import SaveButton from '@/components/cards/items/save/save';
 import GoogleMapComponent from '@/components/map/google-map';
 import Link from 'next/link';
-import {notFound} from "next/navigation";
+import { notFound } from 'next/navigation';
 
 type PlacePageProps = {
   params: {

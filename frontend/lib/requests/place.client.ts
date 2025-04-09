@@ -35,14 +35,6 @@ export class PlaceClient {
     return response.data;
   }
 
-  static async getPlacesByIds(ids: string[]): Promise<Place[]> {
-    const queryParams = ids.map((id) => `ids=${id}`).join('&');
-    const response = await apiClient.get<Place[]>(
-      `/places/batch?${queryParams}`
-    );
-    return response.data;
-  }
-
   static async getNearbyPlaces(
     latitude: number,
     longitude: number,
