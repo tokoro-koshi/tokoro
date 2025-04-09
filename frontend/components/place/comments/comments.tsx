@@ -21,6 +21,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { DateTime } from 'luxon';
+import { useMutation } from '@tanstack/react-query';
+import toast from "react-hot-toast";
 
 interface CommentSectionProps {
   placeId: string;
@@ -41,39 +43,37 @@ export function Comments({
   const [newComment, setNewComment] = useState('');
   const commentListRef = useRef<HTMLDivElement>(null);
 
-  const { user, isLoading } = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
 
-  // Handle submitting a new comment
-  const handleSubmitCreate = async () => {
-    if (!newComment.trim()) return;
-
-    try {
-      if (!user?.userId) return;
+  const { mutate: addComment, isPending: isSubmittingComment } = useMutation({
+    mutationKey: ['createComment', placeId],
+    mutationFn: async (comment: string) => {
+      if (!comment.trim() || !user?.userId) return null;
 
       const newCommentData: PlaceReview = {
-        userId: user?.userId,
+        userId: user.userId,
         placeId,
-        comment: newComment,
+        comment,
         isRecommended: false,
       };
 
-      await axios.post('/api/reviews/create', newCommentData);
+      const { data } = await axios.post('/api/reviews/create', newCommentData);
+      return data;
+    },
+    onSuccess: (newCommentData) => {
+      if (!newCommentData) return;
 
-      newCommentData.userName = user.name;
-      newCommentData.userAvatar = user.picture;
-
-      const now = DateTime.now().toISO();
-      newCommentData.createdAt = now;
-      newCommentData.updatedAt = now;
+      newCommentData.userName = user?.name ?? 'You';
+      newCommentData.userAvatar = user?.picture ?? '';
 
       setComments((prev) => [newCommentData, ...prev]);
-
       setNewComment('');
-    } catch (error) {
+    },
+    onError: (error) => {
+      toast.error('Failed to add comment')
       console.error('Failed to add comment:', error);
-    } finally {
-    }
-  };
+    },
+  })
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
@@ -81,7 +81,7 @@ export function Comments({
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
   return (
-    !isLoading && (
+    !isUserLoading && (
       <div className={styles.container}>
         {user && (
           <div className={styles.commentInputSection}>
@@ -99,8 +99,8 @@ export function Comments({
             <Button
               size='icon'
               className={styles.button}
-              onClick={handleSubmitCreate}
-              // disabled={isLoading || !newComment.trim()}
+              onClick={() => addComment(newComment)}
+              disabled={isUserLoading || isSubmittingComment || !newComment.trim()}
             >
               <span>Send</span>
             </Button>
@@ -108,7 +108,7 @@ export function Comments({
         )}
 
         <div className={styles.commentsList} ref={commentListRef}>
-          {!isLoading && comments.length > 0 ? (
+          {!isUserLoading && comments.length > 0 ? (
             comments.map((comment) => (
               <CommentItem
                 key={comment.id}
@@ -117,7 +117,7 @@ export function Comments({
               />
             ))
           ) : (
-            <div className='py-14 text-center text-3xl font-bold text-background text-muted-foreground'>
+            <div className='py-14 text-center text-3xl font-bold text-muted-foreground'>
               No comments yet, be the first one to post
             </div>
           )}
