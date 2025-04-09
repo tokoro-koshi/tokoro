@@ -12,7 +12,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         return message; // Directly return user messages
       }
       try {
-        const places = await PlaceClient.getPlacesByIds(message.content);
+        const places = await PlaceClient.getPlacesByIdArray(message.content);
         return { sender: 'AI', content: places };
       } catch (error) {
         console.error(error);

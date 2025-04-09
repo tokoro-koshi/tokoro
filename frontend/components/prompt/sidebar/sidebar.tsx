@@ -166,9 +166,7 @@ export function AppSidebar() {
                       }}
                       className={styles.menuItem}
                     >
-                      <p className={'w-4/5 truncate'}>
-                        {chat.title}
-                      </p>
+                      <p className={'w-4/5 truncate'}>{chat.title}</p>
 
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

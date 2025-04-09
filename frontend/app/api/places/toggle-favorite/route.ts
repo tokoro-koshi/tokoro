@@ -32,12 +32,11 @@ export async function POST(request: NextRequest) {
     defaultCollection.placesIds.includes(placeId)
   ) {
     await FavoritesClient.removeFavoritePlace(defaultCollection.id, placeId);
-    return new NextResponse(null, { status: 204 });
+    const collection = await FavoritesClient.getAllCurrentUserCollections();
+    return NextResponse.json(collection);
   } else {
-    const payload = await FavoritesClient.addFavoritePlace(
-      defaultCollection.id,
-      placeId
-    );
-    return NextResponse.json(payload, { status: 200 });
+    await FavoritesClient.addFavoritePlace(defaultCollection.id, placeId);
+    const collection = await FavoritesClient.getAllCurrentUserCollections();
+    return NextResponse.json(collection);
   }
 }
