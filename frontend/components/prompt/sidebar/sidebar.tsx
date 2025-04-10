@@ -53,18 +53,25 @@ export function AppSidebar() {
   }, [open, toggleSidebar]);
 
   const { mutate: deleteChatMutation } = useMutation({
-    mutationFn: async (chatId: string) => {
+    mutationFn: async (chatId: string | null) => {
+      if (!chatId) return null;
       await axios.delete(`/api/chat-history/${chatId}`);
       return chatId;
     },
     onSuccess: (deletedChatId) => {
+      // Check if the chat ID is valid
+      if (!deletedChatId) return;
+
+      // Remove the chat from the store
       deleteChat(deletedChatId);
 
-      if (!pathname.startsWith('/prompt/')) {
-        return;
-      }
+      // Redirect to the search page if the deleted chat is the current one
+      if (!pathname.startsWith('/prompt/')) return;
 
+      // Get the current chat ID from the URL
       const currentChatId = pathname.split('/').pop();
+      // Check if the current chat ID matches the deleted chat ID
+      // If it does, redirect to the new prompt page
       if (currentChatId === deletedChatId) {
         router.push(routes.aiSearch);
       }
@@ -168,29 +175,31 @@ export function AppSidebar() {
                     >
                       <p className={'w-4/5 truncate'}>{chat.title}</p>
 
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant='ghost'
-                            size='sm'
-                            className={styles.ellipsis}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Ellipsis className='h-5 w-5 stroke-[3]' />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align='end'>
-                          <DropdownMenuItem
-                            onClick={(event) =>
-                              handleDeleteChat(chat.id, event)
-                            }
-                            className='bg-background font-medium text-sidebar hover:bg-white'
-                          >
-                            <Trash className='mr-2 h-5 w-5' />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      {chat.id && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant='ghost'
+                              size='sm'
+                              className={styles.ellipsis}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Ellipsis className='h-5 w-5 stroke-[3]' />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align='end'>
+                            <DropdownMenuItem
+                              onClick={(event) =>
+                                handleDeleteChat(chat.id, event)
+                              }
+                              className='bg-background font-medium text-sidebar hover:bg-white'
+                            >
+                              <Trash className='mr-2 h-5 w-5' />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
                     </SidebarMenuItem>
                   ))
                 )}
