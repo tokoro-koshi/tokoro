@@ -1,10 +1,15 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import routes from '@/lib/constants/routes';
 import { ExploreButton } from '@/components/buttons';
 import { Button } from '@/components/ui/button';
 import Place from '@/public/landing/place.avif';
 import styles from './hero.module.css';
 
 export default function Hero() {
+  const router = useRouter();
   return (
     <section className={styles.hero}>
       <div className={styles.text}>
@@ -18,7 +23,11 @@ export default function Hero() {
       </div>
       <div className={styles.buttons}>
         <ExploreButton />
-        <Button size={'lg'} className={styles.btn}>
+        <Button
+          className={styles.btn}
+          size={'lg'}
+          onClick={() => router.push(routes.about)}
+        >
           Learn more
         </Button>
       </div>
