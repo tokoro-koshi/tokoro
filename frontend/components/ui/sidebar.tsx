@@ -64,10 +64,7 @@ const Sidebar = forwardRef<
     return (
       <div
         ref={ref}
-        className={cn(
-          'group peer text-sidebar-foreground md:block',
-          state === 'collapsed' && 'max-md:invisible'
-        )}
+        className={'group peer text-sidebar-foreground md:block'}
         data-state={state}
         data-collapsible={state === 'collapsed' ? collapsible : ''}
         data-variant={variant}
@@ -88,23 +85,29 @@ const Sidebar = forwardRef<
         />
         <div
           className={cn(
-            'sticky bottom-0 z-10 duration-200 ' +
+            'fixed bottom-0 z-10 duration-200 md:sticky ' +
               'w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex',
             side === 'left'
-              ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-              : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+              ? 'left-0 md:group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
+              : 'right-0 md:group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
             // Adjust the padding for floating and inset variants.
             variant === 'floating' || variant === 'inset'
               ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l',
-            state === 'collapsed' && 'max-md:invisible max-md:!w-0',
+              : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] md:group-data-[side=left]:border-r md:group-data-[side=right]:border-l',
             className
           )}
           {...props}
         >
           <div
             data-sidebar='sidebar'
-            className='flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow'
+            className={cn(
+              'flex h-full w-full flex-col',
+              'group-data-[variant=floating]:rounded-lg',
+              'group-data-[variant=floating]:border',
+              'group-data-[variant=floating]:border-sidebar-border',
+              'group-data-[variant=floating]:shadow',
+              state === 'collapsed' ? 'md:bg-sidebar' : 'bg-sidebar'
+            )}
           >
             {children}
           </div>

@@ -97,8 +97,7 @@ export function AppSidebar() {
         className={cn(
           styles.sidebar,
           state === 'collapsed' && '!w-[4rem]',
-          'max-md:!absolute max-md:bottom-0 max-md:top-0 max-md:z-40',
-          open ? 'max-md:left-0' : 'max-md:-left-[364px]',
+          'max-md:bottom-0 max-md:z-40',
           'max-md:transition-all max-md:duration-300 max-md:ease-in-out'
         )}
         data-state={state}
@@ -106,10 +105,7 @@ export function AppSidebar() {
         <SidebarHeader className={styles.header}>
           <div className={styles.action}>
             <div
-              className={cn(
-                styles.toggle,
-                state === 'collapsed' ? 'max-md:fixed' : 'w-full'
-              )}
+              className={cn(styles.toggle, state === 'expanded' && 'w-full')}
             >
               <SidebarTrigger
                 className={cn(
