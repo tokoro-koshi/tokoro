@@ -52,7 +52,13 @@ const GoogleMapComponent = ({
           lng: place.location.coordinate.longitude,
         }}
         onClick={() => handleMarkerClick(place)}
-        icon='https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        icon={
+          place.tags.some((tag) => tag.name.includes('restaurant') || tag.name.includes('bar') || tag.name.includes('shopping')) ? 
+            '/icons/map-marker-happy.svg' : // Happy face Yellow 
+            place.tags.some((tag) => tag.name.includes('beauty') || tag.name.includes('self') || tag.name.includes('spa')) ? 
+            '/icons/map-marker-hashtag.svg' : // Hashtag Purple
+            '/icons/map-marker-star.svg' // Star Pink
+      }
       />
     ));
   }, [handleMarkerClick, places]);
