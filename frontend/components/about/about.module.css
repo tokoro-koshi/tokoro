@@ -76,7 +76,7 @@
 }
 
 .avatar {
-  @apply h-44 w-44 rounded-[43px] object-cover;
+  @apply h-44 w-44 rounded-[43px] object-cover mx-auto;
 }
 
 .memberName {
@@ -96,5 +96,5 @@
 }
 
 .contactButton {
-  @apply rounded-[6px] bg-primary px-14 py-2 text-sm font-semibold leading-6 text-background hover:bg-background hover:text-popover-foreground;
+  @apply rounded-[6px] bg-primary px-14 py-2 text-sm font-semibold leading-6 text-background hover:bg-background hover:text-popover-foreground flex mx-auto;
 }
