@@ -23,11 +23,16 @@
 }
 
 .storySection {
-  @apply -mt-6 ml-auto mr-16 flex max-h-[471px] max-w-[979px] rounded-[43px] bg-foreground bg-opacity-50 px-8;
+  @apply ml-auto mr-16 flex max-h-min rounded-[43px] bg-foreground bg-opacity-50 px-8;
+  @apply mt-6 max-lg:flex-col lg:-mt-6 lg:max-h-[471px] lg:max-w-[979px];
 }
 
 .storyTitle {
-  @apply mb-1 text-4xl font-extrabold leading-5 text-background;
+  @apply mb-1 pt-10 text-4xl font-extrabold leading-5 text-background;
+}
+
+.storyDescription {
+  @apply pb-10 max-lg:order-1;
 }
 
 .storyText {
@@ -35,7 +40,7 @@
 }
 
 .storyImage {
-  @apply -mb-6 mt-6 rounded-[43px];
+  @apply mt-6 rounded-[43px] object-contain max-lg:mx-auto lg:-mb-6;
 }
 
 .valuesTitle {
@@ -43,7 +48,7 @@
 }
 
 .valuesSection {
-  @apply flex flex-col items-center justify-between gap-9 space-y-7 px-20 md:flex-row md:space-x-9 md:space-y-0;
+  @apply flex flex-col items-center justify-between gap-9 space-y-7 px-20 lg:flex-row lg:space-x-9 lg:space-y-0;
 }
 
 .valueCard {
@@ -67,7 +72,7 @@
 }
 
 .teamGrid {
-  @apply grid grid-cols-1 gap-10 pt-7 md:grid-cols-5 lg:grid-cols-5;
+  @apply grid grid-cols-1 gap-10 pt-7 lg:grid-cols-5;
 }
 
 .avatar {
