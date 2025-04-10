@@ -58,7 +58,7 @@ export default function AboutComponent() {
         </div>
         <Image
           className={styles.storyImage}
-          src={'/placeholder.svg'}
+          src={'/our-story.png'}
           alt={'Story'}
           width={448}
           height={471}

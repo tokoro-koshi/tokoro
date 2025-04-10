@@ -40,7 +40,7 @@
 }
 
 .storyImage {
-  @apply mt-6 rounded-[43px] object-contain max-lg:mx-auto lg:-mb-6;
+  @apply mt-6 rounded-[43px] max-lg:mx-auto lg:-mb-6 object-cover;
 }
 
 .valuesTitle {
