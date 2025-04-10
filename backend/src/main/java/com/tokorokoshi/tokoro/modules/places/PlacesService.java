@@ -147,7 +147,7 @@ public class PlacesService {
             CreateUpdatePlaceDto place
     ) {
         Place existingPlace = repository.findById(id, Place.class);
-        if (place == null) return null;
+        if (existingPlace == null) return null;
 
         // Validate pictures
         if (isFilesInvalid(place.pictures())) {
