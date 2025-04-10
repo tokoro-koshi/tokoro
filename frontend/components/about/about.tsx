@@ -42,7 +42,7 @@ export default function AboutComponent() {
       </div>
 
       <div className={styles.storySection}>
-        <div className={'py-10'}>
+        <div className={styles.storyDescription}>
           <h2 className={styles.storyTitle}>Our Story</h2>
           <p className={styles.storyText}>
             Tokoro began with a simple idea: technology should work for people,
