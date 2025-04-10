@@ -74,8 +74,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...props}
       />
     ),
-    // eslint-disable-next-line @next/next/no-img-element
     img: (props) => (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         className={'mb-4 max-w-full rounded-md object-cover'}
         {...props}
