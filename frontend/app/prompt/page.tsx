@@ -3,6 +3,8 @@ import Header from '@/components/layout/header/header';
 import ChatWindow from '@/components/prompt/chat/chat-window';
 import { ChatHistoryClient } from '@/lib/requests/chat-history.client';
 
+export const dynamic = 'force-dynamic'; // force revalidation because of auth
+
 export default async function NewPrompt() {
   const chats = await ChatHistoryClient.getAuthenticatedUserChatHistories(
     0,
