@@ -23,7 +23,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     p: (props) => (
       <p
-        className={`mb-4 text-base leading-relaxed text-background`}
+        className={`text-base leading-relaxed text-background`}
         {...props}
       />
     ),
@@ -55,7 +55,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     hr: (props) => (
       <hr className={'my-8 border-t border-gray-300'} {...props} />
     ),
-    a: (props) => <a className={`text-blue-500 hover:underline`} {...props} />,
+    a: (props) => <a className={`text-blue-300 hover:underline`} {...props} />,
     table: (props) => (
       <table className={'mb-4 w-full table-auto border-collapse'} {...props} />
     ),
