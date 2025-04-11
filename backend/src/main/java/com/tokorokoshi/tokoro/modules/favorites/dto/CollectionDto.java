@@ -3,7 +3,7 @@ package com.tokorokoshi.tokoro.modules.favorites.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +37,7 @@ public record CollectionDto(
                 name = "createdAt",
                 description = "The date and time the collection was created"
         )
-        LocalDateTime createdAt,
+        Instant createdAt,
 
         @Schema(
                 name = "userId",
@@ -99,7 +99,7 @@ public record CollectionDto(
      * @param createdAt The creation timestamp for this collection
      * @return A new collection with the specified createdAt timestamp
      */
-    public CollectionDto withCreatedAt(LocalDateTime createdAt) {
+    public CollectionDto withCreatedAt(Instant createdAt) {
         return new CollectionDto(
                 id,
                 name,

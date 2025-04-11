@@ -3,7 +3,7 @@ package com.tokorokoshi.tokoro.modules.chats.dto;
 import com.tokorokoshi.tokoro.database.Message;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -43,6 +43,6 @@ public record ChatHistoryDto(
                 name = "createdAt",
                 description = "The creation timestamp of the chat history"
         )
-        LocalDateTime createdAt
+        Instant createdAt
 ) {
 }
