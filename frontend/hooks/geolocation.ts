@@ -26,17 +26,12 @@ export default function useGeolocation(): Geolocation {
     if (!('geolocation' in navigator)) return;
 
     // Request the user's current position
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        const newPos = { lat: coords.latitude, lng: coords.longitude };
-        setPosition(
-          (prev) => prev.lat === newPos.lat && prev.lng === newPos.lng 
-            ? prev 
-            : newPos
-        );
-      },
-      console.error
-    );
+    navigator.geolocation.getCurrentPosition(({ coords }) => {
+      const newPos = { lat: coords.latitude, lng: coords.longitude };
+      setPosition((prev) =>
+        prev.lat === newPos.lat && prev.lng === newPos.lng ? prev : newPos
+      );
+    }, console.error);
   }, []);
 
   return position;

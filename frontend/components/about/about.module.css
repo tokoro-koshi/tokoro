@@ -1,5 +1,5 @@
 .titleSection {
-  @apply flex items-center justify-between gap-5 px-5 md:px-9 pt-32;
+  @apply flex items-center justify-between gap-5 px-5 pt-32 md:px-9;
 }
 
 .line {
@@ -11,7 +11,7 @@
 }
 
 .missionSection {
-  @apply ml-4 mr-4 md:ml-16 md:mr-auto mt-11 max-w-[979px] rounded-[43px] bg-background px-8 py-10;
+  @apply ml-4 mr-4 mt-11 max-w-[979px] rounded-[43px] bg-background px-8 py-10 md:ml-16 md:mr-auto;
 }
 
 .missionTitle {
@@ -23,7 +23,7 @@
 }
 
 .storySection {
-  @apply ml-4 mr-4 md:ml-auto md:mr-16 flex max-h-min rounded-[43px] bg-foreground bg-opacity-50 px-8;
+  @apply ml-4 mr-4 flex max-h-min rounded-[43px] bg-foreground bg-opacity-50 px-8 md:ml-auto md:mr-16;
   @apply mt-6 max-lg:flex-col lg:-mt-6 lg:max-h-[471px] lg:max-w-[979px];
 }
 
@@ -40,7 +40,7 @@
 }
 
 .storyImage {
-  @apply mt-6 rounded-[43px] max-lg:mx-auto lg:-mb-6 object-cover;
+  @apply mt-6 rounded-[43px] object-cover max-lg:mx-auto lg:-mb-6;
 }
 
 .valuesTitle {
@@ -48,7 +48,7 @@
 }
 
 .valuesSection {
-  @apply flex flex-col items-center justify-between gap-6 md:gap-9 space-y-7 px-8 md:px-20 lg:flex-row lg:space-x-9 lg:space-y-0;
+  @apply flex flex-col items-center justify-between gap-6 space-y-7 px-8 md:gap-9 md:px-20 lg:flex-row lg:space-x-9 lg:space-y-0;
 }
 
 .valueCard {
@@ -56,7 +56,7 @@
 }
 
 .cardTitle {
-  @apply pb-3 md:pb-5 text-3xl font-bold leading-6 text-background;
+  @apply pb-3 text-3xl font-bold leading-6 text-background md:pb-5;
 }
 
 .cardDescription {
@@ -64,7 +64,7 @@
 }
 
 .teamSection {
-  @apply mx-6 md:mx-20 mt-10 rounded-[43px] bg-background px-0 md:px-14 pb-8 pt-9;
+  @apply mx-6 mt-10 rounded-[43px] bg-background px-0 pb-8 pt-9 md:mx-20 md:px-14;
 }
 
 .teamTitle {
@@ -76,7 +76,7 @@
 }
 
 .avatar {
-  @apply h-44 w-44 rounded-[43px] object-cover mx-auto;
+  @apply mx-auto h-44 w-44 rounded-[43px] object-cover;
 }
 
 .memberName {
@@ -88,13 +88,13 @@
 }
 
 .bottomSection {
-  @apply justify-items-center bg-custom-gradient pb-14 pt-5 ;
+  @apply justify-items-center bg-custom-gradient pb-14 pt-5;
 }
 
 .bottomText {
-  @apply pb-8 pt-12 text-[40px] font-extrabold leading-8 md:leading-5 text-background text-center;
+  @apply pb-8 pt-12 text-center text-[40px] font-extrabold leading-8 text-background md:leading-5;
 }
 
 .contactButton {
-  @apply rounded-[6px] bg-primary px-14 py-2 text-sm font-semibold leading-6 text-background hover:bg-background hover:text-popover-foreground flex mx-auto;
+  @apply mx-auto flex rounded-[6px] bg-primary px-14 py-2 text-sm font-semibold leading-6 text-background hover:bg-background hover:text-popover-foreground;
 }
