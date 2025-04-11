@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,6 +23,7 @@ import {
 import { DateTime } from 'luxon';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { humanRelativeTime } from '@/lib/helpers/date';
 
 interface CommentSectionProps {
   placeId: string;
@@ -40,6 +41,7 @@ export function Comments({
         DateTime.fromISO(a.createdAt || '').toMillis()
     ) || []
   );
+
   const [newComment, setNewComment] = useState('');
   const commentListRef = useRef<HTMLDivElement>(null);
 
@@ -75,11 +77,14 @@ export function Comments({
     },
   });
 
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewComment(e.target.value);
-    e.target.style.height = 'auto';
-    e.target.style.height = `${e.target.scrollHeight}px`;
+  const handleTextareaChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setNewComment(event.target.value);
+    event.target.style.height = 'auto';
+    event.target.style.height = `${event.target.scrollHeight}px`;
   };
+
   return (
     !isUserLoading && (
       <div className={styles.container}>
@@ -140,7 +145,26 @@ export default function CommentItem({
   const [commentDisplay, setCommentDisplay] = useState<string>(comment.comment);
   const [isDeleted, setIsDeleted] = useState(false);
 
-  const handleSumbitEdit = async () => {
+  const [relativeTime, setRelativeTime] = useState<string>('');
+
+  const createdAt = DateTime.fromISO(comment.createdAt ?? '').toFormat(
+    'dd LLL yyyy'
+  );
+  const updatedAt = DateTime.fromISO(comment.updatedAt ?? '').toFormat(
+    'dd LLL yyyy'
+  );
+
+  useEffect(() => {
+    const updateRelativeTime = () =>
+      setRelativeTime(humanRelativeTime(comment.createdAt!) ?? '');
+    updateRelativeTime();
+
+    // Then update every 30 seconds
+    const handler = setInterval(updateRelativeTime, 30000);
+    return () => clearInterval(handler);
+  }, [comment.createdAt, comment.updatedAt]);
+
+  const handleSubmitEdit = async () => {
     if (editedComment === comment.comment || editedComment === '') return;
 
     try {
@@ -183,32 +207,20 @@ export default function CommentItem({
         <div className='flex'>
           <span
             className={styles.commentItemFooter}
-            title={
-              'Posted on ' +
-              DateTime.fromISO(comment.createdAt || '').toFormat('dd.MM.yyyy')
-            }
+            title={`Posted on ${createdAt}`}
           >
             <CalendarDays className={styles.icon} />
-            {DateTime.fromISO(comment.createdAt || '').toRelative({
-              locale: 'en',
-            })}
+            {relativeTime}
           </span>
           {comment.createdAt !== comment.updatedAt && (
             <>
               /{' '}
               <span
-                title={
-                  'Edited on ' +
-                  DateTime.fromISO(comment.updatedAt || '').toFormat(
-                    'dd.MM.yyyy'
-                  )
-                }
+                title={`Edited on ${updatedAt}`}
                 className={styles.commentItemFooter}
               >
                 <PencilLine className={styles.icon} />
-                {DateTime.fromISO(comment.updatedAt || '').toRelative({
-                  locale: 'en',
-                })}
+                {humanRelativeTime(comment.updatedAt!)}
               </span>
             </>
           )}
@@ -244,7 +256,7 @@ export default function CommentItem({
                     <Button
                       className={styles.editButton}
                       type='submit'
-                      onClick={handleSumbitEdit}
+                      onClick={handleSubmitEdit}
                     >
                       Save changes
                     </Button>

@@ -25,9 +25,11 @@ export default function SaveButton({
   const { user, setUser } = useUser();
 
   const isChecked = useMemo(() => {
-    return user?.userMetadata?.collections?.some((collection) =>
-      collection.placesIds.includes(placeId)
-    ) ?? false;
+    return (
+      user?.userMetadata?.collections?.some((collection) =>
+        collection.placesIds.includes(placeId)
+      ) ?? false
+    );
   }, [placeId, user]);
 
   const { mutate: handleSave, isPending: isLoading } = useMutation({

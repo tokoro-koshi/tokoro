@@ -49,12 +49,22 @@ const GoogleMapComponent = ({
         }}
         onClick={() => handleMarkerClick(place)}
         icon={
-          place.tags.some((tag) => tag.name.includes('restaurant') || tag.name.includes('bar') || tag.name.includes('shopping')) ? 
-            '/icons/map-marker-happy.svg' : // Happy face Yellow 
-            place.tags.some((tag) => tag.name.includes('beauty') || tag.name.includes('self') || tag.name.includes('spa')) ? 
-            '/icons/map-marker-hashtag.svg' : // Hashtag Purple
-            '/icons/map-marker-star.svg' // Star Pink
-      }
+          place.tags.some(
+            (tag) =>
+              tag.name.includes('restaurant') ||
+              tag.name.includes('bar') ||
+              tag.name.includes('shopping')
+          )
+            ? '/icons/map-marker-happy.svg' // Happy face Yellow
+            : place.tags.some(
+                  (tag) =>
+                    tag.name.includes('beauty') ||
+                    tag.name.includes('self') ||
+                    tag.name.includes('spa')
+                )
+              ? '/icons/map-marker-hashtag.svg' // Hashtag Purple
+              : '/icons/map-marker-star.svg' // Star Pink
+        }
       />
     ));
   }, [handleMarkerClick, places]);
