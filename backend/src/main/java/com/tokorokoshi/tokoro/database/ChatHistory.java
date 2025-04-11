@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ public record ChatHistory(
         List<Message> messages,
 
         @CreatedDate
-        LocalDateTime createdAt
+        Instant createdAt
 ) {
     /**
      * Creates a new chat history with the specified ID.
@@ -72,7 +72,7 @@ public record ChatHistory(
      * @param createdAt The creation timestamp for this chat history
      * @return A new chat history with the specified createdAt timestamp
      */
-    public ChatHistory withCreatedAt(LocalDateTime createdAt) {
+    public ChatHistory withCreatedAt(Instant createdAt) {
         return new ChatHistory(
                 id,
                 title,

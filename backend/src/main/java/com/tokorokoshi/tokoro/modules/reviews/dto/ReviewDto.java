@@ -2,7 +2,7 @@ package com.tokorokoshi.tokoro.modules.reviews.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * A DTO for a review
@@ -41,11 +41,11 @@ public record ReviewDto(
                 name = "createdAt",
                 description = "The date and time the review was created"
         )
-        LocalDateTime createdAt,
+        Instant createdAt,
         @Schema(
                 name = "updatedAt",
                 description = "The date and time the review was last updated"
         )
-        LocalDateTime updatedAt
+        Instant updatedAt
 ) {
 }

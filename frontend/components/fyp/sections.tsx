@@ -22,11 +22,11 @@ export default function Sections({ activeSection }: SectionsProps) {
 
   // Obtain the user's favorite places IDs from metadata of a current user
   const user = useUser((state) => state.user);
-  const favoritesIds = user?.userMetadata?.collections
-    .flat()
-    ?.map((item) => item.placesIds)
-    ?.flat() 
-    ?? [];
+  const favoritesIds =
+    user?.userMetadata?.collections
+      .flat()
+      ?.map((item) => item.placesIds)
+      ?.flat() ?? [];
 
   // Get the user's geolocation
   const position = useGeolocation();

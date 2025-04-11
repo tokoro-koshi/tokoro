@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,7 +40,7 @@ public class CollectionsService {
                 UUID.randomUUID(),
                 createUpdateCollectionDto.name(),
                 createUpdateCollectionDto.placesIds(),
-                LocalDateTime.now(),
+                Instant.now(),
                 null
         );
         collections.add(newCollection);

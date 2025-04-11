@@ -12,11 +12,19 @@ export function humanRelativeTime(
   date: DateTime | string,
   pivot?: DateTime | string | null
 ): string | null {
-  if (typeof date === 'string') date = DateTime.fromISO(date);
-  if (typeof pivot === 'string') pivot = DateTime.fromISO(pivot);
+  if (typeof date === 'string') {
+    date = DateTime.fromISO(date, { setZone: true }).toUTC();
+  } else {
+    date = date.toUTC();
+  }
 
-  // If pivot is not provided, use current time
-  pivot ??= DateTime.utc();
+  if (typeof pivot === 'string') {
+    pivot = DateTime.fromISO(pivot, { setZone: true }).toUTC();
+  } else if (!pivot) {
+    pivot = DateTime.utc();
+  } else {
+    pivot = pivot.toUTC();
+  }
 
   // If the difference is within the last 2 minutes, show 'Just now'
   const minuteDelta = date.diff(pivot, 'minutes').minutes;

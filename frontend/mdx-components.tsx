@@ -22,10 +22,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       />
     ),
     p: (props) => (
-      <p
-        className={`text-base leading-relaxed text-background`}
-        {...props}
-      />
+      <p className={`text-base leading-relaxed text-background`} {...props} />
     ),
     ul: (props) => (
       <ul className={`mb-4 list-disc pl-6 text-background`} {...props} />

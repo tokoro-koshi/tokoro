@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Represents a review in the database.
@@ -31,10 +31,10 @@ public record Review(
         boolean isRecommended,
 
         @CreatedDate
-        LocalDateTime createdAt,
+        Instant createdAt,
 
         @LastModifiedDate
-        LocalDateTime updatedAt
+        Instant updatedAt
 ) {
     /**
      * Creates a new review with the given ID.
@@ -78,7 +78,7 @@ public record Review(
      * @param createdAt The creation timestamp for this review
      * @return A new review with the specified createdAt timestamp
      */
-    public Review withCreatedAt(LocalDateTime createdAt) {
+    public Review withCreatedAt(Instant createdAt) {
         return new Review(
                 id,
                 userId,
