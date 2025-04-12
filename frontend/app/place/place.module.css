@@ -4,18 +4,42 @@
 
 .header {
   @apply relative mb-4 rounded-b-[2.5rem] bg-background md:rounded-b-[4rem] md:px-8;
+
+  & .rating {
+    @apply left-0 top-24 md:left-8;
+  }
+
+  & .placeName {
+    @apply absolute flex justify-between items-end bottom-24 inset-x-4 md:bottom-12 md:inset-x-14;
+  }
+
+  & .saveButton {
+    @apply static;
+  }
+
+  & .title {
+    @apply z-30 pr-10 text-2xl md:text-5xl font-extrabold text-background md:bottom-11 md:left-16;
+  }
+
+  & .buttons {
+    @apply flex max-md:flex-col gap-1 z-30;
+  }
+
+  & .mapsLink {
+    @apply max-md:ml-0.5 h-10 w-10 text-background;
+  }
 }
 
-.rating {
-  @apply left-0 top-24 md:left-8;
-}
+.info {
+  @apply flex min-h-16 py-2 flex-col justify-center items-center px-8 md:min-h-8 md:flex-row md:justify-between;
 
-.saveButton {
-  @apply bottom-20 right-4 md:bottom-12 md:right-14;
-}
+  & .addressLink {
+    @apply font-light capitalize inline-block;
+  }
 
-.title {
-  @apply absolute bottom-20 left-2 z-30 pr-10 text-5xl font-extrabold text-background md:bottom-11 md:left-16;
+  & .addressLink svg {
+    @apply hidden md:inline -mt-0.5 mr-1;
+  }
 }
 
 .imageContainer {
@@ -28,10 +52,6 @@
 
 .shadow {
   @apply absolute left-0 top-0 z-10 h-full w-full shadow-[inset_0px_-20px_100px_0px_rgba(0,_0,_0,_1)] md:rounded-b-[2.5rem];
-}
-
-.info {
-  @apply flex h-16 flex-col justify-center px-8 md:h-8 md:flex-row md:justify-between md:text-base/7;
 }
 
 .tags {
