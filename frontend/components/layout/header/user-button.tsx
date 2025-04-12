@@ -43,12 +43,14 @@ export default function UserButton({ user }: { user: User }) {
           >
             <Telescope /> Explore
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className={'md:hidden'}
-            onClick={() => router.push(routes.blog)}
-          >
-            <Newspaper /> Blog
-          </DropdownMenuItem>
+          {user.roles?.includes('ADMIN') && (
+            <DropdownMenuItem
+              className={'md:hidden'}
+              onClick={() => router.push(routes.blog)}
+            >
+              <Newspaper /> Blog
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             className={'md:hidden'}
             onClick={() => router.push(routes.aiSearch)}
