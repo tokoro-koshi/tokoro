@@ -18,7 +18,7 @@
 }
 
 .stepsContainer {
-  @apply relative grid grid-cols-1 md:grid-cols-3 gap-20 gap-y-8 md:gap-y-0;
+  @apply relative grid grid-cols-1 lg:grid-cols-3 gap-20 gap-y-8 lg:gap-y-0;
 }
 
 .stepCard {
@@ -30,11 +30,11 @@
 }
 
 .stepsContainer li:not(:last-child) {
-  @apply pr-12;
+  @apply lg:pr-12;
 }
 
 .stepsContainer li:not(:last-child)::after {
-  @apply absolute -right-10 top-2/4 max-md:hidden;
+  @apply absolute -right-10 top-2/4 max-lg:hidden;
   @apply h-10 w-10 -translate-y-1/2 text-4xl text-background;
   @apply bg-contain bg-no-repeat content-[''];
   background-image: url('/icons/arrow.svg');
