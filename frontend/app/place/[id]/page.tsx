@@ -10,6 +10,7 @@ import SaveButton from '@/components/cards/items/save/save';
 import GoogleMapComponent from '@/components/map/google-map';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ExternalLink } from 'lucide-react';
 
 type PlacePageProps = {
   params: {
@@ -30,7 +31,6 @@ export default async function PlacePage({ params }: PlacePageProps) {
     <div className={cn('container', styles.container)}>
       <div className={styles.header}>
         <Rating rating={place.rating} className={styles.rating} />
-        <h1 className={styles.title}>{place.name}</h1>
         <div className={styles.imageContainer}>
           <Image
             className={styles.image}
@@ -41,11 +41,23 @@ export default async function PlacePage({ params }: PlacePageProps) {
           />
           <div className={styles.shadow}></div>
         </div>
-        <SaveButton
-          variant={'light'}
-          placeId={params.id}
-          className={styles.saveButton}
-        />
+        <div className={styles.placeName}>
+          <h1 className={styles.title}>{place.name}</h1>
+          <ul className={styles.buttons}>
+            <li>
+              <a target={'_blank'} href={googleMapsLink}>
+                <ExternalLink className={styles.mapsLink} />
+              </a>
+            </li>
+            <li>
+              <SaveButton
+                variant={'light'}
+                placeId={params.id}
+                className={styles.saveButton}
+              />
+            </li>
+          </ul>
+        </div>
         <div className={styles.info}>
           <span className='font-light capitalize'>
             {place.categoryId.replace(/_+/, ' ')}
@@ -53,11 +65,10 @@ export default async function PlacePage({ params }: PlacePageProps) {
           <a
             target='_blank'
             href={googleMapsLink}
-            className='font-light capitalize'
+            className={styles.addressLink}
           >
-            <span className='hidden md:inline-block'>
-              {place.location.country}, {place.location.city},
-            </span>{' '}
+            <ExternalLink />
+            {place.location.country}, {place.location.city},{' '}
             {place.location.address}
           </a>
         </div>
