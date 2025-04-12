@@ -11,7 +11,7 @@
   }
 
   & .card {
-    @apply flex h-auto flex-col items-center text-balance text-center lg:pt-10;
+    @apply flex flex-col items-center text-balance text-center lg:pt-10;
     @apply relative z-20 min-w-0;
   }
 

@@ -20,18 +20,20 @@ export default function HowItWorks() {
         <div className={styles.line}></div>
       </div>
 
-      <div className={styles.stepsContainer}>
+      <ul className={styles.stepsContainer}>
         {steps.map((step, index) => (
-          <Card key={index} className={styles.stepCard}>
-            <CardHeader>
-              <CardTitle>{step.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>{step.description}</CardDescription>
-            </CardContent>
-          </Card>
+          <li key={index}>
+            <Card className={styles.stepCard}>
+              <CardHeader>
+                <CardTitle>{step.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{step.description}</CardDescription>
+              </CardContent>
+            </Card>
+          </li>
         ))}
-      </div>
+      </ul>
       <div className={styles.bottomLine}></div>
     </section>
   );
