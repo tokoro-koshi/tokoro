@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.chats;
 
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.security.SecurityUtils;

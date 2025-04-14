@@ -1,4 +1,4 @@
-package com.tokorokoshi.tokoro.dto;
+package com.tokorokoshi.tokoro.helpers;
 
 import org.json.JSONObject;
 

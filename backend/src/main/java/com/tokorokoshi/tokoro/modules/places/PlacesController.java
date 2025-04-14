@@ -1,8 +1,8 @@
 package com.tokorokoshi.tokoro.modules.places;
 
 import com.tokorokoshi.tokoro.database.Message;
-import com.tokorokoshi.tokoro.dto.PaginationDto;
-import com.tokorokoshi.tokoro.dto.Response;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.Response;
 import com.tokorokoshi.tokoro.modules.chats.ChatHistoryService;
 import com.tokorokoshi.tokoro.modules.chats.dto.ChatHistoryDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;

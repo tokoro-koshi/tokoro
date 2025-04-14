@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.users;
 
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserDeleteException;
 import com.tokorokoshi.tokoro.modules.exceptions.auth0.UserFetchException;

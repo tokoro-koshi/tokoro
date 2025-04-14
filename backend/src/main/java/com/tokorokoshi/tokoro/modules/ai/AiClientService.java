@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.ai;
 
-import com.tokorokoshi.tokoro.dto.Response;
+import com.tokorokoshi.tokoro.helpers.Response;
 import jakarta.annotation.Nullable;
 import org.springframework.ai.moderation.Moderation;
 import org.springframework.ai.moderation.ModerationResult;
