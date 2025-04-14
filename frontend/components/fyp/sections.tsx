@@ -36,6 +36,9 @@ export default function Sections({ activeSection }: SectionsProps) {
     queryKey: ['savedPlaces', activeSection, position, ...favoritesIds],
     queryFn: async () => {
       if (activeSection === 'saved') {
+        if (favoritesIds.length === 0) {
+          return [];
+        }
         const { data } = await axios.get<Place[]>(`/api/places/batch`, {
           params: { ids: favoritesIds.join(',') },
         });
