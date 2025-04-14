@@ -19,7 +19,7 @@ public class InstantDeserializer extends JsonDeserializer<Instant> {
             if (dotIndex > 0) {
                 dateString = dateString.substring(0, dotIndex);
             }
-            if (!dateString.endsWith("Z")) {
+            if (!dateString.matches(".*([+-]\\d{2}:\\d{2}|Z)$")) {
                 dateString += "Z"; // Append 'Z' to indicate UTC time zone
             }
             return Instant.parse(dateString);
