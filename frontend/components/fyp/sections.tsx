@@ -36,8 +36,9 @@ export default function Sections({ activeSection }: SectionsProps) {
     queryKey: ['savedPlaces', activeSection, position, ...favoritesIds],
     queryFn: async () => {
       if (activeSection === 'saved') {
-        const ids = favoritesIds.join(',');
-        const { data } = await axios.get<Place[]>(`/api/places/batch/${ids}`);
+        const { data } = await axios.get<Place[]>(`/api/places/batch`, {
+          params: { ids: favoritesIds.join(',') },
+        });
         return data;
       } else if (activeSection === 'nearby') {
         const { data } = await axios.get<Place[]>(`/api/places/nearby`, {

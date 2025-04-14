@@ -22,7 +22,6 @@ public class InstantDeserializer extends JsonDeserializer<Instant> {
             if (!dateString.endsWith("Z")) {
                 dateString += "Z"; // Append 'Z' to indicate UTC time zone
             }
-            System.out.println(dateString);
             return Instant.parse(dateString);
         } catch (DateTimeParseException e) {
             throw new JsonParseException(p, "Failed to parse Instant: " + e.getMessage());
