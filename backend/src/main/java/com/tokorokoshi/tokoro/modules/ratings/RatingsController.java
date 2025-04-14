@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.ratings;
 
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.ratings.dto.CreateUpdateRatingDto;
 import com.tokorokoshi.tokoro.modules.ratings.dto.RatingDto;

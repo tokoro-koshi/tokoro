@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.favorites;
 
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.favorites.dto.AddFavoriteDto;
 import com.tokorokoshi.tokoro.modules.favorites.dto.CollectionDto;

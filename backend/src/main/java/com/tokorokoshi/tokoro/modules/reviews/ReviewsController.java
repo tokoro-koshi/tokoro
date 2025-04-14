@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.reviews;
 
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.reviews.dto.CreateUpdateReviewDto;
 import com.tokorokoshi.tokoro.modules.reviews.dto.ReviewDto;

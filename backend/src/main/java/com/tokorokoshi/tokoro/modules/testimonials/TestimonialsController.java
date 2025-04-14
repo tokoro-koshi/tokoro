@@ -1,7 +1,7 @@
 package com.tokorokoshi.tokoro.modules.testimonials;
 
 import com.tokorokoshi.tokoro.database.Testimonial;
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.CreateUpdateTestimonialDto;
 import com.tokorokoshi.tokoro.modules.testimonials.dto.TestimonialDto;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

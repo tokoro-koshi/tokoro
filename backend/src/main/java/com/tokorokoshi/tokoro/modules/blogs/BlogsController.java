@@ -1,6 +1,6 @@
 package com.tokorokoshi.tokoro.modules.blogs;
 
-import com.tokorokoshi.tokoro.dto.PaginationDto;
+import com.tokorokoshi.tokoro.helpers.PaginationDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.BlogDto;
 import com.tokorokoshi.tokoro.modules.blogs.dto.CreateUpdateBlogDto;
 import com.tokorokoshi.tokoro.modules.error.NotFoundException;
